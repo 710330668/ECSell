@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/**11
  * <p>
  * installApp              : 安装 App（支持 8.0）
  * installAppSilent        : 静默安装 App
