@@ -1,0 +1,72 @@
+ext {
+
+    versions = [
+            "buildToolsVersion": "25.0.0",
+            "compileSdkVersion": 26,
+            "minSdkVersion"    : 17,
+            "targetSdkVersion" : 26,
+            "versionCode"      : 45,
+            "versionName"      : "1.5.7"
+    ]
+
+    supportLibVersion = "25.0.0"
+    retrofitLibVersion = "2.1.0"
+    okhttpLibVersion = "3.8.0"
+    rxjavaLibVersion = "2.1.0"
+    rxAndroidVersion = "2.0.1"
+    gsonLibVersion = "2.8.0"
+    blockcanaryVersion = "1.3.1"
+    eventBus3Version = "3.0.0"
+    greenDaoVersion = "3.2.0"
+    guavaVersion = "19.0"
+    dagger2Version = "2.10"
+    glideVersion = "3.7.0"
+    butterKnifeVersion = "8.6.0"
+    recycleview = "27.1.1"
+    greendao = "3.2.2"
+    greendaogenerater = "3.2.2"
+    cardView = "27.1.1"
+    designVersion = "27.1.1"
+    zxingVersion = "3.3.0"
+    zxingEmbeddedVerison = "3.3.0"
+    amapVersion = "4.0.1"
+    dependencies = [
+            // support
+            supportRecyclerview     : "com.android.support:recyclerview-v7:$supportLibVersion",
+            supportMultidex         : 'com.android.support:multidex:1.0.1',
+
+            // rx
+            rxJava                  : "io.reactivex.rxjava2:rxjava:$rxjavaLibVersion",
+            rxAndroid               : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
+
+            gson                    : "com.google.code.gson:gson:$gsonLibVersion",
+            // http
+            retrofit                : "com.squareup.retrofit2:retrofit:$retrofitLibVersion",
+            retrofitGsonConverter   : "com.squareup.retrofit2:converter-gson:$retrofitLibVersion",
+            retrofitRxjavaAdapter   : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0",
+            okhttp3                 : "com.squareup.okhttp3:okhttp:$okhttpLibVersion",
+            okhttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:$okhttpLibVersion",
+
+            glide                   : "com.github.bumptech.glide:glide:$glideVersion",
+
+            guava                   : "com.google.guava:guava:$guavaVersion",
+
+            logger                  : 'com.orhanobut:logger:2.1.1',
+
+            cardView                : "com.android.support:cardview-v7:$cardView",
+
+            butterKnife             : "com.jakewharton:butterknife:$butterKnifeVersion",
+            bKCompiler              : "com.jakewharton:butterknife-compiler:$butterKnifeVersion",
+            recycleview             : "com.android.support:recyclerview-v7:$recycleview",
+
+            greendao                : "org.greenrobot:greendao:$greendao",
+            greendaogenerater       : "org.greenrobot:greendao-generator:$greendaogenerater",
+            eventbus                : "org.greenrobot:eventbus:$eventBus3Version",
+
+            design                  : "com.android.support:design:$designVersion",
+            FlycoTabLayout_Lib      : "com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar",
+            zxing                   : "com.google.zxing:core:$zxingVersion",
+            zxingEmbedded           : "com.journeyapps:zxing-android-embedded:$zxingEmbeddedVerison",
+            amap                    : "com.amap.api:location:$amapVersion"
+    ]
+}
