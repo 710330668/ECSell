@@ -11,7 +11,7 @@ import java.io.File;
 
 /**
  * 使用Glide框架加载图片
- * Created by zqiang94 on 2018/4/13.
+ * Created by 710330 on 2018/4/13.
  */
 public class GlideLoader implements ILoader {
     private static GlideLoader instance ;

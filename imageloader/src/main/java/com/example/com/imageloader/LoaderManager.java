@@ -2,7 +2,7 @@ package com.example.com.imageloader;
 
 /**
  * 图片加载管理，可定制图片加载框架
- * Created by zqiang94 on 2018/4/13.
+ * Created by 710330 on 2018/4/13.
  */
 public class LoaderManager {
     private static ILoader innerLoader;

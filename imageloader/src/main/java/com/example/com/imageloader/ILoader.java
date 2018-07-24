@@ -7,7 +7,7 @@ import java.io.File;
 
 /**
  * 图片加载接口
- * Created by zqiang94 on 2018/4/13.
+ * Created by 710330 on 2018/4/13.
  */
 public interface ILoader {
 

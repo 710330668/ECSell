@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * <p>类说明</p>
- * Created by zqiang94 on 2018/4/11.
+ * Created by 710330 on 2018/4/11.
  */
 public class CommonInjection {
     private static Application sApplication;
