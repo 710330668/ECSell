@@ -28,4 +28,6 @@ dependencies {
     implementation project(':net')
     implementation project(':common')
     implementation project(':imageloader')
+    def dep = rootProject.ext.dependencies
+    implementation dep.butterKnife
 }

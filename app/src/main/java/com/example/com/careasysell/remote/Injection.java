@@ -14,7 +14,7 @@ public class Injection {
         apiService = MyApplication.getInstance().getApiService();
     }
 
-    public static ApiService provideAutoConfigApiService() {
+    public static ApiService provideApiService() {
         return apiService;
     }
 }
