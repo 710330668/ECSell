@@ -32,4 +32,5 @@ dependencies {
     annotationProcessor dep.bKCompiler
     implementation dep.butterKnife
     implementation project(':FlycoTabLayout_Lib')
+    implementation files('libs/pinyin4j-2.5.0.jar')
 }

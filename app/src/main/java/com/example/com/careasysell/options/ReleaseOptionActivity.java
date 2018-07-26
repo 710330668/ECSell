@@ -1,6 +1,7 @@
 package com.example.com.careasysell.options;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -48,6 +48,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
     private List<ItemData> interiorColorTypes = new ArrayList<>();
+    private final int REQUEST_BRAND = 0;
 
     @Override
     public int bindLayout() {
@@ -73,6 +74,7 @@ public class ReleaseOptionActivity extends BaseActivity {
             ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
             interiorColorTypes.add(itemData);
         }
+
     }
 
     @Override
@@ -97,6 +99,8 @@ public class ReleaseOptionActivity extends BaseActivity {
                 showOptionsTypeList();
                 break;
             case R.id.iv_car_model:
+                Intent intent = new Intent(ReleaseOptionActivity.this,ChooseBrandActivity.class);
+                startActivityForResult(intent,REQUEST_BRAND);
                 break;
             case R.id.iv_appearance_color:
                 openRightLayout();
@@ -173,10 +177,4 @@ public class ReleaseOptionActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
