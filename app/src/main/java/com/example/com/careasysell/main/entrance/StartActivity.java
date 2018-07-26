@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.com.careasysell.MainTabActivity;
 import com.example.com.careasysell.R;
 import com.example.com.common.BaseActivity;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -35,17 +35,12 @@ public class StartActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 
     @OnClick({R.id.btn_options_traders, R.id.btn_dealers_traders, R.id.btn_sales_traders, R.id.btn_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_options_traders:
+                startActivity(MainTabActivity.class);
                 break;
             case R.id.btn_dealers_traders:
                 break;

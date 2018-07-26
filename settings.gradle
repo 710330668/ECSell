@@ -1,1 +1,1 @@
-include ':app', ':net', ':common', ':imageloader'
+include ':app', ':net', ':common', ':imageloader','FlycoTabLayout_Lib'

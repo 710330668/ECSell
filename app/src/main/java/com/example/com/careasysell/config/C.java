@@ -17,4 +17,11 @@ public interface C {
 
     //http超时时间
     long httpTimeOut = 5000L;
+
+
+    //首页
+
+    String TAG_PAGE_DUANJIE = "首页";
+    String TAG_PAGE_SETTING = "设置";
+
 }

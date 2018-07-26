@@ -29,5 +29,7 @@ dependencies {
     implementation project(':common')
     implementation project(':imageloader')
     def dep = rootProject.ext.dependencies
+    annotationProcessor dep.bKCompiler
     implementation dep.butterKnife
+    implementation project(':FlycoTabLayout_Lib')
 }
