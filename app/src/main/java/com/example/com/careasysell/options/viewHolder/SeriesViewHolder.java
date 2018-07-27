@@ -38,4 +38,5 @@ public class SeriesViewHolder extends BaseViewHolder {
         CarsSeriesModel model = (CarsSeriesModel) itemData.data;
         tvSeriesType.setText(model.getSeriesName());
     }
+
 }
