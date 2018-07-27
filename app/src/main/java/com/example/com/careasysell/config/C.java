@@ -24,4 +24,10 @@ public interface C {
     String TAG_PAGE_DUANJIE = "首页";
     String TAG_PAGE_SETTING = "设置";
 
+
+    //页面tag
+    String TAG_PAGE_MAIN = "TAG_PAGE_MAIN";
+    String TAG_PAGE_OPTIONS = "options";
+    String TAG_PAGE_DEALER = "dealer";
+
 }

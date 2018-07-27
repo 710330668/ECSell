@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.example.com.careasysell.MainTabActivity;
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.common.BaseActivity;
 
 import butterknife.OnClick;
@@ -38,11 +39,15 @@ public class StartActivity extends BaseActivity {
 
     @OnClick({R.id.btn_options_traders, R.id.btn_dealers_traders, R.id.btn_sales_traders, R.id.btn_share})
     public void onViewClicked(View view) {
+        Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.btn_options_traders:
-                startActivity(MainTabActivity.class);
+                bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_OPTIONS);
+                startActivity(MainTabActivity.class, bundle);
                 break;
             case R.id.btn_dealers_traders:
+                bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_DEALER);
+                startActivity(MainTabActivity.class, bundle);
                 break;
             case R.id.btn_sales_traders:
                 break;

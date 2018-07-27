@@ -99,8 +99,8 @@ public class ReleaseOptionActivity extends BaseActivity {
                 showOptionsTypeList();
                 break;
             case R.id.iv_car_model:
-                Intent intent = new Intent(ReleaseOptionActivity.this,ChooseBrandActivity.class);
-                startActivityForResult(intent,REQUEST_BRAND);
+                Intent intent = new Intent(ReleaseOptionActivity.this, ChooseBrandActivity.class);
+                startActivityForResult(intent, REQUEST_BRAND);
                 break;
             case R.id.iv_appearance_color:
                 openRightLayout();

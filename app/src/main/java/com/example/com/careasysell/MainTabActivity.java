@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.fragment.DealerTradersFragment;
 import com.example.com.careasysell.options.OptionsTradersFragment;
 import com.example.com.careasysell.options.SettingFragment;
 import com.example.com.careasysell.options.TabEntity;
@@ -39,6 +40,8 @@ public class MainTabActivity extends BaseActivity {
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private OptionsTradersFragment tradersFragment;
     private SettingFragment settingFragment;
+    private DealerTradersFragment dealerTradersFragment;
+    private String mPageType;
 
     @Override
     public int bindLayout() {
@@ -47,7 +50,7 @@ public class MainTabActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-
+        mPageType = params.getString(C.TAG_PAGE_MAIN);
     }
 
     @Override
@@ -72,10 +75,7 @@ public class MainTabActivity extends BaseActivity {
 
             }
         });
-        tradersFragment = new OptionsTradersFragment();
-        settingFragment = new SettingFragment();
-        mFragments.add(tradersFragment);
-        mFragments.add(settingFragment);
+        initSubFragment();
         container.setOffscreenPageLimit(mFragments.size());
         container.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         container.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -120,6 +120,28 @@ public class MainTabActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
             return mFragments.get(position);
+        }
+    }
+
+
+    /**
+     * 根据Tag初始化fragment
+     */
+    private void initSubFragment() {
+        switch (mPageType) {
+            case C.TAG_PAGE_OPTIONS:
+                tradersFragment = new OptionsTradersFragment();
+                settingFragment = new SettingFragment();
+                mFragments.add(tradersFragment);
+                mFragments.add(settingFragment);
+                break;
+            case C.TAG_PAGE_DEALER:
+                dealerTradersFragment = new DealerTradersFragment();
+                settingFragment = new SettingFragment();
+                mFragments.add(dealerTradersFragment);
+                mFragments.add(settingFragment);
+                break;
+            default:
         }
     }
 }
