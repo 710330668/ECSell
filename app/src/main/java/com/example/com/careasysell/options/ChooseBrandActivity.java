@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.example.com.careasysell.R;
-import com.example.com.careasysell.options.model.CarBrandModel;
+import com.example.com.careasysell.options.model.AddressModel;
 import com.example.com.common.BaseActivity;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
 
     @BindView(R.id.list)
     ListView listView;
-    private List<CarBrandModel> carBrands = new ArrayList<>();
+    private List<AddressModel> carBrands = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -32,20 +32,20 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     @Override
     public void initParams(Bundle params) {
         carBrands = new ArrayList<>();
-        carBrands.add(new CarBrandModel("保时捷"));
-        carBrands.add(new CarBrandModel("奥迪"));
-        carBrands.add(new CarBrandModel("福特"));
-        carBrands.add(new CarBrandModel("兰博基尼"));
-        carBrands.add(new CarBrandModel("阿斯顿"));
-        carBrands.add(new CarBrandModel("奔驰"));
-        carBrands.add(new CarBrandModel("五菱宏光"));
-        carBrands.add(new CarBrandModel("哈弗"));
-        carBrands.add(new CarBrandModel("凯迪拉克"));
+        carBrands.add(new AddressModel("保时捷"));
+        carBrands.add(new AddressModel("奥迪"));
+        carBrands.add(new AddressModel("福特"));
+        carBrands.add(new AddressModel("兰博基尼"));
+        carBrands.add(new AddressModel("阿斯顿"));
+        carBrands.add(new AddressModel("奔驰"));
+        carBrands.add(new AddressModel("五菱宏光"));
+        carBrands.add(new AddressModel("哈弗"));
+        carBrands.add(new AddressModel("凯迪拉克"));
 
         //对集合排序
-        Collections.sort(carBrands, new Comparator<CarBrandModel>() {
+        Collections.sort(carBrands, new Comparator<AddressModel>() {
             @Override
-            public int compare(CarBrandModel lhs, CarBrandModel rhs) {
+            public int compare(AddressModel lhs, AddressModel rhs) {
                 //根据拼音进行排序
                 return lhs.getPinyin().compareTo(rhs.getPinyin());
             }

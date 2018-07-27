@@ -37,6 +37,7 @@ public class ChooseModelActivity extends BaseActivity {
 
     private String carCombinate;
     private List<ItemData> carSeriesLists = new ArrayList<>();
+    private String carFullName ;
 
     @Override
     public int bindLayout() {
@@ -66,6 +67,9 @@ public class ChooseModelActivity extends BaseActivity {
         BaseAdapter baseAdapter = new BaseAdapter(carSeriesLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
+                //全称
+                CarsSeriesModel model = (CarsSeriesModel) data;
+                carFullName = carCombinate + "|" + model.getSeriesName();
             }
 
             @Override

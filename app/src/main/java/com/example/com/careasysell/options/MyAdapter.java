@@ -9,16 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
-import com.example.com.careasysell.options.model.CarBrandModel;
+import com.example.com.careasysell.options.model.AddressModel;
 
 import java.util.List;
 
 public class MyAdapter extends BaseAdapter {
-    private List<CarBrandModel> list;
+    private List<AddressModel> list;
     private LayoutInflater inflater;
     private SelectBrandListener listener;
 
-    public MyAdapter(Context context, List<CarBrandModel> list) {
+    public MyAdapter(Context context, List<AddressModel> list) {
         inflater = LayoutInflater.from(context);
         this.list = list;
     }

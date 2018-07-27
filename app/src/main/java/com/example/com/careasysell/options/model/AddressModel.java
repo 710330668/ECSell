@@ -5,7 +5,7 @@ import com.example.com.careasysell.utils.PinYinUtils;
 /**
  * Created by 71033 on 2018/7/26.
  */
-public class CarBrandModel {
+public class AddressModel {
 
     //姓名
     private String name;
@@ -14,7 +14,7 @@ public class CarBrandModel {
     //拼音首字母
     private String headerWord;
 
-    public CarBrandModel(String name) {
+    public AddressModel(String name) {
         this.name = name;
         this.pinyin = PinYinUtils.getPinyin(name);
         headerWord = pinyin.substring(0, 1);

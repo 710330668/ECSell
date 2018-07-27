@@ -170,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="16dp"
-                        android:text="地区"
+                        android:text="车源所在地"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -181,6 +181,111 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="14dp"
                         android:src="@mipmap/more_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_toLeftOf="@+id/iv_area"
+                        android:layout_marginRight="14dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="销售区域"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_sales_area"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="14dp"
+                        android:src="@mipmap/more_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_sales_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_toLeftOf="@+id/iv_sales_area"
+                        android:layout_marginRight="14dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="手续"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_formalities"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="14dp"
+                        android:src="@mipmap/more_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_formalities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_toLeftOf="@+id/iv_formalities"
+                        android:layout_marginRight="14dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="年份"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_year"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="14dp"
+                        android:src="@mipmap/more_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_toLeftOf="@+id/iv_year"
+                        android:layout_marginRight="14dp"
+                        android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
 
@@ -333,6 +438,7 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_baoxian"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
@@ -342,6 +448,7 @@
                         android:text="店内上保险" />
 
                     <Button
+                        android:id="@+id/btn_zhihuan"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
@@ -351,6 +458,7 @@
                         android:text="店内置换" />
 
                     <Button
+                        android:id="@+id/btn_daikuan"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
@@ -360,6 +468,7 @@
                         android:text="店内贷款" />
 
                     <Button
+                        android:id="@+id/btn_baoyang"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
@@ -384,6 +493,64 @@
                         android:textSize="14sp" />
 
                 </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="车辆图片"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="14dp"/>
+                
+                <ImageView
+                    android:layout_width="108dp"
+                    android:layout_height="80dp"
+                    android:src="@mipmap/add_photo"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="配置信息"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="14dp"/>
+                
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_margin="14dp"
+                    android:hint="输入配置信息"
+                    android:padding="14dp"
+                    android:gravity="left"
+                    android:background="@drawable/bg_edittext"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="输入备注"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="14dp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="14dp"
+                    android:hint="输入备注"
+                    android:padding="14dp"
+                    android:gravity="left"
+                    android:background="@drawable/bg_edittext"/>
+
+                <Button
+                    android:id="@+id/btn_release_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="发布车源"
+                    android:layout_margin="20dp"
+                    android:background="@mipmap/home_bg"
+                    android:textColor="#FFFFFF"/>
 
             </LinearLayout>
 

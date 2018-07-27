@@ -47,8 +47,17 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_cars_model"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/btn_zidingyi"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="自定义车型"
+        android:layout_margin="20dp"
+        android:background="@mipmap/home_bg"
+        android:textColor="#FFFFFF"/>
 
 
 </LinearLayout>

@@ -7,12 +7,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.options.model.ColorModel;
+import com.example.com.careasysell.options.model.FormalityModel;
 import com.example.com.careasysell.options.model.OptionTypeModel;
+import com.example.com.careasysell.options.model.SalesAreaModel;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -44,11 +48,30 @@ public class ReleaseOptionActivity extends BaseActivity {
     TextView tvApprenceColor;
     @BindView(R.id.tv_interior_color)
     TextView tvInteriorColor;
+    @BindView(R.id.tv_area)
+    TextView tvArea;
+    @BindView(R.id.tv_sales_area)
+    TextView tvSalesArea;
+    @BindView(R.id.tv_formalities)
+    TextView tvFormalities;
+    @BindView(R.id.tv_year)
+    TextView tvYear;
+    @BindView(R.id.btn_baoxian)
+    Button btnBaoxian;
+    @BindView(R.id.btn_zhihuan)
+    Button btnZhihuan;
+    @BindView(R.id.btn_daikuan)
+    Button btnDaikuan;
+    @BindView(R.id.btn_baoyang)
+    Button btnBaoyang;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
     private List<ItemData> interiorColorTypes = new ArrayList<>();
+    private List<ItemData> salesAreaTypes = new ArrayList<>();
+    private List<ItemData> formalityTypes = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
+    private final int REQUEST_AREA = 1;
 
     @Override
     public int bindLayout() {
@@ -75,6 +98,18 @@ public class ReleaseOptionActivity extends BaseActivity {
             interiorColorTypes.add(itemData);
         }
 
+        for (int i = 0; i < 5; i++) {
+            SalesAreaModel salesAreaModel = new SalesAreaModel("全省");
+            ItemData itemData = new ItemData(0, SettingDelegate.SALES_AREA_TYPE, salesAreaModel);
+            salesAreaTypes.add(itemData);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            FormalityModel formalityModel = new FormalityModel("手续齐全");
+            ItemData itemData = new ItemData(0, SettingDelegate.FORMALITY_TYPE, formalityModel);
+            formalityTypes.add(itemData);
+        }
+
     }
 
     @Override
@@ -88,7 +123,9 @@ public class ReleaseOptionActivity extends BaseActivity {
         rlOptionType.setLayoutManager(layoutManager);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color, R.id.iv_interior_color, R.id.iv_area})
+    @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
+            R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
+            R.id.btn_baoxian, R.id.btn_zhihuan, R.id.btn_daikuan, R.id.btn_baoyang})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -111,8 +148,64 @@ public class ReleaseOptionActivity extends BaseActivity {
                 showInteriorColorList();
                 break;
             case R.id.iv_area:
+                startActivityForResult(new Intent(ReleaseOptionActivity.this, ChooseAreaActivity.class), REQUEST_AREA);
                 break;
+            case R.id.iv_sales_area:
+                openRightLayout();
+                showSalesAreaList();
+                break;
+            case R.id.iv_formalities:
+                openRightLayout();
+                showFormalityList();
+                break;
+            case R.id.iv_year:
+                break;
+            case R.id.btn_baoxian:
+                break;
+            case R.id.btn_zhihuan:
+                break;
+            case R.id.btn_daikuan:
+                break;
+            case R.id.btn_baoyang:
+                break;
+
         }
+    }
+
+    private void showFormalityList() {
+        tvDrawerTitle.setText("选择手续");
+        BaseAdapter baseAdapter = new BaseAdapter(formalityTypes, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                mainDrawerLayout.closeDrawer(mainRightDrawerLayout);
+                FormalityModel model = (FormalityModel) data;
+                tvFormalities.setText(model.getFormalityName());
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        rlOptionType.setAdapter(baseAdapter);
+    }
+
+    private void showSalesAreaList() {
+        tvDrawerTitle.setText("选择销售区域");
+        BaseAdapter baseAdapter = new BaseAdapter(salesAreaTypes, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                mainDrawerLayout.closeDrawer(mainRightDrawerLayout);
+                SalesAreaModel model = (SalesAreaModel) data;
+                tvSalesArea.setText(model.getSalesAreaName());
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        rlOptionType.setAdapter(baseAdapter);
     }
 
     private void showInteriorColorList() {
@@ -175,6 +268,23 @@ public class ReleaseOptionActivity extends BaseActivity {
         } else {
             mainDrawerLayout.openDrawer(mainRightDrawerLayout);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_AREA) {
+                tvArea.setText(data.getStringExtra("area"));
+            }
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 
 }
