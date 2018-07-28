@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.fragment.DealerTradersFragment;
+import com.example.com.careasysell.market.ui.fragment.MarketTradersFragment;
 import com.example.com.careasysell.options.OptionsTradersFragment;
 import com.example.com.careasysell.options.SettingFragment;
 import com.example.com.careasysell.options.TabEntity;
@@ -41,6 +42,7 @@ public class MainTabActivity extends BaseActivity {
     private OptionsTradersFragment tradersFragment;
     private SettingFragment settingFragment;
     private DealerTradersFragment dealerTradersFragment;
+    private MarketTradersFragment marketTradersFragment;
     private String mPageType;
 
     @Override
@@ -139,6 +141,12 @@ public class MainTabActivity extends BaseActivity {
                 dealerTradersFragment = new DealerTradersFragment();
                 settingFragment = new SettingFragment();
                 mFragments.add(dealerTradersFragment);
+                mFragments.add(settingFragment);
+                break;
+            case C.TAG_PAGE_MARKET:
+                marketTradersFragment = new MarketTradersFragment();
+                settingFragment = new SettingFragment();
+                mFragments.add(marketTradersFragment);
                 mFragments.add(settingFragment);
                 break;
             default:

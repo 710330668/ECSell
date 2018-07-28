@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.fragment.SearchResultFragment;
 import com.example.com.common.BaseActivity;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -28,7 +29,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     @BindView(R.id.flow_layout_hot_character)
     TagFlowLayout mFlowLayout;
 
-    private FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager = getSupportFragmentManager();
     private SearchResultFragment mSearchResultFragment;
 
 
@@ -39,13 +40,26 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
 
     @Override
     public void initParams(Bundle params) {
-
+        if (params!=null) {
+//            String string = params.getString(C.TAG_PAGE_STORE_MANAGER, "");
+//            switch (string) {
+//                case C.TAG_STATE_PUT_AWAY:
+//                    break;
+//                case C.TAG_STATE_RESERVE:
+//                    break;
+//                case C.TAG_STATE_SELL:
+//                    break;
+//                    default:
+//            }
+            if (mSearchResultFragment==null) {
+                mSearchResultFragment = new SearchResultFragment();
+            }
+            mFragmentManager.beginTransaction().add(R.id.fm_fg_container,mSearchResultFragment).commit();
+        }
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
-        mFragmentManager = getSupportFragmentManager();
-
         mFlowLayout.setOnSelectListener(this);
     }
 

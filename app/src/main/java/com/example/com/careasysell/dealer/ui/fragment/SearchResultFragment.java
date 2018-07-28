@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -45,6 +46,7 @@ public class SearchResultFragment extends BaseFragment {
     @Override
     public void setView(View rootView) {
         mSearchResult.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
     }
 
     @Override
