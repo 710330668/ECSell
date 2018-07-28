@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
+import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseFragment;
@@ -65,7 +66,7 @@ public class SearchResultFragment extends BaseFragment {
         BaseAdapter adapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-
+                startActivity(CarDetailActivity.class);
             }
 
             @Override

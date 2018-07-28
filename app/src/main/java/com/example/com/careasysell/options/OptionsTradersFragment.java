@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
 import com.example.com.common.BaseFragment;
 
 import butterknife.ButterKnife;
@@ -62,6 +63,8 @@ public class OptionsTradersFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
+                //库存管理
+                startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:
                 break;

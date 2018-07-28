@@ -56,6 +56,10 @@
             android:name=".options.ChooseAreaActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".options.CarDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".dealer.ui.activity.StoreManagerActivity" />
         <activity android:name=".dealer.ui.activity.StoreSearchActivity"></activity>
     </application>
