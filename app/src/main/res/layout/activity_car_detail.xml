@@ -37,19 +37,34 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.example.com.careasysell.view.banner.BannerView
-                android:id="@+id/banner_view"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                app:bvAspectRatio="0.6666666"
-                app:bvBarColor="#88888888"
-                app:bvIndicatorColor="#cccccc"
-                app:bvIndicatorColorSelected="@color/colorAccent"
-                app:bvIndicatorGravity="left"
-                app:bvTitleVisible="false">
+                android:layout_height="wrap_content">
 
-            </com.example.com.careasysell.view.banner.BannerView>
+                <com.example.com.careasysell.view.banner.BannerView
+                    android:id="@+id/banner_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    app:bvAspectRatio="0.6666666"
+                    app:bvBarColor="#88888888"
+                    app:bvIndicatorColor="#cccccc"
+                    app:bvIndicatorColorSelected="@color/colorAccent"
+                    app:bvIndicatorGravity="left"
+                    app:bvTitleVisible="false">
+
+                </com.example.com.careasysell.view.banner.BannerView>
+
+                <ImageView
+                    android:id="@+id/iv_amplification"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
+                    android:src="@mipmap/search" />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -134,8 +149,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="14dp"
                     android:background="@drawable/bg_text"
-                    android:text="在售"
                     android:padding="2dp"
+                    android:text="在售"
                     android:textColor="#FF5754"
                     android:textSize="10sp" />
 
@@ -283,8 +298,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="14dp"
-                    android:text="店内上保险"
                     android:background="@drawable/bg_text"
+                    android:text="店内上保险"
                     android:textColor="#FF5754"
                     android:textSize="13dp" />
 

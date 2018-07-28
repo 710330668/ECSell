@@ -8,6 +8,10 @@ import com.example.com.careasysell.config.Environment;
 import com.example.com.careasysell.remote.ApiService;
 import com.example.com.net.HttpClient;
 import com.example.com.net.config.HttpConfig;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.io.File;
 
@@ -29,6 +33,7 @@ public class MyApplication extends Application {
         super.onCreate();
         initHttpConfig();
         context = getApplicationContext();
+        initImageLoader();
     }
 
 
@@ -82,6 +87,18 @@ public class MyApplication extends Application {
      */
     public static Context getContext() {
         return context;
+    }
+
+
+    public void initImageLoader() {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                getApplicationContext()).threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .writeDebugLogs() // Remove for release app
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
 }

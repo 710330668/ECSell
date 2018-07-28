@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.utils.ImagPagerUtil;
 import com.example.com.careasysell.view.banner.BannerView;
 import com.example.com.common.BaseActivity;
 import com.example.com.imageloader.LoaderManager;
@@ -70,6 +71,7 @@ public class CarDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
         bannerView.setViewFactory(new BannerViewFactory());
         bannerView.setDataList(list);
         bannerView.start();
@@ -82,13 +84,15 @@ public class CarDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_title})
+    @OnClick({R.id.iv_back,R.id.iv_amplification})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.tv_title:
+            case R.id.iv_amplification:
+                ImagPagerUtil imagPagerUtil = new ImagPagerUtil(CarDetailActivity.this, urls);
+                imagPagerUtil.show();
                 break;
         }
     }
