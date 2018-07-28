@@ -63,8 +63,6 @@
         android:id="@+id/tv_car_state"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/tv_car_sub_title"
         app:layout_constraintRight_toRightOf="parent"
