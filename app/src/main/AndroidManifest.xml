@@ -52,12 +52,12 @@
             android:name=".options.ChooseModelActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
         <activity
             android:name=".options.ChooseAreaActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".dealer.ui.activity.StoreManagerActivity"></activity>
+        <activity android:name=".dealer.ui.activity.StoreManagerActivity" />
+        <activity android:name=".dealer.ui.activity.StoreSearchActivity"></activity>
     </application>
 
 </manifest>

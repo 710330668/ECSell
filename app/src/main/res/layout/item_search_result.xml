@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="14dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/img_car_poster"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="96dp"
+        android:layout_height="72dp" />
+
+    <TextView
+        android:id="@+id/tv_car_title"
+        android:text="雪佛兰2013款 科鲁兹 1.6LSL 天地板 MT"
+        app:layout_constraintLeft_toRightOf="@id/img_car_poster"
+        app:layout_constraintTop_toTopOf="@id/img_car_poster"
+        android:textSize="14sp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="#333333"
+        android:layout_marginLeft="14dp"
+        android:lines="2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_car_sub_title"
+        android:text="分享20次 | 浏览140次"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_car_title"
+        android:layout_marginTop="6dp"
+        app:layout_constraintLeft_toLeftOf="@id/tv_car_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_car_price"
+        app:layout_constraintLeft_toLeftOf="@id/tv_car_title"
+        app:layout_constraintBottom_toBottomOf="@id/img_car_poster"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FE5F55"
+        android:text="16.8万"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_car_deduct"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/tv_car_price"
+        app:layout_constraintBottom_toBottomOf="@id/tv_car_price"
+        android:text="销售提成2000元"
+        android:layout_width="wrap_content"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/tv_car_state"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_car_sub_title"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="#FF5745"
+        android:text="已上架"
+        android:background="@drawable/bg_car_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_car_date"
+        android:textColor="#999999"
+        app:layout_constraintBottom_toBottomOf="@+id/img_car_poster"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="11sp"
+        android:text="2018/06/24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</android.support.constraint.ConstraintLayout>

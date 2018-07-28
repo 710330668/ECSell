@@ -3,6 +3,7 @@ package com.example.com.careasysell.remote;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
 import com.example.com.careasysell.options.viewHolder.ColorViewHolder;
@@ -27,6 +28,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int AREAS_TYPE = 4;
     public static final int SALES_AREA_TYPE = 5;
     public static final int FORMALITY_TYPE = 6;
+    public static final int SEARCH_RESULT_TYPE = 7;
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,6 +48,9 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new SalesAreaViewHolder(parent, getItemView(parent, viewType));
             case FORMALITY_TYPE:
                 return new FormalityViewHolder(parent, getItemView(parent, viewType));
+            case SEARCH_RESULT_TYPE:
+                return new SearchResultViewHolder(parent,getItemView(parent,viewType));
+                default:
         }
         return null;
     }
@@ -72,6 +77,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_sales_area;
             case FORMALITY_TYPE:
                 return R.layout.item_formality;
+            case SEARCH_RESULT_TYPE:
+                return R.layout.item_search_result;
             default:
         }
         return 0;

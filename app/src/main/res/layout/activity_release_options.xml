@@ -501,7 +501,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="20dp"
                     android:textSize="14dp"/>
-                
+
                 <ImageView
                     android:layout_width="108dp"
                     android:layout_height="80dp"
@@ -516,7 +516,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="20dp"
                     android:textSize="14dp"/>
-                
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
