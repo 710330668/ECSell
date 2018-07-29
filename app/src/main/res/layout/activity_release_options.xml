@@ -33,6 +33,11 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F5F5F5" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -74,6 +79,13 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
@@ -96,6 +108,13 @@
                         android:src="@mipmap/more_gray" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -129,6 +148,13 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
@@ -160,6 +186,13 @@
                         android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -193,6 +226,13 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
@@ -225,6 +265,13 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
@@ -256,6 +303,13 @@
                         android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -338,6 +392,13 @@
                         android:textSize="14sp" />
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -371,6 +432,13 @@
                         android:hint="请输入价格"
                         android:textSize="14sp" />
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F5F5F5"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -502,12 +570,23 @@
                     android:layout_marginTop="20dp"
                     android:textSize="14dp"/>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_edittext"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp">
+
                 <ImageView
                     android:layout_width="108dp"
                     android:layout_height="80dp"
                     android:src="@mipmap/add_photo"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="20dp"/>
+                    android:padding="14dp"
+                    />
+
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -583,6 +662,11 @@
 
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F5F5F5" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rl_option_type"

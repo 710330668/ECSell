@@ -17,6 +17,7 @@ import com.example.com.careasysell.options.model.FormalityModel;
 import com.example.com.careasysell.options.model.OptionTypeModel;
 import com.example.com.careasysell.options.model.SalesAreaModel;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -72,6 +73,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private List<ItemData> formalityTypes = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
+    private boolean baoxianFlag = true , zhihuanFlag = true , daikuanFlag = true , baoyangFlag = true;
 
     @Override
     public int bindLayout() {
@@ -121,6 +123,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlOptionType.setLayoutManager(layoutManager);
+        rlOptionType.addItemDecoration(new SpaceItemDecoration(5));
     }
 
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
@@ -161,15 +164,44 @@ public class ReleaseOptionActivity extends BaseActivity {
             case R.id.iv_year:
                 break;
             case R.id.btn_baoxian:
+                if(baoxianFlag){
+                    changeTextColor(btnBaoxian,R.color.color_FF5754,R.drawable.bg_edittext_red);
+                }else{
+                    changeTextColor(btnBaoxian,R.color.color_333333,R.drawable.bg_edittext);
+                }
+                baoxianFlag = ! baoxianFlag;
                 break;
             case R.id.btn_zhihuan:
+                if(zhihuanFlag){
+                    changeTextColor(btnZhihuan,R.color.color_FF5754,R.drawable.bg_edittext_red);
+                }else{
+                    changeTextColor(btnZhihuan,R.color.color_333333,R.drawable.bg_edittext);
+                }
+                zhihuanFlag = ! zhihuanFlag;
                 break;
             case R.id.btn_daikuan:
+                if(daikuanFlag){
+                    changeTextColor(btnDaikuan,R.color.color_FF5754,R.drawable.bg_edittext_red);
+                }else{
+                    changeTextColor(btnDaikuan,R.color.color_333333,R.drawable.bg_edittext);
+                }
+                daikuanFlag = ! daikuanFlag;
                 break;
             case R.id.btn_baoyang:
+                if(baoyangFlag){
+                    changeTextColor(btnBaoyang,R.color.color_FF5754,R.drawable.bg_edittext_red);
+                }else{
+                    changeTextColor(btnBaoyang,R.color.color_333333,R.drawable.bg_edittext);
+                }
+                baoyangFlag = ! baoyangFlag;
                 break;
 
         }
+    }
+
+    private void changeTextColor(Button view ,int color,int bg) {
+        view.setTextColor(this.getResources().getColor(color));
+        view.setBackgroundResource(bg);
     }
 
     private void showFormalityList() {
