@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
+import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 
 import butterknife.ButterKnife;
@@ -19,6 +21,8 @@ import butterknife.Unbinder;
 public class OptionsTradersFragment extends BaseFragment {
 
     Unbinder unbinder;
+
+    public int INVENTORY = C.INVENTORY_OPTION;
 
     @Override
     protected int setLayoutResouceId() {
@@ -64,6 +68,7 @@ public class OptionsTradersFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
                 //库存管理
+                ParamManager.channelType = INVENTORY;
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:

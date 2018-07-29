@@ -1,5 +1,7 @@
 package com.example.com.careasysell.config;
 
+import android.support.annotation.IntDef;
+
 /**
  * Created by 71033 on 2018/7/19.
  */
@@ -38,5 +40,13 @@ public interface C {
     String TAG_STATE_RESERVE = "TAG_STATE_RESERVE";
     // 已售
     String TAG_STATE_SELL = "TAG_STATE_SELL";
+
+
+    int INVENTORY_OPTION = 0;  //库存——车源
+    int INVENTORY_DEALER = 1; //库存 - 经销
+    int INVENTORY_MARKET = 2;  //库存 - 销售
+
+    @IntDef({INVENTORY_OPTION,INVENTORY_DEALER, INVENTORY_MARKET})
+    public @interface  INVENTORY {}
 
 }

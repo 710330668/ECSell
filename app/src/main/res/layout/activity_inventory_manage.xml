@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/ll_has_put_away"
+        android:id="@+id/ll_in_sale"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="#FFFFFF"
@@ -56,6 +56,47 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         app:layout_constraintTop_toBottomOf="@+id/iv_background">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="在售"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="22辆"
+            android:textColor="#999999"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@mipmap/more_gray" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F5F5F5"
+        app:layout_constraintTop_toBottomOf="@+id/ll_in_sale" />
+
+    <LinearLayout
+        android:id="@+id/ll_has_put_away"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/ll_in_sale">
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,14 +1,21 @@
 package com.example.com.careasysell.options;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.utils.ImagPagerUtil;
+import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.careasysell.view.banner.BannerView;
 import com.example.com.common.BaseActivity;
 import com.example.com.imageloader.LoaderManager;
@@ -33,9 +40,17 @@ public class CarDetailActivity extends BaseActivity {
     BannerView bannerView;
 
 
-    public static String[] titles ;
-    public static String[] urls ;
+    public static String[] titles;
+    public static String[] urls;
     List<BannerItem> list = new ArrayList<>();
+    @BindView(R.id.iv_more)
+    ImageView ivMore;
+    @BindView(R.id.lly_share)
+    LinearLayout llyShare;
+    private PopupWindow pop;
+
+    @C.INVENTORY
+    public int INVENTORY;
 
     @Override
     public int bindLayout() {
@@ -44,6 +59,9 @@ public class CarDetailActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
+
+        INVENTORY = ParamManager.channelType;
+
         titles = new String[]{
                 "汽车之家",
                 "汽车之家",
@@ -71,7 +89,17 @@ public class CarDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
+        switch (INVENTORY) {
+            case C.INVENTORY_OPTION:
+                llyShare.setVisibility(View.GONE);
+                break;
+            case C.INVENTORY_DEALER:
+                llyShare.setVisibility(View.VISIBLE);
+                break;
+            case C.INVENTORY_MARKET:
+                llyShare.setVisibility(View.GONE);
+                break;
+        }
         bannerView.setViewFactory(new BannerViewFactory());
         bannerView.setDataList(list);
         bannerView.start();
@@ -84,7 +112,7 @@ public class CarDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back,R.id.iv_amplification})
+    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -94,7 +122,27 @@ public class CarDetailActivity extends BaseActivity {
                 ImagPagerUtil imagPagerUtil = new ImagPagerUtil(CarDetailActivity.this, urls);
                 imagPagerUtil.show();
                 break;
+            case R.id.iv_more:
+                showPopWindow();
+                break;
         }
+    }
+
+    private void showPopWindow() {
+        View popView = LayoutInflater.from(getApplication()).inflate(R.layout.item_pop, null, false);
+        Button modifyBtn = popView.findViewById(R.id.btn_modify);
+        modifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(ReleaseOptionActivity.class);
+                pop.dismiss();
+            }
+        });
+        pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        pop.setBackgroundDrawable(new BitmapDrawable());
+        pop.setFocusable(true);
+        pop.setOutsideTouchable(true);
+        pop.showAsDropDown(ivMore, 10, 10);
     }
 
 
@@ -112,7 +160,7 @@ public class CarDetailActivity extends BaseActivity {
         @Override
         public View create(BannerItem item, int position, ViewGroup container) {
             ImageView iv = new ImageView(container.getContext());
-            LoaderManager.getLoader().loadNet(iv,item.image);
+            LoaderManager.getLoader().loadNet(iv, item.image);
             return iv;
         }
     }
