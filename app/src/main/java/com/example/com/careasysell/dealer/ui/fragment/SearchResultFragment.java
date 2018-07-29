@@ -1,16 +1,23 @@
 package com.example.com.careasysell.dealer.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
+import com.example.com.careasysell.options.ChooseBrandActivity;
+import com.example.com.careasysell.options.ReleaseOptionActivity;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseFragment;
@@ -23,7 +30,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Author ： DasonYu
@@ -35,9 +45,27 @@ public class SearchResultFragment extends BaseFragment {
 
     @BindView(R.id.rl_search_result)
     RecyclerView mSearchResult;
+    @BindView(R.id.ll_tab)
+    RadioGroup mRadioGroup;
+    @BindView(R.id.rb_car_state)
+    RadioButton mRbState;
+    @BindView(R.id.rb_car_order)
+    RadioButton mRbOrder;
+    @BindView(R.id.rb_car_brand)
+    RadioButton mRbBrand;
+    @BindView(R.id.rb_car_filter)
+    RadioButton mRbFilter;
     Unbinder unbinder;
 
+    private int selectState = 0;
+    private int selectOrder = 0;
+
+    PopupWindow mPopupWindow;
+
     private List<ItemData> mSearchResultData = new ArrayList<>();
+
+    private static final String TAG = "SearchResultFragment";
+    private final int REQUEST_BRAND = 0;
 
     @Override
     protected int setLayoutResouceId() {
@@ -46,7 +74,7 @@ public class SearchResultFragment extends BaseFragment {
 
     @Override
     public void setView(View rootView) {
-        mSearchResult.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        mSearchResult.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
     }
 
@@ -60,7 +88,7 @@ public class SearchResultFragment extends BaseFragment {
             data.setState("已上架");
             data.setSubTitle("分享20次|浏览140次");
             data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
-            ItemData e = new ItemData(0,SettingDelegate.SEARCH_RESULT_TYPE, data);
+            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
             mSearchResultData.add(e);
         }
         BaseAdapter adapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
@@ -99,5 +127,87 @@ public class SearchResultFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick({R.id.rb_car_state,R.id.rb_car_brand,R.id.rb_car_order,R.id.rb_car_filter})
+    public void onViewClicked(View view){
+        switch (view.getId()) {
+//            汽车状态
+            case R.id.rb_car_state:
+                showPopupWindow(R.id.rb_car_state);
+                break;
+//                品牌  跳转品牌activity
+            case R.id.rb_car_brand:
+                Intent intent = new Intent(SearchResultFragment.this.getContext(), ChooseBrandActivity.class);
+                startActivityForResult(intent, REQUEST_BRAND);
+                break;
+//                排序
+            case R.id.rb_car_order:
+                showPopupWindow(R.id.rb_car_order);
+                break;
+//                筛选  draw  open
+            case R.id.rb_car_filter:
+                break;
+            default:
+        }
+    }
+
+    public void showPopupWindow(final int viewId){
+        RadioGroup convertView = null;
+
+        switch (viewId) {
+            case R.id.rb_car_state:
+                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_state,null);
+                ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
+                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                break;
+            case R.id.rb_car_order:
+                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_order,null);
+                ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
+                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                break;
+            default:
+        }
+
+        if (convertView != null) {
+            convertView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    RadioButton selectButton;
+                    switch (viewId) {
+                        case R.id.rb_car_state:
+                            selectButton = ((RadioButton) radioGroup.findViewById(i));
+                            mRbState.setText(selectButton.getText());
+                            selectState = radioGroup.indexOfChild(selectButton);
+                            mPopupWindow.dismiss();
+                            break;
+                        case R.id.rb_car_order:
+                            selectButton = ((RadioButton) radioGroup.findViewById(i));
+                            mRbOrder.setText(selectButton.getText());
+                            selectOrder = radioGroup.indexOfChild(selectButton);
+                            mPopupWindow.dismiss();
+                            break;
+                        default:
+                    }
+                }
+            });
+        }
+
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setOutsideTouchable(false);
+        mPopupWindow.showAsDropDown(mRadioGroup,0,2);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_BRAND) {
+                Log.e(TAG, "onActivityResult: ---" );
+//                tvArea.setText(data.getStringExtra("area"));
+            }
+        }
     }
 }

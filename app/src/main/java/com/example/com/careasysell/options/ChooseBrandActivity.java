@@ -18,7 +18,7 @@ import butterknife.BindView;
 /**
  * Created by 71033 on 2018/7/26.
  */
-public class ChooseBrandActivity extends BaseActivity implements MyAdapter.SelectBrandListener{
+public class ChooseBrandActivity extends BaseActivity implements MyAdapter.SelectBrandListener {
 
     @BindView(R.id.list)
     ListView listView;
@@ -68,7 +68,7 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     @Override
     public void selectBrand(String carBrand) {
         Bundle bundle = new Bundle();
-        bundle.putString("carBrand",carBrand);
-        startActivity(ChooseCarsActivity.class,bundle);
+        bundle.putString("carBrand", carBrand);
+        startActivity(ChooseCarsActivity.class, bundle);
     }
 }

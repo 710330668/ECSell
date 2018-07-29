@@ -8,6 +8,7 @@ import com.example.com.careasysell.MainActivity;
 import com.example.com.careasysell.MainTabActivity;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.share.SharedActivity;
 import com.example.com.common.BaseActivity;
 
 import butterknife.OnClick;
@@ -51,10 +52,11 @@ public class StartActivity extends BaseActivity {
                 startActivity(MainTabActivity.class, bundle);
                 break;
             case R.id.btn_sales_traders:
-                bundle.putString(C.TAG_PAGE_MAIN,C.TAG_PAGE_MARKET);
-                startActivity(MainTabActivity.class,bundle);
+                bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_MARKET);
+                startActivity(MainTabActivity.class, bundle);
                 break;
             case R.id.btn_share:
+                startActivity(SharedActivity.class);
                 break;
             default:
         }
