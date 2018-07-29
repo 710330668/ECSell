@@ -2,6 +2,7 @@ package com.example.com.careasysell.options;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -64,6 +65,7 @@ public class ChooseModelActivity extends BaseActivity {
         tvCarModel.setText(carCombinate);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlCarsModel.setLayoutManager(layoutManager);
+        rlCarsModel.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         BaseAdapter baseAdapter = new BaseAdapter(carSeriesLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {

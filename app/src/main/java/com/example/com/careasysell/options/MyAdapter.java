@@ -66,8 +66,9 @@ public class MyAdapter extends BaseAdapter {
             } else {
                 holder.tv_word.setVisibility(View.VISIBLE);
             }
+
         }
-        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String carBrand = list.get(position).getName();

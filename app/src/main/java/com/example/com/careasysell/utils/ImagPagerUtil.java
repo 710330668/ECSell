@@ -31,7 +31,7 @@ public class ImagPagerUtil {
     private Activity mActivity;
     private Dialog dialog;
     private LazyViewPager mViewPager;
-    private LinearLayout mLL_progress;
+    private LinearLayout mLL_progress,mLinearLayout;
     private TextView tv_loadingmsg;
     private int screenWidth;
     private ImageLoader imageLoader;
@@ -40,6 +40,7 @@ public class ImagPagerUtil {
     private TextView tv_img_current_index;
     private TextView tv_img_count;
     private TextView tv_content;
+    private List<ImageView> mDotView;
 
     public ImagPagerUtil(Activity activity, List<String> mPicList) {
         this.mPicList = mPicList;
@@ -83,6 +84,7 @@ public class ImagPagerUtil {
         tv_img_current_index = getView(contentView, R.id.tv_img_current_index);
         tv_img_count = getView(contentView, R.id.tv_img_count);
         tv_content = getView(contentView, R.id.tv_content);
+        mLinearLayout = getView(contentView, R.id.ll_details_top_dot);
         dialog.setContentView(contentView);
 
         tv_img_count.setText(mPicList.size() + "");
@@ -105,6 +107,20 @@ public class ImagPagerUtil {
         for (int i = 0; i < size; i++) {
             imageViews.add(imageView);
         }
+        mDotView=new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            ImageView imageView1 = new ImageView(mActivity);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            params.leftMargin = 10;     //设置圆点相距距离
+            params.rightMargin = 10;
+            if (i == 0) {               //初始化为红点
+                imageView1.setBackgroundResource(R.mipmap.icon_point_red);
+            } else {
+                imageView1.setBackgroundResource(R.mipmap.icon_point_gray);
+            }
+            mLinearLayout.addView(imageView1,params);
+            mDotView.add(imageView1);
+        }
         initViewPager(imageViews);
     }
 
@@ -112,7 +128,14 @@ public class ImagPagerUtil {
         mViewPager.setOnPageChangeListener(new LazyViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                tv_img_current_index.setText("" + (position + 1));
+//                tv_img_current_index.setText("" + (position + 1));
+                for (int i = 0; i < mPicList.size(); i++) {
+                    if ((position % mPicList.size()) == i) {      //如果是当前的位置就设置为红点
+                        mDotView.get(i).setBackgroundResource(R.mipmap.icon_point_red);
+                    } else {
+                        mDotView.get(i).setBackgroundResource(R.mipmap.icon_point_gray);
+                    }
+                }
             }
         });
 

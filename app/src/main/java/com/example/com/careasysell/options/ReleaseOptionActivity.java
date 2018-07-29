@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.example.com.careasysell.options.model.FormalityModel;
 import com.example.com.careasysell.options.model.OptionTypeModel;
 import com.example.com.careasysell.options.model.SalesAreaModel;
 import com.example.com.careasysell.remote.SettingDelegate;
-import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -123,7 +123,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlOptionType.setLayoutManager(layoutManager);
-        rlOptionType.addItemDecoration(new SpaceItemDecoration(5));
+        rlOptionType.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
     }
 
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
