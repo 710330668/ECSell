@@ -13,6 +13,8 @@ public class ParamManager {
 
     public int channelType ;
 
+    public String carFullName ;
+
     public static ParamManager getInstance(Context context){
 
         if(instance == null){
@@ -37,5 +39,13 @@ public class ParamManager {
 
     public void setChannelType(int channelType) {
         this.channelType = channelType;
+    }
+
+    public String getCarFullName() {
+        return carFullName;
+    }
+
+    public void setCarFullName(String carFullName) {
+        this.carFullName = carFullName;
     }
 }

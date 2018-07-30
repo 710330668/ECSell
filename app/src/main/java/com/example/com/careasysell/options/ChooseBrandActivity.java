@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.options.contract.ICarSell;
 import com.example.com.careasysell.options.model.AddressModel;
+import com.example.com.careasysell.utils.NotifyCallBackManager;
 import com.example.com.common.BaseActivity;
 
 import java.util.ArrayList;
@@ -62,6 +64,12 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
         MyAdapter adapter = new MyAdapter(this, carBrands);
         adapter.setOnSelectBrandListener(this);
         listView.setAdapter(adapter);
+        NotifyCallBackManager.getInstance().registPagerCloseCallBack(new ICarSell.IPagerClose() {
+            @Override
+            public void close() {
+                finish();
+            }
+        });
     }
 
 

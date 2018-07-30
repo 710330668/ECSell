@@ -10,8 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.options.contract.ICarSell;
 import com.example.com.careasysell.options.model.CarsModel;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.NotifyCallBackManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -39,6 +41,7 @@ public class ChooseCarsActivity extends BaseActivity {
     TextView tvCarBrand;
     private List<ItemData> carLists = new ArrayList<>();
     private String carBrand;
+    private ICarSell.IPagerClose iPagerClose;
 
     @Override
     public int bindLayout() {
@@ -83,6 +86,13 @@ public class ChooseCarsActivity extends BaseActivity {
             }
         });
         rlCars.setAdapter(baseAdapter);
+        NotifyCallBackManager.getInstance().registPagerCloseCallBack(iPagerClose = new ICarSell.IPagerClose() {
+            @Override
+            public void close() {
+                NotifyCallBackManager.getInstance().removeCloseCallBack(iPagerClose);
+                finish();
+            }
+        });
     }
 
 

@@ -107,6 +107,15 @@
                         android:layout_marginRight="14dp"
                         android:src="@mipmap/more_gray" />
 
+                    <TextView
+                        android:id="@+id/tv_car_model"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_toLeftOf="@+id/iv_car_model"
+                        android:layout_marginRight="14dp"
+                        android:layout_centerVertical="true"/>
+
                 </RelativeLayout>
 
                 <View

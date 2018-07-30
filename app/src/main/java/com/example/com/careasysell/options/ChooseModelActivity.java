@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.options.model.CarsSeriesModel;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.NotifyCallBackManager;
+import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -72,6 +74,9 @@ public class ChooseModelActivity extends BaseActivity {
                 //全称
                 CarsSeriesModel model = (CarsSeriesModel) data;
                 carFullName = carCombinate + "|" + model.getSeriesName();
+                ParamManager.getInstance(ChooseModelActivity.this).setCarFullName(carFullName);
+                NotifyCallBackManager.getInstance().onCloseCallBack();
+                finish();
             }
 
             @Override
