@@ -42,7 +42,7 @@ public class StoreManagerActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        INVENTORY = ParamManager.channelType;
+        INVENTORY = ParamManager.getInstance(this).getChannelType();
     }
 
     @Override

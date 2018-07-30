@@ -60,7 +60,7 @@ public class CarDetailActivity extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
 
-        INVENTORY = ParamManager.channelType;
+        INVENTORY = ParamManager.getInstance(this).getChannelType();
 
         titles = new String[]{
                 "汽车之家",

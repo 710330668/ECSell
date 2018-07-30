@@ -75,7 +75,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_store_manager:
                 //库存管理
-                ParamManager.channelType = INVENTORY;
+                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_human_manager:

@@ -68,7 +68,7 @@ public class OptionsTradersFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
                 //库存管理
-                ParamManager.channelType = INVENTORY;
+                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:
