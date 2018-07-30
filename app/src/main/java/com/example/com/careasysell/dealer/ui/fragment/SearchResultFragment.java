@@ -3,12 +3,15 @@ package com.example.com.careasysell.dealer.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -129,8 +132,8 @@ public class SearchResultFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rb_car_state,R.id.rb_car_brand,R.id.rb_car_order,R.id.rb_car_filter})
-    public void onViewClicked(View view){
+    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter})
+    public void onViewClicked(View view) {
         switch (view.getId()) {
 //            汽车状态
             case R.id.rb_car_state:
@@ -147,22 +150,32 @@ public class SearchResultFragment extends BaseFragment {
                 break;
 //                筛选  draw  open
             case R.id.rb_car_filter:
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    DrawerLayout mainDrawerLayout = (DrawerLayout) activity.findViewById(R.id.layout_drawer);
+                    LinearLayout mainRightDrawerLayout = (LinearLayout) activity.findViewById(R.id.layout_drawer_right);
+                    if (mainDrawerLayout.isDrawerOpen(mainRightDrawerLayout)) {
+                        mainDrawerLayout.closeDrawer(mainRightDrawerLayout);
+                    } else {
+                        mainDrawerLayout.openDrawer(mainRightDrawerLayout);
+                    }
+                }
                 break;
             default:
         }
     }
 
-    public void showPopupWindow(final int viewId){
+    public void showPopupWindow(final int viewId) {
         RadioGroup convertView = null;
 
         switch (viewId) {
             case R.id.rb_car_state:
-                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_state,null);
+                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_state, null);
                 ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
                 mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 break;
             case R.id.rb_car_order:
-                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_order,null);
+                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_order, null);
                 ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
                 mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -197,7 +210,7 @@ public class SearchResultFragment extends BaseFragment {
         mPopupWindow.setFocusable(true);
         mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(false);
-        mPopupWindow.showAsDropDown(mRadioGroup,0,2);
+        mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
     }
 
     @Override
@@ -205,7 +218,7 @@ public class SearchResultFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_BRAND) {
-                Log.e(TAG, "onActivityResult: ---" );
+                Log.e(TAG, "onActivityResult: ---");
 //                tvArea.setText(data.getStringExtra("area"));
             }
         }
