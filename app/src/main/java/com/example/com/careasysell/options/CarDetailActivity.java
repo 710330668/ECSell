@@ -16,6 +16,7 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.utils.ImagPagerUtil;
 import com.example.com.careasysell.utils.ParamManager;
+import com.example.com.careasysell.view.CommonDialog;
 import com.example.com.careasysell.view.banner.BannerView;
 import com.example.com.common.BaseActivity;
 import com.example.com.imageloader.LoaderManager;
@@ -138,11 +139,36 @@ public class CarDetailActivity extends BaseActivity {
                 pop.dismiss();
             }
         });
+        Button shelvesBtn = popView.findViewById(R.id.btn_xiajia);
+        shelvesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog("确定下架车辆?","下架后,车辆信息将不可找回","取消","确定");
+            }
+        });
         pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
         pop.setBackgroundDrawable(new BitmapDrawable());
         pop.setFocusable(true);
         pop.setOutsideTouchable(true);
-        pop.showAsDropDown(ivMore, 10, 10);
+        pop.showAsDropDown(ivMore, 10, 70);
+    }
+
+    private void showDialog(String title, String content, String cancel, String confirm) {
+        final CommonDialog dialog = new CommonDialog(this, title, content,confirm, cancel);
+        dialog.show();
+        dialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
+            @Override
+            public void doConfirm() {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+
+            @Override
+            public void doCancel() {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
     }
 
 
