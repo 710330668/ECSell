@@ -12,6 +12,8 @@ import com.example.com.careasysell.options.viewHolder.FormalityViewHolder;
 import com.example.com.careasysell.options.viewHolder.OptionTypeViewHolder;
 import com.example.com.careasysell.options.viewHolder.SalesAreaViewHolder;
 import com.example.com.careasysell.options.viewHolder.SeriesViewHolder;
+import com.example.com.careasysell.share.viewholder.SharedCarHolder;
+import com.example.com.careasysell.share.viewholder.SharedHumanHolder;
 import com.example.com.common.adapter.BaseDelegate;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
@@ -31,6 +33,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int FORMALITY_TYPE = 6;
     public static final int SEARCH_RESULT_TYPE = 7;
     public static final int PUT_AWAY_CAR_TYPE = 8;
+    public static final int SHARED_CAR_TYPE = 9;
+    public static final int SHARED_HUMAN_TYPE = 10;
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,6 +58,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new SearchResultViewHolder(parent, getItemView(parent, viewType));
             case PUT_AWAY_CAR_TYPE:
                 return new PutAwayHolder(parent, getItemView(parent, viewType));
+            case SHARED_CAR_TYPE:
+                return new SharedCarHolder(parent, getItemView(parent, viewType));
+            case SHARED_HUMAN_TYPE:
+                return new SharedHumanHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -85,6 +93,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_search_result;
             case PUT_AWAY_CAR_TYPE:
                 return R.layout.item_put_away_car;
+            case SHARED_CAR_TYPE:
+                return R.layout.item_shared_car;
+            case SHARED_HUMAN_TYPE:
+                return R.layout.item_shared_human;
             default:
         }
         return 0;
