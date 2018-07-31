@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.activity.AllSourceSearchActivity;
 import com.example.com.careasysell.dealer.ui.activity.NationSourceActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
 import com.example.com.careasysell.utils.ParamManager;
@@ -68,7 +69,7 @@ public class DealerTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_country_options, R.id.rl_store_manager, R.id.rl_human_manager, R.id.rl_client_manager, R.id.rl_order_manager, R.id.rl_report})
+    @OnClick({R.id.rl_country_options, R.id.rl_store_manager, R.id.rl_human_manager, R.id.rl_client_manager, R.id.rl_order_manager, R.id.rl_report,R.id.et_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_country_options:
@@ -91,6 +92,9 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_report:
                 //报表
+                break;
+            case R.id.et_search:
+                startActivity(AllSourceSearchActivity.class);
                 break;
             default:
 

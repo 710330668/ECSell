@@ -86,13 +86,17 @@ public class SharedActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.ll_call})
+    @OnClick({R.id.ll_call,R.id.iv_back})
     public void onViewClicked(View view){
         switch (view.getId()) {
             case R.id.ll_call:
                 Intent intent =  new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "11111111111"));//跳转到拨号界面，同时传递电话号码
                 startActivity(intent);
                 break;
+            case R.id.iv_back:
+                this.finish();
+                break;
+            default:
         }
     }
 }
