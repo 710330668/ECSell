@@ -2,6 +2,8 @@ package com.example.com.careasysell.dealer.ui.viewHolder;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
     private TextView mCarDeduct;
     private TextView mCarState;
     private TextView mCarDate;
+    private CheckBox mCarPutAway;
 
     /**
      * TODO
@@ -46,11 +49,13 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarDeduct = ((TextView) itemView.findViewById(R.id.tv_car_deduct));
         mCarState = ((TextView) itemView.findViewById(R.id.tv_car_state));
         mCarDate = ((TextView) itemView.findViewById(R.id.tv_car_date));
+        mCarPutAway = ((CheckBox) itemView.findViewById(R.id.cb_car_put_away));
     }
 
     @Override
     public void onBindViewHolder(ItemData data) {
-        SearchResultModel resultModel = (SearchResultModel) data.data;
+        final SearchResultModel resultModel = (SearchResultModel) data.data;
+
         mCarPoster.setImageResource(R.mipmap.ic_launcher);
 
         mCarTitle.setText(resultModel.getTitle());
@@ -59,5 +64,17 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarDate.setText(resultModel.getDate());
         mCarPrice.setText(resultModel.getPrice());
         mCarDeduct.setText(resultModel.getDeduct());
+        mCarPutAway.setChecked(resultModel.isPut());
+
+        mCarDate.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
+        mCarState.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
+        mCarPutAway.setVisibility(resultModel.isOpenPutEntrance() ? View.VISIBLE : View.GONE);
+
+        mCarPutAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                resultModel.setPut(mCarPutAway.isChecked());
+            }
+        });
     }
 }

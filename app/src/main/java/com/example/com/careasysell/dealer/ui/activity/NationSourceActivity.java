@@ -1,39 +1,47 @@
 package com.example.com.careasysell.dealer.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
-import com.example.com.careasysell.dealer.ui.fragment.SearchResultFragment;
 import com.example.com.careasysell.dealer.ui.model.ColorFilterModel;
+import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
+import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
+import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
+import com.example.com.common.adapter.BaseAdapter;
+import com.example.com.common.adapter.ItemData;
+import com.example.com.common.adapter.onItemClickListener;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.OnSelectListener {
+public class NationSourceActivity extends BaseActivity {
 
-    private static final String TAG = "StoreSearchActivity";
-
-    @BindView(R.id.flow_layout_hot_character)
-    TagFlowLayout mFlowLayout;
     @BindView(R.id.tag_flow_price)
     TagFlowLayout mTagFlowPrice;
     @BindView(R.id.tag_flow_time)
@@ -47,57 +55,77 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     @BindView(R.id.tag_flow_car_source_type)
     TagFlowLayout mTagFlowSourceType;
     @BindView(R.id.layout_drawer)
-    DrawerLayout mDrawer;
+    DrawerLayout mDrawerMain;
     @BindView(R.id.layout_drawer_right)
-    LinearLayout mDrawerRightContent;
+    LinearLayout mDrawerRight;
+    @BindView(R.id.rl_search_result)
+    RecyclerView mSearchResult;
+    @BindView(R.id.ll_tab)
+    RadioGroup mRadioGroup;
+    @BindView(R.id.rb_car_state)
+    RadioButton mRbState;
+    @BindView(R.id.rb_car_order)
+    RadioButton mRbOrder;
+    @BindView(R.id.rb_car_brand)
+    RadioButton mRbBrand;
+    @BindView(R.id.rb_car_filter)
+    RadioButton mRbFilter;
+    @BindView(R.id.tv_open_put_away)
+    TextView mTvPutAway;
+    @BindView(R.id.ll_put_away)
+    LinearLayout mLinearPut;
+    private int selectState = 0;
+    private int selectOrder = 0;
 
-    private FragmentManager mFragmentManager = getSupportFragmentManager();
-    private SearchResultFragment mSearchResultFragment;
+    PopupWindow mPopupWindow;
 
+    private List<ItemData> mSearchResultData = new ArrayList<>();
+
+    private static final String TAG = "NationSourceActivity";
+    private final int REQUEST_BRAND = 0;
+    private BaseAdapter mDataAdapter;
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_store_search;
+        return R.layout.activity_nation_source;
     }
 
     @Override
     public void initParams(Bundle params) {
-        if (params != null) {
-            if (mSearchResultFragment == null) {
-                mSearchResultFragment = new SearchResultFragment();
-            }
-            mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
-        }
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
-        mFlowLayout.setOnSelectListener(this);
+        mSearchResult.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        initHotCharcter();
-        initDrawerTagList();
-    }
-
-    /**
-     * 初始化热词
-     */
-    private void initHotCharcter() {
-        List<String> data = new ArrayList<>();
-        data.add("哈密瓜");
-        data.add("哈密瓜");
-        data.add("哈密瓜");
-        data.add("哈密瓜");
-        mFlowLayout.setAdapter(new TagAdapter<String>(data) {
+        for (int i = 0; i < 10; i++) {
+            SearchResultModel data = new SearchResultModel();
+            data.setDate("2018/06/24");
+            data.setDeduct("销售提成2000");
+            data.setPrice("16.8万");
+            data.setState("在售");
+            data.setSubTitle("分享20次|浏览140次");
+            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
+            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
+            mSearchResultData.add(e);
+        }
+        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
-            public View getView(FlowLayout parent, int position, String o) {
-                TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_hot_character, mFlowLayout, false);
-                textView.setText(o);
-                return textView;
+            public void onClick(View v, Object data) {
+                startActivity(CarDetailActivity.class);
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
             }
         });
+        mSearchResult.setAdapter(mDataAdapter);
+        initDrawerTagList();
     }
 
     private void initDrawerTagList() {
@@ -260,21 +288,8 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     }
 
 
-    /**
-     * 热词点击 响应
-     *
-     * @param selectPosSet
-     */
-    @Override
-    public void onSelected(Set<Integer> selectPosSet) {
-        if (mSearchResultFragment == null) {
-            mSearchResultFragment = new SearchResultFragment();
-        }
-        mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
-    }
-
-    @OnClick({R.id.iv_sales_area,R.id.iv_car_brand,R.id.iv_car_model})
-    public void onViewClicked(View view){
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away})
+    public void onDrawerViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_sales_area:
                 startActivity(ChooseAreaActivity.class);
@@ -285,16 +300,105 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
             case R.id.iv_car_model:
                 startActivity(ChooseBrandActivity.class);
                 break;
+            case R.id.tv_open_put_away:
+                for (ItemData bean : mSearchResultData) {
+                    ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
+                    mTvPutAway.setText(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? "取消" : "上架车辆");
+                    mLinearPut.setVisibility(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? View.VISIBLE : View.GONE);
+                }
+                mDataAdapter.notifyDataSetChanged();
+                break;
+            case R.id.ll_put_away:
+                startActivity(PutAwayDetailActivity.class);
+                break;
+
+            default:
+        }
+    }
+
+    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter})
+    public void onRadioButtonSelected(View view) {
+        switch (view.getId()) {
+//            汽车状态
+            case R.id.rb_car_state:
+                showPopupWindow(R.id.rb_car_state);
+                break;
+//                品牌  跳转品牌activity
+            case R.id.rb_car_brand:
+                Intent intent = new Intent(this, ChooseBrandActivity.class);
+                startActivityForResult(intent, REQUEST_BRAND);
+                break;
+//                排序
+            case R.id.rb_car_order:
+                showPopupWindow(R.id.rb_car_order);
+                break;
+//                筛选  draw  open
+            case R.id.rb_car_filter:
+                if (mDrawerMain.isDrawerOpen(mDrawerRight)) {
+                    mDrawerMain.closeDrawer(mDrawerRight);
+                } else {
+                    mDrawerMain.openDrawer(mDrawerRight);
+                }
+                break;
             default:
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (mDrawer.isDrawerOpen(mDrawerRightContent)) {
-            mDrawer.closeDrawer(mDrawerRightContent);
+        if (mDrawerMain.isDrawerOpen(mDrawerRight)) {
+            mDrawerMain.closeDrawer(mDrawerRight);
             return;
         }
         super.onBackPressed();
     }
+
+    public void showPopupWindow(final int viewId) {
+        RadioGroup convertView = null;
+
+        switch (viewId) {
+            case R.id.rb_car_state:
+                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_state, null);
+                ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
+                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                break;
+            case R.id.rb_car_order:
+                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order, null);
+                ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
+                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                break;
+            default:
+        }
+
+        if (convertView != null) {
+            convertView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    RadioButton selectButton;
+                    switch (viewId) {
+                        case R.id.rb_car_state:
+                            selectButton = ((RadioButton) radioGroup.findViewById(i));
+                            mRbState.setText(selectButton.getText());
+                            selectState = radioGroup.indexOfChild(selectButton);
+                            mPopupWindow.dismiss();
+                            break;
+                        case R.id.rb_car_order:
+                            selectButton = ((RadioButton) radioGroup.findViewById(i));
+                            mRbOrder.setText(selectButton.getText());
+                            selectOrder = radioGroup.indexOfChild(selectButton);
+                            mPopupWindow.dismiss();
+                            break;
+                        default:
+                    }
+                }
+            });
+        }
+
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setOutsideTouchable(false);
+        mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
+    }
+
 }

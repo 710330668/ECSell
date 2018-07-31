@@ -3,6 +3,7 @@ package com.example.com.careasysell.remote;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.dealer.ui.viewHolder.PutAwayHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
@@ -29,6 +30,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int SALES_AREA_TYPE = 5;
     public static final int FORMALITY_TYPE = 6;
     public static final int SEARCH_RESULT_TYPE = 7;
+    public static final int PUT_AWAY_CAR_TYPE = 8;
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,8 +51,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
             case FORMALITY_TYPE:
                 return new FormalityViewHolder(parent, getItemView(parent, viewType));
             case SEARCH_RESULT_TYPE:
-                return new SearchResultViewHolder(parent,getItemView(parent,viewType));
-                default:
+                return new SearchResultViewHolder(parent, getItemView(parent, viewType));
+            case PUT_AWAY_CAR_TYPE:
+                return new PutAwayHolder(parent, getItemView(parent, viewType));
+            default:
         }
         return null;
     }
@@ -79,6 +83,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_formality;
             case SEARCH_RESULT_TYPE:
                 return R.layout.item_search_result;
+            case PUT_AWAY_CAR_TYPE:
+                return R.layout.item_put_away_car;
             default:
         }
         return 0;

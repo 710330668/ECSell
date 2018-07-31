@@ -8,20 +8,40 @@ package com.example.com.careasysell.dealer.ui.model;
 
 public class SearchResultModel {
 
-//    图片
+    //    图片
     private String imageUrl;
-//    标题
+    //    标题
     private String title;
-//    副标题
+    //    副标题
     private String subTitle;
-//    价位
+    //    价位
     private String price;
-//    提成
+    //    提成
     private String deduct;
-//    状态
+    //    状态
     private String state;
-//    日期
+    //    日期
     private String date;
+    //    上架
+    private boolean isPut;
+    //    上架入口
+    private boolean openPutEntrance;
+
+    public boolean isOpenPutEntrance() {
+        return openPutEntrance;
+    }
+
+    public void setOpenPutEntrance(boolean openPutEntrance) {
+        this.openPutEntrance = openPutEntrance;
+    }
+
+    public boolean isPut() {
+        return isPut;
+    }
+
+    public void setPut(boolean put) {
+        isPut = put;
+    }
 
     public String getImageUrl() {
         return imageUrl;

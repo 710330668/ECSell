@@ -62,7 +62,9 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".dealer.ui.activity.StoreManagerActivity" />
         <activity android:name=".dealer.ui.activity.StoreSearchActivity" />
-        <activity android:name=".share.SharedActivity"></activity>
+        <activity android:name=".share.SharedActivity" />
+        <activity android:name=".dealer.ui.activity.NationSourceActivity" />
+        <activity android:name=".dealer.ui.activity.PutAwayDetailActivity"></activity>
     </application>
 
 </manifest>

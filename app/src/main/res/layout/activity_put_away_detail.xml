@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.com.careasysell.dealer.ui.activity.PutAwayDetailActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="车辆详情"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/top_more" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F5F5" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_bar"
+        android:background="#FFFFFF">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D9D9D9" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="16dp"
+                android:text="批量设置销售底价"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/check_percent_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="50dp"
+                android:button="@drawable/bg_radio_put_away"
+                android:paddingLeft="10dp"
+                android:text="批量提升百分比"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/check_price_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="92dp"
+                android:button="@drawable/bg_radio_put_away"
+                android:paddingLeft="10dp"
+                android:text="批量加价"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_percent_up"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="14dp"
+                android:background="@drawable/bg_edittext"
+                app:layout_constraintBaseline_toBaselineOf="@+id/check_percent_up"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <EditText
+                android:id="@+id/et_price_up"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="14dp"
+                android:background="@drawable/bg_edittext"
+                app:layout_constraintBaseline_toBaselineOf="@+id/check_price_up"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="130dp"
+                android:background="#F5F5F5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_insurance_rebates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="151dp"
+                android:text="保险返点"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="@id/check_percent_up"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_insurance_rebates"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="14dp"
+                android:background="@drawable/bg_edittext"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_insurance_rebates"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_loan_rebates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="191dp"
+                android:text="贷款返点"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="@id/check_percent_up"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_loan_rebates"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="14dp"
+                android:background="@drawable/bg_edittext"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_loan_rebates"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <View
+                android:id="@+id/line_spilt"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_marginTop="228dp"
+                android:background="#F5F5F5"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/put_away_car_title"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="14dp"
+                android:text="车辆价格"
+                android:textColor="#999999"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@+id/line_spilt" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_put_away_car"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F5F5F5"
+                app:layout_constraintTop_toBottomOf="@+id/put_away_car_title" />
+
+            <FrameLayout
+                android:id="@+id/fm_put_away"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#F5F5F5"
+                android:padding="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/recycler_put_away_car">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/home_page_bg"
+                    android:gravity="center"
+                    android:text="立即上架"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+</RelativeLayout>

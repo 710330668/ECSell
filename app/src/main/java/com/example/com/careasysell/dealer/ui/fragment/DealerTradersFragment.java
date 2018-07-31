@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.activity.NationSourceActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
@@ -72,6 +73,7 @@ public class DealerTradersFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.rl_country_options:
                 //全国车源
+                startActivity(NationSourceActivity.class);
                 break;
             case R.id.rl_store_manager:
                 //库存管理

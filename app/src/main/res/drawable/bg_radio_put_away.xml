@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@mipmap/radio_checked_o" android:state_checked="true" />
+
+    <item android:drawable="@drawable/bg_cb_put_away_normal" android:state_checked="false" />
+
+</selector>
