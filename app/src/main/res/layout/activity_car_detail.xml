@@ -447,6 +447,7 @@
                     android:background="#F5F5F5"
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="14dp"/>
+            </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -506,7 +507,24 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#F5F5F5" />
+
+            <Button
+                android:id="@+id/btn_car_share"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="14dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="分享车辆"
+                android:background="@mipmap/home_bg"
+                android:textColor="#FFFFFF"/>
 
         </LinearLayout>
 
@@ -518,7 +536,8 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:background="@mipmap/dikuang">
+        android:background="@mipmap/dikuang"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -48,7 +48,11 @@ public class CarDetailActivity extends BaseActivity {
     ImageView ivMore;
     @BindView(R.id.lly_share)
     LinearLayout llyShare;
+    @BindView(R.id.btn_car_share)
+    Button btnCarShare;
     private PopupWindow pop;
+    private  View popView ;
+    private Button modifyBtn,shelvesBtn,reservateBtn;
 
     @C.INVENTORY
     public int INVENTORY;
@@ -81,6 +85,10 @@ public class CarDetailActivity extends BaseActivity {
 
             list.add(item);
         }
+        popView = LayoutInflater.from(getApplication()).inflate(R.layout.item_pop, null, false);
+        modifyBtn = popView.findViewById(R.id.btn_modify);
+        shelvesBtn = popView.findViewById(R.id.btn_xiajia);
+        reservateBtn = popView.findViewById(R.id.btn_yuding);
     }
 
     @Override
@@ -93,17 +101,78 @@ public class CarDetailActivity extends BaseActivity {
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
                 llyShare.setVisibility(View.GONE);
+                btnCarShare.setVisibility(View.GONE);
+                LayoutInflateView(INVENTORY);
                 break;
             case C.INVENTORY_DEALER:
                 llyShare.setVisibility(View.VISIBLE);
+                btnCarShare.setVisibility(View.GONE);
+                LayoutInflateView(INVENTORY);
                 break;
             case C.INVENTORY_MARKET:
                 llyShare.setVisibility(View.GONE);
+                btnCarShare.setVisibility(View.VISIBLE);
+                LayoutInflateView(INVENTORY);
                 break;
         }
         bannerView.setViewFactory(new BannerViewFactory());
         bannerView.setDataList(list);
         bannerView.start();
+    }
+
+    private void LayoutInflateView(int inventory) {
+        switch (inventory){
+            case C.INVENTORY_OPTION:
+                modifyBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(ReleaseOptionActivity.class);
+                        pop.dismiss();
+                    }
+                });
+                shelvesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showDialog("确定下架车辆?", "下架后,车辆信息将不可找回", "取消", "确定");
+                    }
+                });
+                reservateBtn.setVisibility(View.GONE);
+                break;
+            case C.INVENTORY_DEALER:
+                reservateBtn.setText("取消预定");
+                modifyBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(ModifyCarInfActivity.class);
+                        pop.dismiss();
+                    }
+                });
+                shelvesBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showDialog("确定下架车辆?", "下架后,车辆信息将不可找回", "取消", "确定");
+                    }
+                });
+                reservateBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(ReleaseOptionActivity.class);
+                        pop.dismiss();
+                    }
+                });
+                break;
+            case C.INVENTORY_MARKET:
+                modifyBtn.setVisibility(View.GONE);
+                shelvesBtn.setVisibility(View.GONE);
+                reservateBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(ReleaseOptionActivity.class);
+                        pop.dismiss();
+                    }
+                });
+                break;
+        }
     }
 
     @Override
@@ -130,22 +199,6 @@ public class CarDetailActivity extends BaseActivity {
     }
 
     private void showPopWindow() {
-        View popView = LayoutInflater.from(getApplication()).inflate(R.layout.item_pop, null, false);
-        Button modifyBtn = popView.findViewById(R.id.btn_modify);
-        modifyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(ReleaseOptionActivity.class);
-                pop.dismiss();
-            }
-        });
-        Button shelvesBtn = popView.findViewById(R.id.btn_xiajia);
-        shelvesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog("确定下架车辆?","下架后,车辆信息将不可找回","取消","确定");
-            }
-        });
         pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
         pop.setBackgroundDrawable(new BitmapDrawable());
         pop.setFocusable(true);
@@ -154,7 +207,7 @@ public class CarDetailActivity extends BaseActivity {
     }
 
     private void showDialog(String title, String content, String cancel, String confirm) {
-        final CommonDialog dialog = new CommonDialog(this, title, content,confirm, cancel);
+        final CommonDialog dialog = new CommonDialog(this, title, content, confirm, cancel);
         dialog.show();
         dialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
             @Override
