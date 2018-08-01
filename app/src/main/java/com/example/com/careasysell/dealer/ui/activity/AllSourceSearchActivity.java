@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.fragment.NationalSourceFragment;
 import com.example.com.careasysell.dealer.ui.fragment.SearchResultFragment;
 import com.example.com.careasysell.dealer.ui.model.ColorFilterModel;
@@ -129,7 +130,11 @@ public class AllSourceSearchActivity extends BaseActivity {
     }
 
     private void initViewPager() {
-        mTagFragments.add(new NationalSourceFragment());
+        NationalSourceFragment e = new NationalSourceFragment();
+        Bundle args = new Bundle();
+        args.putInt(C.TAG_PAGE_MAIN, C.INVENTORY_DEALER);
+        e.setArguments(args);
+        mTagFragments.add(e);
         mTagFragments.add(new SearchResultFragment());
         mContentAdapter = new ContentPagerAdapter(getSupportFragmentManager());
         mVpContent.setAdapter(mContentAdapter);

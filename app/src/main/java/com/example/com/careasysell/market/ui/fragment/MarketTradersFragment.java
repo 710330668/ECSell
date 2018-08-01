@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
+import com.example.com.careasysell.market.ui.MarketSearchActivity;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 
@@ -65,7 +66,7 @@ public class MarketTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_store_manager, R.id.rl_client_manager, R.id.rl_human_manager, R.id.rl_report})
+    @OnClick({R.id.rl_store_manager, R.id.rl_client_manager, R.id.rl_human_manager, R.id.rl_report, R.id.et_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_store_manager:
@@ -77,6 +78,9 @@ public class MarketTradersFragment extends BaseFragment {
             case R.id.rl_human_manager:
                 break;
             case R.id.rl_report:
+                break;
+            case R.id.et_search:
+                startActivity(MarketSearchActivity.class);
                 break;
         }
     }

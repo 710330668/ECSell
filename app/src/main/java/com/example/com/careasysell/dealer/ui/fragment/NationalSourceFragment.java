@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.PutAwayDetailActivity;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
@@ -53,7 +56,14 @@ public class NationalSourceFragment extends BaseFragment {
     RadioButton mRbFilter;
     @BindView(R.id.ll_put_away)
     LinearLayout mLinearPut;
+    @BindView(R.id.tv_put_away_car)
+    TextView mTvPutCar;
+    @BindView(R.id.tv_put_away)
+    TextView mTvBottom;
     Unbinder unbinder;
+
+    @C.INVENTORY
+    public int INVENTORY = C.INVENTORY_OPTION;
 
     private int selectState = 0;
     private int selectOrder = 0;
@@ -78,6 +88,7 @@ public class NationalSourceFragment extends BaseFragment {
 
     @Override
     public void initData(Bundle arguments) {
+        INVENTORY = arguments.getInt(C.TAG_PAGE_MAIN);
         for (int i = 0; i < 10; i++) {
             SearchResultModel data = new SearchResultModel();
             data.setDate("2018/06/24");
@@ -101,6 +112,19 @@ public class NationalSourceFragment extends BaseFragment {
             }
         });
         mSearchResult.setAdapter(mDataAdapter);
+        switch (INVENTORY) {
+            case C.INVENTORY_MARKET:
+                //销售 分享
+                mTvPutCar.setText("分享车辆");
+                mTvBottom.setText("分享选中车辆");
+                break;
+            case C.INVENTORY_DEALER:
+//                经销商  上架
+                mTvPutCar.setText("上架车辆");
+                mTvBottom.setText("上架选中车辆");
+                break;
+            default:
+        }
     }
 
     @Override
@@ -161,7 +185,16 @@ public class NationalSourceFragment extends BaseFragment {
                 mDataAdapter.notifyDataSetChanged();
                 break;
             case R.id.ll_put_away:
-                startActivity(PutAwayDetailActivity.class);
+                switch (INVENTORY) {
+                    case C.INVENTORY_MARKET:
+                        //todo销售 分享
+                        break;
+                    case C.INVENTORY_DEALER:
+//                经销商  上架
+                        startActivity(PutAwayDetailActivity.class);
+                        break;
+                    default:
+                }
                 break;
             default:
         }
