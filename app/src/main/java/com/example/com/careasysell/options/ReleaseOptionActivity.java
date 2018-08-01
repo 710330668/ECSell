@@ -1,7 +1,11 @@
 package com.example.com.careasysell.options;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -9,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +29,7 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +74,8 @@ public class ReleaseOptionActivity extends BaseActivity {
     Button btnBaoyang;
     @BindView(R.id.tv_car_model)
     TextView tvCarModel;
+    @BindView(R.id.iv_local)
+    ImageView ivLocal;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
@@ -76,6 +84,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private List<ItemData> formalityTypes = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
+    private final int REQUEST_LOCAL = 2;
     private boolean baoxianFlag = true, zhihuanFlag = true, daikuanFlag = true, baoyangFlag = true;
 
     @Override
@@ -131,7 +140,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
             R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
-            R.id.btn_baoxian, R.id.btn_zhihuan, R.id.btn_daikuan, R.id.btn_baoyang})
+            R.id.btn_baoxian, R.id.btn_zhihuan, R.id.btn_daikuan, R.id.btn_baoyang,R.id.lly_local_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -197,6 +206,12 @@ public class ReleaseOptionActivity extends BaseActivity {
                     changeTextColor(btnBaoyang, R.color.color_333333, R.drawable.bg_edittext);
                 }
                 baoyangFlag = !baoyangFlag;
+                break;
+            case R.id.lly_local_image:
+                Intent intent1 = new Intent();
+                intent1.setType("image/*");
+                intent1.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent1, REQUEST_LOCAL);
                 break;
 
         }
@@ -317,6 +332,15 @@ public class ReleaseOptionActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_AREA) {
                 tvArea.setText(data.getStringExtra("area"));
+            }else if(requestCode == REQUEST_LOCAL){
+                Uri uri = data.getData();
+                String img_url = uri.getPath();
+                ContentResolver cr = this.getContentResolver();
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    ivLocal.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                }
             }
         }
     }
