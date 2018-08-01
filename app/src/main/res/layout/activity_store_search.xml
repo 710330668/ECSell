@@ -31,6 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_bar_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="14dp"
@@ -97,13 +98,13 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_marginRight="14dp"
-                    android:textColor="@color/color_333333"
-                    android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="筛选" />
+                    android:text="筛选"
+                    android:textColor="@color/color_333333"
+                    android:textSize="16sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -117,12 +118,12 @@
                     android:layout_marginRight="14dp">
 
                     <TextView
-                        android:textColor="@color/color_333333"
-                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="地区" />
+                        android:text="地区"
+                        android:textColor="@color/color_333333"
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:id="@+id/iv_sales_area"
@@ -130,7 +131,7 @@
                         android:layout_height="14dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                            android:src="@mipmap/more_gray" />
+                        android:src="@mipmap/more_gray" />
 
                     <TextView
                         android:id="@+id/tv_sales_area"
@@ -138,8 +139,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="14dp"
-                        android:textColor="@color/color_333333"
                         android:layout_toLeftOf="@+id/iv_sales_area"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -156,11 +157,11 @@
                     android:layout_marginRight="14dp">
 
                     <TextView
-                        android:textColor="@color/color_333333"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="品牌"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -172,13 +173,13 @@
                         android:src="@mipmap/more_gray" />
 
                     <TextView
-                        android:textColor="@color/color_333333"
                         android:id="@+id/tv_car_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="14dp"
                         android:layout_toLeftOf="@+id/iv_car_brand"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -195,11 +196,11 @@
                     android:layout_marginRight="14dp">
 
                     <TextView
-                        android:textColor="@color/color_333333"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="车型"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -211,13 +212,13 @@
                         android:src="@mipmap/more_gray" />
 
                     <TextView
-                        android:textColor="@color/color_333333"
                         android:id="@+id/tv_car_model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="14dp"
                         android:layout_toLeftOf="@+id/iv_car_model"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -235,11 +236,11 @@
 
                     <TextView
 
-                        android:textColor="@color/color_333333"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="年份"
+                        android:textColor="@color/color_333333"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -251,13 +252,13 @@
                     android:background="#F5F5F5" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_333333"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="车源价" />
+                    android:text="车源价"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -304,13 +305,13 @@
                     app:max_select="1" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_333333"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="库存时间" />
+                    android:text="库存时间"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
 
                 <com.zhy.view.flowlayout.TagFlowLayout
                     android:id="@+id/tag_flow_time"
@@ -319,20 +320,20 @@
                     app:max_select="1" />
 
                 <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginRight="14dp"
-                android:layout_marginTop="14dp"
-                android:background="#F5F5F5" />
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginTop="14dp"
+                    android:background="#F5F5F5" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_333333"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="外观颜色" />
+                    android:text="外观颜色"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
 
 
                 <com.zhy.view.flowlayout.TagFlowLayout
@@ -340,6 +341,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
                     app:max_select="1" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -348,13 +350,13 @@
                     android:background="#F5F5F5" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_333333"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="内饰颜色" />
+                    android:text="内饰颜色"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
 
 
                 <com.zhy.view.flowlayout.TagFlowLayout
@@ -371,13 +373,13 @@
                     android:background="#F5F5F5" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_333333"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="车型"/>
+                    android:text="车型"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
 
                 <com.zhy.view.flowlayout.TagFlowLayout
                     android:id="@+id/tag_flow_car_type"
@@ -393,13 +395,13 @@
                     android:background="#F5F5F5" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_333333"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp"
                     android:gravity="center"
-                    android:text="车源类型"/>
+                    android:text="车源类型"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
 
                 <com.zhy.view.flowlayout.TagFlowLayout
                     android:id="@+id/tag_flow_car_source_type"

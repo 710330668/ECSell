@@ -82,7 +82,29 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#F5F5F5" />
+
+    <LinearLayout
+        android:id="@+id/ll_put_away"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#FFFFFF"
+        android:paddingBottom="10dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_put_away"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/home_bg"
+            android:gravity="center"
+            android:text="分享选中车辆"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
 </LinearLayout>

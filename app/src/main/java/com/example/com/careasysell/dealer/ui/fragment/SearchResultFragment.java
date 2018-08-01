@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
@@ -58,6 +59,10 @@ public class SearchResultFragment extends BaseFragment {
     RadioButton mRbBrand;
     @BindView(R.id.rb_car_filter)
     RadioButton mRbFilter;
+    @BindView(R.id.ll_put_away)
+    LinearLayout mLLBottom;
+    @BindView(R.id.tv_put_away)
+    TextView mTvBottom;
     Unbinder unbinder;
 
     private int selectState = 0;
@@ -69,6 +74,7 @@ public class SearchResultFragment extends BaseFragment {
 
     private static final String TAG = "SearchResultFragment";
     private final int REQUEST_BRAND = 0;
+    private BaseAdapter mDataAdapter;
 
     @Override
     protected int setLayoutResouceId() {
@@ -94,7 +100,7 @@ public class SearchResultFragment extends BaseFragment {
             ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
             mSearchResultData.add(e);
         }
-        BaseAdapter adapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 startActivity(CarDetailActivity.class);
@@ -105,7 +111,7 @@ public class SearchResultFragment extends BaseFragment {
                 return false;
             }
         });
-        mSearchResult.setAdapter(adapter);
+        mSearchResult.setAdapter(mDataAdapter);
     }
 
     @Override
@@ -132,7 +138,7 @@ public class SearchResultFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter})
+    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter, R.id.ll_put_away})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 //            汽车状态
@@ -160,6 +166,9 @@ public class SearchResultFragment extends BaseFragment {
                         mainDrawerLayout.openDrawer(mainRightDrawerLayout);
                     }
                 }
+                break;
+            case R.id.ll_put_away:
+                // TODO: 2018/8/1 跳转分享
                 break;
             default:
         }
@@ -213,14 +222,15 @@ public class SearchResultFragment extends BaseFragment {
         mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_BRAND) {
-                Log.e(TAG, "onActivityResult: ---");
-//                tvArea.setText(data.getStringExtra("area"));
-            }
+    public void setShareOpen() {
+        boolean openPutEntrance = false;
+        for (ItemData bean : mSearchResultData) {
+            ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
+            openPutEntrance = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
         }
+        mLLBottom.setVisibility(openPutEntrance ? View.VISIBLE : View.GONE);
+        mDataAdapter.notifyDataSetChanged();
+
     }
+
 }

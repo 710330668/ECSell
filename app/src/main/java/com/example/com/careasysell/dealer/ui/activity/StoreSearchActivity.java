@@ -12,10 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.fragment.SearchResultFragment;
 import com.example.com.careasysell.dealer.ui.model.ColorFilterModel;
 import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
+import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -50,6 +52,12 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     DrawerLayout mDrawer;
     @BindView(R.id.layout_drawer_right)
     LinearLayout mDrawerRightContent;
+    @BindView(R.id.tv_bar_right)
+    TextView mTvBarRight;
+
+    @C.INVENTORY
+    public int INVENTORY = C.INVENTORY_OPTION;
+
 
     private FragmentManager mFragmentManager = getSupportFragmentManager();
     private SearchResultFragment mSearchResultFragment;
@@ -62,6 +70,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
 
     @Override
     public void initParams(Bundle params) {
+        INVENTORY = ParamManager.getInstance(this).getChannelType();
         if (params != null) {
             if (mSearchResultFragment == null) {
                 mSearchResultFragment = new SearchResultFragment();
@@ -73,6 +82,18 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     @Override
     public void setView(Bundle savedInstanceState) {
         mFlowLayout.setOnSelectListener(this);
+        switch (INVENTORY) {
+            case C.INVENTORY_DEALER:
+                mTvBarRight.setText("取消");
+                break;
+            case C.INVENTORY_MARKET:
+                mTvBarRight.setText("分享");
+                break;
+            case C.INVENTORY_OPTION:
+                mTvBarRight.setText("取消");
+                break;
+            default:
+        }
     }
 
     @Override
@@ -273,8 +294,8 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
         mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
     }
 
-    @OnClick({R.id.iv_sales_area,R.id.iv_car_brand,R.id.iv_car_model})
-    public void onViewClicked(View view){
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right})
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_sales_area:
                 startActivity(ChooseAreaActivity.class);
@@ -284,6 +305,20 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                 break;
             case R.id.iv_car_model:
                 startActivity(ChooseBrandActivity.class);
+                break;
+            case R.id.tv_bar_right:
+                switch (INVENTORY) {
+                    case C.INVENTORY_DEALER:
+                        this.finish();
+                        break;
+                    case C.INVENTORY_MARKET:
+                        mSearchResultFragment.setShareOpen();
+                        break;
+                    case C.INVENTORY_OPTION:
+                        this.finish();
+                        break;
+                    default:
+                }
                 break;
             default:
         }

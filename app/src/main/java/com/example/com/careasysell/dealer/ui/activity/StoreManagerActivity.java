@@ -66,12 +66,16 @@ public class StoreManagerActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.et_search, R.id.ll_in_sale,R.id.ll_has_put_away, R.id.ll_has_reserve, R.id.ll_has_sell})
+    @OnClick({R.id.et_search, R.id.ll_in_sale, R.id.ll_has_put_away, R.id.ll_has_reserve, R.id.ll_has_sell})
     public void onViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.et_search:
-                startActivity(StoreSearchActivity.class);
+                if (INVENTORY != C.INVENTORY_MARKET) {
+                    startActivity(StoreSearchActivity.class);
+                }else {
+                    startActivity(NationSourceActivity.class);
+                }
                 break;
             case R.id.ll_in_sale:
                 bundle.putString(C.TAG_PAGE_STORE_MANAGER, C.TAG_STATE_PUT_AWAY);

@@ -65,7 +65,8 @@
         <activity android:name=".share.SharedActivity" />
         <activity android:name=".dealer.ui.activity.NationSourceActivity" />
         <activity android:name=".dealer.ui.activity.PutAwayDetailActivity" />
-        <activity android:name=".dealer.ui.activity.AllSourceSearchActivity"></activity>
+        <activity android:name=".dealer.ui.activity.AllSourceSearchActivity" />
+        <activity android:name=".market.ui.MarketSearchActivity"></activity>
     </application>
 
 </manifest>
