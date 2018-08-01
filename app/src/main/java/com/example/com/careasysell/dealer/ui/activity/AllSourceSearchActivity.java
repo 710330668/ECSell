@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,11 +20,17 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.fragment.NationalSourceFragment;
 import com.example.com.careasysell.dealer.ui.fragment.SearchResultFragment;
 import com.example.com.careasysell.dealer.ui.model.ColorFilterModel;
+import com.example.com.careasysell.dealer.ui.model.SearchHistoryDeleteModel;
+import com.example.com.careasysell.dealer.ui.model.SearchHistoryModel;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
+import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
+import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.common.adapter.onItemClickListener;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -56,11 +64,16 @@ public class AllSourceSearchActivity extends BaseActivity {
     DrawerLayout mDrawerMain;
     @BindView(R.id.layout_drawer_right)
     LinearLayout mDrawerRight;
+    @BindView(R.id.recycler_search_history)
+    RecyclerView mRecyclerSearchHistory;
 
 
     private List<Fragment> mTagFragments = new ArrayList<>();
     private String[] mContentTitles = {"车源", "库存"};
     private ContentPagerAdapter mContentAdapter;
+
+    private List<ItemData> mSearchData = new ArrayList<>();
+    private BaseAdapter<ItemData> mSearchAdapter;
 
 
     @Override
@@ -75,7 +88,8 @@ public class AllSourceSearchActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
-
+        mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
     }
 
     @Override
@@ -83,6 +97,35 @@ public class AllSourceSearchActivity extends BaseActivity {
         initViewPager();
         initTabLayout();
         initDrawerTagList();
+        initSearchHistory();
+    }
+
+    private void initSearchHistory() {
+        mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
+        for (int i = 0; i < 20; i++) {
+            SearchHistoryModel data = new SearchHistoryModel();
+            data.setSearchHistory("保时捷 911");
+            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, data));
+        }
+        mSearchAdapter = new BaseAdapter<>(mSearchData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                if (data instanceof SearchHistoryModel) {
+                    mRecyclerSearchHistory.setVisibility(View.GONE);
+                }
+                if (data instanceof SearchHistoryDeleteModel) {
+                    mSearchData.clear();
+                    mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
+                    mSearchAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        mRecyclerSearchHistory.setAdapter(mSearchAdapter);
     }
 
     private void initViewPager() {
