@@ -1,13 +1,11 @@
 package com.example.com.careasysell.dealer.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.dealer.ui.activity.PutAwayDetailActivity;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.remote.SettingDelegate;
@@ -33,8 +32,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Author ： DasonYu
@@ -54,6 +51,8 @@ public class NationalSourceFragment extends BaseFragment {
     RadioButton mRbOrder;
     @BindView(R.id.rb_car_filter)
     RadioButton mRbFilter;
+    @BindView(R.id.ll_put_away)
+    LinearLayout mLinearPut;
     Unbinder unbinder;
 
     private int selectState = 0;
@@ -64,7 +63,7 @@ public class NationalSourceFragment extends BaseFragment {
     private List<ItemData> mSearchResultData = new ArrayList<>();
 
     private static final String TAG = "SearchResultFragment";
-    private BaseAdapter adapter;
+    private BaseAdapter mDataAdapter;
 
     @Override
     protected int setLayoutResouceId() {
@@ -90,7 +89,7 @@ public class NationalSourceFragment extends BaseFragment {
             ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
             mSearchResultData.add(e);
         }
-        adapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 startActivity(CarDetailActivity.class);
@@ -101,7 +100,7 @@ public class NationalSourceFragment extends BaseFragment {
                 return false;
             }
         });
-        mSearchResult.setAdapter(adapter);
+        mSearchResult.setAdapter(mDataAdapter);
     }
 
     @Override
@@ -128,7 +127,7 @@ public class NationalSourceFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter})
+    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter, R.id.tv_put_away_car, R.id.ll_put_away})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 //            汽车状态
@@ -154,10 +153,15 @@ public class NationalSourceFragment extends BaseFragment {
                 break;
 //                上架车辆
             case R.id.tv_put_away_car:
-                for (ItemData bean :mSearchResultData) {
-                    ((SearchResultModel) bean.getData()).setPut(!((SearchResultModel) bean.getData()).isPut());
+                for (ItemData bean : mSearchResultData) {
+                    ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
+//                    mTvPutAway.setText(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? "取消" : "上架车辆");
+                    mLinearPut.setVisibility(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? View.VISIBLE : View.GONE);
                 }
-                adapter.notifyDataSetChanged();
+                mDataAdapter.notifyDataSetChanged();
+                break;
+            case R.id.ll_put_away:
+                startActivity(PutAwayDetailActivity.class);
                 break;
             default:
         }
