@@ -510,49 +510,50 @@
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/lly_youhui"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btn_baoxian"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="14dp"
-                        android:background="@drawable/bg_edittext"
-                        android:padding="4dp"
-                        android:text="店内上保险" />
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_baoxian"-->
+                        <!--android:layout_width="80dp"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="14dp"-->
+                        <!--android:background="@drawable/bg_edittext"-->
+                        <!--android:padding="4dp"-->
+                        <!--android:text="店内上保险" />-->
 
-                    <Button
-                        android:id="@+id/btn_zhihuan"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="14dp"
-                        android:background="@drawable/bg_edittext"
-                        android:padding="4dp"
-                        android:text="店内置换" />
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_zhihuan"-->
+                        <!--android:layout_width="80dp"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="14dp"-->
+                        <!--android:background="@drawable/bg_edittext"-->
+                        <!--android:padding="4dp"-->
+                        <!--android:text="店内置换" />-->
 
-                    <Button
-                        android:id="@+id/btn_daikuan"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="14dp"
-                        android:background="@drawable/bg_edittext"
-                        android:padding="4dp"
-                        android:text="店内贷款" />
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_daikuan"-->
+                        <!--android:layout_width="80dp"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="14dp"-->
+                        <!--android:background="@drawable/bg_edittext"-->
+                        <!--android:padding="4dp"-->
+                        <!--android:text="店内贷款" />-->
 
-                    <Button
-                        android:id="@+id/btn_baoyang"
-                        android:layout_width="80dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="14dp"
-                        android:background="@drawable/bg_edittext"
-                        android:padding="4dp"
-                        android:text="店内保养" />
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_baoyang"-->
+                        <!--android:layout_width="80dp"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginLeft="14dp"-->
+                        <!--android:background="@drawable/bg_edittext"-->
+                        <!--android:padding="4dp"-->
+                        <!--android:text="店内保养" />-->
                 </LinearLayout>
 
                 <RelativeLayout

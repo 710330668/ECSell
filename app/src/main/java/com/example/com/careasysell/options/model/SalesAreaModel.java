@@ -7,6 +7,16 @@ public class SalesAreaModel {
 
     private String salesAreaName;
 
+    private String salesAreaId;
+
+    public String getSalesAreaId() {
+        return salesAreaId;
+    }
+
+    public void setSalesAreaId(String salesAreaId) {
+        this.salesAreaId = salesAreaId;
+    }
+
     public String getSalesAreaName() {
         return salesAreaName;
     }
@@ -15,7 +25,8 @@ public class SalesAreaModel {
         this.salesAreaName = salesAreaName;
     }
 
-    public SalesAreaModel(String salesAreaName) {
+    public SalesAreaModel(String salesAreaId,String salesAreaName) {
+        this.salesAreaId = salesAreaId;
         this.salesAreaName = salesAreaName;
     }
 }

@@ -7,6 +7,16 @@ public class OptionTypeModel {
 
     private String optionType ;
 
+    private String optionId;
+
+    public String getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(String optionId) {
+        this.optionId = optionId;
+    }
+
     public String getOptionType() {
         return optionType;
     }
@@ -15,7 +25,8 @@ public class OptionTypeModel {
         this.optionType = optionType;
     }
 
-    public OptionTypeModel(String optionType) {
+    public OptionTypeModel(String optionId,String optionType) {
         this.optionType = optionType;
+        this.optionId = optionId;
     }
 }

@@ -12,7 +12,7 @@ public interface C {
 
 
     //测试
-    String TEST_BASE_URL = "http://test.dun.yipurse.cn:8888/api/";
+    String TEST_BASE_URL = "http://39.104.136.205:8080/";
 
     //http缓存大小
     int httpCacheSize = 10 * 1024 * 1024;
@@ -48,5 +48,11 @@ public interface C {
 
     @IntDef({INVENTORY_OPTION,INVENTORY_DEALER, INVENTORY_MARKET})
     public @interface  INVENTORY {}
+
+    String USER_DB = "user_db";
+
+    String USER_TOKEN = "token";
+
+    String USER_TYPE = "user_type";
 
 }

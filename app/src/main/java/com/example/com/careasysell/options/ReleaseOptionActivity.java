@@ -1,5 +1,6 @@
 package com.example.com.careasysell.options;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,16 +20,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.options.model.ColorModel;
 import com.example.com.careasysell.options.model.FormalityModel;
 import com.example.com.careasysell.options.model.OptionTypeModel;
 import com.example.com.careasysell.options.model.SalesAreaModel;
+import com.example.com.careasysell.options.model.response.CommonResponse;
+import com.example.com.careasysell.options.model.response.OptionTypeResponse;
+import com.example.com.careasysell.options.model.response.SalesAreaResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.SP;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -36,6 +44,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 71033 on 2018/7/26.
@@ -64,28 +75,25 @@ public class ReleaseOptionActivity extends BaseActivity {
     TextView tvFormalities;
     @BindView(R.id.tv_year)
     TextView tvYear;
-    @BindView(R.id.btn_baoxian)
-    Button btnBaoxian;
-    @BindView(R.id.btn_zhihuan)
-    Button btnZhihuan;
-    @BindView(R.id.btn_daikuan)
-    Button btnDaikuan;
-    @BindView(R.id.btn_baoyang)
-    Button btnBaoyang;
     @BindView(R.id.tv_car_model)
     TextView tvCarModel;
     @BindView(R.id.iv_local)
     ImageView ivLocal;
+    @BindView(R.id.lly_youhui)
+    LinearLayout llyYouhui;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
     private List<ItemData> interiorColorTypes = new ArrayList<>();
     private List<ItemData> salesAreaTypes = new ArrayList<>();
     private List<ItemData> formalityTypes = new ArrayList<>();
+    private List<String> preferential = new ArrayList<>();
+    private List<Boolean> flags = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_LOCAL = 2;
-    private boolean baoxianFlag = true, zhihuanFlag = true, daikuanFlag = true, baoyangFlag = true;
+    private boolean flag = true;
+    private String token;
 
     @Override
     public int bindLayout() {
@@ -94,36 +102,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        for (int i = 0; i < 5; i++) {
-            OptionTypeModel typeModel = new OptionTypeModel("国产-现车");
-            ItemData itemData = new ItemData(0, SettingDelegate.OPTION_TYPE, typeModel);
-            optionTypes.add(itemData);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            ColorModel colorModel = new ColorModel("红");
-            ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
-            apprenceColorTypes.add(itemData);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            ColorModel colorModel = new ColorModel("红");
-            ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
-            interiorColorTypes.add(itemData);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            SalesAreaModel salesAreaModel = new SalesAreaModel("全省");
-            ItemData itemData = new ItemData(0, SettingDelegate.SALES_AREA_TYPE, salesAreaModel);
-            salesAreaTypes.add(itemData);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            FormalityModel formalityModel = new FormalityModel("手续齐全");
-            ItemData itemData = new ItemData(0, SettingDelegate.FORMALITY_TYPE, formalityModel);
-            formalityTypes.add(itemData);
-        }
-
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -131,16 +110,200 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void doBusiness(Context mContext) {
+        //内饰颜色
+        getInteriorColor();
+        //外观颜色
+        getAppearanceColor();
+        //车源类型
+        getOptionType();
+        //手续类型
+        getFormalityTypes();
+        //销售区域
+        getSalesAreaTypes();
+        //优惠政策
+        getPreferential();
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlOptionType.setLayoutManager(layoutManager);
         rlOptionType.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
+    @SuppressLint("CheckResult")
+    private void getPreferential() {
+        llyYouhui.removeAllViews();
+        Injection.provideApiService().getCarDiscountList(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CommonResponse>() {
+                    @Override
+                    public void accept(CommonResponse response) throws Exception {
+                        //获取优惠政策类型
+                        try {
+                            if (response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    preferential.add(response.getData().get(i).getDataName());
+                                    flags.add(true);
+                                    final Button button = new Button(ReleaseOptionActivity.this);
+                                    button.setText(response.getData().get(i).getDataName());
+                                    button.setBackgroundResource(R.drawable.bg_edittext);
+                                    button.setPadding(4,4,4,4);
+                                    button.setGravity(Gravity.CENTER);
+                                    llyYouhui.addView(button);
+                                    LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) button.getLayoutParams();
+                                    linearParams.height = 150;
+                                    linearParams.width = 300;
+                                    button.setLayoutParams(linearParams);
+                                    final int finalI = i;
+                                    final int finalI1 = i;
+                                    final int finalI2 = i;
+                                    button.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (flags.get(finalI)) {
+                                                changeTextColor(button, R.color.color_FF5754, R.drawable.bg_edittext_red);
+                                            } else {
+                                                changeTextColor(button, R.color.color_333333, R.drawable.bg_edittext);
+                                            }
+                                            flags.set(finalI2,!flags.get(finalI));
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getSalesAreaTypes() {
+        Injection.provideApiService().getSalesAreaTypes(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<SalesAreaResponse>() {
+                    @Override
+                    public void accept(SalesAreaResponse response) throws Exception {
+                        //获取销售区域类型
+                        try {
+                            for (int i = 0; i < response.getData().size(); i++) {
+                                SalesAreaModel salesAreaModel = new SalesAreaModel(response.getData().get(i).getAreaId(), response.getData().get(i).getAreaName());
+                                ItemData itemData = new ItemData(0, SettingDelegate.SALES_AREA_TYPE, salesAreaModel);
+                                salesAreaTypes.add(itemData);
+                            }
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+    }
+
+
+    @SuppressLint("CheckResult")
+    private void getFormalityTypes() {
+        Injection.provideApiService().getFormalityTypes(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CommonResponse>() {
+                    @Override
+                    public void accept(CommonResponse response) throws Exception {
+                        //获取车源类型
+                        try {
+                            for (int i = 0; i < response.getData().size(); i++) {
+                                FormalityModel formalityModel = new FormalityModel(response.getData().get(i).getDataName());
+                                ItemData itemData = new ItemData(0, SettingDelegate.FORMALITY_TYPE, formalityModel);
+                                formalityTypes.add(itemData);
+                            }
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getOptionType() {
+        Injection.provideApiService().getOptionTypes(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<OptionTypeResponse>() {
+                    @Override
+                    public void accept(OptionTypeResponse response) throws Exception {
+                        //获取车源类型
+                        try {
+                            for (int i = 0; i < response.getData().size(); i++) {
+                                OptionTypeModel typeModel = new OptionTypeModel(response.getData().get(i).getCarTypeId(), response.getData().get(i).getTypeName());
+                                ItemData itemData = new ItemData(0, SettingDelegate.OPTION_TYPE, typeModel);
+                                optionTypes.add(itemData);
+                            }
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getAppearanceColor() {
+        Injection.provideApiService().getAppearanceColor(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CommonResponse>() {
+                    @Override
+                    public void accept(CommonResponse response) throws Exception {
+                        //获取外观颜色
+                        try {
+                            if (response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    ColorModel colorModel = new ColorModel(response.getData().get(i).getDataName());
+                                    ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
+                                    apprenceColorTypes.add(itemData);
+                                }
+                            }
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getInteriorColor() {
+        //内饰颜色
+        Injection.provideApiService().getInteriorColor(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CommonResponse>() {
+                    @Override
+                    public void accept(CommonResponse response) throws Exception {
+                        //获取内饰颜色
+                        try {
+                            if (response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    ColorModel colorModel = new ColorModel(response.getData().get(i).getDataName());
+                                    ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
+                                    interiorColorTypes.add(itemData);
+                                }
+                            }
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                });
+    }
+
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
             R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
-            R.id.btn_baoxian, R.id.btn_zhihuan, R.id.btn_daikuan, R.id.btn_baoyang,R.id.lly_local_image})
+            R.id.lly_local_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -174,38 +337,6 @@ public class ReleaseOptionActivity extends BaseActivity {
                 showFormalityList();
                 break;
             case R.id.iv_year:
-                break;
-            case R.id.btn_baoxian:
-                if (baoxianFlag) {
-                    changeTextColor(btnBaoxian, R.color.color_FF5754, R.drawable.bg_edittext_red);
-                } else {
-                    changeTextColor(btnBaoxian, R.color.color_333333, R.drawable.bg_edittext);
-                }
-                baoxianFlag = !baoxianFlag;
-                break;
-            case R.id.btn_zhihuan:
-                if (zhihuanFlag) {
-                    changeTextColor(btnZhihuan, R.color.color_FF5754, R.drawable.bg_edittext_red);
-                } else {
-                    changeTextColor(btnZhihuan, R.color.color_333333, R.drawable.bg_edittext);
-                }
-                zhihuanFlag = !zhihuanFlag;
-                break;
-            case R.id.btn_daikuan:
-                if (daikuanFlag) {
-                    changeTextColor(btnDaikuan, R.color.color_FF5754, R.drawable.bg_edittext_red);
-                } else {
-                    changeTextColor(btnDaikuan, R.color.color_333333, R.drawable.bg_edittext);
-                }
-                daikuanFlag = !daikuanFlag;
-                break;
-            case R.id.btn_baoyang:
-                if (baoyangFlag) {
-                    changeTextColor(btnBaoyang, R.color.color_FF5754, R.drawable.bg_edittext_red);
-                } else {
-                    changeTextColor(btnBaoyang, R.color.color_333333, R.drawable.bg_edittext);
-                }
-                baoyangFlag = !baoyangFlag;
                 break;
             case R.id.lly_local_image:
                 Intent intent1 = new Intent();
@@ -332,7 +463,7 @@ public class ReleaseOptionActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_AREA) {
                 tvArea.setText(data.getStringExtra("area"));
-            }else if(requestCode == REQUEST_LOCAL){
+            } else if (requestCode == REQUEST_LOCAL) {
                 Uri uri = data.getData();
                 String img_url = uri.getPath();
                 ContentResolver cr = this.getContentResolver();

@@ -118,6 +118,7 @@ public class HttpClient {
                             }
                         })
                         .addInterceptor(logInterceptor)
+                        .addInterceptor(new HeaderInterceptor())
                         //TODO fix
                         .sslSocketFactory(sslSocketFactory, trustManager)
                         .addNetworkInterceptor(new CacheInterceptor())
