@@ -3,6 +3,7 @@ package com.example.com.careasysell.options;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.com.careasysell.R;
@@ -21,6 +22,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -32,8 +35,11 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
 
     @BindView(R.id.list)
     ListView listView;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
     private List<AddressModel> carBrands = new ArrayList<>();
-    private String token , carType;
+    private String token;
+    private String optionId;
 
     @Override
     public int bindLayout() {
@@ -42,27 +48,9 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
 
     @Override
     public void initParams(Bundle params) {
-        token = SP.getInstance(C.USER_DB,this).getString(C.USER_TOKEN);
-        carType = SP.getInstance(C.USER_DB,this).getString(C.USER_TYPE);
+        optionId = getIntent().getStringExtra("optionId");
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
         carBrands = new ArrayList<>();
-        carBrands.add(new AddressModel("保时捷"));
-        carBrands.add(new AddressModel("奥迪"));
-        carBrands.add(new AddressModel("福特"));
-        carBrands.add(new AddressModel("兰博基尼"));
-        carBrands.add(new AddressModel("阿斯顿"));
-        carBrands.add(new AddressModel("奔驰"));
-        carBrands.add(new AddressModel("五菱宏光"));
-        carBrands.add(new AddressModel("哈弗"));
-        carBrands.add(new AddressModel("凯迪拉克"));
-
-        //对集合排序
-        Collections.sort(carBrands, new Comparator<AddressModel>() {
-            @Override
-            public int compare(AddressModel lhs, AddressModel rhs) {
-                //根据拼音进行排序
-                return lhs.getPinyin().compareTo(rhs.getPinyin());
-            }
-        });
     }
 
     @Override
@@ -73,21 +61,34 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     @SuppressLint("CheckResult")
     @Override
     public void doBusiness(Context mContext) {
-        Injection.provideApiService().getCarBrand(token,carType)
+        final MyAdapter adapter = new MyAdapter(ChooseBrandActivity.this, carBrands);
+        adapter.setOnSelectBrandListener(ChooseBrandActivity.this);
+        listView.setAdapter(adapter);
+        carBrands.clear();
+        Injection.provideApiService().getCarBrand(token, optionId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CarBrandResponse>() {
                     @Override
                     public void accept(CarBrandResponse salesAreaResponse) throws Exception {
-                        if(salesAreaResponse.getCode() == 200){
+                        if (salesAreaResponse.getCode() == 200) {
+                            for(int i =0 ;i < salesAreaResponse.getData().size();i++){
+                                carBrands.add(new AddressModel(salesAreaResponse.getData().get(i).getBrand(),salesAreaResponse.getData().get(i).getId()));
+                                //对集合排序
+                                Collections.sort(carBrands, new Comparator<AddressModel>() {
+                                    @Override
+                                    public int compare(AddressModel lhs, AddressModel rhs) {
+                                        //根据拼音进行排序
+                                        return lhs.getPinyin().compareTo(rhs.getPinyin());
+                                    }
+                                });
+                            }
+                            adapter.notifyDataSetChanged();
 
                         }
                     }
                 });
 
-        MyAdapter adapter = new MyAdapter(this, carBrands);
-        adapter.setOnSelectBrandListener(this);
-        listView.setAdapter(adapter);
         NotifyCallBackManager.getInstance().registPagerCloseCallBack(new ICarSell.IPagerClose() {
             @Override
             public void close() {
@@ -98,9 +99,22 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
 
 
     @Override
-    public void selectBrand(String carBrand) {
+    public void selectBrand(String carBrand,String id) {
         Bundle bundle = new Bundle();
         bundle.putString("carBrand", carBrand);
+        bundle.putString("brandId", id);
         startActivity(ChooseCarsActivity.class, bundle);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onViewClicked() {
+        finish();
     }
 }

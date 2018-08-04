@@ -8,6 +8,7 @@ import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewH
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
+import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
 import com.example.com.careasysell.options.viewHolder.ColorViewHolder;
 import com.example.com.careasysell.options.viewHolder.FormalityViewHolder;
@@ -39,6 +40,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int SHARED_HUMAN_TYPE = 10;
     public static final int SEARCH_HISTORY_TYPE = 11;
     public static final int DELETE_SEARCH_HISTORY_TYPE = 12;
+    public static final int CAR_PHOTO_TYPE = 13;
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,6 +72,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new SearchHistoryViewHolder(parent, getItemView(parent, viewType));
             case DELETE_SEARCH_HISTORY_TYPE:
                 return new SearchHistoryDeleteViewHolder(parent, getItemView(parent, viewType));
+            case CAR_PHOTO_TYPE:
+                return new CarPhotoViewHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -109,6 +113,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_search_history;
             case DELETE_SEARCH_HISTORY_TYPE:
                 return R.layout.item_search_history_header;
+            case CAR_PHOTO_TYPE:
+                return R.layout.item_car_photo;
             default:
         }
         return 0;

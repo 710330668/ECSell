@@ -14,10 +14,13 @@ public class AddressModel {
     //拼音首字母
     private String headerWord;
 
-    public AddressModel(String name) {
+    private int brandId;
+
+    public AddressModel(String name,int brandId) {
         this.name = name;
         this.pinyin = PinYinUtils.getPinyin(name);
         headerWord = pinyin.substring(0, 1);
+        this.brandId = brandId;
     }
 
     public String getPinyin() {
@@ -34,5 +37,13 @@ public class AddressModel {
 
     public String getHeaderWord() {
         return headerWord;
+    }
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
     }
 }

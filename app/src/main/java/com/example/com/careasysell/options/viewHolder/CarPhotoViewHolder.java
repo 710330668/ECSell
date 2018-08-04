@@ -1,0 +1,51 @@
+package com.example.com.careasysell.options.viewHolder;
+
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.example.com.careasysell.R;
+import com.example.com.careasysell.options.model.CarPhotoModel;
+import com.example.com.common.adapter.BaseViewHolder;
+import com.example.com.common.adapter.ItemData;
+
+/**
+ * Created by 71033 on 2018/8/4.
+ */
+public class CarPhotoViewHolder extends BaseViewHolder {
+
+    private ImageView ivCarPhoto;
+    private ImageView ivDelete;
+
+    /**
+     * TODO
+     * single view may be direct construction, eg: TextView view = new TextView(context);
+     *
+     * @param parent current no use, may be future use
+     * @param view
+     */
+    public CarPhotoViewHolder(ViewGroup parent, View view) {
+        super(parent, view);
+    }
+
+    @Override
+    public void findViews() {
+        ivCarPhoto = itemView.findViewById(R.id.iv_car_photo);
+        ivDelete = itemView.findViewById(R.id.iv_delete);
+    }
+
+    @Override
+    public void onBindViewHolder(Object data) {
+        ItemData itemData = (ItemData) data;
+        CarPhotoModel model = (CarPhotoModel) itemData.data;
+        ivCarPhoto.setImageBitmap(model.getBitmap());
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+    }
+}
+

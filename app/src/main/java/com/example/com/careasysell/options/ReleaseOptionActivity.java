@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.options.model.CarPhotoModel;
 import com.example.com.careasysell.options.model.ColorModel;
 import com.example.com.careasysell.options.model.FormalityModel;
 import com.example.com.careasysell.options.model.OptionTypeModel;
@@ -81,19 +83,24 @@ public class ReleaseOptionActivity extends BaseActivity {
     ImageView ivLocal;
     @BindView(R.id.lly_youhui)
     LinearLayout llyYouhui;
+    @BindView(R.id.rl_car_photo)
+    RecyclerView rlCarPhoto;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
     private List<ItemData> interiorColorTypes = new ArrayList<>();
     private List<ItemData> salesAreaTypes = new ArrayList<>();
     private List<ItemData> formalityTypes = new ArrayList<>();
+    private List<ItemData> carPhotos = new ArrayList<>();
     private List<String> preferential = new ArrayList<>();
     private List<Boolean> flags = new ArrayList<>();
+    private List<Bitmap> photos = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_LOCAL = 2;
     private boolean flag = true;
     private String token;
+    private String optionId;
 
     @Override
     public int bindLayout() {
@@ -149,12 +156,13 @@ public class ReleaseOptionActivity extends BaseActivity {
                                     final Button button = new Button(ReleaseOptionActivity.this);
                                     button.setText(response.getData().get(i).getDataName());
                                     button.setBackgroundResource(R.drawable.bg_edittext);
-                                    button.setPadding(4,4,4,4);
+                                    button.setPadding(10, 10, 10, 10);
                                     button.setGravity(Gravity.CENTER);
                                     llyYouhui.addView(button);
-                                    LinearLayout.LayoutParams linearParams =(LinearLayout.LayoutParams) button.getLayoutParams();
-                                    linearParams.height = 150;
-                                    linearParams.width = 300;
+                                    LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) button.getLayoutParams();
+                                    linearParams.setMargins(20, 20, 10, 10);
+                                    linearParams.height = 120;
+                                    linearParams.width = 240;
                                     button.setLayoutParams(linearParams);
                                     final int finalI = i;
                                     final int finalI1 = i;
@@ -167,7 +175,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                                             } else {
                                                 changeTextColor(button, R.color.color_333333, R.drawable.bg_edittext);
                                             }
-                                            flags.set(finalI2,!flags.get(finalI));
+                                            flags.set(finalI2, !flags.get(finalI));
                                         }
                                     });
                                 }
@@ -315,6 +323,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                 break;
             case R.id.iv_car_model:
                 Intent intent = new Intent(ReleaseOptionActivity.this, ChooseBrandActivity.class);
+                intent.putExtra("optionId",optionId);
                 startActivityForResult(intent, REQUEST_BRAND);
                 break;
             case R.id.iv_appearance_color:
@@ -433,6 +442,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                 mainDrawerLayout.closeDrawer(mainRightDrawerLayout);
                 OptionTypeModel model = (OptionTypeModel) data;
                 tvOptionsType.setText(model.getOptionType());
+                optionId = model.getOptionId();
             }
 
             @Override
@@ -460,6 +470,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        carPhotos.clear();
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_AREA) {
                 tvArea.setText(data.getStringExtra("area"));
@@ -469,7 +480,25 @@ public class ReleaseOptionActivity extends BaseActivity {
                 ContentResolver cr = this.getContentResolver();
                 try {
                     Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                    ivLocal.setImageBitmap(bitmap);
+                    //最多九张
+                    photos.add(bitmap);
+                    for(int i =0;i<photos.size();i++){
+                        CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
+                        ItemData itemData = new ItemData(0, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
+                        carPhotos.add(itemData);
+                        rlCarPhoto.setLayoutManager(new GridLayoutManager(this,3));
+                        BaseAdapter baseAdapter = new BaseAdapter(carPhotos, new SettingDelegate(), new onItemClickListener() {
+                            @Override
+                            public void onClick(View v, Object data) {
+                            }
+
+                            @Override
+                            public boolean onLongClick(View v, Object data) {
+                                return false;
+                            }
+                        });
+                        rlCarPhoto.setAdapter(baseAdapter);
+                    }
                 } catch (FileNotFoundException e) {
                 }
             }

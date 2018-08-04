@@ -64,13 +64,13 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     public void initParams(Bundle params) {
 
         areas = new ArrayList<>();
-        areas.add(new AddressModel("安徽"));
-        areas.add(new AddressModel("北京"));
-        areas.add(new AddressModel("重庆"));
-        areas.add(new AddressModel("福建"));
-        areas.add(new AddressModel("甘肃"));
-        areas.add(new AddressModel("广东"));
-        areas.add(new AddressModel("广西"));
+//        areas.add(new AddressModel("安徽"));
+//        areas.add(new AddressModel("北京"));
+//        areas.add(new AddressModel("重庆"));
+//        areas.add(new AddressModel("福建"));
+//        areas.add(new AddressModel("甘肃"));
+//        areas.add(new AddressModel("广东"));
+//        areas.add(new AddressModel("广西"));
 
         //对集合排序
         Collections.sort(areas, new Comparator<AddressModel>() {
@@ -136,7 +136,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     }
 
     @Override
-    public void selectBrand(String areaBrand) {
+    public void selectBrand(String areaBrand,String id) {
         tvAreaName.setText(areaBrand);
         openRightLayout();
     }

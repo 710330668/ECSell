@@ -580,7 +580,12 @@
                     android:layout_marginTop="20dp"
                     android:textSize="14dp"/>
 
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rl_car_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                <RelativeLayout
                     android:id="@+id/lly_local_image"
                     android:layout_width="108dp"
                     android:layout_height="80dp"
@@ -591,13 +596,13 @@
 
                 <ImageView
                     android:id="@+id/iv_local"
-                    android:layout_width="108dp"
-                    android:layout_height="80dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:src="@mipmap/add_photo"
-                    android:scaleType="fitXY"
+                    android:layout_centerInParent="true"
                     />
 
-                </LinearLayout>
+                </RelativeLayout>
 
 
                 <TextView

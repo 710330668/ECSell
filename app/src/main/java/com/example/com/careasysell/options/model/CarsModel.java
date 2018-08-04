@@ -7,6 +7,8 @@ public class CarsModel {
 
     private String carsName ;
 
+    private String carsId;
+
     public String getCarsName() {
         return carsName;
     }
@@ -15,7 +17,16 @@ public class CarsModel {
         this.carsName = carsName;
     }
 
-    public CarsModel(String carsName) {
+    public CarsModel(String carsName,String carsId) {
         this.carsName = carsName;
+        this.carsId =carsId;
+    }
+
+    public String getCarsId() {
+        return carsId;
+    }
+
+    public void setCarsId(String carsId) {
+        this.carsId = carsId;
     }
 }

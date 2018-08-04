@@ -2,9 +2,12 @@ package com.example.com.careasysell.remote;
 
 import com.example.com.careasysell.main.login.LoginResponse;
 import com.example.com.careasysell.options.model.response.CarBrandResponse;
+import com.example.com.careasysell.options.model.response.CarsModelResponse;
+import com.example.com.careasysell.options.model.response.CarsResponse;
 import com.example.com.careasysell.options.model.response.CommonResponse;
 import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
+import com.example.com.careasysell.usercenter.model.UserInforModel;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -56,6 +59,19 @@ public interface ApiService {
     @POST("carBrand/findCarBrandList")
     Observable<CarBrandResponse> getCarBrand(@Field("token") String token, @Field("carType") String carType);
 
+    //获取个人信息
+    @FormUrlEncoded
+    @POST("user/findMyInfo")
+    Observable<UserInforModel> getUserInfo(@Field("token") String token);
 
+    //汽车系列
+    @FormUrlEncoded
+    @POST("ucmsCarBrandAudi/findUcmsCarBrandAudiListByBrandId")
+    Observable<CarsResponse> getCars(@Field("token") String token, @Field("brandId") String brandId);
+
+    //汽车型号
+    @FormUrlEncoded
+    @POST("ucmsCarBrandVersion/findAllUcmsCarBrandVersionListByAudiId")
+    Observable<CarsModelResponse> getCarsModel(@Field("token") String token, @Field("audiId") String audiId);
 
 }

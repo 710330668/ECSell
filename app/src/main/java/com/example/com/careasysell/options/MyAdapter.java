@@ -72,7 +72,8 @@ public class MyAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 String carBrand = list.get(position).getName();
-                listener.selectBrand(carBrand);
+                String id = list.get(position).getBrandId()+"";
+                listener.selectBrand(carBrand,id);
             }
         });
         return convertView;
@@ -86,7 +87,7 @@ public class MyAdapter extends BaseAdapter {
     }
 
     interface SelectBrandListener{
-        void selectBrand(String carBrand);
+        void selectBrand(String carBrand,String id);
     }
 
     public void setOnSelectBrandListener(SelectBrandListener listener){

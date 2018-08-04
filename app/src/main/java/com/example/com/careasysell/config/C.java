@@ -41,6 +41,10 @@ public interface C {
     // 已售
     String TAG_STATE_SELL = "TAG_STATE_SELL";
 
+    String USER_TYPE_CYS = "USER_CYS";
+    String USER_TYPE_XS = "USER_XS";
+    String USER_TYPE_JXS = "USER_JXS";
+    String USER_TYPE_DTRY = "USER_DTRY";
 
     int INVENTORY_OPTION = 0;  //库存——车源
     int INVENTORY_DEALER = 1; //库存 - 经销
