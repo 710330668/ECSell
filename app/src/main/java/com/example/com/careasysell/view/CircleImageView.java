@@ -4,6 +4,7 @@ package com.example.com.careasysell.view;
  * Created by 71033 on 2018/8/4.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
  * @author caizhiming
  *
  */
+@SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView{
 
     private Paint paint ;

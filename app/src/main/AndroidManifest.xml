@@ -78,6 +78,7 @@
         <activity android:name=".dealer.ui.activity.AllSourceSearchActivity" />
         <activity android:name=".market.ui.MarketSearchActivity" />
         <activity android:name=".usercenter.DealershipActivity" />
+        <activity android:name=".options.VehicleheatActivity"></activity>
     </application>
 
 </manifest>

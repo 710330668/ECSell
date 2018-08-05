@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CarEasySell</string>
+    <string name="vehicleheat_item_car_state">上架%1$s次 | 分享%2$s次 | 浏览%3$s次</string>
 </resources>
