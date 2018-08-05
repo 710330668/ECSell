@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="#FFFFFF"
+    android:padding="14dp">
+
+    <TextView
+        android:id="@+id/tv_rankings"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:text="1" />
+
+    <ImageView
+        android:id="@+id/img_car_poster"
+        android:layout_width="48dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toRightOf="@+id/tv_rankings" />
+
+    <TextView
+        android:id="@+id/tv_car_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:text="雪弗兰2013款 科鲁兹 1.6LSL天地版MT"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@id/img_car_poster"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_car_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:text="@string/vehicleheat_item_car_state"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/img_car_poster"
+        app:layout_constraintRight_toRightOf="parent " />
+
+</android.support.constraint.ConstraintLayout>

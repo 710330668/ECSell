@@ -72,6 +72,7 @@ public class OptionsTradersFragment extends BaseFragment {
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:
+                startActivity(VehicleheatActivity.class);
                 break;
             case R.id.rl_release_option:
                 //发布车源

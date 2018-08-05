@@ -9,7 +9,7 @@
         android:layout_height="120dp"
         android:background="@mipmap/home_bg">
 
-        <com.example.com.careasysell.view.CircleImageView
+        <ImageView
             android:id="@+id/iv_head"
             android:layout_width="60dp"
             android:layout_height="60dp"

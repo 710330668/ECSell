@@ -1,5 +1,6 @@
 package com.example.com.careasysell.remote;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
@@ -7,6 +8,7 @@ import com.example.com.careasysell.dealer.ui.viewHolder.PutAwayHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
+import com.example.com.careasysell.dealer.ui.viewHolder.StoreManagerViewHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
@@ -15,6 +17,7 @@ import com.example.com.careasysell.options.viewHolder.FormalityViewHolder;
 import com.example.com.careasysell.options.viewHolder.OptionTypeViewHolder;
 import com.example.com.careasysell.options.viewHolder.SalesAreaViewHolder;
 import com.example.com.careasysell.options.viewHolder.SeriesViewHolder;
+import com.example.com.careasysell.options.viewHolder.VehicleHeatViewHolder;
 import com.example.com.careasysell.share.viewholder.SharedCarHolder;
 import com.example.com.careasysell.share.viewholder.SharedHumanHolder;
 import com.example.com.common.adapter.BaseDelegate;
@@ -41,10 +44,12 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int SEARCH_HISTORY_TYPE = 11;
     public static final int DELETE_SEARCH_HISTORY_TYPE = 12;
     public static final int CAR_PHOTO_TYPE = 13;
+    public static final int VEHICLE_HEAT_TYPE = 14;
+
+    public static final int STORE_MANAGE_TYPE = 15;
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         switch (viewType) {
             case OPTION_TYPE:
                 return new OptionTypeViewHolder(parent, getItemView(parent, viewType));
@@ -74,6 +79,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new SearchHistoryDeleteViewHolder(parent, getItemView(parent, viewType));
             case CAR_PHOTO_TYPE:
                 return new CarPhotoViewHolder(parent, getItemView(parent, viewType));
+            case VEHICLE_HEAT_TYPE:
+                return new VehicleHeatViewHolder(parent, getItemView(parent, viewType));
+            case STORE_MANAGE_TYPE:
+                return new StoreManagerViewHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -115,6 +124,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_search_history_header;
             case CAR_PHOTO_TYPE:
                 return R.layout.item_car_photo;
+            case VEHICLE_HEAT_TYPE:
+                return R.layout.item_vehicle_heat;
+            case STORE_MANAGE_TYPE:
+                return R.layout.item_store_manager;
             default:
         }
         return 0;
