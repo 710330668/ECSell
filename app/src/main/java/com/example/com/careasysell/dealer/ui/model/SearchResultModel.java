@@ -25,6 +25,8 @@ public class SearchResultModel {
     //    上架
     private boolean isPut;
     //    上架入口
+    private String id;
+
     private boolean openPutEntrance;
 
     public boolean isOpenPutEntrance() {
@@ -97,5 +99,13 @@ public class SearchResultModel {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

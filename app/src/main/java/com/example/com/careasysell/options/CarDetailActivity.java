@@ -1,5 +1,6 @@
 package com.example.com.careasysell.options;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -14,11 +15,15 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.options.model.response.CarDetailResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.utils.ImagPagerUtil;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.careasysell.view.CommonDialog;
 import com.example.com.careasysell.view.banner.BannerView;
 import com.example.com.common.BaseActivity;
+import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.SP;
 import com.example.com.imageloader.LoaderManager;
 
 import java.util.ArrayList;
@@ -27,6 +32,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 71033 on 2018/7/28.
@@ -50,9 +58,15 @@ public class CarDetailActivity extends BaseActivity {
     LinearLayout llyShare;
     @BindView(R.id.btn_car_share)
     Button btnCarShare;
+    @BindView(R.id.tv_advise)
+    TextView tvAdvise;
+    @BindView(R.id.tv_vname)
+    TextView tvVname;
     private PopupWindow pop;
-    private  View popView ;
-    private Button modifyBtn,shelvesBtn,reservateBtn;
+    private View popView;
+    private Button modifyBtn, shelvesBtn, reservateBtn;
+    private String carId;
+    private String token;
 
     @C.INVENTORY
     public int INVENTORY;
@@ -66,6 +80,12 @@ public class CarDetailActivity extends BaseActivity {
     public void initParams(Bundle params) {
 
         INVENTORY = ParamManager.getInstance(this).getChannelType();
+
+        if(params!=null){
+            carId = params.getString("carId");
+        }
+
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
 
         titles = new String[]{
                 "汽车之家",
@@ -98,6 +118,7 @@ public class CarDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+        getCarDetail();
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
                 llyShare.setVisibility(View.GONE);
@@ -120,8 +141,29 @@ public class CarDetailActivity extends BaseActivity {
         bannerView.start();
     }
 
+    @SuppressLint("CheckResult")
+    private void getCarDetail() {
+        Injection.provideApiService().getCarDetail(token, carId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CarDetailResponse>() {
+                    @Override
+                    public void accept(CarDetailResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if (response.getCode() == 200) {
+                            tvAdvise.setText("建议售价" + response.getData().getAdvicePrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
+                            tvVname.setText(response.getData().getVname());
+//                            for (int i = 0 ;i<response.getData().getImgs().size();i++){
+//                                urls[i] = response.getData().getImgs().get(i).getImgThumUrl();
+//                            }
+
+                        }
+                    }
+                });
+    }
+
     private void LayoutInflateView(int inventory) {
-        switch (inventory){
+        switch (inventory) {
             case C.INVENTORY_OPTION:
                 modifyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override

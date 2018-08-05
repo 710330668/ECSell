@@ -1,5 +1,6 @@
 package com.example.com.careasysell.dealer.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,6 +26,7 @@ import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.careasysell.view.SpaceItemDecoration;
@@ -32,6 +34,8 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.SP;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -41,6 +45,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class NationSourceActivity extends BaseActivity {
 
@@ -88,6 +95,7 @@ public class NationSourceActivity extends BaseActivity {
     private static final String TAG = "NationSourceActivity";
     private final int REQUEST_BRAND = 0;
     private BaseAdapter mDataAdapter;
+    private String token;
 
     @Override
     public int bindLayout() {
@@ -97,6 +105,7 @@ public class NationSourceActivity extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
         INVENTORY = ParamManager.getInstance(this).getChannelType();
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -116,30 +125,52 @@ public class NationSourceActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        for (int i = 0; i < 10; i++) {
-            SearchResultModel data = new SearchResultModel();
-            data.setDate("2018/06/24");
-            data.setDeduct("销售提成2000");
-            data.setPrice("16.8万");
-            data.setState("在售");
-            data.setSubTitle("分享20次|浏览140次");
-            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
-            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
-            mSearchResultData.add(e);
-        }
-        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
-            @Override
-            public void onClick(View v, Object data) {
-                startActivity(CarDetailActivity.class);
-            }
-
-            @Override
-            public boolean onLongClick(View v, Object data) {
-                return false;
-            }
-        });
-        mSearchResult.setAdapter(mDataAdapter);
+        //获取全国车源
+        getAllOptions();
         initDrawerTagList();
+    }
+
+    @SuppressLint("CheckResult")
+    private void getAllOptions() {
+        Injection.provideApiService().getCarList(token,"10","all")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AllOptionResponse>() {
+                    @Override
+                    public void accept(AllOptionResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if (response.getCode() == 200){
+                            for(int i =0;i < response.getData().getLists().size();i++){
+                                SearchResultModel data = new SearchResultModel();
+                                data.setDate(response.getData().getLists().get(i).getCreateDate()+"");
+                                data.setDeduct(response.getData().getLists().get(i).getSaleCommission()+"");
+                                data.setPrice(response.getData().getLists().get(i).getBrowseNum()+"万");
+                                data.setState(response.getData().getLists().get(i).getCarStatusName());
+                                data.setSubTitle("分享"+response.getData().getLists().get(i).getShareNum()+"次|浏览140次");
+                                data.setTitle(response.getData().getLists().get(i).getVname());
+                                data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
+                                data.setId(response.getData().getLists().get(i).getCarId());
+                                ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
+                                mSearchResultData.add(e);
+                            }
+                        }
+                        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+                            @Override
+                            public void onClick(View v, Object data) {
+                                SearchResultModel model = (SearchResultModel) data;
+                                Bundle bundle = new Bundle();
+                                bundle.putString("carId",model.getId());
+                                startActivity(CarDetailActivity.class,bundle);
+                            }
+
+                            @Override
+                            public boolean onLongClick(View v, Object data) {
+                                return false;
+                            }
+                        });
+                        mSearchResult.setAdapter(mDataAdapter);
+                    }
+                });
     }
 
     private void initDrawerTagList() {

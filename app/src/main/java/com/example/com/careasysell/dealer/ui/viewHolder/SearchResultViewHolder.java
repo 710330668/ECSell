@@ -1,5 +1,6 @@
 package com.example.com.careasysell.dealer.ui.viewHolder;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -11,6 +12,7 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Author ： DasonYu
@@ -69,6 +71,10 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarDate.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
         mCarState.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
         mCarPutAway.setVisibility(resultModel.isOpenPutEntrance() ? View.VISIBLE : View.GONE);
+
+        if(!TextUtils.isEmpty(resultModel.getImageUrl())){
+            ImageLoader.getInstance().displayImage(resultModel.getImageUrl(),mCarPoster);
+        }
 
         mCarPutAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

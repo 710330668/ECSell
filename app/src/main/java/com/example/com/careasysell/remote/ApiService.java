@@ -1,7 +1,10 @@
 package com.example.com.careasysell.remote;
 
+import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
+import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.main.login.LoginResponse;
 import com.example.com.careasysell.options.model.response.CarBrandResponse;
+import com.example.com.careasysell.options.model.response.CarDetailResponse;
 import com.example.com.careasysell.options.model.response.CarsModelResponse;
 import com.example.com.careasysell.options.model.response.CarsResponse;
 import com.example.com.careasysell.options.model.response.CommonResponse;
@@ -73,5 +76,20 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("ucmsCarBrandVersion/findAllUcmsCarBrandVersionListByAudiId")
     Observable<CarsModelResponse> getCarsModel(@Field("token") String token, @Field("audiId") String audiId);
+
+    //库存列表
+    @FormUrlEncoded
+    @POST("car/findCarCount")
+    Observable<StoreManagerResponse> getInventoryList(@Field("token") String token);
+
+    //全国车源
+    @FormUrlEncoded
+    @POST("car/findCarList")
+    Observable<AllOptionResponse> getCarList(@Field("token") String token, @Field("pageSize") String pageSize, @Field("scopeType") String scopeType);
+
+    //全国车源
+    @FormUrlEncoded
+    @POST("car/findCarDetailByCarId")
+    Observable<CarDetailResponse> getCarDetail(@Field("token") String token, @Field("carId") String carId);
 
 }

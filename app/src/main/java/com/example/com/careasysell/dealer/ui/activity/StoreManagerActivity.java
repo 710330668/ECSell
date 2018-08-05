@@ -1,5 +1,6 @@
 package com.example.com.careasysell.dealer.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -8,12 +9,19 @@ import android.widget.LinearLayout;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseActivity;
+import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.SP;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 库存管理页面
@@ -35,6 +43,8 @@ public class StoreManagerActivity extends BaseActivity {
     @BindView(R.id.ll_in_sale)
     LinearLayout llInSale;
 
+    private String token;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_inventory_manage;
@@ -43,6 +53,7 @@ public class StoreManagerActivity extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
         INVENTORY = ParamManager.getInstance(this).getChannelType();
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -50,8 +61,21 @@ public class StoreManagerActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void doBusiness(Context mContext) {
+        Injection.provideApiService().getInventoryList(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<StoreManagerResponse>() {
+                    @Override
+                    public void accept(StoreManagerResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+
+                        }
+                    }
+                });
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
                 llInSale.setVisibility(View.VISIBLE);
