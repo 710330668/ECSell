@@ -5,17 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.remote.Injection;
+import com.example.com.careasysell.usercenter.DealershipActivity;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
+import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -33,7 +37,16 @@ public class SettingFragment extends BaseFragment {
     @BindView(R.id.tv_company)
     TextView tvCompany;
     Unbinder unbinder;
+    @BindView(R.id.lly_option)
+    LinearLayout llyOption;
+    @BindView(R.id.lly_dealer)
+    LinearLayout llyDealer;
+    @BindView(R.id.lly_market)
+    LinearLayout llyMarket;
     private String token;
+
+    @C.INVENTORY
+    public int INVENTORY;
 
     @Override
     protected int setLayoutResouceId() {
@@ -48,12 +61,30 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
+        INVENTORY = ParamManager.getInstance(getActivity()).getChannelType();
     }
 
     @Override
     public void onLazyLoad() {
         //获取个人信息
         getUserInfor();
+        switch (INVENTORY) {
+            case C.INVENTORY_OPTION:
+                llyOption.setVisibility(View.VISIBLE);
+                llyDealer.setVisibility(View.GONE);
+                llyMarket.setVisibility(View.GONE);
+                break;
+            case C.INVENTORY_DEALER:
+                llyOption.setVisibility(View.GONE);
+                llyDealer.setVisibility(View.VISIBLE);
+                llyMarket.setVisibility(View.GONE);
+                break;
+            case C.INVENTORY_MARKET:
+                llyOption.setVisibility(View.GONE);
+                llyDealer.setVisibility(View.GONE);
+                llyMarket.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
 
@@ -68,7 +99,7 @@ public class SettingFragment extends BaseFragment {
                         try {
                             if (response.getCode() == 200) {
                                 tvAccount.setText(response.getData().getUserName());
-                                switch (response.getData().getUserType()){
+                                switch (response.getData().getUserType()) {
                                     case C.USER_TYPE_DTRY:
                                         tvType.setText("地推人员");
                                         break;
@@ -108,5 +139,16 @@ public class SettingFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick({R.id.iv_car_infor, R.id.rl_dealer})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_car_infor:
+                break;
+            case R.id.rl_dealer:
+                startActivity(DealershipActivity.class);
+                break;
+        }
     }
 }

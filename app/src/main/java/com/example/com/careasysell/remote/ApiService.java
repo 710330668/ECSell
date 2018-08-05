@@ -3,6 +3,7 @@ package com.example.com.careasysell.remote;
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.main.login.LoginResponse;
+import com.example.com.careasysell.options.model.response.AreaProvinceResponse;
 import com.example.com.careasysell.options.model.response.CarBrandResponse;
 import com.example.com.careasysell.options.model.response.CarDetailResponse;
 import com.example.com.careasysell.options.model.response.CarsModelResponse;
@@ -61,6 +62,11 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("carBrand/findCarBrandList")
     Observable<CarBrandResponse> getCarBrand(@Field("token") String token, @Field("carType") String carType);
+
+    //查询车辆所在地
+    @FormUrlEncoded
+    @POST("region/findRegionListByPid")
+    Observable<AreaProvinceResponse> getRegionList(@Field("token") String token, @Field("pid") String pid);
 
     //获取个人信息
     @FormUrlEncoded

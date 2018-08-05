@@ -7,6 +7,8 @@ public class AreasModel {
 
     private String areasName ;
 
+    private String areasId;
+
     public String getAreasName() {
         return areasName;
     }
@@ -15,7 +17,16 @@ public class AreasModel {
         this.areasName = areasName;
     }
 
-    public AreasModel(String areasName) {
+    public AreasModel(String areasName,String id) {
         this.areasName = areasName;
+        this.areasId = id;
+    }
+
+    public String getAreasId() {
+        return areasId;
+    }
+
+    public void setAreasId(String areasId) {
+        this.areasId = areasId;
     }
 }

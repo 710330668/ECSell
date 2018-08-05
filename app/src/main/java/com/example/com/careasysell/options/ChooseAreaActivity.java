@@ -1,5 +1,6 @@
 package com.example.com.careasysell.options;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,13 +14,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.options.model.AddressModel;
 import com.example.com.careasysell.options.model.AreasModel;
+import com.example.com.careasysell.options.model.response.AreaProvinceResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.SP;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +35,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 71033 on 2018/7/26.
@@ -54,6 +63,8 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
     private List<AddressModel> areas = new ArrayList<>();
     private List<ItemData> areaLists = new ArrayList<>();
+    private String token;
+    private BaseAdapter baseAdapter;
 
     @Override
     public int bindLayout() {
@@ -63,29 +74,10 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     @Override
     public void initParams(Bundle params) {
 
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
+
         areas = new ArrayList<>();
-//        areas.add(new AddressModel("安徽"));
-//        areas.add(new AddressModel("北京"));
-//        areas.add(new AddressModel("重庆"));
-//        areas.add(new AddressModel("福建"));
-//        areas.add(new AddressModel("甘肃"));
-//        areas.add(new AddressModel("广东"));
-//        areas.add(new AddressModel("广西"));
 
-        //对集合排序
-        Collections.sort(areas, new Comparator<AddressModel>() {
-            @Override
-            public int compare(AddressModel lhs, AddressModel rhs) {
-                //根据拼音进行排序
-                return lhs.getPinyin().compareTo(rhs.getPinyin());
-            }
-        });
-
-        for (int i = 0; i < 5; i++) {
-            AreasModel areasModel = new AreasModel("全省");
-            ItemData itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
-            areaLists.add(itemData);
-        }
     }
 
     @Override
@@ -95,12 +87,10 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
     @Override
     public void doBusiness(Context mContext) {
-        MyAdapter adapter = new MyAdapter(this, areas);
-        adapter.setOnSelectBrandListener(this);
-        listView.setAdapter(adapter);
+        getRegionList();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlArea.setLayoutManager(layoutManager);
-        BaseAdapter baseAdapter = new BaseAdapter(areaLists, new SettingDelegate(), new onItemClickListener() {
+        baseAdapter = new BaseAdapter(areaLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 AreasModel model = (AreasModel) data;
@@ -116,6 +106,58 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
             }
         });
         rlArea.setAdapter(baseAdapter);
+    }
+
+    //车源所在地
+    @SuppressLint("CheckResult")
+    private void getRegionList() {
+        Injection.provideApiService().getRegionList(token,"0")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AreaProvinceResponse>() {
+                    @Override
+                    public void accept(AreaProvinceResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            for (int i = 0; i < response.getData().size(); i++) {
+                                areas.add(new AddressModel(response.getData().get(i).getCityName(),response.getData().get(i).getId()));
+                            }
+                            //对集合排序
+                            Collections.sort(areas, new Comparator<AddressModel>() {
+                                @Override
+                                public int compare(AddressModel lhs, AddressModel rhs) {
+                                    //根据拼音进行排序
+                                    return lhs.getPinyin().compareTo(rhs.getPinyin());
+                                }
+                            });
+
+                            MyAdapter adapter = new MyAdapter(ChooseAreaActivity.this, areas);
+                            adapter.setOnSelectBrandListener(ChooseAreaActivity.this);
+                            listView.setAdapter(adapter);
+                        }
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getCity(String areaId) {
+        Injection.provideApiService().getRegionList(token,areaId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AreaProvinceResponse>() {
+                    @Override
+                    public void accept(AreaProvinceResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            for (int i =0;i<response.getData().size();i++) {
+                                AreasModel areasModel = new AreasModel(response.getData().get(i).getCityName(),response.getData().get(i).getId()+"");
+                                ItemData itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
+                                areaLists.add(itemData);
+                            }
+                        }
+                        baseAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     @Override
@@ -137,6 +179,8 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
     @Override
     public void selectBrand(String areaBrand,String id) {
+        String areaId = id+"";
+        getCity(areaId);
         tvAreaName.setText(areaBrand);
         openRightLayout();
     }
