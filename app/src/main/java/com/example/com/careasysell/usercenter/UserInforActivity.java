@@ -10,13 +10,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by 71033 on 2018/8/5.
+ * Created by 71033 on 2018/8/6.
  */
-public class DealershipActivity extends BaseActivity {
+public class UserInforActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_dealership_infor;
+        return R.layout.activity_user_infor;
     }
 
     @Override

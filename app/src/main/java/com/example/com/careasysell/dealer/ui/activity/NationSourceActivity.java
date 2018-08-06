@@ -333,9 +333,12 @@ public class NationSourceActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away})
+    @OnClick({R.id.iv_back,R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away})
     public void onDrawerViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.iv_sales_area:
                 startActivity(ChooseAreaActivity.class);
                 break;

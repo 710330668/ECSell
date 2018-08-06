@@ -11,6 +11,7 @@ import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.AllSourceSearchActivity;
 import com.example.com.careasysell.dealer.ui.activity.NationSourceActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
+import com.example.com.careasysell.dealer.ui.activity.UserManagerActivity;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 
@@ -83,6 +84,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_human_manager:
                 //人员管理
+                startActivity(UserManagerActivity.class);
                 break;
             case R.id.rl_order_manager:
                 //订单管理

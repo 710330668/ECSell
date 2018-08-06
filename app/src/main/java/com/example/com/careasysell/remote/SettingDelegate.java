@@ -1,6 +1,5 @@
 package com.example.com.careasysell.remote;
 
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
@@ -9,6 +8,7 @@ import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewH
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.StoreManagerViewHolder;
+import com.example.com.careasysell.dealer.ui.viewHolder.UserListViewHolder;
 import com.example.com.careasysell.market.ui.viewholder.MarketShareHeaderHolder;
 import com.example.com.careasysell.market.ui.viewholder.MarketShareHolder;
 import com.example.com.careasysell.market.ui.viewholder.ShareRankHolder;
@@ -58,6 +58,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     private MarketShareHeaderHolder.ShareRankClickListener listener;
 
+    public static final int USER_LIST_TYPE = 19;
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -93,6 +94,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new VehicleHeatViewHolder(parent, getItemView(parent, viewType));
             case STORE_MANAGE_TYPE:
                 return new StoreManagerViewHolder(parent, getItemView(parent, viewType));
+            case USER_LIST_TYPE:
+                return new UserListViewHolder(parent, getItemView(parent, viewType));
             case MARKET_SHARE_HEADER_TYPE:
                 MarketShareHeaderHolder marketShareHeaderHolder = new MarketShareHeaderHolder(parent, getItemView(parent, viewType));
                 marketShareHeaderHolder.setListener(listener);
@@ -152,6 +155,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_market_share;
             case SHARE_RANK_TYPE:
                 return R.layout.item_share_rank;
+            case USER_LIST_TYPE:
+                return R.layout.item_user_manager;
             default:
         }
         return 0;

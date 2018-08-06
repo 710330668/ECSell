@@ -12,6 +12,7 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.usercenter.DealershipActivity;
+import com.example.com.careasysell.usercenter.UserInforActivity;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
@@ -141,13 +142,16 @@ public class SettingFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_car_infor, R.id.rl_dealer})
+    @OnClick({R.id.iv_car_infor, R.id.rl_dealer,R.id.rl_user_infor})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_car_infor:
                 break;
             case R.id.rl_dealer:
                 startActivity(DealershipActivity.class);
+                break;
+            case R.id.rl_user_infor:
+                startActivity(UserInforActivity.class);
                 break;
         }
     }

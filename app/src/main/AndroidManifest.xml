@@ -78,9 +78,14 @@
         <activity android:name=".dealer.ui.activity.AllSourceSearchActivity" />
         <activity android:name=".market.ui.MarketSearchActivity" />
         <activity android:name=".usercenter.DealershipActivity" />
-        <activity android:name=".options.VehicleheatActivity" />
+        <activity android:name=".options.VehicleheatActivity"></activity>
+        <activity android:name=".usercenter.UserInforActivity"></activity>
+        <activity android:name=".dealer.ui.activity.UserManagerActivity"></activity>
+        <activity android:name=".dealer.ui.activity.AddSalerActivity"></activity>
         <activity android:name=".market.ui.MarketShareActivity" />
         <activity android:name=".market.ui.MarketShareRankingsActivity"></activity>
+        <activity android:name=".dealer.ui.activity.SalerDetailActivity"></activity>
+        <activity android:name=".dealer.ui.activity.ModifySalerInforActivity"></activity>
     </application>
 
 </manifest>

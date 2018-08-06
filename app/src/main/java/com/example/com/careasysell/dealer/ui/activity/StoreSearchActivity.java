@@ -107,10 +107,10 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
      */
     private void initHotCharcter() {
         List<String> data = new ArrayList<>();
-        data.add("哈密瓜");
-        data.add("哈密瓜");
-        data.add("哈密瓜");
-        data.add("哈密瓜");
+        data.add("奔驰");
+        data.add("奔驰");
+        data.add("奔驰");
+        data.add("奔驰");
         mFlowLayout.setAdapter(new TagAdapter<String>(data) {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
