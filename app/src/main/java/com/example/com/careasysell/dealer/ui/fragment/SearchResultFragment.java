@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
+import com.example.com.careasysell.market.ui.MarketStoreShareActivity;
 import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
 import com.example.com.careasysell.options.ReleaseOptionActivity;
@@ -138,7 +139,7 @@ public class SearchResultFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter, R.id.ll_put_away})
+    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter, R.id.tv_put_away})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 //            汽车状态
@@ -167,8 +168,9 @@ public class SearchResultFragment extends BaseFragment {
                     }
                 }
                 break;
-            case R.id.ll_put_away:
+            case R.id.tv_put_away:
                 // TODO: 2018/8/1 跳转分享
+                startActivity(MarketStoreShareActivity.class);
                 break;
             default:
         }

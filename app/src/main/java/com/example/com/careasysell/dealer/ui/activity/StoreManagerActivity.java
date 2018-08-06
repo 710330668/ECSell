@@ -28,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -103,36 +104,19 @@ public class StoreManagerActivity extends BaseActivity {
     }
 
 
-//    @OnClick({R.id.et_search, R.id.ll_in_sale, R.id.ll_has_put_away, R.id.ll_has_reserve, R.id.ll_has_sell})
-//    public void onViewClicked(View view) {
-//        Bundle bundle = new Bundle();
-//        switch (view.getId()) {
-//            case R.id.et_search:
-//                if (INVENTORY != C.INVENTORY_MARKET) {
-//                    startActivity(StoreSearchActivity.class);
-//                } else {
-//                    startActivity(NationSourceActivity.class);
-//                }
-//                break;
-//            case R.id.ll_in_sale:
-//                bundle.putString(C.TAG_PAGE_STORE_MANAGER, C.TAG_STATE_PUT_AWAY);
-//                startActivity(StoreSearchActivity.class, bundle);
-//                break;
-//            case R.id.ll_has_put_away:
-//                bundle.putString(C.TAG_PAGE_STORE_MANAGER, C.TAG_STATE_PUT_AWAY);
-//                startActivity(StoreSearchActivity.class, bundle);
-//                break;
-//            case R.id.ll_has_reserve:
-//                bundle.putString(C.TAG_PAGE_STORE_MANAGER, C.TAG_STATE_RESERVE);
-//                startActivity(StoreSearchActivity.class, bundle);
-//                break;
-//            case R.id.ll_has_sell:
-//                bundle.putString(C.TAG_PAGE_STORE_MANAGER, C.TAG_STATE_SELL);
-//                startActivity(StoreSearchActivity.class, bundle);
-//                break;
-//            default:
-//        }
-//    }
+    @OnClick({R.id.et_search})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.et_search:
+                if (INVENTORY != C.INVENTORY_MARKET) {
+                    startActivity(StoreSearchActivity.class);
+                } else {
+                    startActivity(NationSourceActivity.class);
+                }
+                break;
+            default:
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
