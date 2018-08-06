@@ -11,6 +11,7 @@ import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.StoreManagerViewHolder;
 import com.example.com.careasysell.market.ui.viewholder.MarketShareHeaderHolder;
 import com.example.com.careasysell.market.ui.viewholder.MarketShareHolder;
+import com.example.com.careasysell.market.ui.viewholder.ShareRankHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
@@ -52,6 +53,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public static final int MARKET_SHARE_HEADER_TYPE = 16;
     public static final int MARKET_SHARE_TYPE = 17;
+
+    public static final int SHARE_RANK_TYPE = 18;
 
     private MarketShareHeaderHolder.ShareRankClickListener listener;
 
@@ -96,6 +99,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return marketShareHeaderHolder;
             case MARKET_SHARE_TYPE:
                 return new MarketShareHolder(parent, getItemView(parent, viewType));
+            case SHARE_RANK_TYPE:
+                return new ShareRankHolder(parent,getItemView(parent,viewType));
             default:
         }
         return null;
@@ -145,6 +150,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_market_share_header;
             case MARKET_SHARE_TYPE:
                 return R.layout.item_market_share;
+            case SHARE_RANK_TYPE:
+                return R.layout.item_share_rank;
             default:
         }
         return 0;

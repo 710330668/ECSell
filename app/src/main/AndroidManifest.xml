@@ -79,7 +79,8 @@
         <activity android:name=".market.ui.MarketSearchActivity" />
         <activity android:name=".usercenter.DealershipActivity" />
         <activity android:name=".options.VehicleheatActivity" />
-        <activity android:name=".market.ui.MarketShareActivity"></activity>
+        <activity android:name=".market.ui.MarketShareActivity" />
+        <activity android:name=".market.ui.MarketShareRankingsActivity"></activity>
     </application>
 
 </manifest>

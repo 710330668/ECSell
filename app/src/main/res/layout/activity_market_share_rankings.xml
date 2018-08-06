@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".market.ui.MarketShareRankingsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="分享排行榜"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_share_rank_today"
+            style="@style/vehicleheat_radio_button"
+            android:text="今日" />
+
+        <RadioButton
+            android:id="@+id/rb_share_rank_the_week"
+            style="@style/vehicleheat_radio_button"
+            android:text="本周" />
+
+        <RadioButton
+            android:id="@+id/rb_share_rank_last_week"
+            style="@style/vehicleheat_radio_button"
+            android:text="上周" />
+
+        <com.example.com.careasysell.view.DrawableCenterRadioButton
+            android:id="@+id/rb_share_rank_more"
+            style="@style/vehicleheat_radio_button"
+            android:drawableRight="@drawable/drawable_left_radio_selector"
+            android:text="更多" />
+
+    </RadioGroup>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_share_rank"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp" />
+
+
+</LinearLayout>

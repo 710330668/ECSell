@@ -75,7 +75,7 @@ public class MarketShareActivity extends BaseActivity {
         delegate.setShareHeaderClickListener(new MarketShareHeaderHolder.ShareRankClickListener() {
             @Override
             public void onShareClick() {
-                Log.e(TAG, "onShareClick: ");
+                startActivity(MarketShareRankingsActivity.class);
             }
         });
         mRecycler.setAdapter(new BaseAdapter(mData, delegate));
