@@ -16,6 +16,7 @@ import com.example.com.careasysell.market.ui.viewholder.ShareRankHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
+import com.example.com.careasysell.options.viewHolder.ClientViewHolder;
 import com.example.com.careasysell.options.viewHolder.ColorViewHolder;
 import com.example.com.careasysell.options.viewHolder.FormalityViewHolder;
 import com.example.com.careasysell.options.viewHolder.OptionTypeViewHolder;
@@ -63,6 +64,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public static final int USER_LIST_TYPE = 20;
 
+    public static final int CLIENT_LIST_TYPE = 21;
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -110,6 +112,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new ShareRankHolder(parent, getItemView(parent, viewType));
             case STORE_SHARE_GRID_TYPE:
                 return new MarketStoreShareHolder(parent, getItemView(parent, viewType));
+            case CLIENT_LIST_TYPE:
+                return new ClientViewHolder(parent,getItemView(parent,viewType));
             default:
         }
         return null;
@@ -165,6 +169,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_user_manager;
             case STORE_SHARE_GRID_TYPE:
                 return R.layout.item_market_store_share_layout;
+            case CLIENT_LIST_TYPE:
+                return R.layout.item_client;
             default:
         }
         return 0;

@@ -1,12 +1,9 @@
 package com.example.com.careasysell.market.ui;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.market.ui.model.MarketShareHeaderModel;

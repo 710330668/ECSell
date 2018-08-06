@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.AllSourceSearchActivity;
+import com.example.com.careasysell.dealer.ui.activity.MyReportActivity;
 import com.example.com.careasysell.dealer.ui.activity.NationSourceActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
 import com.example.com.careasysell.dealer.ui.activity.UserManagerActivity;
@@ -94,6 +95,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_report:
                 //报表
+                startActivity(MyReportActivity.class);
                 break;
             case R.id.et_search:
                 startActivity(AllSourceSearchActivity.class);

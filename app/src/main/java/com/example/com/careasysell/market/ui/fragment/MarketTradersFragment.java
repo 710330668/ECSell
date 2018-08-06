@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.activity.MyReportActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
 import com.example.com.careasysell.market.ui.MarketSearchActivity;
 import com.example.com.careasysell.market.ui.MarketShareActivity;
@@ -78,6 +79,7 @@ public class MarketTradersFragment extends BaseFragment {
                 //客户管理
                 break;
             case R.id.rl_report:
+                startActivity(MyReportActivity.class);
                 break;
             case R.id.et_search:
                 startActivity(MarketSearchActivity.class);

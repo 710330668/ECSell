@@ -86,6 +86,10 @@
         <activity android:name=".market.ui.MarketShareRankingsActivity"></activity>
         <activity android:name=".dealer.ui.activity.SalerDetailActivity"></activity>
         <activity android:name=".dealer.ui.activity.ModifySalerInforActivity"></activity>
+        <activity android:name=".dealer.ui.activity.MyReportActivity"></activity>
+        <activity android:name=".dealer.ui.activity.ClientListActivity" />
+        <activity android:name=".dealer.ui.activity.ReportCarListActivity" />
+        <activity android:name=".market.ui.MarketStoreShareActivity" />
     </application>
 
 </manifest>
