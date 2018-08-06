@@ -9,6 +9,8 @@ import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewH
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.StoreManagerViewHolder;
+import com.example.com.careasysell.market.ui.viewholder.MarketShareHeaderHolder;
+import com.example.com.careasysell.market.ui.viewholder.MarketShareHolder;
 import com.example.com.careasysell.options.viewHolder.AreasViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.options.viewHolder.CarsViewHolder;
@@ -48,6 +50,11 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public static final int STORE_MANAGE_TYPE = 15;
 
+    public static final int MARKET_SHARE_HEADER_TYPE = 16;
+    public static final int MARKET_SHARE_TYPE = 17;
+
+    private MarketShareHeaderHolder.ShareRankClickListener listener;
+
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -83,6 +90,12 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new VehicleHeatViewHolder(parent, getItemView(parent, viewType));
             case STORE_MANAGE_TYPE:
                 return new StoreManagerViewHolder(parent, getItemView(parent, viewType));
+            case MARKET_SHARE_HEADER_TYPE:
+                MarketShareHeaderHolder marketShareHeaderHolder = new MarketShareHeaderHolder(parent, getItemView(parent, viewType));
+                marketShareHeaderHolder.setListener(listener);
+                return marketShareHeaderHolder;
+            case MARKET_SHARE_TYPE:
+                return new MarketShareHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -128,8 +141,16 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_vehicle_heat;
             case STORE_MANAGE_TYPE:
                 return R.layout.item_store_manager;
+            case MARKET_SHARE_HEADER_TYPE:
+                return R.layout.item_market_share_header;
+            case MARKET_SHARE_TYPE:
+                return R.layout.item_market_share;
             default:
         }
         return 0;
+    }
+
+    public void setShareHeaderClickListener(MarketShareHeaderHolder.ShareRankClickListener listener) {
+        this.listener = listener;
     }
 }

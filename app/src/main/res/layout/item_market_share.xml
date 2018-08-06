@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:paddingBottom="14dp"
+    android:paddingLeft="9dp"
+    android:paddingTop="15dp">
+
+    <HorizontalScrollView
+        android:id="@+id/scroll_share_item"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/share_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/share_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:text="2018/06/04 15:21"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scroll_share_item" />
+
+    <TextView
+        android:id="@+id/share_item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:text="26人看过"
+        app:layout_constraintBaseline_toBaselineOf="@+id/share_item_time"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

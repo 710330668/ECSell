@@ -62,6 +62,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <RelativeLayout
                 android:id="@+id/rl_store_manager"
                 android:layout_width="0dp"
@@ -132,7 +133,7 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:id="@+id/rl_human_manager"
+                android:id="@+id/rl_my_share"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -150,7 +151,7 @@
                     android:layout_below="@+id/iv_human"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="12dp"
-                    android:text="人员管理"
+                    android:text="我的分享"
                     android:textSize="14dp" />
 
             </RelativeLayout>
