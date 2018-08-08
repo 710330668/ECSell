@@ -42,7 +42,7 @@ public class MyReportActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.rl_new, R.id.rl_store,R.id.rl_shouchu})
+    @OnClick({R.id.iv_back, R.id.rl_new, R.id.rl_store,R.id.rl_shouchu,R.id.rl_store_report})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -55,6 +55,9 @@ public class MyReportActivity extends BaseActivity {
                 break;
             case R.id.rl_shouchu:
                 startActivity(ReportCarListActivity.class);
+                break;
+            case R.id.rl_store_report:
+                startActivity(StoreReportActivity.class);
                 break;
         }
     }

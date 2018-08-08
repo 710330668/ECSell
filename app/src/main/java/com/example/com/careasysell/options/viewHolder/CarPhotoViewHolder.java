@@ -16,6 +16,7 @@ public class CarPhotoViewHolder extends BaseViewHolder {
 
     private ImageView ivCarPhoto;
     private ImageView ivDelete;
+    private OnImageDeleteListener listener;
 
     /**
      * TODO
@@ -36,16 +37,26 @@ public class CarPhotoViewHolder extends BaseViewHolder {
 
     @Override
     public void onBindViewHolder(Object data) {
-        ItemData itemData = (ItemData) data;
+        final ItemData itemData = (ItemData) data;
         CarPhotoModel model = (CarPhotoModel) itemData.data;
         ivCarPhoto.setImageBitmap(model.getBitmap());
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                listener.removeImage(itemData.tag);
             }
         });
 
+    }
+
+
+    public interface OnImageDeleteListener{
+        void removeImage(int position);
+    }
+
+
+    public void setOnImageDeleteListener(OnImageDeleteListener listener){
+        this.listener = listener;
     }
 }
 

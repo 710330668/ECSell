@@ -30,6 +30,7 @@ import com.example.com.careasysell.options.model.SalesAreaModel;
 import com.example.com.careasysell.options.model.response.CommonResponse;
 import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
+import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.ParamManager;
@@ -101,6 +102,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private boolean flag = true;
     private String token;
     private String optionId;
+    private  BaseAdapter imageDeleteAdapter;
 
     @Override
     public int bindLayout() {
@@ -483,11 +485,20 @@ public class ReleaseOptionActivity extends BaseActivity {
                     //最多九张
                     photos.add(bitmap);
                     for(int i =0;i<photos.size();i++){
-                        CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
-                        ItemData itemData = new ItemData(0, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
+                        final CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
+                        ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
                         carPhotos.add(itemData);
                         rlCarPhoto.setLayoutManager(new GridLayoutManager(this,3));
-                        BaseAdapter baseAdapter = new BaseAdapter(carPhotos, new SettingDelegate(), new onItemClickListener() {
+                        SettingDelegate delegate = new SettingDelegate();
+                        delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
+                            @Override
+                            public void removeImage(int position) {
+                                carPhotos.remove(position);
+                                photos.remove(position);
+                                imageDeleteAdapter.notifyDataSetChanged();
+                            }
+                        });
+                        imageDeleteAdapter = new BaseAdapter(carPhotos,delegate, new onItemClickListener() {
                             @Override
                             public void onClick(View v, Object data) {
                             }
@@ -497,7 +508,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                                 return false;
                             }
                         });
-                        rlCarPhoto.setAdapter(baseAdapter);
+                        rlCarPhoto.setAdapter(imageDeleteAdapter);
                     }
                 } catch (FileNotFoundException e) {
                 }

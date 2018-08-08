@@ -7,6 +7,7 @@ import com.example.com.careasysell.dealer.ui.viewHolder.PutAwayHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchResultViewHolder;
+import com.example.com.careasysell.dealer.ui.viewHolder.SellRankViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.StoreManagerViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.UserListViewHolder;
 import com.example.com.careasysell.market.ui.viewholder.MarketShareHeaderHolder;
@@ -28,6 +29,7 @@ import com.example.com.careasysell.share.viewholder.SharedHumanHolder;
 import com.example.com.common.adapter.BaseDelegate;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.common.util.RefreshFooterViewHolder;
 
 /**
  * Created by 71033 on 2018/7/26.
@@ -62,9 +64,15 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     private MarketShareHeaderHolder.ShareRankClickListener listener;
 
+    private CarPhotoViewHolder.OnImageDeleteListener imageDeleteListener;
+
     public static final int USER_LIST_TYPE = 20;
 
     public static final int CLIENT_LIST_TYPE = 21;
+
+    public static final int SELL_RANK_TYPE = 22;
+
+    public static final int FOOT_TYPE = 99;
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -95,7 +103,9 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
             case DELETE_SEARCH_HISTORY_TYPE:
                 return new SearchHistoryDeleteViewHolder(parent, getItemView(parent, viewType));
             case CAR_PHOTO_TYPE:
-                return new CarPhotoViewHolder(parent, getItemView(parent, viewType));
+                CarPhotoViewHolder carPhotoViewHolder = new CarPhotoViewHolder(parent, getItemView(parent, viewType));
+                carPhotoViewHolder.setOnImageDeleteListener(imageDeleteListener);
+                return carPhotoViewHolder;
             case VEHICLE_HEAT_TYPE:
                 return new VehicleHeatViewHolder(parent, getItemView(parent, viewType));
             case STORE_MANAGE_TYPE:
@@ -114,6 +124,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new MarketStoreShareHolder(parent, getItemView(parent, viewType));
             case CLIENT_LIST_TYPE:
                 return new ClientViewHolder(parent,getItemView(parent,viewType));
+            case SELL_RANK_TYPE:
+                return new SellRankViewHolder(parent,getItemView(parent,viewType));
+            case FOOT_TYPE:
+                return new RefreshFooterViewHolder(parent,getItemView(parent,viewType));
             default:
         }
         return null;
@@ -171,6 +185,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_market_store_share_layout;
             case CLIENT_LIST_TYPE:
                 return R.layout.item_client;
+            case SELL_RANK_TYPE:
+                return R.layout.item_sell_rank;
+            case FOOT_TYPE:
+                return R.layout.layout_refresh_footer;
             default:
         }
         return 0;
@@ -178,5 +196,9 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public void setShareHeaderClickListener(MarketShareHeaderHolder.ShareRankClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnImageDeleteListener(CarPhotoViewHolder.OnImageDeleteListener listener) {
+        this.imageDeleteListener = listener;
     }
 }

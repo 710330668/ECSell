@@ -11,6 +11,7 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.EndlessRecyclerOnScrollListener;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -34,6 +35,8 @@ public class ReportCarListActivity extends BaseActivity {
     @BindView(R.id.rl_car)
     RecyclerView rlCar;
 
+    private BaseAdapter mDataAdapter;
+
     private List<ItemData> mSearchResultData = new ArrayList<>();
 
     @Override
@@ -54,17 +57,25 @@ public class ReportCarListActivity extends BaseActivity {
             ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
             mSearchResultData.add(e);
         }
+        ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
+        mSearchResultData.add(e);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
         rlCar.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rlCar.addItemDecoration(new SpaceItemDecoration(5));
+        rlCar.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                mDataAdapter.setLoadState(mDataAdapter.LOADING);
+            }
+        });
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        BaseAdapter mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 startActivity(CarDetailActivity.class);

@@ -260,6 +260,7 @@
         android:background="#F5F5F5" />
 
     <RelativeLayout
+        android:id="@+id/rl_store_report"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
