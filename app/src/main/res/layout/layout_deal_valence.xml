@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.com.careasysell.utils.MyRadioGroup
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="horizontal"
+    android:padding="9.5dp">
+
+
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:text="不限"
+        android:background="@drawable/bg_rb_selector"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:text="5万以下"
+        android:background="@drawable/bg_rb_selector"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:text="5-10万"
+        android:background="@drawable/bg_rb_selector"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:background="@drawable/bg_rb_selector"
+        android:text="10-15万"
+        android:layout_width="80dp"
+        android:layout_margin="2dp"
+        android:layout_height="30dp" />
+
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:background="@drawable/bg_rb_selector"
+        android:text="15万-30万"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:background="@drawable/bg_rb_selector"
+        android:text="30万-50万"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:background="@drawable/bg_rb_selector"
+        android:text="50万-100万"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+    <RadioButton
+        android:gravity="center"
+        android:button="@null"
+        android:background="@drawable/bg_rb_selector"
+        android:text="100万及以上"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_margin="2dp"/>
+
+</com.example.com.careasysell.utils.MyRadioGroup>

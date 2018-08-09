@@ -91,6 +91,7 @@
         <activity android:name=".dealer.ui.activity.ReportCarListActivity" />
         <activity android:name=".market.ui.MarketStoreShareActivity" />
         <activity android:name=".dealer.ui.activity.StoreReportActivity" />
+        <activity android:name=".order.OrderListActivity" />
     </application>
 
 </manifest>

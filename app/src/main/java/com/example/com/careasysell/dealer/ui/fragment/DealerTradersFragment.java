@@ -13,6 +13,7 @@ import com.example.com.careasysell.dealer.ui.activity.MyReportActivity;
 import com.example.com.careasysell.dealer.ui.activity.NationSourceActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
 import com.example.com.careasysell.dealer.ui.activity.UserManagerActivity;
+import com.example.com.careasysell.order.OrderListActivity;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 
@@ -89,6 +90,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_order_manager:
                 //订单管理
+                startActivity(OrderListActivity.class);
                 break;
             case R.id.rl_client_manager:
                 //客户管理
