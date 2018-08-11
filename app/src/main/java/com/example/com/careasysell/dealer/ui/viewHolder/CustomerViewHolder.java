@@ -1,6 +1,7 @@
 package com.example.com.careasysell.dealer.ui.viewHolder;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ public class CustomerViewHolder extends BaseViewHolder<ItemData> {
     private TextView mNeed;
     private TextView mFollow;
     private TextView mMessage;
+    private static final String TAG = "CustomerViewHolder";
 
     /**
      * TODO
@@ -31,6 +33,7 @@ public class CustomerViewHolder extends BaseViewHolder<ItemData> {
 
     @Override
     public void findViews() {
+        Log.e(TAG, "findViews: ===" );
         mName = ((TextView) itemView.findViewById(R.id.tv_customer_name));
         mState = ((TextView) itemView.findViewById(R.id.tv_customer_state));
         mNeed = ((TextView) itemView.findViewById(R.id.tv_buy_need));

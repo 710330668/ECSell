@@ -118,7 +118,7 @@ public class CustomerManagerActivity extends BaseActivity {
                 break;
             case R.id.img_add_client:
                 // TODO: 2018/8/7 添加客户
-//                startActivity();
+                startActivity(CreateNewCustomerActivity.class);
                 break;
             case R.id.rb_customer_state:
                 // TODO: 2018/8/7 showPop

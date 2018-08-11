@@ -92,7 +92,8 @@
         <activity android:name=".market.ui.MarketStoreShareActivity" />
         <activity android:name=".dealer.ui.activity.StoreReportActivity" />
         <activity android:name=".order.OrderListActivity" />
-        <activity android:name=".dealer.ui.activity.CustomerManagerActivity"></activity>
+        <activity android:name=".dealer.ui.activity.CustomerManagerActivity" />
+        <activity android:name=".dealer.ui.activity.CreateNewCustomerActivity"></activity>
     </application>
 
 </manifest>
