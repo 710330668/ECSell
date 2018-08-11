@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.AllSourceSearchActivity;
+import com.example.com.careasysell.dealer.ui.activity.CustomerManagerActivity;
 import com.example.com.careasysell.dealer.ui.activity.MyReportActivity;
 import com.example.com.careasysell.dealer.ui.activity.NationSourceActivity;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
@@ -72,7 +73,7 @@ public class DealerTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_country_options, R.id.rl_store_manager, R.id.rl_human_manager, R.id.rl_client_manager, R.id.rl_order_manager, R.id.rl_report,R.id.et_search})
+    @OnClick({R.id.rl_country_options, R.id.rl_store_manager, R.id.rl_human_manager, R.id.rl_client_manager, R.id.rl_order_manager, R.id.rl_report, R.id.et_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_country_options:
@@ -94,6 +95,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_client_manager:
                 //客户管理
+                startActivity(CustomerManagerActivity.class);
                 break;
             case R.id.rl_report:
                 //报表

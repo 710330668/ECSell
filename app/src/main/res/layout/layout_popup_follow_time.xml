@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.view.flowlayout.TagFlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="102dp"
+    android:background="#FFFFFF"
+    android:orientation="horizontal"
+    android:padding="9.5dp">
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/rl_all"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="4.5dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/bg_rb_selector"-->
+    <!--android:button="@null"-->
+    <!--android:gravity="center"-->
+    <!--android:text="全部" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/rl_selling"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="4.5dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/bg_rb_selector"-->
+    <!--android:button="@null"-->
+    <!--android:gravity="center"-->
+    <!--android:text="在售" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/rl_has_put_away"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="4.5dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/bg_rb_selector"-->
+    <!--android:button="@null"-->
+    <!--android:gravity="center"-->
+    <!--android:text="已上架" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/rl_reserve"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_margin="4.5dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@drawable/bg_rb_selector"-->
+    <!--android:button="@null"-->
+    <!--android:gravity="center"-->
+    <!--android:text="已预订" />-->
+
+</com.zhy.view.flowlayout.TagFlowLayout>

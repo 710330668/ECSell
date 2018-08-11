@@ -34,4 +34,14 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
+    <style name="customer_manager_radio_button">
+        <item name="android:textColor">@drawable/text_color_radio_selector</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+
 </resources>

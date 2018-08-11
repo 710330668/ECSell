@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/tv_customer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="14dp"
+        android:text="张达"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_customer_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="14dp"
+        android:background="#FF5754"
+        android:text="未到店"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_buy_need_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="买车需求"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_customer_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_customer_name" />
+
+    <TextView
+        android:id="@+id/tv_buy_need"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:text="预算16-20万 | 标致-标致301 等5款车"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_buy_need_title"
+        app:layout_constraintLeft_toRightOf="@+id/tv_buy_need_title" />
+
+    <TextView
+        android:id="@+id/tv_latest_follow_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="最新跟进"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_customer_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_buy_need_title" />
+
+    <TextView
+        android:id="@+id/tv_latest_follow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:text="08/01 客户考虑中"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_latest_follow_title"
+        app:layout_constraintLeft_toRightOf="@+id/tv_latest_follow_title" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="2018/07/12 创建 | 销售 王硕"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_latest_follow_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_latest_follow" />
+</android.support.constraint.ConstraintLayout>

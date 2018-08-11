@@ -3,6 +3,7 @@ package com.example.com.careasysell.remote;
 import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.dealer.ui.viewHolder.CustomerViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.PutAwayHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryViewHolder;
@@ -72,7 +73,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public static final int SELL_RANK_TYPE = 22;
 
+    public static final int CUSTOMER_MANAGER_TYPE = 23;
+
     public static final int FOOT_TYPE = 99;
+
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
@@ -123,11 +127,13 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
             case STORE_SHARE_GRID_TYPE:
                 return new MarketStoreShareHolder(parent, getItemView(parent, viewType));
             case CLIENT_LIST_TYPE:
-                return new ClientViewHolder(parent,getItemView(parent,viewType));
+                return new ClientViewHolder(parent, getItemView(parent, viewType));
             case SELL_RANK_TYPE:
-                return new SellRankViewHolder(parent,getItemView(parent,viewType));
+                return new SellRankViewHolder(parent, getItemView(parent, viewType));
             case FOOT_TYPE:
-                return new RefreshFooterViewHolder(parent,getItemView(parent,viewType));
+                return new RefreshFooterViewHolder(parent, getItemView(parent, viewType));
+            case CUSTOMER_MANAGER_TYPE:
+                return new CustomerViewHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -189,6 +195,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_sell_rank;
             case FOOT_TYPE:
                 return R.layout.layout_refresh_footer;
+            case CUSTOMER_MANAGER_TYPE:
+                return R.layout.item_customer_recycler;
             default:
         }
         return 0;

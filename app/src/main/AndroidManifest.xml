@@ -78,20 +78,21 @@
         <activity android:name=".dealer.ui.activity.AllSourceSearchActivity" />
         <activity android:name=".market.ui.MarketSearchActivity" />
         <activity android:name=".usercenter.DealershipActivity" />
-        <activity android:name=".options.VehicleheatActivity"></activity>
-        <activity android:name=".usercenter.UserInforActivity"></activity>
-        <activity android:name=".dealer.ui.activity.UserManagerActivity"></activity>
-        <activity android:name=".dealer.ui.activity.AddSalerActivity"></activity>
+        <activity android:name=".options.VehicleheatActivity" />
+        <activity android:name=".usercenter.UserInforActivity" />
+        <activity android:name=".dealer.ui.activity.UserManagerActivity" />
+        <activity android:name=".dealer.ui.activity.AddSalerActivity" />
         <activity android:name=".market.ui.MarketShareActivity" />
-        <activity android:name=".market.ui.MarketShareRankingsActivity"></activity>
-        <activity android:name=".dealer.ui.activity.SalerDetailActivity"></activity>
-        <activity android:name=".dealer.ui.activity.ModifySalerInforActivity"></activity>
-        <activity android:name=".dealer.ui.activity.MyReportActivity"></activity>
+        <activity android:name=".market.ui.MarketShareRankingsActivity" />
+        <activity android:name=".dealer.ui.activity.SalerDetailActivity" />
+        <activity android:name=".dealer.ui.activity.ModifySalerInforActivity" />
+        <activity android:name=".dealer.ui.activity.MyReportActivity" />
         <activity android:name=".dealer.ui.activity.ClientListActivity" />
         <activity android:name=".dealer.ui.activity.ReportCarListActivity" />
         <activity android:name=".market.ui.MarketStoreShareActivity" />
         <activity android:name=".dealer.ui.activity.StoreReportActivity" />
         <activity android:name=".order.OrderListActivity" />
+        <activity android:name=".dealer.ui.activity.CustomerManagerActivity"></activity>
     </application>
 
 </manifest>
