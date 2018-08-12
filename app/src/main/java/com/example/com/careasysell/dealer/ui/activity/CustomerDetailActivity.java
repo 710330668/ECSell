@@ -64,7 +64,7 @@ public class CustomerDetailActivity extends BaseActivity {
         mRecyclerWantCar.setAdapter(adapter);
     }
 
-    @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit})
+    @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit, R.id.tv_want_car_edit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_message_edit:
@@ -72,6 +72,9 @@ public class CustomerDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_customer_need_edit:
                 startActivity(EditCustomerNeedActivity.class);
+                break;
+            case R.id.tv_want_car_edit:
+                startActivity(CustomerCarWantActivity.class);
                 break;
 
         }

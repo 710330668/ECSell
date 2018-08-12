@@ -4,8 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
@@ -28,7 +30,6 @@ import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
-import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -49,7 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class NationSourceActivity extends BaseActivity {
+public class CustomerCarWantActivity extends BaseActivity {
 
     @BindView(R.id.tag_flow_price)
     TagFlowLayout mTagFlowPrice;
@@ -75,102 +76,138 @@ public class NationSourceActivity extends BaseActivity {
     RadioButton mRbState;
     @BindView(R.id.rb_car_order)
     RadioButton mRbOrder;
-    @BindView(R.id.rb_car_brand)
-    RadioButton mRbBrand;
     @BindView(R.id.rb_car_filter)
     RadioButton mRbFilter;
-    @BindView(R.id.tv_open_put_away)
-    TextView mTvPutAway;
     @BindView(R.id.ll_put_away)
     LinearLayout mLinearPut;
     private int selectState = 0;
     private int selectOrder = 0;
 
-    @C.INVENTORY
-    public int INVENTORY = C.INVENTORY_OPTION;
     PopupWindow mPopupWindow;
 
     private List<ItemData> mSearchResultData = new ArrayList<>();
 
     private static final String TAG = "NationSourceActivity";
-    private final int REQUEST_BRAND = 0;
     private BaseAdapter mDataAdapter;
-    private String token;
+
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_nation_source;
+        return R.layout.activity_customer_car_want;
     }
 
     @Override
     public void initParams(Bundle params) {
-        INVENTORY = ParamManager.getInstance(this).getChannelType();
-        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
         mSearchResult.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
-        switch (INVENTORY) {
-            case C.INVENTORY_MARKET:
-                mTvPutAway.setText("分享车辆");
+    }
+
+    @Override
+    public void doBusiness(Context mContext) {
+        initRecycler();
+        initDrawerTagList();
+    }
+
+    private void initRecycler() {
+        for (int i = 0; i < 10; i++) {
+            SearchResultModel data = new SearchResultModel();
+            data.setDate("2018/06/24");
+            data.setDeduct("销售提成2000");
+            data.setPrice("16.8万");
+            data.setState("在售");
+            data.setOpenPutEntrance(true);
+            data.setSubTitle("分享20次|浏览140次");
+            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
+            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
+            mSearchResultData.add(e);
+        }
+        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        mSearchResult.setAdapter(mDataAdapter);
+    }
+
+
+    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter})
+    public void onRadioButtonSelected(View view) {
+        switch (view.getId()) {
+//            汽车状态
+            case R.id.rb_car_state:
+                showPopupWindow(R.id.rb_car_state);
                 break;
-            case C.INVENTORY_DEALER:
-                mTvPutAway.setText("上架车辆");
+//                排序
+            case R.id.rb_car_order:
+                showPopupWindow(R.id.rb_car_order);
+                break;
+//                筛选  draw  open
+            case R.id.rb_car_filter:
+                if (mDrawerMain.isDrawerOpen(mDrawerRight)) {
+                    mDrawerMain.closeDrawer(mDrawerRight);
+                } else {
+                    mDrawerMain.openDrawer(mDrawerRight);
+                }
                 break;
             default:
         }
     }
 
-    @Override
-    public void doBusiness(Context mContext) {
-        //获取全国车源
-        getAllOptions();
-        initDrawerTagList();
-    }
+    public void showPopupWindow(final int viewId) {
+        RadioGroup convertView = null;
 
-    @SuppressLint("CheckResult")
-    private void getAllOptions() {
-        Injection.provideApiService().getCarList(token, "10", "all")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<AllOptionResponse>() {
-                    @Override
-                    public void accept(AllOptionResponse response) throws Exception {
-                        LogUtils.e(response.getMsg());
-                        if (response.getCode() == 200) {
-                            for (int i = 0; i < response.getData().getLists().size(); i++) {
-                                SearchResultModel data = new SearchResultModel();
-                                data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
-                                data.setDeduct(response.getData().getLists().get(i).getSaleCommission() + "");
-                                data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
-                                data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
-                                data.setTitle(response.getData().getLists().get(i).getVname());
-                                data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
-                                data.setId(response.getData().getLists().get(i).getCarId());
-                                ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
-                                mSearchResultData.add(e);
-                            }
-                        }
-                        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
-                            @Override
-                            public void onClick(View v, Object data) {
-                                SearchResultModel model = (SearchResultModel) data;
-                                Bundle bundle = new Bundle();
-                                bundle.putString("carId", model.getId());
-                                startActivity(CarDetailActivity.class, bundle);
-                            }
+        switch (viewId) {
+            case R.id.rb_car_state:
+                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_state, null);
+                ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
+                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                break;
+            case R.id.rb_car_order:
+                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order, null);
+                ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
+                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                            @Override
-                            public boolean onLongClick(View v, Object data) {
-                                return false;
-                            }
-                        });
-                        mSearchResult.setAdapter(mDataAdapter);
+                break;
+            default:
+        }
+
+        if (convertView != null) {
+            convertView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    RadioButton selectButton;
+                    switch (viewId) {
+                        case R.id.rb_car_state:
+                            selectButton = ((RadioButton) radioGroup.findViewById(i));
+                            mRbState.setText(selectButton.getText());
+                            selectState = radioGroup.indexOfChild(selectButton);
+                            mPopupWindow.dismiss();
+                            break;
+                        case R.id.rb_car_order:
+                            selectButton = ((RadioButton) radioGroup.findViewById(i));
+                            mRbOrder.setText(selectButton.getText());
+                            selectOrder = radioGroup.indexOfChild(selectButton);
+                            mPopupWindow.dismiss();
+                            break;
+                        default:
                     }
-                });
+                }
+            });
+        }
+
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setOutsideTouchable(false);
+        mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
     }
 
     private void initDrawerTagList() {
@@ -333,7 +370,7 @@ public class NationSourceActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_back, R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away})
+    @OnClick({R.id.img_back, R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.ll_put_away})
     public void onDrawerViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
@@ -348,63 +385,10 @@ public class NationSourceActivity extends BaseActivity {
             case R.id.iv_car_model:
                 startActivity(ChooseBrandActivity.class);
                 break;
-            case R.id.tv_open_put_away:
-                boolean open = false;
-                for (ItemData bean : mSearchResultData) {
-                    ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
-                    open = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
-                    mLinearPut.setVisibility(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? View.VISIBLE : View.GONE);
-                }
-                switch (INVENTORY) {
-                    case C.INVENTORY_MARKET:
-                        mTvPutAway.setText(open ? "取消" : "分享车辆");
-                        break;
-                    case C.INVENTORY_DEALER:
-                        mTvPutAway.setText(open ? "取消" : "上架车辆");
-                        break;
-                    default:
-                }
-                mDataAdapter.notifyDataSetChanged();
-                break;
             case R.id.ll_put_away:
-                switch (INVENTORY) {
-                    case C.INVENTORY_MARKET:
-                        break;
-                    case C.INVENTORY_DEALER:
-                        startActivity(PutAwayDetailActivity.class);
-                        break;
-                    default:
-                }
+                Toast.makeText(appContext, "添加成功", Toast.LENGTH_SHORT).show();
                 break;
 
-            default:
-        }
-    }
-
-    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter})
-    public void onRadioButtonSelected(View view) {
-        switch (view.getId()) {
-//            汽车状态
-            case R.id.rb_car_state:
-                showPopupWindow(R.id.rb_car_state);
-                break;
-//                品牌  跳转品牌activity
-            case R.id.rb_car_brand:
-                Intent intent = new Intent(this, ChooseBrandActivity.class);
-                startActivityForResult(intent, REQUEST_BRAND);
-                break;
-//                排序
-            case R.id.rb_car_order:
-                showPopupWindow(R.id.rb_car_order);
-                break;
-//                筛选  draw  open
-            case R.id.rb_car_filter:
-                if (mDrawerMain.isDrawerOpen(mDrawerRight)) {
-                    mDrawerMain.closeDrawer(mDrawerRight);
-                } else {
-                    mDrawerMain.openDrawer(mDrawerRight);
-                }
-                break;
             default:
         }
     }
@@ -417,53 +401,4 @@ public class NationSourceActivity extends BaseActivity {
         }
         super.onBackPressed();
     }
-
-    public void showPopupWindow(final int viewId) {
-        RadioGroup convertView = null;
-
-        switch (viewId) {
-            case R.id.rb_car_state:
-                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_state, null);
-                ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                break;
-            case R.id.rb_car_order:
-                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order, null);
-                ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                break;
-            default:
-        }
-
-        if (convertView != null) {
-            convertView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    RadioButton selectButton;
-                    switch (viewId) {
-                        case R.id.rb_car_state:
-                            selectButton = ((RadioButton) radioGroup.findViewById(i));
-                            mRbState.setText(selectButton.getText());
-                            selectState = radioGroup.indexOfChild(selectButton);
-                            mPopupWindow.dismiss();
-                            break;
-                        case R.id.rb_car_order:
-                            selectButton = ((RadioButton) radioGroup.findViewById(i));
-                            mRbOrder.setText(selectButton.getText());
-                            selectOrder = radioGroup.indexOfChild(selectButton);
-                            mPopupWindow.dismiss();
-                            break;
-                        default:
-                    }
-                }
-            });
-        }
-
-        mPopupWindow.setFocusable(true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setOutsideTouchable(false);
-        mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
-    }
-
 }
