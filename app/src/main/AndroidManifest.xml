@@ -93,7 +93,10 @@
         <activity android:name=".dealer.ui.activity.StoreReportActivity" />
         <activity android:name=".order.OrderListActivity" />
         <activity android:name=".dealer.ui.activity.CustomerManagerActivity" />
-        <activity android:name=".dealer.ui.activity.CreateNewCustomerActivity"></activity>
+        <activity android:name=".dealer.ui.activity.CreateNewCustomerActivity" />
+        <activity android:name=".dealer.ui.activity.CustomerDetailActivity" />
+        <activity android:name=".dealer.ui.activity.EditCustomerMessageActivity" />
+        <activity android:name=".dealer.ui.activity.EditCustomerNeedActivity"></activity>
     </application>
 
 </manifest>

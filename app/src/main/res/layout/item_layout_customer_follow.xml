@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp">
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="2018/07/12"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="16：24"
+        android:textSize="10sp"
+        app:layout_constraintRight_toRightOf="@+id/tv_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="@+id/img_circle"
+        app:layout_constraintRight_toRightOf="@+id/img_circle" />
+
+    <com.example.com.careasysell.view.CircleImageView
+        android:id="@+id/img_circle"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="#999999"
+        app:layout_constraintLeft_toRightOf="@+id/tv_date"
+        app:layout_constraintTop_toTopOf="@+id/tv_date" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="短信通知"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_date"
+        app:layout_constraintLeft_toRightOf="@+id/img_circle" />
+
+    <TextView
+        android:id="@+id/tv_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="系统"
+        android:textColor="#999999"
+        android:textSize="10sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_time"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_message" />
+
+</android.support.constraint.ConstraintLayout>

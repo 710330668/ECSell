@@ -98,7 +98,7 @@ public class CustomerManagerActivity extends BaseActivity {
         BaseAdapter adapter = new BaseAdapter(dataList, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-
+                startActivity(CustomerDetailActivity.class);
             }
 
             @Override

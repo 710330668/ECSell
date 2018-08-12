@@ -437,8 +437,10 @@
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:orientation="horizontal"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp">
+
 
                 <RadioButton
                     android:layout_width="0dp"
@@ -447,6 +449,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_rb_selector"
                     android:button="@null"
+                    android:gravity="center"
                     android:text="到店"
                     android:textColor="@drawable/text_color_radio_selector" />
 
@@ -457,6 +460,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_rb_selector"
                     android:button="@null"
+                    android:gravity="center"
                     android:text="电话"
                     android:textColor="@drawable/text_color_radio_selector" />
 
@@ -467,6 +471,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_rb_selector"
                     android:button="@null"
+                    android:gravity="center"
                     android:text="微信"
                     android:textColor="@drawable/text_color_radio_selector" />
 
@@ -476,6 +481,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_rb_selector"
                     android:button="@null"
+                    android:gravity="center"
                     android:text="短信"
                     android:textColor="@drawable/text_color_radio_selector" />
             </RadioGroup>

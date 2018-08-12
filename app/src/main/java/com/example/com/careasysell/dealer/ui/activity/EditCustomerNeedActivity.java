@@ -1,7 +1,7 @@
+
 package com.example.com.careasysell.dealer.ui.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,10 +11,11 @@ import com.example.com.common.BaseActivity;
 
 import butterknife.OnClick;
 
-public class CreateNewCustomerActivity extends BaseActivity {
+public class EditCustomerNeedActivity extends BaseActivity {
+
     @Override
     public int bindLayout() {
-        return R.layout.activity_create_new_customer;
+        return R.layout.activity_edit_customer_need;
     }
 
     @Override
@@ -32,15 +33,11 @@ public class CreateNewCustomerActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.ll_contacts})
+    @OnClick({R.id.img_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.ll_contacts:
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.PICK");
-                intent.addCategory("android.intent.category.DEFAULT");
-                intent.setType("vnd.android.cursor.dir/phone_v2");
-                startActivity(intent);
+            case R.id.img_back:
+                this.finish();
                 break;
             default:
         }
