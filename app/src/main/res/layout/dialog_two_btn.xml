@@ -3,69 +3,79 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="162dp"
         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:textSize="16sp"
-        android:textColor="#333333"
-        android:text="确定下架车辆?"
-         />
-
-    <TextView
-        android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:textSize="12sp"
-        android:textColor="#999999"
-        android:text="下架后,车辆信息将不能找回"
-        android:layout_below="@+id/tv_title"
-        android:layout_centerHorizontal="true"
-        />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/tv_content">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:text="取消"
-            android:textSize="12dp"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="确定下架车辆?"
             android:textColor="#333333"
-            android:background="@drawable/bg_dialog_btn"
-             />
+            android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/btn_confirm"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="确定"
-            android:textSize="12dp"
-            android:textColor="#FFFFFF"
-            android:background="@mipmap/home_bg"
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="下架后,车辆信息将不能找回"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_text"
+            android:padding="@dimen/dimens_5dp"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            android:visibility="invisible"
             />
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_content"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_dialog_btn"
+                android:text="取消"
+                android:textColor="#333333"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/home_bg"
+                android:text="确定"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp" />
+        </RelativeLayout>
 
     </RelativeLayout>
 

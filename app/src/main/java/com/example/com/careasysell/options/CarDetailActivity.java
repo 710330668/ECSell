@@ -259,6 +259,11 @@ public class CarDetailActivity extends BaseActivity {
             }
 
             @Override
+            public void doConfirm(String etContent) {
+
+            }
+
+            @Override
             public void doCancel() {
                 // TODO Auto-generated method stub
                 dialog.dismiss();

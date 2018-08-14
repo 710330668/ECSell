@@ -17,6 +17,8 @@ import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
 import com.example.com.imageloader.LoaderManager;
 
+import java.io.Serializable;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,6 +47,7 @@ public class SalerDetailActivity extends BaseActivity {
     TextView tvTime;
     private String token;
     private String userId;
+    public XsUserDetailResponse xsUserDetailResponse;
 
     @Override
     public int bindLayout() {
@@ -77,6 +80,7 @@ public class SalerDetailActivity extends BaseActivity {
                     public void accept(XsUserDetailResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
+                            xsUserDetailResponse = response;
                             tvAccount.setText(response.getData().getAccount());
                             tvName.setText(response.getData().getUserName());
                             tvPhone.setText(response.getData().getPhone());
@@ -101,7 +105,10 @@ public class SalerDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_modify_infor:
-                startActivity(ModifySalerInforActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("userId",userId);
+                bundle.putSerializable("response", (Serializable) xsUserDetailResponse);
+                startActivity(ModifySalerInforActivity.class,bundle);
                 break;
         }
     }

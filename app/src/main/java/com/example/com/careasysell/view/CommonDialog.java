@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
@@ -23,17 +24,33 @@ public class CommonDialog extends Dialog {
     private String confirmButtonText;
     private String cacelButtonText;
     private String content;
+    private EditText etContent;
     private ClickListenerInterface clickListenerInterface;
+    private boolean hasEdit = false;
 
     public interface ClickListenerInterface {
 
         public void doConfirm();
+
+        public void doConfirm(String etContent);
 
         public void doCancel();
     }
 
     public CommonDialog(Context context, String title, String content, String confirmButtonText, String cacelButtonText) {
         super(context, 0);
+        hasEdit = false;
+        this.context = context;
+        this.title = title;
+        this.content = content;
+        this.confirmButtonText = confirmButtonText;
+        this.cacelButtonText = cacelButtonText;
+    }
+
+
+    public CommonDialog(Context context, String title,String confirmButtonText, String cacelButtonText) {
+        super(context, 0);
+        hasEdit = true;
         this.context = context;
         this.title = title;
         this.content = content;
@@ -58,6 +75,15 @@ public class CommonDialog extends Dialog {
         TextView tvContent = (TextView) view.findViewById(R.id.tv_content);
         Button btnConfirm = (Button) view.findViewById(R.id.btn_confirm);
         Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+        etContent = view.findViewById(R.id.et_content);
+
+        if(hasEdit){
+            etContent.setVisibility(View.VISIBLE);
+            tvContent.setVisibility(View.INVISIBLE);
+        }else{
+            etContent.setVisibility(View.INVISIBLE);
+            tvContent.setVisibility(View.VISIBLE);
+        }
 
         tvTitle.setText(title);
         tvContent.setText(content);
@@ -85,7 +111,11 @@ public class CommonDialog extends Dialog {
             int id = v.getId();
             switch (id) {
                 case R.id.btn_confirm:
-                    clickListenerInterface.doConfirm();
+                    if(hasEdit){
+                        clickListenerInterface.doConfirm(etContent.getText().toString());
+                    }else{
+                        clickListenerInterface.doConfirm();
+                    }
                     break;
                 case R.id.btn_cancel:
                     clickListenerInterface.doCancel();
@@ -94,5 +124,6 @@ public class CommonDialog extends Dialog {
         }
 
     };
+
 
 }

@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
-import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
+import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.BitmapUtils;
@@ -39,6 +39,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -110,7 +111,6 @@ public class AddSalerActivity extends BaseActivity {
                 boolean permission = (PackageManager.PERMISSION_GRANTED ==
                         pm.checkPermission("android.permission.READ_CONTACTS", getPackageName()));
                 if (permission) {
-                    //紧急联系人
                     startActivityForResult(intent, REQUES_CODE_1);
                 } else {
                     Toast.makeText(AddSalerActivity.this, "请先打开通讯录权限", Toast.LENGTH_SHORT).show();
@@ -130,26 +130,26 @@ public class AddSalerActivity extends BaseActivity {
                 && !TextUtils.isEmpty(etWechat.getText().toString()) && !TextUtils.isEmpty(bitmap64Head)) {
             Map<String,RequestBody> params = new HashMap<>();
             File file = new File(imgUrl);
-            params.put("token",toRequestBody(token));
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
             params.put("account",toRequestBody(etAccount.getText().toString()));
             params.put("password",toRequestBody(etPassword.getText().toString()));
-            params.put("phone",toRequestBody(etPhone.getText().toString()));
+            params.put("phone",toRequestBody(etPhone.getText().toString().trim()));
             params.put("userName",toRequestBody(etSaleName.getText().toString()));
             params.put("weChat",toRequestBody(etWechat.getText().toString()));
             params.put("sex",toRequestBody("0"));
-            params.put("file",RequestBody.create(MediaType.parse("image/jpg"),file));
-//            RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//            MultipartBody.Part imageBodyPart = MultipartBody.Part.createFormData("file", file.getName(), imageBody);
-            Injection.provideApiService().saveXsUserInfo(params)
+            Injection.provideApiService().saveXsUserInfo(token,body,params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<StoreManagerResponse>() {
+                    .subscribe(new Consumer<EasyResponse>() {
                         @Override
-                        public void accept(StoreManagerResponse response) throws Exception {
+                        public void accept(EasyResponse response) throws Exception {
                             LogUtils.e(response.getMsg());
                             if(response.getCode() == 200){
                                 Toast.makeText(AddSalerActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();
+                            }else{
+                                Toast.makeText(AddSalerActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

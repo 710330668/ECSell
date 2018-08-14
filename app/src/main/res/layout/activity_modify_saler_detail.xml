@@ -71,6 +71,7 @@
             android:textSize="13dp" />
 
         <EditText
+            android:id="@+id/et_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -97,14 +98,25 @@
             android:textSize="13dp" />
 
         <EditText
+            android:id="@+id/et_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:hint="请输入初始密码"
             android:background="@null"
             android:textColor="#333333"
             android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/tv_reset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="right|center"
+            android:text="重置"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:layout_marginRight="14dp"/>
 
     </LinearLayout>
 
@@ -139,6 +151,7 @@
             android:textSize="13dp" />
 
         <LinearLayout
+            android:id="@+id/lly_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -146,6 +159,7 @@
             android:layout_marginLeft="14dp">
 
             <ImageView
+                android:id="@+id/iv_head"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -156,6 +170,17 @@
                 />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_re_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="right|center"
+            android:text="重选"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:layout_marginRight="14dp"/>
 
     </LinearLayout>
 
@@ -181,6 +206,7 @@
             android:textSize="13dp" />
 
         <EditText
+            android:id="@+id/et_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -191,6 +217,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_address_hook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -224,11 +251,12 @@
             android:textSize="13dp" />
 
         <EditText
+            android:id="@+id/et_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:hint="请输入初始密码"
+            android:hint="请输入手机号"
             android:background="@null"
             android:textColor="#333333"
             android:textSize="13dp" />
@@ -258,6 +286,7 @@
             android:textSize="13dp" />
 
         <EditText
+            android:id="@+id/et_wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

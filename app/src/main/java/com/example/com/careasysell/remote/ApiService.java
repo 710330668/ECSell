@@ -1,6 +1,7 @@
 package com.example.com.careasysell.remote;
 
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
+import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserDetailResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserResponse;
@@ -18,11 +19,14 @@ import com.example.com.careasysell.usercenter.model.UserInforModel;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 
 /**
@@ -114,11 +118,17 @@ public interface ApiService {
 
     //新增销售人员
     @Multipart
-    @POST("file/upload")
-    Observable<StoreManagerResponse> saveXsUserInfo(@PartMap Map<String,RequestBody> params);
+    @POST("user/saveXsUserInfo")
+    Observable<EasyResponse> saveXsUserInfo(@Header("token") String token, @Part MultipartBody.Part file, @PartMap Map<String, RequestBody> params);
 
     //销售人员详情
     @FormUrlEncoded
     @POST("user/getXsUserInfoByUserId")
     Observable<XsUserDetailResponse> getXsUserInfoByUserId(@Field("token") String token, @Field("userId") String userId);
+
+
+    //重置密码
+    @FormUrlEncoded
+    @POST("user/resetXsUserPass")
+    Observable<EasyResponse> resetXsUserPass(@Header("token") String token, @Field("userId") String userId, @Field("password") String password);
 }

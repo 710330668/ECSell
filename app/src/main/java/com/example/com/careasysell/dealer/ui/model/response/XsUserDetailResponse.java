@@ -1,9 +1,11 @@
 package com.example.com.careasysell.dealer.ui.model.response;
 
+import java.io.Serializable;
+
 /**
  * Created by 71033 on 2018/8/13.
  */
-public class XsUserDetailResponse {
+public class XsUserDetailResponse implements Serializable{
 
 
     /**
@@ -40,7 +42,7 @@ public class XsUserDetailResponse {
         this.msg = msg;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * account : xs123
          * createDate : 1533571200000
