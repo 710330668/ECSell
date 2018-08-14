@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
@@ -28,9 +29,11 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_name"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#F5F5F5">
+        android:background="#F5F5F5"
+        android:layout_below="@+id/rl_title">
 
         <TextView
             android:id="@+id/tv_car_model"
@@ -47,7 +50,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_cars_model"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_name">
     </android.support.v7.widget.RecyclerView>
 
     <Button
@@ -57,7 +61,45 @@
         android:text="自定义车型"
         android:layout_margin="20dp"
         android:background="@mipmap/home_bg"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"/>
+
+    <com.example.com.careasysell.view.KeyboardListenRelativeLayout
+        android:id="@+id/mainlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+    <LinearLayout
+        android:id="@+id/lly_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <EditText
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint=""
+            android:background="@drawable/bg_text"
+            android:layout_weight="10"
+            android:layout_margin="16dp"
+            />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="42dp"
+            android:background="@mipmap/home_bg"
+            android:layout_margin="16dp"
+            android:text="发送"
+            />
+
+    </LinearLayout>
+
+    </com.example.com.careasysell.view.KeyboardListenRelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -53,6 +53,7 @@
             android:textSize="13dp" />
 
         <ImageView
+            android:id="@+id/iv_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -84,6 +85,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -148,6 +150,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/iv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -180,6 +183,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -212,6 +216,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -244,6 +249,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

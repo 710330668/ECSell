@@ -45,6 +45,7 @@
     </RelativeLayout>
 
     <EditText
+        android:id="@+id/et_queryKey"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:layout_margin="20dp"
@@ -52,7 +53,7 @@
         android:background="@drawable/home_page_bg"
         android:drawableLeft="@mipmap/search"
         android:paddingLeft="20dp"
-        android:text="销售名称/电话"
+        android:hint="销售名称/电话"
         android:textSize="14dp"
         android:textColor="#FFFFFF"
         />

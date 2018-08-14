@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.NotifyCallBackManager;
 import com.example.com.careasysell.utils.ParamManager;
+import com.example.com.careasysell.view.KeyboardListenRelativeLayout;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -45,13 +47,17 @@ public class ChooseModelActivity extends BaseActivity {
     TextView tvCarModel;
     @BindView(R.id.rl_cars_model)
     RecyclerView rlCarsModel;
+    @BindView(R.id.mainlayout)
+    KeyboardListenRelativeLayout mainlayout;
 
     private String carCombinate;
     private List<ItemData> carSeriesLists = new ArrayList<>();
-    private String carFullName ;
+    private String carFullName;
     private String audiId;
     private String token;
     private BaseAdapter baseAdapter;
+    private InputMethodManager imm;
+
 
     @Override
     public int bindLayout() {
@@ -67,6 +73,22 @@ public class ChooseModelActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mainlayout
+                .setOnKeyboardStateChangedListener(new KeyboardListenRelativeLayout.IOnKeyboardStateChangedListener() {
+
+                    @Override
+                    public void onKeyboardStateChanged(int state) {
+                        // TODO Auto-generated method stub
+                        switch (state) {
+                            case KeyboardListenRelativeLayout.KEYBOARD_STATE_HIDE:
+                                mainlayout.setVisibility(View.GONE);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                });
 
     }
 
@@ -75,7 +97,7 @@ public class ChooseModelActivity extends BaseActivity {
         tvCarModel.setText(carCombinate);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlCarsModel.setLayoutManager(layoutManager);
-        rlCarsModel.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        rlCarsModel.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         baseAdapter = new BaseAdapter(carSeriesLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
@@ -98,16 +120,16 @@ public class ChooseModelActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getCarsModel() {
-        Injection.provideApiService().getCarsModel(token,audiId)
+        Injection.provideApiService().getCarsModel(token, audiId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CarsModelResponse>() {
                     @Override
                     public void accept(CarsModelResponse response) throws Exception {
                         try {
-                            if(response.getCode() == 200){
-                                for(int i =0;i<response.getData().size();i++){
-                                    CarsSeriesModel carsModel = new CarsSeriesModel(response.getData().get(i).getVName(),response.getData().get(i).getId()+"");
+                            if (response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    CarsSeriesModel carsModel = new CarsSeriesModel(response.getData().get(i).getVName(), response.getData().get(i).getId() + "");
                                     ItemData itemData = new ItemData(0, SettingDelegate.SERIES_TYPE, carsModel);
                                     carSeriesLists.add(itemData);
                                 }
@@ -128,11 +150,16 @@ public class ChooseModelActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back})
+    @OnClick({R.id.iv_back, R.id.btn_zidingyi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.btn_zidingyi:
+                imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                mainlayout.setVisibility(View.VISIBLE);
                 break;
         }
     }

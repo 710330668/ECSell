@@ -5,6 +5,8 @@ package com.example.com.careasysell.dealer.ui.model;
  */
 public class UserListModel {
 
+    private String userId;
+
     private String imageUrl;
 
     private String userName ;
@@ -55,7 +57,16 @@ public class UserListModel {
         this.phone = phone;
     }
 
-    public UserListModel(String imageUrl, String userName, String account, String timestamp, String phone) {
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public UserListModel(String userId,String imageUrl, String userName, String account, String timestamp, String phone) {
+        this.userId = userId;
         this.imageUrl = imageUrl;
         this.userName = userName;
         this.account = account;

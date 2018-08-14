@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.ClientModel;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.SP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class ClientListActivity extends BaseActivity {
     RecyclerView rlClient;
 
     private List<ItemData> clientLists = new ArrayList<>();
+    private String token;
 
     @Override
     public int bindLayout() {
@@ -42,6 +45,8 @@ public class ClientListActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
+
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
 
         for (int i = 0; i < 5; i++) {
             ClientModel clientModel = new ClientModel("", "王皓", "账号:wanghao", "2017/2/20", "132321231");
@@ -71,6 +76,7 @@ public class ClientListActivity extends BaseActivity {
             }
         });
         rlClient.setAdapter(baseAdapter);
+//        Injection.provideApiService().getClientList(token,)
     }
 
     @Override

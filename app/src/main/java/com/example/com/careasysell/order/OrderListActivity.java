@@ -54,6 +54,7 @@ public class OrderListActivity extends BaseActivity {
 
     PopupWindow mPopupWindow;
 
+
     @Override
     public int bindLayout() {
         return R.layout.activity_order_list;
