@@ -29,16 +29,17 @@
     <View
         android:layout_width="1dp"
         android:layout_height="50dp"
+        android:background="#999999"
         app:layout_constraintLeft_toLeftOf="@+id/img_circle"
         app:layout_constraintRight_toRightOf="@+id/img_circle" />
 
-    <com.example.com.careasysell.view.CircleImageView
+    <ImageView
         android:id="@+id/img_circle"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:src="#999999"
+        android:src="@drawable/circle_gary"
         app:layout_constraintLeft_toRightOf="@+id/tv_date"
         app:layout_constraintTop_toTopOf="@+id/tv_date" />
 

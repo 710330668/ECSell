@@ -4,6 +4,7 @@ import android.view.ViewGroup;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.viewHolder.CustomerDetailWantHolder;
+import com.example.com.careasysell.dealer.ui.viewHolder.CustomerFollowHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.CustomerViewHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.PutAwayHolder;
 import com.example.com.careasysell.dealer.ui.viewHolder.SearchHistoryDeleteViewHolder;
@@ -77,7 +78,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int CUSTOMER_MANAGER_TYPE = 23;
 
     public static final int CUSTOMER_DETAIL_WANT_TYPE = 24;
-
+    public static final int CUSTOMER_DETAIL_FOLLOW_TYPE = 25;
     public static final int FOOT_TYPE = 99;
 
     @Override
@@ -139,6 +140,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new CustomerViewHolder(parent, getItemView(parent, viewType));
             case CUSTOMER_DETAIL_WANT_TYPE:
                 return new CustomerDetailWantHolder(parent, getItemView(parent, viewType));
+            case CUSTOMER_DETAIL_FOLLOW_TYPE:
+                return new CustomerFollowHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -204,6 +207,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_customer_recycler;
             case CUSTOMER_DETAIL_WANT_TYPE:
                 return R.layout.item_customer_detail_want_car;
+            case CUSTOMER_DETAIL_FOLLOW_TYPE:
+                return R.layout.item_layout_customer_follow;
             default:
         }
         return 0;

@@ -20,20 +20,20 @@ import android.widget.ImageView;
 
 /**
  * 自定义的圆形ImageView，可以直接当组件在布局中使用。
- * @author caizhiming
  *
+ * @author caizhiming
  */
 @SuppressLint("AppCompatCustomView")
-public class CircleImageView extends ImageView{
+public class CircleImageView extends ImageView {
 
-    private Paint paint ;
+    private Paint paint;
 
     public CircleImageView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public CircleImageView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
@@ -44,6 +44,7 @@ public class CircleImageView extends ImageView{
 
     /**
      * 绘制圆形图片
+     *
      * @author caizhiming
      */
     @Override
@@ -54,7 +55,7 @@ public class CircleImageView extends ImageView{
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             Bitmap b = getCircleBitmap(bitmap, 14);
             final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
-            final Rect rectDest = new Rect(0,0,getWidth(),getHeight());
+            final Rect rectDest = new Rect(0, 0, getWidth(), getHeight());
             paint.reset();
             canvas.drawBitmap(b, rectSrc, rectDest, paint);
 
@@ -65,6 +66,7 @@ public class CircleImageView extends ImageView{
 
     /**
      * 获取圆形图片方法
+     *
      * @param bitmap
      * @param pixels
      * @return Bitmap

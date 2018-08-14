@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.CustomerDetailWantModel;
+import com.example.com.careasysell.dealer.ui.model.CustomerFollowModel;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
@@ -30,6 +31,7 @@ public class CustomerDetailActivity extends BaseActivity {
 
     private static final String TAG = "CustomerDetailActivity";
     private List<ItemData> mData = new ArrayList<>();
+    private List<ItemData> mFollowData = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -46,6 +48,9 @@ public class CustomerDetailActivity extends BaseActivity {
         mRecyclerWantCar.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerWantCar.addItemDecoration(new SpaceItemDecoration(10));
         mRecyclerWantCar.setNestedScrollingEnabled(false);
+
+        mRecyclerFollow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerFollow.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -62,6 +67,16 @@ public class CustomerDetailActivity extends BaseActivity {
         }
         BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
         mRecyclerWantCar.setAdapter(adapter);
+
+        for (int i = 0; i < 4; i++) {
+            CustomerFollowModel data = new CustomerFollowModel();
+            data.setDate("2018/07/12");
+            data.setTime("16:24");
+            data.setMessage("短信通知");
+            data.setFrom("系统");
+            mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
+        }
+        mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
     }
 
     @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit, R.id.tv_want_car_edit})
