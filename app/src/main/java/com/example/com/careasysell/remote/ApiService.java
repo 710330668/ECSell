@@ -104,7 +104,10 @@ public interface ApiService {
     //全国车源
     @FormUrlEncoded
     @POST("car/findCarList")
-    Observable<AllOptionResponse> getCarList(@Field("token") String token, @Field("pageSize") String pageSize, @Field("scopeType") String scopeType);
+    Observable<AllOptionResponse> getCarList(@Header("token") String token, @Field("pageSize") String pageSize, @Field("page") String page,@Field("scopeType") String scopeType,
+                                             @Field("carType") String carType,@Field("brandId") String brandId,@Field("versionId") String versionId,@Field("carYear") String carYear,@Field("outsiteColor") String outsiteColor,
+                                             @Field("withinColor") String withinColor,@Field("minCarPrice") String minCarPrice,@Field("maxCarPrice") String maxCarPrice,@Field("startDate") String startDate,
+                                             @Field("endDate") String endDate,@Field("queryKey") String queryKey);
 
     //全国车源
     @FormUrlEncoded
