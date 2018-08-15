@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,12 +18,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.options.model.CarPhotoModel;
 import com.example.com.careasysell.options.model.ColorModel;
 import com.example.com.careasysell.options.model.FormalityModel;
@@ -34,15 +39,23 @@ import com.example.com.careasysell.options.viewHolder.CarPhotoViewHolder;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.ParamManager;
+import com.example.com.careasysell.view.CustomDatePicker;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +63,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * Created by 71033 on 2018/7/26.
@@ -86,6 +102,18 @@ public class ReleaseOptionActivity extends BaseActivity {
     LinearLayout llyYouhui;
     @BindView(R.id.rl_car_photo)
     RecyclerView rlCarPhoto;
+    @BindView(R.id.et_configuration)
+    EditText etConfiguration;
+    @BindView(R.id.et_note)
+    EditText etNote;
+    @BindView(R.id.et_car_price)
+    EditText etCarPrice;
+    @BindView(R.id.et_guided_price)
+    EditText etGuidedPrice;
+    @BindView(R.id.et_commission)
+    EditText etCommission;
+    @BindView(R.id.et_specific_discount)
+    EditText etSpecificDiscount;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
@@ -102,7 +130,13 @@ public class ReleaseOptionActivity extends BaseActivity {
     private boolean flag = true;
     private String token;
     private String optionId;
-    private  BaseAdapter imageDeleteAdapter;
+    private BaseAdapter imageDeleteAdapter;
+    private String prefers = "";
+    private String provinceCode, cityCode;
+    private String imgUrl;
+    private ArrayList<String> imgPaths;
+    private CustomDatePicker customDatePicker;
+    private String now;
 
     @Override
     public int bindLayout() {
@@ -111,12 +145,23 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
+        imgPaths = new ArrayList<>();
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        now = sdf.format(new Date());
 
+        customDatePicker = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
+            @Override
+            public void handle(String time) { // 回调接口，获得选中的时间
+                tvYear.setText(time.substring(0,4));
+            }
+        }, "1990-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+        customDatePicker.showSpecificTime(false); // 不显示时和分
+        customDatePicker.setIsLoop(false); // 不允许循环滚动
     }
 
     @SuppressLint("CheckResult")
@@ -313,7 +358,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
             R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
-            R.id.lly_local_image})
+            R.id.lly_local_image, R.id.btn_release_options})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -325,7 +370,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                 break;
             case R.id.iv_car_model:
                 Intent intent = new Intent(ReleaseOptionActivity.this, ChooseBrandActivity.class);
-                intent.putExtra("optionId",optionId);
+                intent.putExtra("optionId", optionId);
                 startActivityForResult(intent, REQUEST_BRAND);
                 break;
             case R.id.iv_appearance_color:
@@ -348,15 +393,78 @@ public class ReleaseOptionActivity extends BaseActivity {
                 showFormalityList();
                 break;
             case R.id.iv_year:
+                customDatePicker.show(now.split(" ")[0]);
                 break;
             case R.id.lly_local_image:
                 Intent intent1 = new Intent();
                 intent1.setType("image/*");
-                intent1.setAction(Intent.ACTION_GET_CONTENT);
+                intent1.setAction(Intent.ACTION_PICK);
                 startActivityForResult(intent1, REQUEST_LOCAL);
+                break;
+            case R.id.btn_release_options:
+                //发布车源
+                saveCarInfo();
                 break;
 
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void saveCarInfo() {
+        prefers = "";
+        Map<String, RequestBody> params = new HashMap<>();
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for(int i =0;i<imgPaths.size();i++){
+            File file = new File(imgPaths.get(i));
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+            parts.add(body);
+        }
+        params.put("carType", toRequestBody(optionId));
+        params.put("carModel", toRequestBody(ParamManager.getInstance(this).getCarId()));
+        params.put("saleArea", toRequestBody(tvSalesArea.getText().toString().trim()));
+        params.put("carFormality", toRequestBody(tvFormalities.getText().toString()));
+        params.put("carYear", toRequestBody(tvYear.getText().toString()));
+        params.put("carSetting", toRequestBody(etConfiguration.getText().toString()));
+        for (int i = 0; i < flags.size(); i++) {
+            if (flags.get(i)) {
+                prefers = prefers + "," + preferential.get(i);
+            }
+        }
+        prefers = prefers.substring(1, prefers.length());
+        params.put("discountList", toRequestBody(prefers));
+        params.put("discountContent", toRequestBody(etSpecificDiscount.getText().toString()));
+        params.put("outsiteColor", toRequestBody(tvApprenceColor.getText().toString()));
+        params.put("withinColor", toRequestBody(tvInteriorColor.getText().toString()));
+        params.put("provinceCode", toRequestBody(provinceCode));
+        params.put("cityCode", toRequestBody(cityCode));
+        params.put("remark", toRequestBody(etNote.getText().toString()));
+        params.put("carPrice", toRequestBody(etCarPrice.getText().toString()));
+        params.put("guidPrice", toRequestBody(etGuidedPrice.getText().toString()));
+        params.put("saleCommission", toRequestBody(etCommission.getText().toString()));
+        Injection.provideApiService().saveCarInfo(token, parts, params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if (response.getCode() == 200) {
+                            Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                            ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
+                            ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
+                            finish();
+                        } else {
+                            Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+    }
+
+
+    public RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 
     private void changeTextColor(Button view, int color, int bg) {
@@ -473,32 +581,40 @@ public class ReleaseOptionActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         carPhotos.clear();
+        imgPaths.clear();
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_AREA) {
                 tvArea.setText(data.getStringExtra("area"));
+                provinceCode = data.getStringExtra("provinceCode");
+                cityCode = data.getStringExtra("cityCode");
             } else if (requestCode == REQUEST_LOCAL) {
                 Uri uri = data.getData();
                 String img_url = uri.getPath();
                 ContentResolver cr = this.getContentResolver();
                 try {
+                    if (photos.size() == 9) {
+                        Toast.makeText(ReleaseOptionActivity.this, "最多可添加9张图片", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                     //最多九张
                     photos.add(bitmap);
-                    for(int i =0;i<photos.size();i++){
+                    for (int i = 0; i < photos.size(); i++) {
                         final CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
                         ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
                         carPhotos.add(itemData);
-                        rlCarPhoto.setLayoutManager(new GridLayoutManager(this,3));
+                        rlCarPhoto.setLayoutManager(new GridLayoutManager(this, 3));
                         SettingDelegate delegate = new SettingDelegate();
                         delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
                             @Override
                             public void removeImage(int position) {
                                 carPhotos.remove(position);
                                 photos.remove(position);
+                                imgPaths.remove(position);
                                 imageDeleteAdapter.notifyDataSetChanged();
                             }
                         });
-                        imageDeleteAdapter = new BaseAdapter(carPhotos,delegate, new onItemClickListener() {
+                        imageDeleteAdapter = new BaseAdapter(carPhotos, delegate, new onItemClickListener() {
                             @Override
                             public void onClick(View v, Object data) {
                             }
@@ -509,6 +625,9 @@ public class ReleaseOptionActivity extends BaseActivity {
                             }
                         });
                         rlCarPhoto.setAdapter(imageDeleteAdapter);
+                        imgUrl = getPath(data);
+                        imgPaths.add(imgUrl);
+
                     }
                 } catch (FileNotFoundException e) {
                 }
@@ -521,6 +640,20 @@ public class ReleaseOptionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+
+    private String getPath(Intent data) {
+        String[] imgPath = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = managedQuery(data.getData(), imgPath, null, null, null);
+
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+        cursor.moveToFirst();
+
+        String path = cursor.getString(column_index);
+        return path;
     }
 
 }

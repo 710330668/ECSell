@@ -15,6 +15,8 @@ public class ParamManager {
 
     public String carFullName ;
 
+    private String carId;
+
     public static ParamManager getInstance(Context context){
 
         if(instance == null){
@@ -47,5 +49,13 @@ public class ParamManager {
 
     public void setCarFullName(String carFullName) {
         this.carFullName = carFullName;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 }

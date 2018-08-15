@@ -91,6 +91,7 @@
                     android:layout_height="50dp">
 
                     <TextView
+                        android:id="@+id/tv_carxing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -113,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:layout_toLeftOf="@+id/iv_car_model"
-                        android:layout_marginRight="14dp"
+                        android:layout_toRightOf="@+id/tv_carxing"
                         android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
@@ -391,6 +392,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:id="@+id/et_car_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -432,6 +434,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:id="@+id/et_guided_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -472,6 +475,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:id="@+id/et_commission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -515,46 +519,27 @@
                     android:layout_height="60dp"
                     android:orientation="horizontal">
 
-                    <!--<Button-->
-                        <!--android:id="@+id/btn_baoxian"-->
-                        <!--android:layout_width="80dp"-->
-                        <!--android:layout_height="30dp"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:layout_marginLeft="14dp"-->
-                        <!--android:background="@drawable/bg_edittext"-->
-                        <!--android:padding="4dp"-->
-                        <!--android:text="店内上保险" />-->
-
-                    <!--<Button-->
-                        <!--android:id="@+id/btn_zhihuan"-->
-                        <!--android:layout_width="80dp"-->
-                        <!--android:layout_height="30dp"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:layout_marginLeft="14dp"-->
-                        <!--android:background="@drawable/bg_edittext"-->
-                        <!--android:padding="4dp"-->
-                        <!--android:text="店内置换" />-->
-
-                    <!--<Button-->
-                        <!--android:id="@+id/btn_daikuan"-->
-                        <!--android:layout_width="80dp"-->
-                        <!--android:layout_height="30dp"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:layout_marginLeft="14dp"-->
-                        <!--android:background="@drawable/bg_edittext"-->
-                        <!--android:padding="4dp"-->
-                        <!--android:text="店内贷款" />-->
-
-                    <!--<Button-->
-                        <!--android:id="@+id/btn_baoyang"-->
-                        <!--android:layout_width="80dp"-->
-                        <!--android:layout_height="30dp"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:layout_marginLeft="14dp"-->
-                        <!--android:background="@drawable/bg_edittext"-->
-                        <!--android:padding="4dp"-->
-                        <!--android:text="店内保养" />-->
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="具体优惠"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#333333"
+                    android:textSize="14dp"/>
+
+                <EditText
+                    android:id="@+id/et_specific_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_margin="14dp"
+                    android:hint="输入优惠信息"
+                    android:padding="14dp"
+                    android:gravity="left"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_edittext"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -568,6 +553,32 @@
                         android:layout_marginLeft="16dp"
                         android:text="其他信息"
                         android:textColor="#333333"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="车架号"
+                        android:textSize="14sp" />
+
+
+                    <EditText
+                        android:id="@+id/et_car_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="14dp"
+                        android:background="@null"
+                        android:hint="请输入车架号"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -614,6 +625,7 @@
                     android:textSize="14dp"/>
 
                 <EditText
+                    android:id="@+id/et_configuration"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
                     android:layout_margin="14dp"
@@ -632,6 +644,7 @@
                     android:textSize="14dp"/>
 
                 <EditText
+                    android:id="@+id/et_note"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_margin="14dp"

@@ -9,6 +9,7 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.UserListModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.imageloader.LoaderManager;
 
 /**
  * Created by 71033 on 2018/8/6.
@@ -48,5 +49,6 @@ public class UserListViewHolder extends BaseViewHolder<ItemData> {
         userAccount.setText(model.getAccount());
         phone.setText(model.getPhone());
         timeStamp.setText(model.getTimestamp());
+        LoaderManager.getLoader().loadNet(imageView,model.getImageUrl());
     }
 }

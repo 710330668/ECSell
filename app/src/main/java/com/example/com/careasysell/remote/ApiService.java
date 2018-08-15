@@ -2,6 +2,7 @@ package com.example.com.careasysell.remote;
 
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
+import com.example.com.careasysell.dealer.ui.model.response.SalersListResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserDetailResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserResponse;
@@ -16,6 +17,7 @@ import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -131,4 +133,15 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("user/resetXsUserPass")
     Observable<EasyResponse> resetXsUserPass(@Header("token") String token, @Field("userId") String userId, @Field("password") String password);
+
+    //销售人员列表(无分页)
+    @FormUrlEncoded
+    @POST("user/findAllXsUserList")
+    Observable<SalersListResponse> findAllXsUserList(@Field("token") String token);
+
+    //保存车源信息
+    @Multipart
+    @POST("car/saveCarInfo")
+    Observable<EasyResponse> saveCarInfo(@Header("token") String token, @Part List<MultipartBody.Part> files, @PartMap Map<String, RequestBody> params);
+
 }
