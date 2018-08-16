@@ -142,6 +142,7 @@
 
 
         <RadioGroup
+            android:id="@+id/radio_sex_group"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -149,6 +150,7 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/rb_sex_boy"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/dimens_9dp"
@@ -160,6 +162,7 @@
                 android:textSize="12sp" />
 
             <RadioButton
+                android:id="@+id/rb_sex_girl"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_rb_selector"

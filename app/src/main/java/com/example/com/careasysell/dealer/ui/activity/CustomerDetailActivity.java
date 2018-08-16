@@ -4,22 +4,35 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.CustomerDetailWantModel;
 import com.example.com.careasysell.dealer.ui.model.CustomerFollowModel;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class CustomerDetailActivity extends BaseActivity {
 
@@ -32,6 +45,8 @@ public class CustomerDetailActivity extends BaseActivity {
     private static final String TAG = "CustomerDetailActivity";
     private List<ItemData> mData = new ArrayList<>();
     private List<ItemData> mFollowData = new ArrayList<>();
+    private String customerId;
+    private String token;
 
     @Override
     public int bindLayout() {
@@ -40,7 +55,8 @@ public class CustomerDetailActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-
+        customerId = params.getString("customerId");
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -83,7 +99,9 @@ public class CustomerDetailActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_message_edit:
-                startActivity(EditCustomerMessageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("customerId", customerId);
+                startActivity(EditCustomerMessageActivity.class, bundle);
                 break;
             case R.id.tv_customer_need_edit:
                 startActivity(EditCustomerNeedActivity.class);

@@ -1,6 +1,7 @@
 package com.example.com.careasysell.remote;
 
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.dealer.ui.model.response.SalersListResponse;
@@ -144,7 +145,13 @@ public interface ApiService {
     Observable<EasyResponse> saveCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     //获取客户基本信息
-    Observable<String> getCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+    @Multipart
+    @POST("customer/findCustomerBaseInfo")
+    Observable<CustomerInfoResponse> getCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
+    @Multipart
+    @POST("customer/updateCustomerBaseInfo")
+    Observable<EasyResponse> updateCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
 
     //获取客户列表

@@ -200,7 +200,11 @@ public class CustomerManagerActivity extends BaseActivity {
         mAdapter = new BaseAdapter(dataList, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-                startActivity(CustomerDetailActivity.class);
+                if (data instanceof CustomerResponse.DataBean.ListsBean) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("customerId", ((CustomerResponse.DataBean.ListsBean) data).getCustomerId());
+                    startActivity(CustomerDetailActivity.class, bundle);
+                }
             }
 
             @Override
@@ -245,6 +249,7 @@ public class CustomerManagerActivity extends BaseActivity {
                 break;
             case R.id.btn_sure:
                 initRecycler(TAG_FILTER);
+                mDrawerLayout.closeDrawer(Gravity.RIGHT);
                 break;
             default:
         }
