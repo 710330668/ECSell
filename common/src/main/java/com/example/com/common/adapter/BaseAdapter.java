@@ -89,7 +89,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
             if(loadState == LOADING){// 正在加载
                 footViewHolder.changeStatus(View.VISIBLE,View.VISIBLE,View.GONE);
             }else if(loadState == LOADING_COMPLETE){// 加载完成
-                footViewHolder.changeStatus(View.INVISIBLE,View.INVISIBLE,View.GONE);
+                footViewHolder.changeStatus(View.GONE,View.GONE,View.GONE);
             }else{// 加载到底
                 footViewHolder.changeStatus(View.GONE,View.GONE,View.VISIBLE);
             }

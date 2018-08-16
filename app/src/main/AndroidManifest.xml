@@ -101,6 +101,7 @@
         <activity android:name=".dealer.ui.activity.EditCustomerMessageActivity" />
         <activity android:name=".dealer.ui.activity.EditCustomerNeedActivity" />
         <activity android:name=".dealer.ui.activity.CustomerCarWantActivity"></activity>
+        <activity android:name=".dealer.ui.activity.SalerManagerActivity"></activity>
     </application>
 
 </manifest>

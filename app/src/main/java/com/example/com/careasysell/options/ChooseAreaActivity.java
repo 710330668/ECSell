@@ -65,6 +65,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     private List<ItemData> areaLists = new ArrayList<>();
     private String token;
     private BaseAdapter baseAdapter;
+    private String areaId;
 
     @Override
     public int bindLayout() {
@@ -93,9 +94,12 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         baseAdapter = new BaseAdapter(areaLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
+                String areaName = tvAreaName.getText().toString();
                 AreasModel model = (AreasModel) data;
                 Intent intent = new Intent();
-                intent.putExtra("area",model.getAreasName());
+                intent.putExtra("area",areaName+""+model.getAreasName());
+                intent.putExtra("provinceCode",areaId);
+                intent.putExtra("cityCode",model.getAreasId());
                 setResult(RESULT_OK,intent);
                 finish();
             }
@@ -179,7 +183,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
     @Override
     public void selectBrand(String areaBrand,String id) {
-        String areaId = id+"";
+        areaId = id+"";
         getCity(areaId);
         tvAreaName.setText(areaBrand);
         openRightLayout();

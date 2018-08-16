@@ -104,6 +104,7 @@ public class ChooseModelActivity extends BaseActivity {
                 //全称
                 CarsSeriesModel model = (CarsSeriesModel) data;
                 carFullName = carCombinate + "|" + model.getSeriesName();
+                ParamManager.getInstance(ChooseModelActivity.this).setCarId(model.getId());
                 ParamManager.getInstance(ChooseModelActivity.this).setCarFullName(carFullName);
                 NotifyCallBackManager.getInstance().onCloseCallBack();
                 finish();

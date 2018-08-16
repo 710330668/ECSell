@@ -28,6 +28,7 @@ import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.EndlessRecyclerOnScrollListener;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
@@ -96,6 +97,11 @@ public class NationSourceActivity extends BaseActivity {
     private final int REQUEST_BRAND = 0;
     private BaseAdapter mDataAdapter;
     private String token;
+    private   int CURRENT_PAGE = 1;
+    private   int PAGE_SIZE = 6;
+    private int count ;
+    private String carType,brandId,versionId,carYear,outsiteColor,withinColor,minCarPrice,maxCarPrice,startDate,endDate,queryKey;
+
 
     @Override
     public int bindLayout() {
@@ -112,6 +118,18 @@ public class NationSourceActivity extends BaseActivity {
     public void setView(Bundle savedInstanceState) {
         mSearchResult.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
+        mSearchResult.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                mDataAdapter.setLoadState(mDataAdapter.LOADING);
+                if(mSearchResultData.size() < count){
+                    ++CURRENT_PAGE;
+                    getAllOptions();
+                }else{
+                    mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
+                }
+            }
+        });
         switch (INVENTORY) {
             case C.INVENTORY_MARKET:
                 mTvPutAway.setText("分享车辆");
@@ -125,6 +143,21 @@ public class NationSourceActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                SearchResultModel model = (SearchResultModel) data;
+                Bundle bundle = new Bundle();
+                bundle.putString("carId", model.getId());
+                startActivity(CarDetailActivity.class, bundle);
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        mSearchResult.setAdapter(mDataAdapter);
         //获取全国车源
         getAllOptions();
         initDrawerTagList();
@@ -132,7 +165,12 @@ public class NationSourceActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getAllOptions() {
-        Injection.provideApiService().getCarList(token, "10", "all")
+        if(mSearchResultData.size()>0){
+            mSearchResultData.remove(mSearchResultData.size()-1);
+        }
+        Injection.provideApiService().getCarList(token, PAGE_SIZE+"", CURRENT_PAGE+"","all",
+                carType,brandId,versionId,carYear,outsiteColor,withinColor,minCarPrice,maxCarPrice,
+                startDate,endDate,queryKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AllOptionResponse>() {
@@ -140,6 +178,7 @@ public class NationSourceActivity extends BaseActivity {
                     public void accept(AllOptionResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
+                            count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
                                 data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
@@ -153,22 +192,11 @@ public class NationSourceActivity extends BaseActivity {
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }
+                            ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
+                            mSearchResultData.add(e);
                         }
-                        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
-                            @Override
-                            public void onClick(View v, Object data) {
-                                SearchResultModel model = (SearchResultModel) data;
-                                Bundle bundle = new Bundle();
-                                bundle.putString("carId", model.getId());
-                                startActivity(CarDetailActivity.class, bundle);
-                            }
-
-                            @Override
-                            public boolean onLongClick(View v, Object data) {
-                                return false;
-                            }
-                        });
-                        mSearchResult.setAdapter(mDataAdapter);
+                        mDataAdapter.notifyDataSetChanged();
+                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
                     }
                 });
     }

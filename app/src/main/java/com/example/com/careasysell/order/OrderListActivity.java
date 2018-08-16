@@ -13,7 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.com.careasysell.R;
-import com.example.com.careasysell.dealer.ui.activity.ClientListActivity;
+import com.example.com.careasysell.dealer.ui.activity.SalerManagerActivity;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.remote.SettingDelegate;
@@ -124,7 +124,7 @@ public class OrderListActivity extends BaseActivity {
                 showPopupWindow(R.id.rb_deal_valence);
                 break;
             case R.id.rb_sales:
-                startActivity(ClientListActivity.class);
+                startActivity(SalerManagerActivity.class);
                 break;
         }
     }
