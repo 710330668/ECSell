@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="#FFFFFF"
         android:gravity="center_vertical">
 
         <ImageView
@@ -65,6 +66,7 @@
                     android:textSize="14sp" />
 
                 <EditText
+                    android:id="@+id/et_customer_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -112,6 +114,7 @@
                     android:textSize="14sp" />
 
                 <EditText
+                    android:id="@+id/et_customer_phone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -143,6 +146,7 @@
                     android:textSize="14sp" />
 
                 <EditText
+                    android:id="@+id/et_customer_wechat"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -189,6 +193,7 @@
                         android:textColor="@drawable/text_color_radio_selector" />
 
                     <RadioButton
+                        android:id="@+id/rb_customer_sex"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:background="@drawable/bg_rb_selector"
@@ -226,6 +231,7 @@
                     android:textColor="#333333" />
 
                 <EditText
+                    android:id="@+id/et_min_money"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -241,6 +247,7 @@
                     android:text="~" />
 
                 <EditText
+                    android:id="@+id/et_max_money"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -384,6 +391,7 @@
                 android:textColor="#333333" />
 
             <EditText
+                android:id="@+id/et_customer_need"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:layout_marginLeft="14dp"
@@ -404,6 +412,7 @@
                 android:textColor="#333333" />
 
             <EditText
+                android:id="@+id/et_customer_order"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginBottom="20dp"
@@ -435,6 +444,7 @@
                 android:textColor="#333333" />
 
             <RadioGroup
+                android:id="@+id/rg_common_type"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal"
@@ -493,6 +503,7 @@
                 android:padding="20dp">
 
                 <TextView
+                    android:id="@+id/save_customer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@mipmap/home_bg"

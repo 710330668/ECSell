@@ -94,4 +94,9 @@ public class CustomerDetailActivity extends BaseActivity {
 
         }
     }
+
+
+    public void getCustomerInfo() {
+
+    }
 }

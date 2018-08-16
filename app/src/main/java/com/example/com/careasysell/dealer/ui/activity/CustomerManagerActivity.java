@@ -1,5 +1,6 @@
 package com.example.com.careasysell.dealer.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -18,22 +21,34 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.CustomerModel;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.EndlessRecyclerOnScrollListener;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.SP;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class CustomerManagerActivity extends BaseActivity {
 
@@ -56,11 +71,48 @@ public class CustomerManagerActivity extends BaseActivity {
     TagFlowLayout mFollowTimeTag;
     @BindView(R.id.recycler_customer_manager)
     RecyclerView mCustomerRecycler;
+    @BindView(R.id.et_min_money)
+    EditText mEtMinMoney;
+    @BindView(R.id.et_max_money)
+    EditText mEtMaxMoney;
+    @BindView(R.id.et_create_start_time)
+    EditText mEtCreateStartTime;
+    @BindView(R.id.et_create_end_time)
+    EditText mEtCreateEndTime;
+    @BindView(R.id.et_follow_start_time)
+    EditText mEtFollowStartTime;
+    @BindView(R.id.et_follow_end_time)
+    EditText mEtFollowEndTime;
+    @BindView(R.id.btn_reset)
+    Button mBtnReset;
+    @BindView(R.id.btn_sure)
+    Button mBtnSure;
+    private int count;
+    private String TAG_FILTER = "tag_filter";
+    private String TAG_LOAD_MORE = "tag_load_more";
+
+    private String pageSize = "10";
+    private String page = "1";
+    private String createStartTime = "";
+    private String createEndTime = "";
+    private String progressStartTime = "";
+    private String progressEndTime = "";
+    private String minBudget = "";
+    private String maxBudget = "";
+    private String status = "";
+    private String brandId = "";
+    private String versionId = "";
+    private String orderType = "CREATE";
+    private String userId = "";
 
     private int selectState = 0;
     private int selectTime = 0;
 
+    private int CURRENT_PAGE = 1;
+
     private List<ItemData> dataList = new ArrayList<>();
+    private String token;
+    private BaseAdapter mAdapter;
 
     @Override
     public int bindLayout() {
@@ -69,33 +121,83 @@ public class CustomerManagerActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
         mCustomerRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mCustomerRecycler.addItemDecoration(new SpaceItemDecoration(10));
+        mCustomerRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                mAdapter.setLoadState(mAdapter.LOADING);
+                if (dataList.size() < count) {
+                    CURRENT_PAGE++;
+                    initRecycler(TAG_LOAD_MORE);
+                } else {
+                    mAdapter.setLoadState(mAdapter.LOADING_END);
+                }
+            }
+        });
     }
 
     @Override
     public void doBusiness(Context mContext) {
         initTagFlowLayout();
-        initRecycler();
+        initRecycler(TAG_LOAD_MORE);
     }
 
-    private void initRecycler() {
-        for (int i = 0; i < 10; i++) {
-            CustomerModel data = new CustomerModel();
-            data.setName("张达");
-            data.setFollowTime("08/01 客户考虑中");
-            data.setNeed("预算16-20万 | 标致-标致301 等5款车");
-            data.setMessage("2018/07/12 创建 | 销售 王硕");
-            data.setState(i % 2);
-            dataList.add(new ItemData(0, SettingDelegate.CUSTOMER_MANAGER_TYPE, data));
+    @SuppressLint("CheckResult")
+    private void initRecycler(final String tag) {
+        if (dataList.size() > 0) {
+            if (dataList.get(dataList.size() - 1).getHolderType() == SettingDelegate.FOOT_TYPE) {
+                dataList.remove(dataList.size() - 1);
+            }
         }
-        dataList.add(new ItemData(0, SettingDelegate.FOOT_TYPE));
-        BaseAdapter adapter = new BaseAdapter(dataList, new SettingDelegate(), new onItemClickListener() {
+        if (TAG_FILTER.equals(tag)) {
+            dataList.clear();
+            CURRENT_PAGE = 1;
+        }
+        minBudget = mEtMinMoney.getText().toString();
+        maxBudget = mEtMaxMoney.getText().toString();
+        progressStartTime = mEtFollowStartTime.getText().toString();
+        progressEndTime = mEtFollowEndTime.getText().toString();
+        createStartTime = mEtCreateStartTime.getText().toString();
+        createEndTime = mEtCreateEndTime.getText().toString();
+        page = CURRENT_PAGE + "";
+        Map<String, RequestBody> params = new HashMap<>();
+        params.put("pageSize", toRequestBody(pageSize));
+        params.put("page", toRequestBody(page));
+        params.put("createStartTime", toRequestBody(createStartTime));
+        params.put("createEndTime", toRequestBody(createEndTime));
+        params.put("progressStartTime", toRequestBody(progressStartTime));
+        params.put("progressEndTime", toRequestBody(progressEndTime));
+        params.put("minBudget", toRequestBody(minBudget));
+        params.put("maxBudget", toRequestBody(maxBudget));
+        params.put("status", toRequestBody(status));
+        params.put("brandId", toRequestBody(brandId));
+        params.put("versionId", toRequestBody(versionId));
+        params.put("orderType", toRequestBody(orderType));
+        params.put("userId", toRequestBody(userId));
+        Injection.provideApiService().getCustomerList(token, params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CustomerResponse>() {
+                    @Override
+                    public void accept(CustomerResponse s) throws Exception {
+                        if (s != null && s.getCode() == 200) {
+                            count = s.getData().getCount();
+                            for (int i = 0; i < s.getData().getLists().size(); i++) {
+                                ItemData e = new ItemData(0, SettingDelegate.CUSTOMER_MANAGER_TYPE, s.getData().getLists().get(i));
+                                dataList.add(e);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            dataList.add(new ItemData(0, SettingDelegate.FOOT_TYPE));
+                        }
+                    }
+                });
+        mAdapter = new BaseAdapter(dataList, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 startActivity(CustomerDetailActivity.class);
@@ -107,30 +209,42 @@ public class CustomerManagerActivity extends BaseActivity {
             }
         });
 
-        mCustomerRecycler.setAdapter(adapter);
+        mCustomerRecycler.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter})
+    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
                 this.finish();
                 break;
             case R.id.img_add_client:
-                // TODO: 2018/8/7 添加客户
                 startActivity(CreateNewCustomerActivity.class);
                 break;
             case R.id.rb_customer_state:
-                // TODO: 2018/8/7 showPop
                 showPopUpWindow(R.id.rb_customer_state);
                 break;
             case R.id.rb_follow_time:
-                // TODO: 2018/8/7 showPop
                 showPopUpWindow(R.id.rb_follow_time);
                 break;
             case R.id.rb_customer_filter:
-                // TODO: 2018/8/7 showDrawer
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
+                break;
+            case R.id.btn_reset:
+                selectState = 0;
+                selectTime = 0;
+                mEtMaxMoney.setText("");
+                mEtMinMoney.setText("");
+                mEtCreateStartTime.setText("");
+                mEtCreateEndTime.setText("");
+                mEtFollowStartTime.setText("");
+                mEtFollowEndTime.setText("");
+                break;
+            case R.id.btn_sure:
+                initRecycler(TAG_FILTER);
                 break;
             default:
         }
@@ -174,6 +288,12 @@ public class CustomerManagerActivity extends BaseActivity {
                         selectState = position;
                         mPopupWindow.dismiss();
                         // TODO: 2018/8/11 刷新数据
+                        if (position == 0) {
+                            status = "";
+                        } else {
+                            status = dataSize.get(position);
+                        }
+                        initRecycler(TAG_FILTER);
                         return true;
                     }
                 });
@@ -189,6 +309,16 @@ public class CustomerManagerActivity extends BaseActivity {
                         selectTime = content.indexOfChild(selectButton);
                         mPopupWindow.dismiss();
                         // TODO: 2018/8/11 刷新数据
+                        switch (checkedId) {
+                            case R.id.latest_follow_time:
+                                orderType = "PROGRESS";
+                                break;
+                            case R.id.latest_create_time:
+                                orderType = "CREATE";
+                                break;
+                            default:
+                        }
+                        initRecycler(TAG_FILTER);
                     }
                 });
                 mPopupWindow = new PopupWindow(content, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -209,7 +339,6 @@ public class CustomerManagerActivity extends BaseActivity {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
                 TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_tag_create_time, mCreateTimeTag, false);
-//                        textView.getLayoutParams().width = getWindowManager().getDefaultDisplay().getWidth() / 5;
                 textView.setText(o);
                 return textView;
             }
@@ -226,5 +355,9 @@ public class CustomerManagerActivity extends BaseActivity {
             }
         };
         mFollowTimeTag.setAdapter(followTimeAdapter);
+    }
+
+    public RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 }

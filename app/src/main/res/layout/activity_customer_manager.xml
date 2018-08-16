@@ -94,7 +94,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_customer_manager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#F5F5F5" />
     </LinearLayout>
 
     <LinearLayout
@@ -147,11 +148,13 @@
                         android:textColor="#333333" />
 
                     <EditText
+                        android:id="@+id/et_min_money"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/drawable_empty"
                         android:hint="最低"
+                        android:inputType="number"
                         android:textColor="#888888" />
 
                     <TextView
@@ -162,11 +165,13 @@
                         android:textColor="#333333" />
 
                     <EditText
+                        android:id="@+id/et_max_money"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/drawable_empty"
                         android:hint="最高"
+                        android:inputType="number"
                         android:textColor="#888888" />
 
                     <TextView
@@ -325,6 +330,7 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:id="@+id/et_create_start_time"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
@@ -343,6 +349,7 @@
                         android:textSize="12sp" />
 
                     <EditText
+                        android:id="@+id/et_create_end_time"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
@@ -405,6 +412,7 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:id="@+id/et_follow_start_time"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
@@ -423,6 +431,7 @@
                         android:textSize="12sp" />
 
                     <EditText
+                        android:id="@+id/et_follow_end_time"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
@@ -472,6 +481,7 @@
             android:paddingTop="10dp">
 
             <Button
+                android:id="@+id/btn_reset"
                 android:layout_width="131dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="10dp"
@@ -479,6 +489,7 @@
                 android:text="重置" />
 
             <Button
+                android:id="@+id/btn_sure"
                 android:layout_width="131dp"
                 android:layout_height="40dp"
                 android:background="@drawable/home_page_bg"

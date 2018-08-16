@@ -8,8 +8,13 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.CustomerModel;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CustomerViewHolder extends BaseViewHolder<ItemData> {
 
@@ -18,6 +23,7 @@ public class CustomerViewHolder extends BaseViewHolder<ItemData> {
     private TextView mNeed;
     private TextView mFollow;
     private TextView mMessage;
+    private static final String TAG = "CustomerViewHolder";
 
     /**
      * TODO
@@ -41,18 +47,26 @@ public class CustomerViewHolder extends BaseViewHolder<ItemData> {
 
     @Override
     public void onBindViewHolder(ItemData data) {
-        CustomerModel data1 = (CustomerModel) data.getData();
+        CustomerResponse.DataBean.ListsBean data1 = (CustomerResponse.DataBean.ListsBean) data.getData();
+        Log.e(TAG, "onBindViewHolder: " + new Gson().toJson(data1));
         mName.setText(data1.getName());
-        mNeed.setText(data1.getNeed());
-        mFollow.setText(data1.getFollowTime());
-        mMessage.setText(data1.getMessage());
-        switch (data1.getState()) {
-            case 0:
+        mNeed.setText(mNeed.getContext().getResources().getString(R.string.customer_need, data1.getMinBudget(), data1.getMaxBudget(), data1.getBrandName(), data1.getCarCount()));
+        mFollow.setText(formatData(data1.getProgressDate(), "MM/dd") + " " + data1.getProgressContent());
+        mMessage.setText(formatData(data1.getCreateDate(), "yyyy/MM/dd") + "创建");
+        switch (data1.getStatusName()) {
+            case "已到店":
                 mState.setBackgroundColor(Color.parseColor("#FF5755"));
                 break;
-            case 1:
+            case "未到店":
                 mState.setBackgroundColor(Color.parseColor("#3E404F"));
                 break;
         }
+        mState.setText(data1.getStatusName());
+    }
+
+    public String formatData(long time, String format) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        String format1 = simpleDateFormat.format(new Date(time));
+        return format1;
     }
 }

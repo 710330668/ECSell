@@ -1,6 +1,7 @@
 package com.example.com.careasysell.remote;
 
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.dealer.ui.model.response.SalersListResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
@@ -104,10 +105,10 @@ public interface ApiService {
     //全国车源
     @FormUrlEncoded
     @POST("car/findCarList")
-    Observable<AllOptionResponse> getCarList(@Header("token") String token, @Field("pageSize") String pageSize, @Field("page") String page,@Field("scopeType") String scopeType,
-                                             @Field("carType") String carType,@Field("brandId") String brandId,@Field("versionId") String versionId,@Field("carYear") String carYear,@Field("outsiteColor") String outsiteColor,
-                                             @Field("withinColor") String withinColor,@Field("minCarPrice") String minCarPrice,@Field("maxCarPrice") String maxCarPrice,@Field("startDate") String startDate,
-                                             @Field("endDate") String endDate,@Field("queryKey") String queryKey);
+    Observable<AllOptionResponse> getCarList(@Header("token") String token, @Field("pageSize") String pageSize, @Field("page") String page, @Field("scopeType") String scopeType,
+                                             @Field("carType") String carType, @Field("brandId") String brandId, @Field("versionId") String versionId, @Field("carYear") String carYear, @Field("outsiteColor") String outsiteColor,
+                                             @Field("withinColor") String withinColor, @Field("minCarPrice") String minCarPrice, @Field("maxCarPrice") String maxCarPrice, @Field("startDate") String startDate,
+                                             @Field("endDate") String endDate, @Field("queryKey") String queryKey);
 
     //全国车源
     @FormUrlEncoded
@@ -136,6 +137,20 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("user/resetXsUserPass")
     Observable<EasyResponse> resetXsUserPass(@Header("token") String token, @Field("userId") String userId, @Field("password") String password);
+
+    //新增客户
+    @Multipart
+    @POST("customer/saveCustomerInfo")
+    Observable<EasyResponse> saveCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
+    //获取客户基本信息
+    Observable<String> getCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
+
+    //获取客户列表
+    @Multipart
+    @POST("customer/findAllCustomerInfoList")
+    Observable<CustomerResponse> getCustomerList(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     //销售人员列表(无分页)
     @FormUrlEncoded
