@@ -155,7 +155,8 @@
                         android:background="@drawable/drawable_empty"
                         android:hint="最低"
                         android:inputType="number"
-                        android:textColor="#888888" />
+                        android:textColor="#888888"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -172,7 +173,8 @@
                         android:background="@drawable/drawable_empty"
                         android:hint="最高"
                         android:inputType="number"
-                        android:textColor="#888888" />
+                        android:textColor="#888888"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:layout_width="0dp"
