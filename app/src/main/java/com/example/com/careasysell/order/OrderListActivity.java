@@ -1,5 +1,6 @@
 package com.example.com.careasysell.order;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -13,15 +14,20 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.SalerManagerActivity;
-import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
+import com.example.com.careasysell.order.response.OrderListResponse;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.EndlessRecyclerOnScrollListener;
 import com.example.com.careasysell.view.DrawableCenterRadioButton;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.SP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 71033 on 2018/8/9.
@@ -51,6 +60,11 @@ public class OrderListActivity extends BaseActivity {
     private BaseAdapter mDataAdapter;
     private int selectState = 0;
     private int selectOrder = 0;
+    private String token;
+    private   int CURRENT_PAGE = 1;
+    private   int PAGE_SIZE = 6;
+    private int count ;
+
 
     PopupWindow mPopupWindow;
 
@@ -62,17 +76,7 @@ public class OrderListActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        for (int i = 0; i < 10; i++) {
-            SearchResultModel data = new SearchResultModel();
-            data.setDate("2018/06/24");
-            data.setDeduct("销售提成2000");
-            data.setPrice("16.8万");
-            data.setState("已上架");
-            data.setSubTitle("分享20次|浏览140次");
-            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
-            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
-            mSearchResultData.add(e);
-        }
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -85,10 +89,26 @@ public class OrderListActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlSearchResult.setLayoutManager(layoutManager);
         rlSearchResult.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        rlSearchResult.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                mDataAdapter.setLoadState(mDataAdapter.LOADING);
+                if(mSearchResultData.size() < count){
+                    ++CURRENT_PAGE;
+                    getOrderList();
+                }else{
+                    mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
+                }
+            }
+        });
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-                startActivity(CarDetailActivity.class);
+                OrderListResponse.DataBean.ListsBean model = (OrderListResponse.DataBean.ListsBean) data;
+                Bundle bundle = new Bundle();
+                bundle.putString("orderItemId", model.getOrderItemId());
+                bundle.putString("source",C.SOURCE_ORDER);
+                startActivity(CarDetailActivity.class,bundle);
             }
 
             @Override
@@ -97,6 +117,36 @@ public class OrderListActivity extends BaseActivity {
             }
         });
         rlSearchResult.setAdapter(mDataAdapter);
+        getOrderList();
+    }
+
+    @SuppressLint("CheckResult")
+    private void getOrderList() {
+        if(mSearchResultData.size()>0){
+            mSearchResultData.remove(mSearchResultData.size()-1);
+        }
+        Injection.provideApiService().findMyOrderList(token,CURRENT_PAGE+"",PAGE_SIZE+"","",
+                "","","","","","").
+                subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<OrderListResponse>() {
+                    @Override
+                    public void accept(OrderListResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            count = response.getData().getCount();
+                            for(int i =0 ;i<response.getData().getLists().size();i++){
+                                OrderListResponse.DataBean.ListsBean bean = response.getData().getLists().get(i);
+                                ItemData e = new ItemData(0, SettingDelegate.ORDER_LIST_TYPE, bean);
+                                mSearchResultData.add(e);
+                            }
+                            ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
+                            mSearchResultData.add(e);
+                            mDataAdapter.notifyDataSetChanged();
+                            mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        }
+                    }
+                });
     }
 
     @Override

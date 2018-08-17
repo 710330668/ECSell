@@ -74,7 +74,7 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:id="@+id/rl_new"
+                android:id="@+id/rl_day_new"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -104,7 +104,7 @@
                 android:background="#F5F5F5" />
 
             <RelativeLayout
-                android:id="@+id/rl_store"
+                android:id="@+id/rl_day_store"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -134,7 +134,7 @@
                 android:background="#F5F5F5" />
 
             <RelativeLayout
-                android:id="@+id/rl_shouchu"
+                android:id="@+id/rl_day_shouchu"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -172,6 +172,7 @@
             android:orientation="horizontal">
 
             <RelativeLayout
+                android:id="@+id/rl_month_new"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -201,6 +202,7 @@
                 android:background="#F5F5F5" />
 
             <RelativeLayout
+                android:id="@+id/rl_month_store"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -230,6 +232,7 @@
                 android:background="#F5F5F5" />
 
             <RelativeLayout
+                android:id="@+id/rl_month_shouchu"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">

@@ -27,6 +27,7 @@ import com.example.com.careasysell.options.viewHolder.OptionTypeViewHolder;
 import com.example.com.careasysell.options.viewHolder.SalesAreaViewHolder;
 import com.example.com.careasysell.options.viewHolder.SeriesViewHolder;
 import com.example.com.careasysell.options.viewHolder.VehicleHeatViewHolder;
+import com.example.com.careasysell.order.viewHolder.OrderListViewHolder;
 import com.example.com.careasysell.share.viewholder.SharedCarHolder;
 import com.example.com.careasysell.share.viewholder.SharedHumanHolder;
 import com.example.com.common.adapter.BaseDelegate;
@@ -79,6 +80,9 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public static final int CUSTOMER_DETAIL_WANT_TYPE = 24;
     public static final int CUSTOMER_DETAIL_FOLLOW_TYPE = 25;
+
+    public static final int ORDER_LIST_TYPE = 26;
+
     public static final int FOOT_TYPE = 99;
 
     @Override
@@ -142,6 +146,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new CustomerDetailWantHolder(parent, getItemView(parent, viewType));
             case CUSTOMER_DETAIL_FOLLOW_TYPE:
                 return new CustomerFollowHolder(parent, getItemView(parent, viewType));
+            case ORDER_LIST_TYPE:
+                return new OrderListViewHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -209,6 +215,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_customer_detail_want_car;
             case CUSTOMER_DETAIL_FOLLOW_TYPE:
                 return R.layout.item_layout_customer_follow;
+            case ORDER_LIST_TYPE:
+                return R.layout.item_order_list;
             default:
         }
         return 0;

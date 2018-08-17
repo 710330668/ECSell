@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:padding="14dp">
+
+    <ImageView
+        android:id="@+id/img_car_poster"
+        android:layout_width="96dp"
+        android:layout_height="72dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_car_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:lines="2"
+        android:text="雪佛兰2013款 科鲁兹 1.6LSL 天地板 MT"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@id/img_car_poster"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_car_poster" />
+
+    <TextView
+        android:id="@+id/tv_order_sub_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="客户李颖 | 销售王硕"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@id/tv_car_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_car_title" />
+
+    <TextView
+        android:id="@+id/tv_order_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="16.8万"
+        android:textColor="#FE5F55"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/img_car_poster"
+        app:layout_constraintLeft_toLeftOf="@id/tv_car_title" />
+
+    <TextView
+        android:id="@+id/tv_order_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018/06/24"
+        android:textColor="#999999"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_car_poster"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

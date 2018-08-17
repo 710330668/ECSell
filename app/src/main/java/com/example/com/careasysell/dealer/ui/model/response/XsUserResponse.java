@@ -10,7 +10,7 @@ public class XsUserResponse {
 
     /**
      * code : 200
-     * data : {"count":2,"userModels":[{"account":"xs123","createDate":1533571200000,"phone":"5555228243","sex":0,"userId":"308c226ede2c4e3b8e2a19e636ad2e4f","userName":"Anna Haro"},{"account":"xs","createDate":1510416000000,"phone":"18363671108","sex":0,"userId":"1b6ce670df034cf5b6bd20cb8fac18bf","userName":"销售"}]}
+     * data : {"count":9,"userModels":[{"account":"zxg123","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"a9c2ce2b3ef040bb811bddea5bf7508f","userName":"张晓光001","userPic":"http://39.104.136.205:8888/user/20180814/1534211851529.png"},{"account":"c002","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"2a24119c20a04624982ad65305fca433","userName":"cys002","userPic":"http://39.104.136.205:8888/user/20180814/1534213425288.png"},{"account":"1112","createDate":1534176000000,"phone":"13668847563","sex":1,"userId":"cf871d0c0c56424589303042a299adcb","userName":"111","userPic":"http://39.104.136.205:8888/user/20180814/1534225322793.jpg"},{"account":"c001","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"3bb92f806760451480ff3f7a85013d81","userName":"cys002","userPic":"http://39.104.136.205:8888/user/20180814/1534213184776.png"},{"account":"ghhj","createDate":1534176000000,"phone":"13789847050","sex":0,"userId":"41142ae2fc7d4d6c8f511be6ebda5239","userName":"nnsz","userPic":"http://39.104.136.205:8888/user/20180814/1534227228777.jpg"},{"account":"zcw","createDate":1534176000000,"phone":"12345678912","sex":0,"userId":"415da807f4e24c9bbf992823568f8d0f","userName":"","userPic":"http://39.104.136.205:8888/user/20180814/1534216906919.jpg"}]}
      * msg : 操作成功
      */
 
@@ -44,8 +44,8 @@ public class XsUserResponse {
 
     public static class DataBean {
         /**
-         * count : 2
-         * userModels : [{"account":"xs123","createDate":1533571200000,"phone":"5555228243","sex":0,"userId":"308c226ede2c4e3b8e2a19e636ad2e4f","userName":"Anna Haro"},{"account":"xs","createDate":1510416000000,"phone":"18363671108","sex":0,"userId":"1b6ce670df034cf5b6bd20cb8fac18bf","userName":"销售"}]
+         * count : 9
+         * userModels : [{"account":"zxg123","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"a9c2ce2b3ef040bb811bddea5bf7508f","userName":"张晓光001","userPic":"http://39.104.136.205:8888/user/20180814/1534211851529.png"},{"account":"c002","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"2a24119c20a04624982ad65305fca433","userName":"cys002","userPic":"http://39.104.136.205:8888/user/20180814/1534213425288.png"},{"account":"1112","createDate":1534176000000,"phone":"13668847563","sex":1,"userId":"cf871d0c0c56424589303042a299adcb","userName":"111","userPic":"http://39.104.136.205:8888/user/20180814/1534225322793.jpg"},{"account":"c001","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"3bb92f806760451480ff3f7a85013d81","userName":"cys002","userPic":"http://39.104.136.205:8888/user/20180814/1534213184776.png"},{"account":"ghhj","createDate":1534176000000,"phone":"13789847050","sex":0,"userId":"41142ae2fc7d4d6c8f511be6ebda5239","userName":"nnsz","userPic":"http://39.104.136.205:8888/user/20180814/1534227228777.jpg"},{"account":"zcw","createDate":1534176000000,"phone":"12345678912","sex":0,"userId":"415da807f4e24c9bbf992823568f8d0f","userName":"","userPic":"http://39.104.136.205:8888/user/20180814/1534216906919.jpg"}]
          */
 
         private int count;
@@ -69,12 +69,13 @@ public class XsUserResponse {
 
         public static class UserModelsBean {
             /**
-             * account : xs123
-             * createDate : 1533571200000
-             * phone : 5555228243
+             * account : zxg123
+             * createDate : 1534176000000
+             * phone : 18363671109
              * sex : 0
-             * userId : 308c226ede2c4e3b8e2a19e636ad2e4f
-             * userName : Anna Haro
+             * userId : a9c2ce2b3ef040bb811bddea5bf7508f
+             * userName : 张晓光001
+             * userPic : http://39.104.136.205:8888/user/20180814/1534211851529.png
              */
 
             private String account;
@@ -83,6 +84,7 @@ public class XsUserResponse {
             private int sex;
             private String userId;
             private String userName;
+            private String userPic;
 
             public String getAccount() {
                 return account;
@@ -130,6 +132,14 @@ public class XsUserResponse {
 
             public void setUserName(String userName) {
                 this.userName = userName;
+            }
+
+            public String getUserPic() {
+                return userPic;
+            }
+
+            public void setUserPic(String userPic) {
+                this.userPic = userPic;
             }
         }
     }

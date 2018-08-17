@@ -34,6 +34,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +157,7 @@ public class SearchResultFragment extends BaseFragment {
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
-                                data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
+                                data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                 data.setDeduct(response.getData().getLists().get(i).getSaleCommission() + "");
                                 data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());

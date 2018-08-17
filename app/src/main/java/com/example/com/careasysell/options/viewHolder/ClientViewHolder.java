@@ -5,7 +5,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.dealer.ui.model.ClientModel;
 import com.example.com.common.adapter.BaseViewHolder;
+import com.example.com.common.adapter.ItemData;
 
 /**
  * Created by 71033 on 2018/8/6.
@@ -32,9 +34,20 @@ public class ClientViewHolder extends BaseViewHolder {
     @Override
     public void findViews() {
         tvName = itemView.findViewById(R.id.tv_name);
+        tvDemand = itemView.findViewById(R.id.tv_demand);
+        tvFollow = itemView.findViewById(R.id.tv_follow);
+        tvTime = itemView.findViewById(R.id.tv_time);
+        tvStatus = itemView.findViewById(R.id.tv_status);
     }
 
     @Override
     public void onBindViewHolder(Object data) {
+        ItemData itemData = (ItemData) data;
+        ClientModel model = (ClientModel) itemData.data;
+        tvName.setText(model.getName());
+        tvDemand.setText(model.getDemand());
+        tvFollow.setText(model.getFollow());
+        tvTime.setText(model.getTime());
+        tvStatus.setText(model.getStatus());
     }
 }

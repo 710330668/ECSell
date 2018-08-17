@@ -50,6 +50,21 @@ public interface C {
     int INVENTORY_DEALER = 1; //库存 - 经销
     int INVENTORY_MARKET = 2;  //库存 - 销售
 
+
+    String SOURCE_ORDER = "order";  //订单
+
+    String SOURCE_DAY_SELL = "day_order";  //日售出
+
+    String SOURCE_MONTH_SELL = "month_order";  //月售出
+
+    String SOURCE_DAY_NEW = "day_new";  //日新增
+
+    String SOURCE_MONTH_NEW = "month_new";  //月新增
+
+    String SOURCE_DAY_SHOP = "day_shop";  //日进店
+
+    String SOURCE_MONTH_SHOP = "month_shop";  //月进店
+
     @IntDef({INVENTORY_OPTION,INVENTORY_DEALER, INVENTORY_MARKET})
     public @interface  INVENTORY {}
 

@@ -4,8 +4,10 @@ import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
+import com.example.com.careasysell.dealer.ui.model.response.ReportCarResponse;
 import com.example.com.careasysell.dealer.ui.model.response.SalersListResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
+import com.example.com.careasysell.dealer.ui.model.response.ToShopResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserDetailResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserResponse;
 import com.example.com.careasysell.main.login.LoginResponse;
@@ -17,6 +19,8 @@ import com.example.com.careasysell.options.model.response.CarsResponse;
 import com.example.com.careasysell.options.model.response.CommonResponse;
 import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
+import com.example.com.careasysell.order.response.OrderDetailResponse;
+import com.example.com.careasysell.order.response.OrderListResponse;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
 
 import java.util.List;
@@ -168,5 +172,41 @@ public interface ApiService {
     @Multipart
     @POST("car/saveCarInfo")
     Observable<EasyResponse> saveCarInfo(@Header("token") String token, @Part List<MultipartBody.Part> files, @PartMap Map<String, RequestBody> params);
+
+
+    //订单列表
+    @FormUrlEncoded
+    @POST("order/findMyOrderList")
+    Observable<OrderListResponse> findMyOrderList(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize,
+                                                  @Field("xsUserId") String xsUserId, @Field("startDate") String startDate, @Field("endDate") String endDate,
+                                                  @Field("minPrice") String minPrice, @Field("maxPrice") String maxPrice, @Field("queryKey") String queryKey,
+                                                  @Field("orderType") String orderType);
+
+
+    //订单详情
+    @FormUrlEncoded
+    @POST("order/findOrderDetail")
+    Observable<OrderDetailResponse> findOrderDetail(@Header("token") String token, @Field("orderItemId") String orderItemId);
+
+
+    //本月进店列表
+    @FormUrlEncoded
+    @POST("customer/findMonthEnterCustomerInfo")
+    Observable<ToShopResponse> findMonthEnterCustomerInfo(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
+
+    //本日进店列表
+    @FormUrlEncoded
+    @POST("customer/findDayEnterCustomerInfo")
+    Observable<ToShopResponse> findDayEnterCustomerInfo(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
+
+    //本日成交列表
+    @FormUrlEncoded
+    @POST("order/findDayOrderList")
+    Observable<ReportCarResponse> findDayOrderList(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
+
+    //本月成交列表
+    @FormUrlEncoded
+    @POST("order/findMonthOrderList")
+    Observable<ReportCarResponse> findMonthOrderList(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
 
 }

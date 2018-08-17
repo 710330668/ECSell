@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.com.careasysell.R;
+import com.example.com.careasysell.config.C;
 import com.example.com.common.BaseActivity;
 
 import butterknife.ButterKnife;
@@ -42,22 +43,45 @@ public class MyReportActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.rl_new, R.id.rl_store,R.id.rl_shouchu,R.id.rl_store_report})
+    @OnClick({R.id.iv_back, R.id.rl_day_new, R.id.rl_day_store,R.id.rl_day_shouchu,R.id.rl_store_report,R.id.rl_month_shouchu,R.id.rl_month_new,R.id.rl_month_store})
     public void onViewClicked(View view) {
+        Bundle bundle;
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.rl_new:
-                startActivity(ClientListActivity.class);
+            case R.id.rl_day_new:
+                bundle = new Bundle();
+                bundle.putString("source", C.SOURCE_DAY_NEW);
+                startActivity(ClientListActivity.class,bundle);
                 break;
-            case R.id.rl_store:
+            case R.id.rl_day_store:
+                bundle = new Bundle();
+                bundle.putString("source", C.SOURCE_DAY_SHOP);
+                startActivity(ClientListActivity.class,bundle);
                 break;
-            case R.id.rl_shouchu:
-                startActivity(ReportCarListActivity.class);
+            case R.id.rl_month_new:
+                bundle = new Bundle();
+                bundle.putString("source", C.SOURCE_MONTH_NEW);
+                startActivity(ClientListActivity.class,bundle);
+                break;
+            case R.id.rl_month_store:
+                bundle = new Bundle();
+                bundle.putString("source", C.SOURCE_MONTH_SHOP);
+                startActivity(ClientListActivity.class,bundle);
+                break;
+            case R.id.rl_day_shouchu:
+                bundle = new Bundle();
+                bundle.putString("source", C.SOURCE_DAY_SELL);
+                startActivity(ReportCarListActivity.class,bundle);
                 break;
             case R.id.rl_store_report:
                 startActivity(StoreReportActivity.class);
+                break;
+            case R.id.rl_month_shouchu:
+                bundle = new Bundle();
+                bundle.putString("source", C.SOURCE_MONTH_SELL);
+                startActivity(ReportCarListActivity.class,bundle);
                 break;
         }
     }

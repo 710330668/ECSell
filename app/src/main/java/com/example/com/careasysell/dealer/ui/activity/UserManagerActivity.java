@@ -114,7 +114,7 @@ public class UserManagerActivity extends BaseActivity {
                                 return;
                             }
                             for (int i = 0; i < response.getData().getUserModels().size(); i++) {
-                                UserListModel userListModel = new UserListModel(beans.get(i).getUserId(),"", response.getData().getUserModels().get(i).getUserName(), "账号:"+
+                                UserListModel userListModel = new UserListModel(beans.get(i).getUserId(),beans.get(i).getUserPic(), response.getData().getUserModels().get(i).getUserName(), "账号:"+
                                         response.getData().getUserModels().get(i).getAccount(), TimeUtils.millis2String(response.getData().getUserModels().get(i).getCreateDate()),
                                         response.getData().getUserModels().get(i).getPhone());
                                 ItemData itemData = new ItemData(0, SettingDelegate.USER_LIST_TYPE, userListModel);
