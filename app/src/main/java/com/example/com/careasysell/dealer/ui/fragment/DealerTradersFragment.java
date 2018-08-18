@@ -73,7 +73,7 @@ public class DealerTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_country_options, R.id.rl_store_manager, R.id.rl_human_manager, R.id.rl_client_manager, R.id.rl_order_manager, R.id.rl_report, R.id.et_search})
+    @OnClick({R.id.rl_country_options, R.id.rl_store_manager, R.id.rl_human_manager, R.id.rl_client_manager, R.id.rl_order_manager, R.id.rl_report, R.id.et_search, R.id.rl_my_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_country_options:
@@ -103,6 +103,9 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.et_search:
                 startActivity(AllSourceSearchActivity.class);
+                break;
+            case R.id.rl_my_share:
+                // TODO: 2018/8/18   我的分享
                 break;
             default:
 
