@@ -74,7 +74,9 @@ public class StoreManagerActivity extends BaseActivity {
             @Override
             public void onClick(View v, Object data) {
                 StoreManagerResponse.DataBean data1 = (StoreManagerResponse.DataBean) data;
-                startActivity(StoreSearchActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data", data1);
+                startActivity(StoreSearchActivity.class, bundle);
             }
 
             @Override

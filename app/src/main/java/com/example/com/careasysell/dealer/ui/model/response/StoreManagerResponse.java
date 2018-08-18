@@ -1,11 +1,12 @@
 package com.example.com.careasysell.dealer.ui.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by 71033 on 2018/8/5.
  */
-public class StoreManagerResponse {
+public class StoreManagerResponse implements Serializable {
 
     /**
      * code : 200
@@ -41,7 +42,7 @@ public class StoreManagerResponse {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * carCount : 0
          * carStatus : SHELVES
