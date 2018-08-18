@@ -2,18 +2,23 @@ package com.example.com.careasysell.options;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.com.careasysell.MyApplication;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.usercenter.DealershipActivity;
 import com.example.com.careasysell.usercenter.UserInforActivity;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
+import com.example.com.careasysell.utils.DataCleanManager;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
@@ -44,7 +49,12 @@ public class SettingFragment extends BaseFragment {
     LinearLayout llyDealer;
     @BindView(R.id.lly_market)
     LinearLayout llyMarket;
+    @BindView(R.id.rl_clean_cache)
+    RelativeLayout rlCleanCache;
+    @BindView(R.id.tv_cache)
+    TextView tvCache;
     private String token;
+    private String cacheNum;
 
     @C.INVENTORY
     public int INVENTORY;
@@ -63,11 +73,17 @@ public class SettingFragment extends BaseFragment {
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
         INVENTORY = ParamManager.getInstance(getActivity()).getChannelType();
+        try {
+            cacheNum = DataCleanManager.getTotalCacheSize(MyApplication.getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onLazyLoad() {
         //获取个人信息
+        tvCache.setText(cacheNum);
         getUserInfor();
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
@@ -142,7 +158,7 @@ public class SettingFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_car_infor, R.id.rl_dealer,R.id.rl_user_infor})
+    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_car_infor:
@@ -152,6 +168,22 @@ public class SettingFragment extends BaseFragment {
                 break;
             case R.id.rl_user_infor:
                 startActivity(UserInforActivity.class);
+                break;
+            case R.id.rl_clean_cache:
+                Toast.makeText(getActivity(), "缓存清理中,请耐心等待..", Toast.LENGTH_SHORT).show();
+                DataCleanManager.cleanInternalCache(MyApplication.getContext());
+                Handler mHandler = new Handler();
+                Runnable r = new Runnable() {
+
+                    @Override
+                    public void run() {
+                        tvCache.setText("0MB");
+                        Toast.makeText(getActivity(), "缓存已清理完毕", Toast.LENGTH_SHORT).show();
+                    }
+                };
+
+
+                mHandler.postDelayed(r, 5000);//延时100毫秒
                 break;
         }
     }

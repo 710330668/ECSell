@@ -670,7 +670,7 @@
     </LinearLayout>
 
     <!-- 右侧滑动栏 -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/main_right_drawer_layout"
         android:layout_width="240dp"
         android:layout_height="match_parent"
@@ -678,6 +678,11 @@
         android:background="#FFFFFF"
         android:orientation="vertical"
         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -707,5 +712,18 @@
 
         </android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_zidingyi"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="自定义"
+            android:layout_margin="20dp"
+            android:background="@mipmap/home_bg"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>

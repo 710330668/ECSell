@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.options.model.response.CarDetailResponse;
 import com.example.com.careasysell.order.response.OrderDetailResponse;
 import com.example.com.careasysell.remote.Injection;
@@ -116,6 +117,7 @@ public class CarDetailActivity extends BaseActivity {
     public static String[] urls;
     List<BannerItem> list = new ArrayList<>();
     private List<String> discounts;
+    private String saleId;
 
     @C.INVENTORY
     public int INVENTORY;
@@ -204,6 +206,7 @@ public class CarDetailActivity extends BaseActivity {
                     public void accept(OrderDetailResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
+                            saleId = response.getData().getCarId();
                             tvAdvise.setText("建议售价" + response.getData().getAdvicePrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
@@ -255,6 +258,7 @@ public class CarDetailActivity extends BaseActivity {
                     public void accept(CarDetailResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
+                            saleId = response.getData().getCarId();
                             tvAdvise.setText("建议售价" + response.getData().getAdvicePrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
@@ -346,7 +350,7 @@ public class CarDetailActivity extends BaseActivity {
                 reservateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(ReleaseOptionActivity.class);
+                        unReserveSaleCarInfo();
                         pop.dismiss();
                     }
                 });
@@ -357,12 +361,47 @@ public class CarDetailActivity extends BaseActivity {
                 reservateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(ReleaseOptionActivity.class);
+                        reservate();
                         pop.dismiss();
                     }
                 });
                 break;
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void unReserveSaleCarInfo() {
+        Injection.provideApiService().unReserveSaleCarInfo(token,saleId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+
+                        }
+
+                    }
+                });
+    }
+
+    //预定车辆
+    @SuppressLint("CheckResult")
+    private void reservate() {
+        Injection.provideApiService().reserveSaleCarInfo(token,saleId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+
+                        }
+
+                    }
+                });
     }
 
     @Override

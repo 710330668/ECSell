@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.NotifyCallBackManager;
 import com.example.com.careasysell.utils.ParamManager;
-import com.example.com.careasysell.view.KeyboardListenRelativeLayout;
+import com.example.com.careasysell.view.KeyMapDailog;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -47,8 +48,6 @@ public class ChooseModelActivity extends BaseActivity {
     TextView tvCarModel;
     @BindView(R.id.rl_cars_model)
     RecyclerView rlCarsModel;
-    @BindView(R.id.mainlayout)
-    KeyboardListenRelativeLayout mainlayout;
 
     private String carCombinate;
     private List<ItemData> carSeriesLists = new ArrayList<>();
@@ -69,26 +68,11 @@ public class ChooseModelActivity extends BaseActivity {
         carCombinate = params.getString("carCombinate");
         audiId = params.getString("audiId");
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
-        mainlayout
-                .setOnKeyboardStateChangedListener(new KeyboardListenRelativeLayout.IOnKeyboardStateChangedListener() {
-
-                    @Override
-                    public void onKeyboardStateChanged(int state) {
-                        // TODO Auto-generated method stub
-                        switch (state) {
-                            case KeyboardListenRelativeLayout.KEYBOARD_STATE_HIDE:
-                                mainlayout.setVisibility(View.GONE);
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                });
 
     }
 
@@ -158,9 +142,17 @@ public class ChooseModelActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_zidingyi:
-                imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                mainlayout.setVisibility(View.VISIBLE);
+                KeyMapDailog dialog =new KeyMapDailog("自定义车型", new KeyMapDailog.SendBackListener() {
+                    @Override
+                    public void sendBack(String inputText) {
+                        //TODO  点击发表后业务逻辑
+                        carFullName = carCombinate + "|" + inputText;
+                        ParamManager.getInstance(ChooseModelActivity.this).setCarFullName(carFullName);
+                        NotifyCallBackManager.getInstance().onCloseCallBack();
+                        finish();
+                    }
+                });
+                dialog.show(getSupportFragmentManager(), "dialog");
                 break;
         }
     }

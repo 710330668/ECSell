@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class TimeUtils {
@@ -902,6 +904,161 @@ public class TimeUtils {
         return getWeekOfYear(millis2Date(millis));
     }
 
+
+    //获取本周时间
+    public static List<DayBean> getWeekData() {
+        List<DayBean> data = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        //获取当天星期几
+        int mWay = c.get(Calendar.DAY_OF_WEEK);
+        //将时间退到周日
+        for (int i = 0; i < mWay; i++) {
+            c.add(Calendar.DATE, -1);
+        }
+        //得到本周时间
+        for (int i = 0; i < 7; i++) {
+            c.add(Calendar.DATE, 1);
+            data.add(new DayBean(format.format(c.getTime()), getWeekDay(c.get(Calendar.DAY_OF_WEEK), mWay),
+                    c.get(Calendar.DAY_OF_WEEK) == mWay ? true : false));
+        }
+        return data;
+    }
+
+    //获取上周时间
+    public static List<DayBean> getLastWeekData() {
+        List<DayBean> data = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        //获取当天星期几
+        int mWay = c.get(Calendar.DAY_OF_WEEK);
+        //将时间退到上周周日
+        for (int i = 0; i < mWay + 7; i++) {
+            c.add(Calendar.DATE, -1);
+        }
+        //得到本周时间
+        for (int i = 0; i < 7; i++) {
+            c.add(Calendar.DATE, 1);
+            data.add(new DayBean(format.format(c.getTime()), getWeekDay(c.get(Calendar.DAY_OF_WEEK), mWay),
+                    c.get(Calendar.DAY_OF_WEEK) == mWay ? true : false));
+        }
+        return data;
+    }
+
+    public static String getTodayTime(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        return simpleDateFormat.format(date);
+    }
+
+    private static String getWeekDay(int day, int today) {
+        String s = null;switch (day) {
+            case 1:
+                s = "日";
+                break;
+            case 2:
+                s = "一";
+                break;
+            case 3:
+                s = "二";
+                break;
+            case 4:
+                s = "三";
+                break;
+            case 5:
+                s = "四";
+                break;
+            case 6:
+                s = "五";
+                break;
+            case 7:
+                s = "六";
+                break;
+        }
+        if (day == today)
+            s = "今";
+        return s;
+    }
+
+
+    /**
+     * 根据提供的年月日获取该月份的第一天
+     * @Description: (这里用一句话描述这个方法的作用)
+     * @Author: gyz
+     * @Since: 2017-1-9下午2:26:57
+     * @param date
+     *
+     * @return
+     */
+    public static String getSupportBeginDayofMonth(Date date) {
+        date.getTime();
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(date);
+        startDate.set(Calendar.DAY_OF_MONTH, 1);
+        startDate.set(Calendar.HOUR_OF_DAY, 0);
+        startDate.set(Calendar.MINUTE, 0);
+        startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        Date firstDate = startDate.getTime();
+        return getStrTime((firstDate.getTime()+""));
+
+    }
+
+    /**
+     * 根据提供的年月获取该月份的最后一天
+     * @Description: (这里用一句话描述这个方法的作用)
+     * @Author: gyz
+     * @Since: 2017-1-9下午2:29:38
+     * @param date
+     * @return
+     */
+    public static String getSupportEndDayofMonth(Date date) {
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(date);
+        startDate.set(Calendar.DAY_OF_MONTH, startDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        startDate.set(Calendar.HOUR_OF_DAY, 23);
+        startDate.set(Calendar.MINUTE, 59);
+        startDate.set(Calendar.SECOND, 59);
+        startDate.set(Calendar.MILLISECOND, 999);
+        Date firstDate = startDate.getTime();
+        return getStrTime((firstDate.getTime()+""));
+    }
+
+    /**
+     * 当天的开始时间
+     * @return
+     */
+    public static long startOfTodDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date date=calendar.getTime();
+        return date.getTime();
+    }
+    /**
+     * 当天的结束时间
+     * @return
+     */
+    public static long endOfTodDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        Date date=calendar.getTime();
+        return date.getTime();
+    }
+
+    //时间戳转字符串
+    public static String getStrTime(String timeStamp){
+        String timeString = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        long  l = Long.valueOf(timeStamp);
+        timeString = sdf.format(new Date(l));//单位秒
+        return timeString;
+    }
 
 
 }
