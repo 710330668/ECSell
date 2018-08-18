@@ -20,7 +20,7 @@
             android:drawableRight="@drawable/drawable_left_radio_selector"
             android:gravity="center"
             android:text="车辆状态"
-            android:textColor="#333333" />
+            android:textColor="@drawable/text_color_radio_selector" />
 
         <View
             android:layout_width="1dp"
@@ -38,7 +38,7 @@
             android:drawableRight="@drawable/drawable_left_radio_selector"
             android:gravity="center"
             android:text="默认排序"
-            android:textColor="#333333" />
+            android:textColor="@drawable/text_color_radio_selector" />
 
         <View
             android:layout_width="1dp"
@@ -56,19 +56,19 @@
             android:drawableRight="@drawable/drawable_left_radio_selector"
             android:gravity="center"
             android:text="筛选"
-            android:textColor="#333333" />
+            android:textColor="@drawable/text_color_radio_selector" />
 
         <Button
             android:id="@+id/btn_car_share"
             android:layout_width="76dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
-            android:text="分享车辆"
-            android:textSize="12sp"
-            android:textColor="#FFFFFF"
-            android:background="@mipmap/home_bg"
             android:layout_marginRight="12dp"
-            android:visibility="gone"/>
+            android:background="@mipmap/home_bg"
+            android:text="分享车辆"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:visibility="gone" />
 
 
     </RadioGroup>
