@@ -10,8 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,6 +70,10 @@ public class AllSourceSearchActivity extends BaseActivity {
     LinearLayout mDrawerRight;
     @BindView(R.id.recycler_search_history)
     RecyclerView mRecyclerSearchHistory;
+    @BindView(R.id.tv_search)
+    TextView mTvSearch;
+    @BindView(R.id.et_search)
+    EditText mEtSearch;
 
 
     private List<Fragment> mTagFragments = new ArrayList<>();
@@ -91,6 +98,26 @@ public class AllSourceSearchActivity extends BaseActivity {
     public void setView(Bundle savedInstanceState) {
         mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+                    mTvSearch.setText("搜索");
+                } else {
+                    mTvSearch.setText("取消");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -103,7 +130,7 @@ public class AllSourceSearchActivity extends BaseActivity {
 
     private void initSearchHistory() {
         mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             SearchHistoryModel data = new SearchHistoryModel();
             data.setSearchHistory("保时捷 911");
             mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, data));
@@ -144,10 +171,6 @@ public class AllSourceSearchActivity extends BaseActivity {
     private void initTabLayout() {
         mTabSearchResult.setViewPager(mVpContent, mContentTitles);
         mTabSearchResult.setIndicatorColor(Color.parseColor("#F55745"));
-//        mTabSearchResult.setTabTextColors(Color.parseColor("#333333"),Color.parseColor("#F55745"));
-//        mTabSearchResult.setSelectedTabIndicatorColor(Color.parseColor("#FF5745"));
-//        ViewCompat.setElevation(mTabSearchResult,10);
-//        mTabSearchResult.setupWithViewPager(mVpContent);
     }
 
 
@@ -333,7 +356,7 @@ public class AllSourceSearchActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model})
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_search})
     public void onDrawerViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_sales_area:
@@ -344,6 +367,13 @@ public class AllSourceSearchActivity extends BaseActivity {
                 break;
             case R.id.iv_car_model:
                 startActivity(ChooseBrandActivity.class);
+                break;
+            case R.id.tv_search:
+                if (TextUtils.isEmpty(mEtSearch.getText().toString())) {
+                    this.finish();
+                } else {
+                    mRecyclerSearchHistory.setVisibility(View.GONE);
+                }
                 break;
             default:
         }

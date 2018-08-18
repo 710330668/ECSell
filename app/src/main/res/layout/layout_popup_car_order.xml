@@ -1,62 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioGroup
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:paddingLeft="14dp"
     android:paddingRight="14dp">
-    
+
     <RadioButton
-        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="默认排序"
-        android:button="@null"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
     <View
-        android:background="#F5F5F5"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
     <RadioButton
-        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="车源价最低"
-        android:button="@null"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
     <View
-        android:background="#F5F5F5"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
     <RadioButton
-        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="车源价最高"
-        android:button="@null"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
     <View
-        android:background="#F5F5F5"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
     <RadioButton
-        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="销售提成最低"
-        android:button="@null"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
     <View
-        android:background="#F5F5F5"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
     <RadioButton
-        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="销售提成最高"
-        android:button="@null"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
 
 </RadioGroup>

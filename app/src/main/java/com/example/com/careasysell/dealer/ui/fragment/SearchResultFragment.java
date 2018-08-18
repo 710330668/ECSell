@@ -63,8 +63,6 @@ public class SearchResultFragment extends BaseFragment {
     RadioButton mRbState;
     @BindView(R.id.rb_car_order)
     RadioButton mRbOrder;
-    @BindView(R.id.rb_car_brand)
-    RadioButton mRbBrand;
     @BindView(R.id.rb_car_filter)
     RadioButton mRbFilter;
     @BindView(R.id.ll_put_away)
@@ -84,10 +82,10 @@ public class SearchResultFragment extends BaseFragment {
     private final int REQUEST_BRAND = 0;
     private BaseAdapter mDataAdapter;
     private String token;
-    private   int CURRENT_PAGE = 1;
-    private   int PAGE_SIZE = 6;
-    private int count ;
-    private String carType,brandId,versionId,carYear,outsiteColor,withinColor,minCarPrice,maxCarPrice,startDate,endDate,queryKey;
+    private int CURRENT_PAGE = 1;
+    private int PAGE_SIZE = 6;
+    private int count;
+    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey;
 
 
     @Override
@@ -110,7 +108,7 @@ public class SearchResultFragment extends BaseFragment {
                 SearchResultModel model = (SearchResultModel) data;
                 Bundle bundle = new Bundle();
                 bundle.putString("carId", model.getId());
-                startActivity(CarDetailActivity.class,bundle);
+                startActivity(CarDetailActivity.class, bundle);
             }
 
             @Override
@@ -123,10 +121,10 @@ public class SearchResultFragment extends BaseFragment {
             @Override
             public void onLoadMore() {
                 mDataAdapter.setLoadState(mDataAdapter.LOADING);
-                if(mSearchResultData.size() < count){
+                if (mSearchResultData.size() < count) {
                     ++CURRENT_PAGE;
                     getOwnOption();
-                }else{
+                } else {
                     mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
                 }
             }
@@ -141,12 +139,12 @@ public class SearchResultFragment extends BaseFragment {
 
     @SuppressLint("CheckResult")
     private void getOwnOption() {
-        if(mSearchResultData.size()>0){
-            mSearchResultData.remove(mSearchResultData.size()-1);
+        if (mSearchResultData.size() > 0) {
+            mSearchResultData.remove(mSearchResultData.size() - 1);
         }
-        Injection.provideApiService().getCarList(token, PAGE_SIZE+"", CURRENT_PAGE+"","own",
-                carType,brandId,versionId,carYear,outsiteColor,withinColor,minCarPrice,maxCarPrice,
-                startDate,endDate,queryKey)
+        Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "own",
+                carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
+                startDate, endDate, queryKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AllOptionResponse>() {
@@ -196,17 +194,12 @@ public class SearchResultFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rb_car_state, R.id.rb_car_brand, R.id.rb_car_order, R.id.rb_car_filter, R.id.tv_put_away})
+    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter, R.id.tv_put_away})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 //            汽车状态
             case R.id.rb_car_state:
                 showPopupWindow(R.id.rb_car_state);
-                break;
-//                品牌  跳转品牌activity
-            case R.id.rb_car_brand:
-                Intent intent = new Intent(SearchResultFragment.this.getContext(), ChooseBrandActivity.class);
-                startActivityForResult(intent, REQUEST_BRAND);
                 break;
 //                排序
             case R.id.rb_car_order:

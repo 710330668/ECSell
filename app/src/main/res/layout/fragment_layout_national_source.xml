@@ -20,7 +20,7 @@
             android:drawableRight="@drawable/drawable_left_radio_selector"
             android:gravity="center"
             android:text="车辆状态"
-            android:textColor="#333333" />
+            android:textColor="@drawable/text_color_radio_selector" />
 
         <View
             android:layout_width="1dp"
@@ -38,7 +38,7 @@
             android:drawableRight="@drawable/drawable_left_radio_selector"
             android:gravity="center"
             android:text="默认排序"
-            android:textColor="#333333" />
+            android:textColor="@drawable/text_color_radio_selector" />
 
         <View
             android:layout_width="1dp"
@@ -56,7 +56,7 @@
             android:drawableRight="@drawable/drawable_left_radio_selector"
             android:gravity="center"
             android:text="筛选"
-            android:textColor="#333333" />
+            android:textColor="@drawable/text_color_radio_selector" />
 
         <View
             android:layout_width="1dp"

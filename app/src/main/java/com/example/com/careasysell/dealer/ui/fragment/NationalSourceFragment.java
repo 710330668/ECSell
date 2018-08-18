@@ -1,12 +1,12 @@
 package com.example.com.careasysell.dealer.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +18,20 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.activity.PutAwayDetailActivity;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.options.CarDetailActivity;
+import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.utils.EndlessRecyclerOnScrollListener;
 import com.example.com.careasysell.view.SpaceItemDecoration;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.SP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Author ： DasonYu
@@ -72,8 +80,17 @@ public class NationalSourceFragment extends BaseFragment {
 
     private List<ItemData> mSearchResultData = new ArrayList<>();
 
+    private String TAG_LOAD_MORE = "tag_load_more";
+    private String TAG_FILTER = "tag_filter";
+
     private static final String TAG = "SearchResultFragment";
     private BaseAdapter mDataAdapter;
+    private String token;
+
+    private int CURRENT_PAGE = 1;
+    private int PAGE_SIZE = 6;
+    private int count;
+    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey;
 
     @Override
     protected int setLayoutResouceId() {
@@ -84,22 +101,35 @@ public class NationalSourceFragment extends BaseFragment {
     public void setView(View rootView) {
         mSearchResult.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
+        mSearchResult.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                mDataAdapter.setLoadState(mDataAdapter.LOADING);
+                if (mSearchResultData.size() < count) {
+                    ++CURRENT_PAGE;
+                    initRecycler(TAG_LOAD_MORE);
+                } else {
+                    mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
+                }
+            }
+        });
     }
 
     @Override
     public void initData(Bundle arguments) {
         INVENTORY = arguments.getInt(C.TAG_PAGE_MAIN);
-        for (int i = 0; i < 10; i++) {
-            SearchResultModel data = new SearchResultModel();
-            data.setDate("2018/06/24");
-            data.setDeduct("销售提成2000");
-            data.setPrice("16.8万");
-            data.setState("已上架");
-            data.setSubTitle("分享20次|浏览140次");
-            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
-            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
-            mSearchResultData.add(e);
-        }
+        token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
+//        for (int i = 0; i < 10; i++) {
+//            SearchResultModel data = new SearchResultModel();
+//            data.setDate("2018/06/24");
+//            data.setDeduct("销售提成2000");
+//            data.setPrice("16.8万");
+//            data.setState("已上架");
+//            data.setSubTitle("分享20次|浏览140次");
+//            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
+//            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
+//            mSearchResultData.add(e);
+//        }
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
@@ -112,6 +142,7 @@ public class NationalSourceFragment extends BaseFragment {
             }
         });
         mSearchResult.setAdapter(mDataAdapter);
+        initRecycler(TAG_LOAD_MORE);
         switch (INVENTORY) {
             case C.INVENTORY_MARKET:
                 //销售 分享
@@ -246,5 +277,43 @@ public class NationalSourceFragment extends BaseFragment {
         mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(false);
         mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
+    }
+
+    @SuppressLint("CheckResult")
+    private void initRecycler(String tag) {
+        if (mSearchResultData.size() > 0) {
+            mSearchResultData.remove(mSearchResultData.size() - 1);
+        }
+        Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "own",
+                carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
+                startDate, endDate, queryKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<AllOptionResponse>() {
+                    @Override
+                    public void accept(AllOptionResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if (response.getCode() == 200) {
+                            count = response.getData().getCount();
+                            for (int i = 0; i < response.getData().getLists().size(); i++) {
+                                SearchResultModel data = new SearchResultModel();
+                                data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
+                                data.setDeduct(response.getData().getLists().get(i).getSaleCommission() + "");
+                                data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
+                                data.setState(response.getData().getLists().get(i).getCarStatusName());
+                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
+                                data.setTitle(response.getData().getLists().get(i).getVname());
+                                data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
+                                data.setId(response.getData().getLists().get(i).getCarId());
+                                ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
+                                mSearchResultData.add(e);
+                            }
+                            ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
+                            mSearchResultData.add(e);
+                        }
+                        mDataAdapter.notifyDataSetChanged();
+                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                    }
+                });
     }
 }
