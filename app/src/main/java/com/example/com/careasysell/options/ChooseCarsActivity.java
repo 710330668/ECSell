@@ -2,6 +2,7 @@ package com.example.com.careasysell.options;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,10 +49,11 @@ public class ChooseCarsActivity extends BaseActivity {
     @BindView(R.id.tv_car_brand)
     TextView tvCarBrand;
     private List<ItemData> carLists = new ArrayList<>();
-    private String carBrand,bindId;
+    private String carBrand, bindId;
     private ICarSell.IPagerClose iPagerClose;
     private String token;
     private BaseAdapter baseAdapter;
+    private String paramsString;
 
     @Override
     public int bindLayout() {
@@ -63,6 +65,7 @@ public class ChooseCarsActivity extends BaseActivity {
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
         carBrand = params.getString("carBrand");
         bindId = params.getString("brandId");
+        paramsString = params.getString("params");
     }
 
     @Override
@@ -75,7 +78,7 @@ public class ChooseCarsActivity extends BaseActivity {
         tvCarBrand.setText(carBrand);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlCars.setLayoutManager(layoutManager);
-        rlCars.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        rlCars.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         baseAdapter = new BaseAdapter(carLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
@@ -83,10 +86,18 @@ public class ChooseCarsActivity extends BaseActivity {
                 String carsName = model.getCarsName();
                 String audiId = model.getCarsId();
                 String carCombinate = carBrand + "|" + carsName;
-                Bundle bundle = new Bundle();
-                bundle.putString("carCombinate",carCombinate);
-                bundle.putString("audiId",audiId);
-                startActivity(ChooseModelActivity.class,bundle);
+                if ("filter".equals(paramsString)) {
+                    Intent intent = new Intent();
+                    intent.putExtra("carCombinate", carCombinate);
+                    intent.putExtra("audiId", audiId);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("carCombinate", carCombinate);
+                    bundle.putString("audiId", audiId);
+                    startActivity(ChooseModelActivity.class, bundle);
+                }
             }
 
             @Override
@@ -106,16 +117,16 @@ public class ChooseCarsActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getCars() {
-        Injection.provideApiService().getCars(token,bindId)
+        Injection.provideApiService().getCars(token, bindId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CarsResponse>() {
                     @Override
                     public void accept(CarsResponse response) throws Exception {
                         try {
-                            if(response.getCode() == 200){
-                                for(int i =0 ;i<response.getData().size();i++){
-                                    CarsModel carsModel = new CarsModel(response.getData().get(i).getCarSeries(),response.getData().get(i).getId()+"");
+                            if (response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    CarsModel carsModel = new CarsModel(response.getData().get(i).getCarSeries(), response.getData().get(i).getId() + "");
                                     ItemData itemData = new ItemData(0, SettingDelegate.CARS_TYPE, carsModel);
                                     carLists.add(itemData);
                                     baseAdapter.notifyDataSetChanged();

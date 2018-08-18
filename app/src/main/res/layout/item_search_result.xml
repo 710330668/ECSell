@@ -19,6 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
+        android:includeFontPadding="false"
         android:lines="2"
         android:text="雪佛兰2013款 科鲁兹 1.6LSL 天地板 MT"
         android:textColor="#333333"
@@ -32,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:includeFontPadding="false"
         android:text="分享20次 | 浏览140次"
         android:textColor="#999999"
         android:textSize="12sp"
@@ -42,18 +44,21 @@
         android:id="@+id/tv_car_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:includeFontPadding="false"
         android:text="16.8万"
         android:textColor="#FE5F55"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/img_car_poster"
-        app:layout_constraintLeft_toLeftOf="@id/tv_car_title" />
+        app:layout_constraintLeft_toLeftOf="@id/tv_car_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_car_sub_title" />
 
     <TextView
         android:id="@+id/tv_car_deduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:includeFontPadding="false"
         android:text="销售提成2000元"
         android:textColor="#333333"
         android:textSize="12sp"
@@ -65,11 +70,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_car_state"
+        android:includeFontPadding="false"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:text="已上架"
         android:textColor="#FF5745"
-        android:textSize="14sp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@id/tv_car_sub_title"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -80,7 +86,7 @@
         android:text="2018/06/24"
         android:textColor="#999999"
         android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_car_poster"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_car_deduct"
         app:layout_constraintRight_toRightOf="parent" />
 
     <CheckBox

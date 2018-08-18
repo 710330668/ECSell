@@ -2,6 +2,7 @@ package com.example.com.careasysell.options;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -40,6 +41,7 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     private List<AddressModel> carBrands = new ArrayList<>();
     private String token;
     private String optionId;
+    private String paramsString;
 
     @Override
     public int bindLayout() {
@@ -49,6 +51,7 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     @Override
     public void initParams(Bundle params) {
         optionId = getIntent().getStringExtra("optionId");
+        paramsString = params.getString("params");
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
         carBrands = new ArrayList<>();
     }
@@ -72,8 +75,8 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
                     @Override
                     public void accept(CarBrandResponse salesAreaResponse) throws Exception {
                         if (salesAreaResponse.getCode() == 200) {
-                            for(int i =0 ;i < salesAreaResponse.getData().size();i++){
-                                carBrands.add(new AddressModel(salesAreaResponse.getData().get(i).getBrand(),salesAreaResponse.getData().get(i).getId()));
+                            for (int i = 0; i < salesAreaResponse.getData().size(); i++) {
+                                carBrands.add(new AddressModel(salesAreaResponse.getData().get(i).getBrand(), salesAreaResponse.getData().get(i).getId()));
                                 //对集合排序
                                 Collections.sort(carBrands, new Comparator<AddressModel>() {
                                     @Override
@@ -99,11 +102,19 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
 
 
     @Override
-    public void selectBrand(String carBrand,String id) {
+    public void selectBrand(String carBrand, String id) {
         Bundle bundle = new Bundle();
         bundle.putString("carBrand", carBrand);
         bundle.putString("brandId", id);
-        startActivity(ChooseCarsActivity.class, bundle);
+        if (paramsString.equals("filter")) {
+            Intent intent = new Intent();
+            intent.putExtra("carBrand", carBrand);
+            intent.putExtra("brandId", id);
+            this.setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            startActivity(ChooseCarsActivity.class, bundle);
+        }
     }
 
     @Override

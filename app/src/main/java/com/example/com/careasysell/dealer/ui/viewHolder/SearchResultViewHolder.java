@@ -14,6 +14,9 @@ import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Author ： DasonYu
  * Date ： 2018/7/28
@@ -63,7 +66,12 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarTitle.setText(resultModel.getTitle());
         mCarSubTitle.setText(resultModel.getSubTitle());
         mCarState.setText(resultModel.getState());
-        mCarDate.setText(resultModel.getDate());
+        try {
+            mCarDate.setText(formatDate("yyyy/MM/dd", Long.parseLong(resultModel.getDate())));
+        } catch (Exception e) {
+
+        }
+//        mCarDate.setText(resultModel.getDate());
         mCarPrice.setText(resultModel.getPrice());
         mCarDeduct.setText(resultModel.getDeduct());
         mCarPutAway.setChecked(resultModel.isPut());
@@ -72,8 +80,8 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarState.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
         mCarPutAway.setVisibility(resultModel.isOpenPutEntrance() ? View.VISIBLE : View.GONE);
 
-        if(!TextUtils.isEmpty(resultModel.getImageUrl())){
-            ImageLoader.getInstance().displayImage(resultModel.getImageUrl(),mCarPoster);
+        if (!TextUtils.isEmpty(resultModel.getImageUrl())) {
+            ImageLoader.getInstance().displayImage(resultModel.getImageUrl(), mCarPoster);
         }
 
         mCarPutAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -82,5 +90,12 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
                 resultModel.setPut(mCarPutAway.isChecked());
             }
         });
+    }
+
+    private String formatDate(String format, long date) {
+        Date date1 = new Date(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        String format1 = simpleDateFormat.format(date1);
+        return format1;
     }
 }
