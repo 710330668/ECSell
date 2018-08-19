@@ -85,7 +85,7 @@ public class SearchResultFragment extends BaseFragment {
     private int CURRENT_PAGE = 1;
     private int PAGE_SIZE = 6;
     private int count;
-    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey;
+    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
 
 
     @Override
@@ -144,7 +144,7 @@ public class SearchResultFragment extends BaseFragment {
         }
         Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "own",
                 carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
-                startDate, endDate, queryKey)
+                startDate, endDate, queryKey, carStatus, orderType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AllOptionResponse>() {

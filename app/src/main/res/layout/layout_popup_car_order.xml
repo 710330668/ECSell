@@ -26,20 +26,6 @@
         android:layout_height="40dp"
         android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
-        android:text="车源价最低"
-        android:textColor="@drawable/text_color_radio_selector"
-        android:textSize="12sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#F5F5F5" />
-
-    <RadioButton
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:button="@null"
-        android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="车源价最高"
         android:textColor="@drawable/text_color_radio_selector"
         android:textSize="12sp" />
@@ -54,7 +40,7 @@
         android:layout_height="40dp"
         android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
-        android:text="销售提成最低"
+        android:text="车源价最低"
         android:textColor="@drawable/text_color_radio_selector"
         android:textSize="12sp" />
 
@@ -69,6 +55,20 @@
         android:button="@null"
         android:drawableRight="@drawable/drawable_left_order_selector"
         android:text="销售提成最高"
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
+        android:drawableRight="@drawable/drawable_left_order_selector"
+        android:text="销售提成最低"
         android:textColor="@drawable/text_color_radio_selector"
         android:textSize="12sp" />
 

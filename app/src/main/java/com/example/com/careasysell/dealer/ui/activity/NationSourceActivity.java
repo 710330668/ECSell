@@ -126,7 +126,7 @@ public class NationSourceActivity extends BaseActivity {
     private int CURRENT_PAGE = 1;
     private int PAGE_SIZE = 6;
     private int count;
-    private String carType, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey;
+    private String carType, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private String brandId = "";
     private boolean isOpen;
     private String carBrand;
@@ -215,7 +215,7 @@ public class NationSourceActivity extends BaseActivity {
         }
         Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "all",
                 carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
-                startDate, endDate, queryKey)
+                startDate, endDate, queryKey, carStatus, orderType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AllOptionResponse>() {
@@ -604,13 +604,25 @@ public class NationSourceActivity extends BaseActivity {
                         case R.id.rb_car_state:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbState.setText(selectButton.getText());
+                            if (mRbState.getText().toString().equals("全部")) {
+                                carStatus = "";
+                            } else {
+                                carStatus = mRbState.getText().toString();
+                            }
                             selectState = radioGroup.indexOfChild(selectButton);
+                            CURRENT_PAGE = 1;
+                            mSearchResultData.clear();
+                            getAllOptions();
                             mPopupWindow.dismiss();
                             break;
                         case R.id.rb_car_order:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbOrder.setText(selectButton.getText());
                             selectOrder = radioGroup.indexOfChild(selectButton);
+                            orderType = (i == 0 ? 1 : i) + "";
+                            CURRENT_PAGE = 1;
+                            mSearchResultData.clear();
+                            getAllOptions();
                             mPopupWindow.dismiss();
                             break;
                         default:

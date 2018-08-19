@@ -116,7 +116,7 @@ public interface ApiService {
     Observable<AllOptionResponse> getCarList(@Header("token") String token, @Field("pageSize") String pageSize, @Field("page") String page, @Field("scopeType") String scopeType,
                                              @Field("carType") String carType, @Field("brandId") String brandId, @Field("versionId") String versionId, @Field("carYear") String carYear, @Field("outsiteColor") String outsiteColor,
                                              @Field("withinColor") String withinColor, @Field("minCarPrice") String minCarPrice, @Field("maxCarPrice") String maxCarPrice, @Field("startDate") String startDate,
-                                             @Field("endDate") String endDate, @Field("queryKey") String queryKey);
+                                             @Field("endDate") String endDate, @Field("queryKey") String queryKey, @Field("carStatus") String carStatus, @Field("orderType") String orderType);
 
     //全国车源
     @FormUrlEncoded
