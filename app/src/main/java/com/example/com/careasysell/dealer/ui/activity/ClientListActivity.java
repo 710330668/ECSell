@@ -89,8 +89,10 @@ public class ClientListActivity extends BaseActivity {
                     ++CURRENT_PAGE;
                     switch (source){
                         case C.SOURCE_DAY_NEW:
+                            getDayNewClient();
                             break;
                         case C.SOURCE_MONTH_NEW:
+                            getMonthNewClient();
                             break;
                         case C.SOURCE_DAY_SHOP:
                             getDayShopClient();
@@ -118,8 +120,10 @@ public class ClientListActivity extends BaseActivity {
 
         switch (source){
             case C.SOURCE_DAY_NEW:
+                getDayNewClient();
                 break;
             case C.SOURCE_MONTH_NEW:
+                getMonthNewClient();
                 break;
             case C.SOURCE_DAY_SHOP:
                 getDayShopClient();
@@ -128,6 +132,68 @@ public class ClientListActivity extends BaseActivity {
                 getMonthShopClient();
                 break;
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void getMonthNewClient() {
+        if(clientLists.size()>0){
+            clientLists.remove(clientLists.size()-1);
+        }
+        Injection.provideApiService().findMonthCustomerInfo(token,CURRENT_PAGE+"",PAGE_SIZE+"")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ToShopResponse>() {
+                    @Override
+                    public void accept(ToShopResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            List<ToShopResponse.DataBean.ListsBean> lists  = response.getData().getLists();
+                            count = response.getData().getCount();
+                            for(int i =0 ;i<lists.size();i++){
+                                ClientModel clientModel = new ClientModel(lists.get(i).getName(), "预算"+lists.get(i).getMinBudget()+"-"+lists.get(i).getMaxBudget()+"万|"+lists.get(i).getNeedTxt()+"等"+lists.get(i).getCarCount()+"辆车",
+                                        lists.get(i).getProgressDate()+" "+ lists.get(i).getProgressContent(),
+                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatus());
+                                ItemData itemData = new ItemData(0, SettingDelegate.CLIENT_LIST_TYPE, clientModel);
+                                clientLists.add(itemData);
+                            }
+                            ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
+                            clientLists.add(e);
+                        }
+                        mDataAdapter.notifyDataSetChanged();
+                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                    }
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    private void getDayNewClient() {
+        if(clientLists.size()>0){
+            clientLists.remove(clientLists.size()-1);
+        }
+        Injection.provideApiService().findDayCustomerInfo(token,CURRENT_PAGE+"",PAGE_SIZE+"")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ToShopResponse>() {
+                    @Override
+                    public void accept(ToShopResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            List<ToShopResponse.DataBean.ListsBean> lists  = response.getData().getLists();
+                            count = response.getData().getCount();
+                            for(int i =0 ;i<lists.size();i++){
+                                ClientModel clientModel = new ClientModel(lists.get(i).getName(), "预算"+lists.get(i).getMinBudget()+"-"+lists.get(i).getMaxBudget()+"万|"+lists.get(i).getNeedTxt()+"等"+lists.get(i).getCarCount()+"辆车",
+                                        lists.get(i).getProgressDate()+" "+ lists.get(i).getProgressContent(),
+                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatus());
+                                ItemData itemData = new ItemData(0, SettingDelegate.CLIENT_LIST_TYPE, clientModel);
+                                clientLists.add(itemData);
+                            }
+                            ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
+                            clientLists.add(e);
+                        }
+                        mDataAdapter.notifyDataSetChanged();
+                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")

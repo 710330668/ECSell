@@ -227,6 +227,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_clean_cache"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
@@ -246,6 +247,15 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="14dp"
             android:src="@mipmap/more_gray" />
+
+        <TextView
+            android:id="@+id/tv_cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:layout_toLeftOf="@id/iv_clear_cache"
+            android:layout_marginRight="16dp"/>
 
     </RelativeLayout>
 

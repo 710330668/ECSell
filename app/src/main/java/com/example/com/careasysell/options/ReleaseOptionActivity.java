@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.careasysell.view.CustomDatePicker;
+import com.example.com.careasysell.view.KeyMapDailog;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -77,7 +79,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     @BindView(R.id.rl_option_type)
     RecyclerView rlOptionType;
     @BindView(R.id.main_right_drawer_layout)
-    LinearLayout mainRightDrawerLayout;
+    RelativeLayout mainRightDrawerLayout;
     @BindView(R.id.tv_options_type)
     TextView tvOptionsType;
     @BindView(R.id.tv_drawer_title)
@@ -114,6 +116,8 @@ public class ReleaseOptionActivity extends BaseActivity {
     EditText etCommission;
     @BindView(R.id.et_specific_discount)
     EditText etSpecificDiscount;
+    @BindView(R.id.btn_zidingyi)
+    Button btnZidingyi;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
@@ -137,6 +141,11 @@ public class ReleaseOptionActivity extends BaseActivity {
     private ArrayList<String> imgPaths;
     private CustomDatePicker customDatePicker;
     private String now;
+    private int ziDingYiFlag = 0 ;
+    private final int APPEARANCE_COLOR = 1;
+    private final int INTERIOR_COLOR = 2;
+    private final int FORMALITIES = 3;
+    private KeyMapDailog dialog;
 
     @Override
     public int bindLayout() {
@@ -157,7 +166,7 @@ public class ReleaseOptionActivity extends BaseActivity {
         customDatePicker = new CustomDatePicker(this, new CustomDatePicker.ResultHandler() {
             @Override
             public void handle(String time) { // 回调接口，获得选中的时间
-                tvYear.setText(time.substring(0,4));
+                tvYear.setText(time.substring(0, 4));
             }
         }, "1990-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(false); // 不显示时和分
@@ -358,7 +367,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
             R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
-            R.id.lly_local_image, R.id.btn_release_options})
+            R.id.lly_local_image, R.id.btn_release_options,R.id.btn_zidingyi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -367,6 +376,7 @@ public class ReleaseOptionActivity extends BaseActivity {
             case R.id.iv_options_type:
                 openRightLayout();
                 showOptionsTypeList();
+                btnZidingyi.setVisibility(View.GONE);
                 break;
             case R.id.iv_car_model:
                 Intent intent = new Intent(ReleaseOptionActivity.this, ChooseBrandActivity.class);
@@ -376,10 +386,14 @@ public class ReleaseOptionActivity extends BaseActivity {
             case R.id.iv_appearance_color:
                 openRightLayout();
                 showApprenceColorList();
+                btnZidingyi.setVisibility(View.VISIBLE);
+                ziDingYiFlag = 1;
                 break;
             case R.id.iv_interior_color:
                 openRightLayout();
                 showInteriorColorList();
+                btnZidingyi.setVisibility(View.VISIBLE);
+                ziDingYiFlag = 2;
                 break;
             case R.id.iv_area:
                 startActivityForResult(new Intent(ReleaseOptionActivity.this, ChooseAreaActivity.class), REQUEST_AREA);
@@ -387,10 +401,13 @@ public class ReleaseOptionActivity extends BaseActivity {
             case R.id.iv_sales_area:
                 openRightLayout();
                 showSalesAreaList();
+                btnZidingyi.setVisibility(View.GONE);
                 break;
             case R.id.iv_formalities:
                 openRightLayout();
                 showFormalityList();
+                btnZidingyi.setVisibility(View.VISIBLE);
+                ziDingYiFlag = 3;
                 break;
             case R.id.iv_year:
                 customDatePicker.show(now.split(" ")[0]);
@@ -405,6 +422,28 @@ public class ReleaseOptionActivity extends BaseActivity {
                 //发布车源
                 saveCarInfo();
                 break;
+            case R.id.btn_zidingyi:
+                dialog =new KeyMapDailog("自定义", new KeyMapDailog.SendBackListener() {
+                    @Override
+                    public void sendBack(String inputText) {
+                        //TODO  点击发表后业务逻辑
+                        mainDrawerLayout.closeDrawer(mainRightDrawerLayout);
+                        dialog.dismiss();
+                        switch (ziDingYiFlag){
+                            case APPEARANCE_COLOR:
+                                tvApprenceColor.setText(inputText);
+                                break;
+                            case INTERIOR_COLOR:
+                                tvInteriorColor.setText(inputText);
+                                break;
+                            case FORMALITIES:
+                                tvFormalities.setText(inputText);
+                                break;
+                        }
+                    }
+                });
+                dialog.show(getSupportFragmentManager(), "dialog");
+                break;
 
         }
     }
@@ -414,7 +453,7 @@ public class ReleaseOptionActivity extends BaseActivity {
         prefers = "";
         Map<String, RequestBody> params = new HashMap<>();
         List<MultipartBody.Part> parts = new ArrayList<>();
-        for(int i =0;i<imgPaths.size();i++){
+        for (int i = 0; i < imgPaths.size(); i++) {
             File file = new File(imgPaths.get(i));
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);

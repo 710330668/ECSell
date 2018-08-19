@@ -4,6 +4,7 @@ import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
+import com.example.com.careasysell.dealer.ui.model.response.MyReportResponse;
 import com.example.com.careasysell.dealer.ui.model.response.ReportCarResponse;
 import com.example.com.careasysell.dealer.ui.model.response.SalersListResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
@@ -17,6 +18,8 @@ import com.example.com.careasysell.options.model.response.CarDetailResponse;
 import com.example.com.careasysell.options.model.response.CarsModelResponse;
 import com.example.com.careasysell.options.model.response.CarsResponse;
 import com.example.com.careasysell.options.model.response.CommonResponse;
+import com.example.com.careasysell.options.model.response.HotCarCountResponse;
+import com.example.com.careasysell.options.model.response.HotCarListResponse;
 import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
 import com.example.com.careasysell.order.response.OrderDetailResponse;
@@ -132,6 +135,7 @@ public interface ApiService {
     @POST("user/saveXsUserInfo")
     Observable<EasyResponse> saveXsUserInfo(@Header("token") String token, @Part MultipartBody.Part file, @PartMap Map<String, RequestBody> params);
 
+
     //销售人员详情
     @FormUrlEncoded
     @POST("user/getXsUserInfoByUserId")
@@ -199,6 +203,17 @@ public interface ApiService {
     @POST("customer/findDayEnterCustomerInfo")
     Observable<ToShopResponse> findDayEnterCustomerInfo(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
 
+    //本日新增列表
+    @FormUrlEncoded
+    @POST("customer/findDayCustomerInfo")
+    Observable<ToShopResponse> findDayCustomerInfo(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
+
+    //本月新增列表
+    @FormUrlEncoded
+    @POST("customer/findMonthCustomerInfo")
+    Observable<ToShopResponse> findMonthCustomerInfo(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
+
+
     //本日成交列表
     @FormUrlEncoded
     @POST("order/findDayOrderList")
@@ -209,4 +224,30 @@ public interface ApiService {
     @POST("order/findMonthOrderList")
     Observable<ReportCarResponse> findMonthOrderList(@Header("token") String token, @Field("page") String page, @Field("pageSize") String pageSize);
 
+    //统计报表数量列表
+    @FormUrlEncoded
+    @POST("customer/findCustomerCount")
+    Observable<MyReportResponse> findCustomerCount(@Field("token") String token);
+
+    //预定车辆
+    @FormUrlEncoded
+    @POST("sale/reserveSaleCarInfo")
+    Observable<EasyResponse> reserveSaleCarInfo(@Header("token") String token, @Field("saleId") String saleId);
+
+    //取消预定
+    @FormUrlEncoded
+    @POST("sale/unReserveSaleCarInfo")
+    Observable<EasyResponse> unReserveSaleCarInfo(@Header("token") String token, @Field("saleId") String saleId);
+
+
+    //获取车源热度数量
+    @FormUrlEncoded
+    @POST("car/findHotCarCount")
+    Observable<HotCarCountResponse> findHotCarCount(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
+
+    //获取车源热度列表
+    @FormUrlEncoded
+    @POST("car/findHotCarList")
+    Observable<HotCarListResponse> findHotCarList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate,
+                                                  @Field("pageSize") String pageSize, @Field("page") String page);
 }
