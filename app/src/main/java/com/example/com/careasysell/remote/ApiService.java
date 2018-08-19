@@ -3,6 +3,7 @@ package com.example.com.careasysell.remote;
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerStatusResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.dealer.ui.model.response.MyReportResponse;
 import com.example.com.careasysell.dealer.ui.model.response.ReportCarResponse;
@@ -251,11 +252,15 @@ public interface ApiService {
     Observable<HotCarListResponse> findHotCarList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate,
                                                   @Field("pageSize") String pageSize, @Field("page") String page);
 
-//    @Multipart
-//    @POST("sale/batchShelvesCarInfo")
-//    Observable<EasyResponse> batchShelvesCarInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
+    // 上架车辆
     @FormUrlEncoded
     @POST("sale/batchShelvesCarInfo")
     Observable<EasyResponse> batchShelvesCarInfo(@Field("token") String token, @Field("insuranceRebates") String insuranceRebates, @Field("loanRebates") String loanRebates, @Field("carJson") String carJson);
+
+    //
+    @FormUrlEncoded
+    @POST("dict/getCustomerStatusList")
+    Observable<CustomerStatusResponse> getCustomerStatusList(@Field("token") String token);
+
 }

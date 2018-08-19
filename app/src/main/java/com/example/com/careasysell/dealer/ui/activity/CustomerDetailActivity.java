@@ -1,17 +1,21 @@
 package com.example.com.careasysell.dealer.ui.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.CustomerDetailWantModel;
 import com.example.com.careasysell.dealer.ui.model.CustomerFollowModel;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerStatusResponse;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.view.SpaceItemDecoration;
@@ -21,6 +25,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +47,35 @@ public class CustomerDetailActivity extends BaseActivity {
     @BindView(R.id.recycler_follow_list)
     RecyclerView mRecyclerFollow;
 
+    @BindView(R.id.tv_not_arrive_shop)
+    TextView mTvState1;
+    @BindView(R.id.tv_arrive_shop)
+    TextView mTvState2;
+    @BindView(R.id.tv_reserve)
+    TextView mTvState3;
+    @BindView(R.id.tv_deal)
+    TextView mTvState4;
+
+    @BindView(R.id.view_line_1)
+    View mLine1;
+    @BindView(R.id.view_line_2)
+    View mLine2;
+    @BindView(R.id.view_line_3)
+    View mLine3;
+    @BindView(R.id.view_line_4)
+    View mLine4;
+    @BindView(R.id.view_line_5)
+    View mLine5;
+    @BindView(R.id.view_line_6)
+    View mLine6;
+
+
     private static final String TAG = "CustomerDetailActivity";
     private List<ItemData> mData = new ArrayList<>();
     private List<ItemData> mFollowData = new ArrayList<>();
     private String customerId;
     private String token;
+    private CustomerResponse.DataBean.ListsBean customer;
 
     @Override
     public int bindLayout() {
@@ -55,7 +84,8 @@ public class CustomerDetailActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        customerId = params.getString("customerId");
+        customer = (CustomerResponse.DataBean.ListsBean) params.getSerializable("customer");
+        customerId = customer.getCustomerId();
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
@@ -67,6 +97,24 @@ public class CustomerDetailActivity extends BaseActivity {
 
         mRecyclerFollow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerFollow.setNestedScrollingEnabled(false);
+
+        switch (customer.getStatusName()) {
+            case "已成交":
+                mTvState4.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine6.setBackgroundColor(Color.parseColor("#FF5755"));
+            case "预定":
+                mTvState3.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine5.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine4.setBackgroundColor(Color.parseColor("#FF5755"));
+            case "已到店":
+                mTvState2.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine3.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine2.setBackgroundColor(Color.parseColor("#FF5755"));
+            case "未到店":
+                mTvState1.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine1.setBackgroundColor(Color.parseColor("#FF5755"));
+                break;
+        }
     }
 
     @Override

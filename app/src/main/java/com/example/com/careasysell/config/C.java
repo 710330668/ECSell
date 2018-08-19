@@ -65,13 +65,28 @@ public interface C {
 
     String SOURCE_MONTH_SHOP = "month_shop";  //月进店
 
-    @IntDef({INVENTORY_OPTION,INVENTORY_DEALER, INVENTORY_MARKET})
-    public @interface  INVENTORY {}
+    @IntDef({INVENTORY_OPTION, INVENTORY_DEALER, INVENTORY_MARKET})
+    public @interface INVENTORY {
+    }
 
     String USER_DB = "user_db";
 
     String USER_TOKEN = "token";
 
     String USER_TYPE = "user_type";
+
+//    	"code":200,	"data":[
+//    {
+//        "dataCode":"NO_STORE",			"dataName":"未到店"
+//    },		{
+//        "dataCode":"YES_STORE",			"dataName":"已到店"
+//    },		{
+//        "dataCode":"RESERVE",			"dataName":"已预订"
+//    },		{
+//        "dataCode":"SUCCESS",			"dataName":"已成交"
+//    },		{
+//        "dataCode":"FAIL",			"dataName":"战败"
+//    }
+//    	],	"msg":"操作成功"
 
 }

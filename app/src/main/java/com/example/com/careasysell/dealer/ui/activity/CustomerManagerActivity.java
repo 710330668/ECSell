@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.CustomerModel;
+import com.example.com.careasysell.dealer.ui.model.StatusModel;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
@@ -64,6 +65,9 @@ public class CustomerManagerActivity extends BaseActivity {
     RadioButton mRbTime;
     @BindView(R.id.drawer_root)
     DrawerLayout mDrawerLayout;
+
+    @BindView(R.id.et_search)
+    EditText mEtSearch;
 
     @BindView(R.id.tag_create_time)
     TagFlowLayout mCreateTimeTag;
@@ -202,7 +206,7 @@ public class CustomerManagerActivity extends BaseActivity {
             public void onClick(View v, Object data) {
                 if (data instanceof CustomerResponse.DataBean.ListsBean) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("customerId", ((CustomerResponse.DataBean.ListsBean) data).getCustomerId());
+                    bundle.putSerializable("customer", ((CustomerResponse.DataBean.ListsBean) data));
                     startActivity(CustomerDetailActivity.class, bundle);
                 }
             }
@@ -265,20 +269,20 @@ public class CustomerManagerActivity extends BaseActivity {
         switch (id) {
             case R.id.rb_customer_state:
                 convertView = (TagFlowLayout) LayoutInflater.from(this).inflate(R.layout.layout_popup_customer_state, null);
-                final List<String> dataSize = new ArrayList<>();
-                dataSize.add("全部");
-                dataSize.add("未到店");
-                dataSize.add("已到店");
-                dataSize.add("已预定");
-                dataSize.add("已成交");
-                dataSize.add("战败");
+                final List<StatusModel> dataSize = new ArrayList<>();
+                dataSize.add(new StatusModel("全部", ""));
+                dataSize.add(new StatusModel("未到店", "NO_STORE"));
+                dataSize.add(new StatusModel("已到店", "YES_STORE"));
+                dataSize.add(new StatusModel("已预订", "RESERVE"));
+                dataSize.add(new StatusModel("已成交", "SUCCESS"));
+                dataSize.add(new StatusModel("战败", "FAIL"));
                 final TagFlowLayout finalConvertView = convertView;
-                TagAdapter<String> stateAdapter = new TagAdapter<String>(dataSize) {
+                TagAdapter<StatusModel> stateAdapter = new TagAdapter<StatusModel>(dataSize) {
                     @Override
-                    public View getView(FlowLayout parent, int position, String o) {
+                    public View getView(FlowLayout parent, int position, StatusModel o) {
                         TextView textView = (TextView) getLayoutInflater().inflate(R.layout.tv_tag_customer_state, finalConvertView, false);
 //                        textView.getLayoutParams().width = getWindowManager().getDefaultDisplay().getWidth() / 5;
-                        textView.setText(o);
+                        textView.setText(o.getStatusName());
                         return textView;
                     }
                 };
@@ -289,15 +293,12 @@ public class CustomerManagerActivity extends BaseActivity {
                 convertView.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
                     @Override
                     public boolean onTagClick(View view, int position, FlowLayout parent) {
-                        mRbState.setText(dataSize.get(position));
+                        mRbState.setText(dataSize.get(position).getStatusName());
                         selectState = position;
                         mPopupWindow.dismiss();
                         // TODO: 2018/8/11 刷新数据
-                        if (position == 0) {
-                            status = "";
-                        } else {
-                            status = dataSize.get(position);
-                        }
+                        status = dataSize.get(position).getStatusCode();
+//                        Log.e(TAG, "onTagClick: " + status);
                         initRecycler(TAG_FILTER);
                         return true;
                     }

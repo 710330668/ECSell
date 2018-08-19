@@ -1,8 +1,9 @@
 package com.example.com.careasysell.dealer.ui.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CustomerResponse {
+public class CustomerResponse implements Serializable {
 
     /**
      * code : 200
@@ -38,7 +39,7 @@ public class CustomerResponse {
         this.msg = msg;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * count : 14
          * lists : [{"brandName":"AC Schnitzer","carCount":1,"createDate":1534344541000,"customerId":"2372c8caa9bc4ad885360bf007d721f2","maxBudget":12,"minBudget":2,"name":"测试到店客户","progressContent":"新建客户","progressDate":1534344541000,"statusName":"已到店","userName":"经销商"}]
@@ -63,7 +64,7 @@ public class CustomerResponse {
             this.lists = lists;
         }
 
-        public static class ListsBean {
+        public static class ListsBean implements Serializable {
             /**
              * brandName : AC Schnitzer
              * carCount : 1
