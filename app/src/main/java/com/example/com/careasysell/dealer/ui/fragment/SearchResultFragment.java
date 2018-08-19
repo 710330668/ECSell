@@ -302,8 +302,10 @@ public class SearchResultFragment extends BaseFragment {
     public void setShareOpen() {
         boolean openPutEntrance = false;
         for (ItemData bean : mSearchResultData) {
-            ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
-            openPutEntrance = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
+            if (bean.getData() instanceof SearchResultModel) {
+                ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
+                openPutEntrance = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
+            }
         }
         mLLBottom.setVisibility(openPutEntrance ? View.VISIBLE : View.GONE);
         mDataAdapter.notifyDataSetChanged();
