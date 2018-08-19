@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -116,6 +118,7 @@ public class NationSourceActivity extends BaseActivity {
     PopupWindow mPopupWindow;
 
     private List<ItemData> mSearchResultData = new ArrayList<>();
+    private ArrayList<SearchResultModel> mPutAwayData = new ArrayList<>();
 
     private static final String TAG = "NationSourceActivity";
     private final int REQUEST_BRAND = 0;
@@ -226,11 +229,12 @@ public class NationSourceActivity extends BaseActivity {
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
+                                AllOptionResponse.DataBean.ListsBean listsBean = response.getData().getLists().get(i);
                                 data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
+                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" + response.getData().getLists().get(i).getBrowseNum() + "次");
                                 data.setTitle(response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
@@ -498,7 +502,14 @@ public class NationSourceActivity extends BaseActivity {
                     case C.INVENTORY_MARKET:
                         break;
                     case C.INVENTORY_DEALER:
-                        startActivity(PutAwayDetailActivity.class);
+                        mPutAwayData.clear();
+                        for (ItemData bean : mSearchResultData) {
+                            if ((bean.getData() instanceof SearchResultModel) && ((SearchResultModel) bean.getData()).isPut()) {
+                                mPutAwayData.add((SearchResultModel) bean.getData());
+                            }
+                        }
+                        bundle.putParcelableArrayList("data", mPutAwayData);
+                        startActivity(PutAwayDetailActivity.class, bundle);
                         break;
                     default:
                 }
@@ -604,10 +615,19 @@ public class NationSourceActivity extends BaseActivity {
                         case R.id.rb_car_state:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbState.setText(selectButton.getText());
-                            if (mRbState.getText().toString().equals("全部")) {
-                                carStatus = "";
-                            } else {
-                                carStatus = mRbState.getText().toString();
+                            switch (mRbState.getText().toString()) {
+                                case "全部":
+                                    carStatus = "";
+                                    break;
+                                case "在售":
+                                    carStatus = "IN_SALE";
+                                    break;
+                                case "已上架":
+                                    carStatus = "SHELVES";
+                                    break;
+                                case "已预定":
+                                    carStatus = "RESERVE";
+                                    break;
                             }
                             selectState = radioGroup.indexOfChild(selectButton);
                             CURRENT_PAGE = 1;
@@ -619,7 +639,7 @@ public class NationSourceActivity extends BaseActivity {
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbOrder.setText(selectButton.getText());
                             selectOrder = radioGroup.indexOfChild(selectButton);
-                            orderType = (i == 0 ? 1 : i) + "";
+                            orderType = (i % 5 == 1 ? "" : i % 5 - 1) + "";
                             CURRENT_PAGE = 1;
                             mSearchResultData.clear();
                             getAllOptions();

@@ -229,7 +229,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvRemark.setText(response.getData().getRemark());
                             tvCustomerName.setText(response.getData().getCustomerName());
                             tvSalerName.setText(response.getData().getUserName());
-                            tvDealValence.setText(response.getData().getOrderPrice()+"万");
+                            tvDealValence.setText(response.getData().getOrderPrice() + "万");
                             urls = new String[response.getData().getImgs().size()];
                             for (int i = 0; i < response.getData().getImgs().size(); i++) {
                                 urls[i] = response.getData().getImgs().get(i).getImgThumUrl();
@@ -298,6 +298,9 @@ public class CarDetailActivity extends BaseActivity {
     }
 
     private void addDiscounts(List<String> discounts) {
+        if (discounts == null) {
+            return;
+        }
         for (int i = 0; i < discounts.size(); i++) {
             final Button button = new Button(CarDetailActivity.this);
             button.setText(discounts.get(i));
@@ -371,14 +374,14 @@ public class CarDetailActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void unReserveSaleCarInfo() {
-        Injection.provideApiService().unReserveSaleCarInfo(token,saleId)
+        Injection.provideApiService().unReserveSaleCarInfo(token, saleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<EasyResponse>() {
                     @Override
                     public void accept(EasyResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
 
                         }
 
@@ -389,14 +392,14 @@ public class CarDetailActivity extends BaseActivity {
     //预定车辆
     @SuppressLint("CheckResult")
     private void reservate() {
-        Injection.provideApiService().reserveSaleCarInfo(token,saleId)
+        Injection.provideApiService().reserveSaleCarInfo(token, saleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<EasyResponse>() {
                     @Override
                     public void accept(EasyResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
 
                         }
 

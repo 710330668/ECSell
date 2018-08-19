@@ -1,10 +1,15 @@
 package com.example.com.common.adapter;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by 71033 on 2017/10/17.
  */
 
-public class ItemData {
+public class ItemData implements Parcelable {
 
     public int tag;
 
@@ -13,6 +18,24 @@ public class ItemData {
     public String itemDesc;
 
     public Object data;
+
+    protected ItemData(Parcel in) {
+        tag = in.readInt();
+        holderType = in.readInt();
+        itemDesc = in.readString();
+    }
+
+    public static final Creator<ItemData> CREATOR = new Creator<ItemData>() {
+        @Override
+        public ItemData createFromParcel(Parcel in) {
+            return new ItemData(in);
+        }
+
+        @Override
+        public ItemData[] newArray(int size) {
+            return new ItemData[size];
+        }
+    };
 
     public int getTag() {
         return tag;
@@ -61,5 +84,17 @@ public class ItemData {
         this.tag = tag;
         this.holderType = holderType;
         this.data = data;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(tag);
+        dest.writeInt(holderType);
+        dest.writeString(itemDesc);
     }
 }

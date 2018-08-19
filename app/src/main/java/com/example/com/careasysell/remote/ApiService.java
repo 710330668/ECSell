@@ -250,4 +250,12 @@ public interface ApiService {
     @POST("car/findHotCarList")
     Observable<HotCarListResponse> findHotCarList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate,
                                                   @Field("pageSize") String pageSize, @Field("page") String page);
+
+//    @Multipart
+//    @POST("sale/batchShelvesCarInfo")
+//    Observable<EasyResponse> batchShelvesCarInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
+    @FormUrlEncoded
+    @POST("sale/batchShelvesCarInfo")
+    Observable<EasyResponse> batchShelvesCarInfo(@Field("token") String token, @Field("insuranceRebates") String insuranceRebates, @Field("loanRebates") String loanRebates, @Field("carJson") String carJson);
 }

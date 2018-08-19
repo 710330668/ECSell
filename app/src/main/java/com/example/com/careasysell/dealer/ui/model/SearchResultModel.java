@@ -1,12 +1,15 @@
 package com.example.com.careasysell.dealer.ui.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Author ： DasonYu
  * Date ： 2018/7/28
  * Email Address : 15764240573@163.com
  */
 
-public class SearchResultModel {
+public class SearchResultModel implements Parcelable {
 
     //    图片
     private String imageUrl;
@@ -28,6 +31,34 @@ public class SearchResultModel {
     private String id;
 
     private boolean openPutEntrance;
+
+    public SearchResultModel() {
+    }
+
+    protected SearchResultModel(Parcel in) {
+        imageUrl = in.readString();
+        title = in.readString();
+        subTitle = in.readString();
+        price = in.readString();
+        deduct = in.readString();
+        state = in.readString();
+        date = in.readString();
+        isPut = in.readByte() != 0;
+        id = in.readString();
+        openPutEntrance = in.readByte() != 0;
+    }
+
+    public static final Creator<SearchResultModel> CREATOR = new Creator<SearchResultModel>() {
+        @Override
+        public SearchResultModel createFromParcel(Parcel in) {
+            return new SearchResultModel(in);
+        }
+
+        @Override
+        public SearchResultModel[] newArray(int size) {
+            return new SearchResultModel[size];
+        }
+    };
 
     public boolean isOpenPutEntrance() {
         return openPutEntrance;
@@ -107,5 +138,24 @@ public class SearchResultModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(imageUrl);
+        dest.writeString(title);
+        dest.writeString(subTitle);
+        dest.writeString(price);
+        dest.writeString(deduct);
+        dest.writeString(state);
+        dest.writeString(date);
+        dest.writeByte((byte) (isPut ? 1 : 0));
+        dest.writeString(id);
+        dest.writeByte((byte) (openPutEntrance ? 1 : 0));
     }
 }

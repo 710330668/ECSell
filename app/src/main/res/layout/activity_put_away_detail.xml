@@ -43,7 +43,7 @@
         android:layout_below="@+id/layout_bar"
         android:background="#F5F5F5" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_bar"
@@ -140,6 +140,7 @@
                 android:layout_width="94dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="14dp"
+
                 android:background="@drawable/bg_edittext"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_insurance_rebates"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -188,6 +189,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#F5F5F5"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintTop_toBottomOf="@+id/put_away_car_title" />
 
             <FrameLayout
@@ -211,6 +213,6 @@
 
 
         </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>

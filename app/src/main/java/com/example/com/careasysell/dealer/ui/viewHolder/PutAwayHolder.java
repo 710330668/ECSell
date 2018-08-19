@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.dealer.ui.model.PutCarModel;
+import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
 
@@ -46,9 +47,9 @@ public class PutAwayHolder extends BaseViewHolder<ItemData> {
 
     @Override
     public void onBindViewHolder(ItemData data) {
-        PutCarModel data1 = (PutCarModel) data.getData();
+        SearchResultModel data1 = (SearchResultModel) data.getData();
         mCarTitle.setText(data1.getTitle());
         mCarPrice.setText(data1.getPrice());
-        mCarPriceSuggestion.setText(data1.getPriceSuggestion());
+//        mCarPriceSuggestion.setText(data1.getPriceSuggestion());
     }
 }
