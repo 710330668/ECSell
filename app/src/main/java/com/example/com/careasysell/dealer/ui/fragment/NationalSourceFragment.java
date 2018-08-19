@@ -79,6 +79,7 @@ public class NationalSourceFragment extends BaseFragment {
     PopupWindow mPopupWindow;
 
     private List<ItemData> mSearchResultData = new ArrayList<>();
+    private ArrayList<SearchResultModel> dataList = new ArrayList<>();
 
     private String TAG_LOAD_MORE = "tag_load_more";
     private String TAG_FILTER = "tag_filter";
@@ -90,7 +91,7 @@ public class NationalSourceFragment extends BaseFragment {
     private int CURRENT_PAGE = 1;
     private int PAGE_SIZE = 6;
     private int count;
-    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey,carStatus,orderType;
+    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
 
     @Override
     protected int setLayoutResouceId() {
@@ -107,7 +108,7 @@ public class NationalSourceFragment extends BaseFragment {
                 mDataAdapter.setLoadState(mDataAdapter.LOADING);
                 if (mSearchResultData.size() < count) {
                     ++CURRENT_PAGE;
-                    initRecycler(TAG_LOAD_MORE);
+                    initRecycler();
                 } else {
                     mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
                 }
@@ -119,17 +120,6 @@ public class NationalSourceFragment extends BaseFragment {
     public void initData(Bundle arguments) {
         INVENTORY = arguments.getInt(C.TAG_PAGE_MAIN);
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
-//        for (int i = 0; i < 10; i++) {
-//            SearchResultModel data = new SearchResultModel();
-//            data.setDate("2018/06/24");
-//            data.setDeduct("销售提成2000");
-//            data.setPrice("16.8万");
-//            data.setState("已上架");
-//            data.setSubTitle("分享20次|浏览140次");
-//            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
-//            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
-//            mSearchResultData.add(e);
-//        }
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
@@ -142,7 +132,7 @@ public class NationalSourceFragment extends BaseFragment {
             }
         });
         mSearchResult.setAdapter(mDataAdapter);
-        initRecycler(TAG_LOAD_MORE);
+        initRecycler();
         switch (INVENTORY) {
             case C.INVENTORY_MARKET:
                 //销售 分享
@@ -209,20 +199,29 @@ public class NationalSourceFragment extends BaseFragment {
 //                上架车辆
             case R.id.tv_put_away_car:
                 for (ItemData bean : mSearchResultData) {
-                    ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
+                    if (bean.getData() instanceof SearchResultModel) {
+                        ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
 //                    mTvPutAway.setText(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? "取消" : "上架车辆");
-                    mLinearPut.setVisibility(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? View.VISIBLE : View.GONE);
+                        mLinearPut.setVisibility(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? View.VISIBLE : View.GONE);
+                    }
                 }
                 mDataAdapter.notifyDataSetChanged();
                 break;
             case R.id.ll_put_away:
+                for (ItemData bean : mSearchResultData) {
+                    if (bean.getData() instanceof SearchResultModel && ((SearchResultModel) bean.getData()).isPut()) {
+                        dataList.add((SearchResultModel) bean.getData());
+                    }
+                }
                 switch (INVENTORY) {
                     case C.INVENTORY_MARKET:
                         //todo销售 分享
                         break;
                     case C.INVENTORY_DEALER:
 //                经销商  上架
-                        startActivity(PutAwayDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("data", dataList);
+                        startActivity(PutAwayDetailActivity.class, bundle);
                         break;
                     default:
                 }
@@ -259,12 +258,34 @@ public class NationalSourceFragment extends BaseFragment {
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbState.setText(selectButton.getText());
                             selectState = radioGroup.indexOfChild(selectButton);
+                            switch (mRbState.getText().toString()) {
+                                case "全部":
+                                    carStatus = "";
+                                    break;
+                                case "在售":
+                                    carStatus = "IN_SALE";
+                                    break;
+                                case "已上架":
+                                    carStatus = "SHELVES";
+                                    break;
+                                case "已预定":
+                                    carStatus = "RESERVE";
+                                    break;
+                            }
+                            selectState = radioGroup.indexOfChild(selectButton);
+                            CURRENT_PAGE = 1;
+                            mSearchResultData.clear();
+                            initRecycler();
                             mPopupWindow.dismiss();
                             break;
                         case R.id.rb_car_order:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbOrder.setText(selectButton.getText());
                             selectOrder = radioGroup.indexOfChild(selectButton);
+                            orderType = (i % 5 == 1 ? "" : i % 5 - 1) + "";
+                            CURRENT_PAGE = 1;
+                            mSearchResultData.clear();
+                            initRecycler();
                             mPopupWindow.dismiss();
                             break;
                         default:
@@ -280,13 +301,13 @@ public class NationalSourceFragment extends BaseFragment {
     }
 
     @SuppressLint("CheckResult")
-    private void initRecycler(String tag) {
+    private void initRecycler() {
         if (mSearchResultData.size() > 0) {
             mSearchResultData.remove(mSearchResultData.size() - 1);
         }
         Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "own",
                 carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
-                startDate, endDate, queryKey,carStatus,orderType)
+                startDate, endDate, queryKey, carStatus, orderType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AllOptionResponse>() {
@@ -298,10 +319,10 @@ public class NationalSourceFragment extends BaseFragment {
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
                                 data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
-                                data.setDeduct(response.getData().getLists().get(i).getSaleCommission() + "");
+                                data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
+                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" + response.getData().getLists().get(i).getBrowseNum() + "次");
                                 data.setTitle(response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
@@ -315,5 +336,21 @@ public class NationalSourceFragment extends BaseFragment {
                         mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
                     }
                 });
+    }
+
+
+    public void filterRecycler(String carType, String brandId, String versionId, String carYear, String outsiteColor, String withinColor, String minCarPrice, String maxCarPrice, String startDate, String endDate, String queryKey) {
+        this.carType = carType;
+        this.brandId = brandId;
+        this.versionId = versionId;
+        this.carYear = carYear;
+        this.outsiteColor = outsiteColor;
+        this.withinColor = withinColor;
+        this.minCarPrice = minCarPrice;
+        this.maxCarPrice = maxCarPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.queryKey = queryKey;
+        initRecycler();
     }
 }

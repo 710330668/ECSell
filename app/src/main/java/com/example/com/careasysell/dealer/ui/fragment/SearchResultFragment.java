@@ -71,6 +71,9 @@ public class SearchResultFragment extends BaseFragment {
     TextView mTvBottom;
     Unbinder unbinder;
 
+    private String TAG_LOAD_MORE = "tag_load_more";
+    private String TAG_FILTER = "tag_filter";
+
     private int selectState = 0;
     private int selectOrder = 0;
 
@@ -254,12 +257,34 @@ public class SearchResultFragment extends BaseFragment {
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbState.setText(selectButton.getText());
                             selectState = radioGroup.indexOfChild(selectButton);
+                            switch (mRbState.getText().toString()) {
+                                case "全部":
+                                    carStatus = "";
+                                    break;
+                                case "在售":
+                                    carStatus = "IN_SALE";
+                                    break;
+                                case "已上架":
+                                    carStatus = "SHELVES";
+                                    break;
+                                case "已预定":
+                                    carStatus = "RESERVE";
+                                    break;
+                            }
+                            selectState = radioGroup.indexOfChild(selectButton);
+                            CURRENT_PAGE = 1;
+                            mSearchResultData.clear();
+                            getOwnOption();
                             mPopupWindow.dismiss();
                             break;
                         case R.id.rb_car_order:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             mRbOrder.setText(selectButton.getText());
                             selectOrder = radioGroup.indexOfChild(selectButton);
+                            orderType = (i % 5 == 1 ? "" : i % 5 - 1) + "";
+                            CURRENT_PAGE = 1;
+                            mSearchResultData.clear();
+                            getOwnOption();
                             mPopupWindow.dismiss();
                             break;
                         default:
@@ -283,6 +308,22 @@ public class SearchResultFragment extends BaseFragment {
         mLLBottom.setVisibility(openPutEntrance ? View.VISIBLE : View.GONE);
         mDataAdapter.notifyDataSetChanged();
 
+    }
+
+
+    public void filterRecycler(String carType, String brandId, String versionId, String carYear, String outsiteColor, String withinColor, String minCarPrice, String maxCarPrice, String startDate, String endDate, String queryKey) {
+        this.carType = carType;
+        this.brandId = brandId;
+        this.versionId = versionId;
+        this.carYear = carYear;
+        this.outsiteColor = outsiteColor;
+        this.withinColor = withinColor;
+        this.minCarPrice = minCarPrice;
+        this.maxCarPrice = maxCarPrice;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.queryKey = queryKey;
+        getOwnOption();
     }
 
 }

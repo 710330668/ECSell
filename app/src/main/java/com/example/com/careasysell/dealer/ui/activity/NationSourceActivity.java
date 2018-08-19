@@ -180,6 +180,7 @@ public class NationSourceActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                queryKey = mEditSearch.getText().toString();
             }
 
             @Override
@@ -381,7 +382,7 @@ public class NationSourceActivity extends BaseActivity {
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 ColorFilterModel colorFilterModel = dataColorInside.get(position);
                 if (!TextUtils.isEmpty(colorFilterModel.getColor())) {
-                    withinColor = colorFilterModel.getColor();
+                    withinColor = colorFilterModel.getText();
                 } else {
                     withinColor = "";
                 }
