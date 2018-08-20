@@ -136,7 +136,7 @@ public class CustomerDetailActivity extends BaseActivity {
                     mTvWechat.setText(s.getData().getWeBcat());
                     mTvPhone.setText(s.getData().getPhone());
                     mTvName.setText(s.getData().getName());
-                    mTvSex.setText(s.getData().getSex() == 0 ? "女" : "男");
+                    mTvSex.setText(s.getData().getSex() == 0 ? "先生" : "女士");
                     mTvOfferName.setText(s.getData().getUserName());
                     mTvPrice.setText(s.getData().getMinBudget() + "-" + s.getData().getMaxBudget() + "万");
                     List<String> lists = s.getData().getLists();
