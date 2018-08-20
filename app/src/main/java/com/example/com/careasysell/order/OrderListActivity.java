@@ -2,6 +2,7 @@ package com.example.com.careasysell.order;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,6 +65,9 @@ public class OrderListActivity extends BaseActivity {
     private   int CURRENT_PAGE = 1;
     private   int PAGE_SIZE = 6;
     private int count ;
+    private String orderType;
+    private static final int REQUEST_CLIENT = 1;
+    private String xsUserId;
 
 
     PopupWindow mPopupWindow;
@@ -125,8 +129,8 @@ public class OrderListActivity extends BaseActivity {
         if(mSearchResultData.size()>0){
             mSearchResultData.remove(mSearchResultData.size()-1);
         }
-        Injection.provideApiService().findMyOrderList(token,CURRENT_PAGE+"",PAGE_SIZE+"","",
-                "","","","","","").
+        Injection.provideApiService().findMyOrderList(token,CURRENT_PAGE+"",PAGE_SIZE+"",xsUserId,
+                "","","","","",orderType).
                 subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<OrderListResponse>() {
@@ -174,11 +178,25 @@ public class OrderListActivity extends BaseActivity {
                 showPopupWindow(R.id.rb_deal_valence);
                 break;
             case R.id.rb_sales:
-                startActivity(SalerManagerActivity.class);
+                Intent intent = new Intent(OrderListActivity.this,SalerManagerActivity.class);
+                startActivityForResult(intent,REQUEST_CLIENT);
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == REQUEST_CLIENT){
+                rbSales.setText(data.getStringExtra("saleName"));
+                xsUserId = data.getStringExtra("xsUserId");
+                mSearchResultData.clear();
+                CURRENT_PAGE = 1;
+                getOrderList();
+            }
+        }
+    }
 
     public void showPopupWindow(final int viewId) {
         RadioGroup convertView = null;
@@ -212,6 +230,10 @@ public class OrderListActivity extends BaseActivity {
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             rbDefaultSort.setText(selectButton.getText());
                             selectState = radioGroup.indexOfChild(selectButton);
+                            orderType = (i % 5 == 1 ? "" : i % 5 - 1) + "";
+                            mSearchResultData.clear();
+                            CURRENT_PAGE = 1;
+                            getOrderList();
                             mPopupWindow.dismiss();
                             break;
                         case R.id.rb_sale_time:

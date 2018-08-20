@@ -651,4 +651,10 @@ public class CustomDatePicker {
         return convertSuccess;
     }
 
+
+    public void showMonth(){
+        month_pv.setVisibility(View.VISIBLE);
+        day_pv.setVisibility(View.VISIBLE);
+    }
+
 }

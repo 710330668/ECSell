@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -52,6 +55,7 @@ public class UserManagerActivity extends BaseActivity {
     private   int CURRENT_PAGE = 1;
     private   int PAGE_SIZE = 6;
     private BaseAdapter baseAdapter;
+    private int count;
 
     @Override
     public int bindLayout() {
@@ -65,15 +69,20 @@ public class UserManagerActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        etQueryKey.addTextChangedListener(new EditChangedListener());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlUserManager.setLayoutManager(layoutManager);
         rlUserManager.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         rlUserManager.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore() {
-                ++CURRENT_PAGE;
                 baseAdapter.setLoadState(baseAdapter.LOADING);
-                getUserList();
+                if(userLists.size() < count){
+                    ++CURRENT_PAGE;
+                    getUserList();
+                }else{
+                    baseAdapter.setLoadState(baseAdapter.LOADING_END);
+                }
             }
         });
     }
@@ -100,6 +109,9 @@ public class UserManagerActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getUserList() {
+        if(userLists.size()>0){
+            userLists.remove(userLists.size()-1);
+        }
         Injection.provideApiService().getClientList(token,etQueryKey.getText().toString(), PAGE_SIZE+"",CURRENT_PAGE+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,6 +120,7 @@ public class UserManagerActivity extends BaseActivity {
                     public void accept(XsUserResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if(response.getCode() == 200){
+                            count = response.getData().getCount();
                             List<XsUserResponse.DataBean.UserModelsBean> beans = response.getData().getUserModels();
                             if(beans.size() == 0){
                                 baseAdapter.setLoadState(baseAdapter.LOADING_END);
@@ -137,7 +150,29 @@ public class UserManagerActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_back, R.id.tv_add_saler})
+    class EditChangedListener implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            Log.d("TAG", "beforeTextChanged--------------->");
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            Log.d("TAG", "onTextChanged--------------->");
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Log.d("TAG", "afterTextChanged--------------->");
+            CURRENT_PAGE = 1;
+            userLists.clear();
+            getUserList();
+        }
+    };
+
+
+        @OnClick({R.id.iv_back, R.id.tv_add_saler})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:

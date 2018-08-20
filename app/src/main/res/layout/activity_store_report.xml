@@ -135,6 +135,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_sale_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -179,6 +180,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_money_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"

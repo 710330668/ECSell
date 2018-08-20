@@ -8,6 +8,15 @@ public class VehicleHeatModel {
     private String shareTime;
     private String browsTime;
     private int carRankings;
+    private String carUrl;
+
+    public String getCarUrl() {
+        return carUrl;
+    }
+
+    public void setCarUrl(String carUrl) {
+        this.carUrl = carUrl;
+    }
 
     public int getCarRankings() {
         return carRankings;

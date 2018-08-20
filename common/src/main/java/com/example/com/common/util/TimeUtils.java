@@ -67,6 +67,12 @@ public class TimeUtils {
      */
     public static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
+
+    public static final String DEFAULT_PATTERN1 = "yyyy-MM-dd";
+
+    public static SimpleDateFormat dateFormater = new SimpleDateFormat(
+            "yyyy-MM-dd");
+
     /**
      * 将时间戳转为时间字符串
      * <p>格式为yyyy-MM-dd HH:mm:ss</p>
@@ -76,6 +82,11 @@ public class TimeUtils {
      */
     public static String millis2String(long millis) {
         return new SimpleDateFormat(DEFAULT_PATTERN, Locale.getDefault()).format(new Date(millis));
+    }
+
+
+    public static String millis3String(long millis) {
+        return new SimpleDateFormat(DEFAULT_PATTERN1, Locale.getDefault()).format(new Date(millis));
     }
 
     /**
@@ -1058,6 +1069,21 @@ public class TimeUtils {
         long  l = Long.valueOf(timeStamp);
         timeString = sdf.format(new Date(l));//单位秒
         return timeString;
+    }
+
+
+    public static String getTimeOfYearStart(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR, 1);
+
+        return dateFormater.format(cal.getTime());
+    }
+
+    public static String getTimeOfYearEnd(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR,
+                cal.getActualMaximum(Calendar.DAY_OF_YEAR));
+        return dateFormater.format(cal.getTime());
     }
 
 

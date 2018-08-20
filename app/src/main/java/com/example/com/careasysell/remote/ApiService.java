@@ -6,12 +6,15 @@ import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerStatusResponse;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.dealer.ui.model.response.MyReportResponse;
+import com.example.com.careasysell.dealer.ui.model.response.MySaleCountResponse;
+import com.example.com.careasysell.dealer.ui.model.response.NearDaySaleResponse;
 import com.example.com.careasysell.dealer.ui.model.response.ReportCarResponse;
 import com.example.com.careasysell.dealer.ui.model.response.SalersListResponse;
 import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.ToShopResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserDetailResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserResponse;
+import com.example.com.careasysell.dealer.ui.model.response.XsUserStatResponse;
 import com.example.com.careasysell.main.login.LoginResponse;
 import com.example.com.careasysell.options.model.response.AreaProvinceResponse;
 import com.example.com.careasysell.options.model.response.CarBrandResponse;
@@ -25,6 +28,7 @@ import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
 import com.example.com.careasysell.order.response.OrderDetailResponse;
 import com.example.com.careasysell.order.response.OrderListResponse;
+import com.example.com.careasysell.usercenter.model.DealerShipResponse;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
 
 import java.util.List;
@@ -252,6 +256,20 @@ public interface ApiService {
     Observable<HotCarListResponse> findHotCarList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate,
                                                   @Field("pageSize") String pageSize, @Field("page") String page);
 
+    //删除销售
+    @FormUrlEncoded
+    @POST("user/updateXsUserInfo")
+    Observable<EasyResponse> updateXsUserInfo(@Field("token") String token,@Field("userId") String userId);
+
+
+    //车行信息
+    @FormUrlEncoded
+    @POST("company/findMyCompanyInfo")
+    Observable<DealerShipResponse> findMyCompanyInfo(@Field("token") String token);
+
+//    @Multipart
+//    @POST("sale/batchShelvesCarInfo")
+//    Observable<EasyResponse> batchShelvesCarInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     // 上架车辆
     @FormUrlEncoded
@@ -263,4 +281,21 @@ public interface ApiService {
     @POST("dict/getCustomerStatusList")
     Observable<CustomerStatusResponse> getCustomerStatusList(@Field("token") String token);
 
+
+
+    @FormUrlEncoded
+    @POST("user/findXsUserStatList")
+    Observable<XsUserStatResponse> findXsUserStatList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
+
+
+    //获得30天销售量
+    @FormUrlEncoded
+    @POST("order/getNearDaySale")
+    Observable<NearDaySaleResponse> getNearDaySale(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
+
+
+    //获得今日销售量
+    @FormUrlEncoded
+    @POST("order/getMySaleCount")
+    Observable<MySaleCountResponse> getMySaleCount(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
 }
