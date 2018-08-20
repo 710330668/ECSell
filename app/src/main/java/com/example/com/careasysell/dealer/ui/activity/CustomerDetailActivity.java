@@ -7,15 +7,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.CustomerDetailWantModel;
 import com.example.com.careasysell.dealer.ui.model.CustomerFollowModel;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerDetailResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
-import com.example.com.careasysell.dealer.ui.model.response.CustomerStatusResponse;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.view.SpaceItemDecoration;
@@ -23,10 +24,10 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
-import com.google.gson.Gson;
 
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,8 +69,25 @@ public class CustomerDetailActivity extends BaseActivity {
     View mLine5;
     @BindView(R.id.view_line_6)
     View mLine6;
+    @BindView(R.id.tv_car_price)
+    TextView mTvPrice;
+    @BindView(R.id.tv_car_brand)
+    TextView mTvBrand;
+    @BindView(R.id.tv_customer_name)
+    TextView mTvName;
+    @BindView(R.id.tv_wechat_number)
+    TextView mTvWechat;
+    @BindView(R.id.tv_telephone_number)
+    TextView mTvPhone;
+    @BindView(R.id.tv_customer_sex)
+    TextView mTvSex;
+    @BindView(R.id.tv_offer_name)
+    TextView mTvOfferName;
+    @BindView(R.id.tv_need_text)
+    TextView mTvNeedText;
 
-
+    @BindView(R.id.tv_customer_remark)
+    TextView mTvRemark;
     private static final String TAG = "CustomerDetailActivity";
     private List<ItemData> mData = new ArrayList<>();
     private List<ItemData> mFollowData = new ArrayList<>();
@@ -98,49 +116,71 @@ public class CustomerDetailActivity extends BaseActivity {
         mRecyclerFollow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerFollow.setNestedScrollingEnabled(false);
 
-        switch (customer.getStatusName()) {
-            case "已成交":
-                mTvState4.setBackgroundColor(Color.parseColor("#FF5755"));
-                mLine6.setBackgroundColor(Color.parseColor("#FF5755"));
-            case "预定":
-                mTvState3.setBackgroundColor(Color.parseColor("#FF5755"));
-                mLine5.setBackgroundColor(Color.parseColor("#FF5755"));
-                mLine4.setBackgroundColor(Color.parseColor("#FF5755"));
-            case "已到店":
-                mTvState2.setBackgroundColor(Color.parseColor("#FF5755"));
-                mLine3.setBackgroundColor(Color.parseColor("#FF5755"));
-                mLine2.setBackgroundColor(Color.parseColor("#FF5755"));
-            case "未到店":
-                mTvState1.setBackgroundColor(Color.parseColor("#FF5755"));
-                mLine1.setBackgroundColor(Color.parseColor("#FF5755"));
-                break;
-        }
+        mTvBrand.setText(customer.getBrandName());
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        for (int i = 0; i < 3; i++) {
-            CustomerDetailWantModel data = new CustomerDetailWantModel();
-            data.setDeduct("销售提成2000元   ");
-            data.setMessage("车源商名称 | 地区 | 全省");
-            data.setPrice("16.8万");
-            data.setState("在售");
-            data.setTime("今天");
-            data.setTitle("雪弗兰2013款 科鲁兹 1.6LSL天地版MT");
-            mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
-        }
-        BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
-        mRecyclerWantCar.setAdapter(adapter);
+    }
 
-        for (int i = 0; i < 4; i++) {
-            CustomerFollowModel data = new CustomerFollowModel();
-            data.setDate("2018/07/12");
-            data.setTime("16:24");
-            data.setMessage("短信通知");
-            data.setFrom("系统");
-            mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
-        }
-        mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Map<String, RequestBody> params = new HashMap<>();
+        params.put("customerId", RequestBody.create(MediaType.parse("text/plain"), customerId));
+        Injection.provideApiService().getCustomerDetailInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<CustomerDetailResponse>() {
+            @Override
+            public void accept(CustomerDetailResponse s) throws Exception {
+                if (s != null && s.getCode() == 200) {
+                    initStatus(s.getData().getStatusName());
+                    mTvWechat.setText(s.getData().getWeBcat());
+                    mTvPhone.setText(s.getData().getPhone());
+                    mTvName.setText(s.getData().getName());
+                    mTvSex.setText(s.getData().getSex() == 0 ? "女" : "男");
+                    mTvOfferName.setText(s.getData().getUserName());
+                    mTvPrice.setText(s.getData().getMinBudget() + "-" + s.getData().getMaxBudget() + "万");
+                    List<String> lists = s.getData().getLists();
+                    StringBuffer stringBuffer = new StringBuffer();
+                    if (lists != null) {
+                        for (String s1 : lists) {
+                            stringBuffer.append(s1);
+                        }
+                    }
+                    mTvBrand.setText(stringBuffer.toString());
+                    mTvNeedText.setText(s.getData().getNeedTxt());
+                    mTvRemark.setText(s.getData().getRemark());
+
+                    mData.clear();
+                    List<CustomerDetailResponse.DataBean.SaleCarInfoBean> saleCarInfos = s.getData().getSaleCarInfos();
+                    for (CustomerDetailResponse.DataBean.SaleCarInfoBean bean : saleCarInfos) {
+                        CustomerDetailWantModel data = new CustomerDetailWantModel();
+                        data.setDeduct("销售提成" + bean.getSaleCommission() + "元   ");
+                        data.setMessage(bean.getCarUserName() + " | " + bean.getProvinceName() + " | " + bean.getCityName());
+                        data.setPrice(bean.getCarPrice() + "万");
+                        data.setState(bean.getCarStatusName());
+                        data.setTime("今天");
+                        data.setTitle(bean.getBrand() + "  " + bean.getCarSeries() + "  " + bean.getVname());
+                        mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
+                    }
+                    BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
+                    mRecyclerWantCar.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                    mFollowData.clear();
+                    List<CustomerDetailResponse.DataBean.ProgressesBean> progresses = s.getData().getProgresses();
+                    for (CustomerDetailResponse.DataBean.ProgressesBean bean : progresses) {
+                        CustomerFollowModel data = new CustomerFollowModel();
+                        data.setDate(formatDate("yyyy-MM-dd", bean.getCreateDate()));
+                        data.setTime(formatDate("hh:mm", bean.getCreateDate()));
+                        data.setMessage(bean.getContent());
+                        data.setFrom(bean.getSource());
+                        mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
+                    }
+                    mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
+
+                }
+            }
+        });
     }
 
     @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit, R.id.tv_want_car_edit})
@@ -164,5 +204,31 @@ public class CustomerDetailActivity extends BaseActivity {
 
     public void getCustomerInfo() {
 
+    }
+
+    private void initStatus(String statusName) {
+        switch (statusName) {
+            case "已成交":
+                mTvState4.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine6.setBackgroundColor(Color.parseColor("#FF5755"));
+            case "预定":
+                mTvState3.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine5.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine4.setBackgroundColor(Color.parseColor("#FF5755"));
+            case "已到店":
+                mTvState2.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine3.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine2.setBackgroundColor(Color.parseColor("#FF5755"));
+            case "未到店":
+                mTvState1.setBackgroundColor(Color.parseColor("#FF5755"));
+                mLine1.setBackgroundColor(Color.parseColor("#FF5755"));
+                break;
+        }
+    }
+
+    private String formatDate(String format, long date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        Date date1 = new Date(date);
+        return simpleDateFormat.format(date1);
     }
 }

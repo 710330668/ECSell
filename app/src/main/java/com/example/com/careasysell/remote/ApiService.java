@@ -1,6 +1,7 @@
 package com.example.com.careasysell.remote;
 
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
+import com.example.com.careasysell.dealer.ui.model.response.CustomerDetailResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerInfoResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerResponse;
 import com.example.com.careasysell.dealer.ui.model.response.CustomerStatusResponse;
@@ -162,6 +163,11 @@ public interface ApiService {
     @POST("customer/findCustomerBaseInfo")
     Observable<CustomerInfoResponse> getCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
+    //获取客户详细信息
+    @Multipart
+    @POST("customer/findCustomerDetailInfo")
+    Observable<CustomerDetailResponse> getCustomerDetailInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
     @Multipart
     @POST("customer/updateCustomerBaseInfo")
     Observable<EasyResponse> updateCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
@@ -259,7 +265,7 @@ public interface ApiService {
     //删除销售
     @FormUrlEncoded
     @POST("user/updateXsUserInfo")
-    Observable<EasyResponse> updateXsUserInfo(@Field("token") String token,@Field("userId") String userId);
+    Observable<EasyResponse> updateXsUserInfo(@Field("token") String token, @Field("userId") String userId);
 
 
     //车行信息
@@ -280,7 +286,6 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("dict/getCustomerStatusList")
     Observable<CustomerStatusResponse> getCustomerStatusList(@Field("token") String token);
-
 
 
     @FormUrlEncoded

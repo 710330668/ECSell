@@ -314,6 +314,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tv_car_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="16-20万"
@@ -344,6 +345,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tv_car_brand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="2"
@@ -375,6 +377,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tv_need_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="2"
@@ -406,6 +409,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tv_customer_remark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
