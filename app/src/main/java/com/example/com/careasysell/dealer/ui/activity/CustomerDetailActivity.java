@@ -1,14 +1,21 @@
 package com.example.com.careasysell.dealer.ui.activity;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
@@ -88,6 +95,14 @@ public class CustomerDetailActivity extends BaseActivity {
 
     @BindView(R.id.tv_customer_remark)
     TextView mTvRemark;
+    @BindView(R.id.ll_customer_phone)
+    LinearLayout mLinearPhone;
+    @BindView(R.id.ll_customer_wechat)
+    LinearLayout mLinearWechat;
+    @BindView(R.id.ll_customer_message)
+    LinearLayout mLinearMessage;
+    @BindView(R.id.tv_follow)
+    TextView mTvFollow;
     private static final String TAG = "CustomerDetailActivity";
     private List<ItemData> mData = new ArrayList<>();
     private List<ItemData> mFollowData = new ArrayList<>();
@@ -183,8 +198,9 @@ public class CustomerDetailActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit, R.id.tv_want_car_edit})
+    @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit, R.id.tv_want_car_edit, R.id.ll_customer_message, R.id.ll_customer_phone, R.id.ll_customer_wechat, R.id.tv_follow})
     public void onViewClicked(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.tv_message_edit:
                 Bundle bundle = new Bundle();
@@ -196,6 +212,31 @@ public class CustomerDetailActivity extends BaseActivity {
                 break;
             case R.id.tv_want_car_edit:
                 startActivity(CustomerCarWantActivity.class);
+                break;
+            case R.id.ll_customer_message:
+                // TODO: 2018/8/20 短信
+                break;
+            case R.id.ll_customer_phone:
+                intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                break;
+            case R.id.ll_customer_wechat:
+                if (isWeixinAvilible(this)) {
+                    intent = new Intent();
+                    ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+                    intent.setAction(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setComponent(cmp);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(appContext, "尚未安装微信", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.tv_follow:
+                startActivity(CustomerFollowActivity.class);
+                // TODO: 2018/8/20 跟进
                 break;
 
         }
@@ -230,5 +271,19 @@ public class CustomerDetailActivity extends BaseActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
         Date date1 = new Date(date);
         return simpleDateFormat.format(date1);
+    }
+
+    private boolean isWeixinAvilible(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mm")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

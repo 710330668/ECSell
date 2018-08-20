@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".dealer.ui.activity.CustomerFollowActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="跟进"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rl_top_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_follow_record"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_edittext"
+                android:gravity="left|top"
+                android:hint="请填写跟进记录（必填）"
+                android:padding="2dp"
+                android:textColor="#999999"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@+id/rl_top_layout" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="14dp"
+                android:background="#F5F5F5"
+                app:layout_constraintTop_toBottomOf="@+id/et_follow_record" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rl_car_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:background="#F5F5F5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="20dp"
+                android:text="沟通方式"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_command_type"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="到店"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="电话"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="微信"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="短信"
+                    android:textColor="@drawable/text_color_radio_selector" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="20dp"
+                android:text="客户状态"
+                android:textColor="#333333"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_costumer_status"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="未到店"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="已到店"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="已预定"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="已成交"
+                    android:textColor="@drawable/text_color_radio_selector" />
+
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4.5dp"
+                    android:layout_marginRight="4.5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="战败"
+                    android:textColor="@drawable/text_color_radio_selector" />
+            </RadioGroup>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:background="#F5F5F5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="成交车辆"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加"
+                    android:textColor="#FF5755"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tv_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/home_page_bg"
+                    android:text="保存"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.constraint.ConstraintLayout>
