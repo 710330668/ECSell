@@ -73,6 +73,7 @@ public class ModifySalerInforActivity extends BaseActivity {
     private String token;
     public XsUserDetailResponse response;
     public CommonDialog resetPassDialog;
+    private  CommonDialog dialog;
 
     @Override
     public int bindLayout() {
@@ -142,13 +143,13 @@ public class ModifySalerInforActivity extends BaseActivity {
     }
 
     private void showDialog(String title, String content, String cancel, String confirm) {
-        final CommonDialog dialog = new CommonDialog(this, title, content, confirm, cancel);
+        dialog = new CommonDialog(this, title, content, confirm, cancel);
         dialog.show();
         dialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
             @Override
             public void doConfirm() {
                 // TODO Auto-generated method stub
-                dialog.dismiss();
+                updateXsUserInfo();
             }
 
             @Override
@@ -162,6 +163,23 @@ public class ModifySalerInforActivity extends BaseActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    @SuppressLint("CheckResult")
+    private void updateXsUserInfo() {
+        Injection.provideApiService().updateXsUserInfo(token,userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            Toast.makeText(ModifySalerInforActivity.this,response.getMsg(),Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")

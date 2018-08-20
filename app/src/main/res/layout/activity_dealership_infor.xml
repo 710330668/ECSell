@@ -42,6 +42,7 @@
             android:textSize="13dp" />
 
         <ImageView
+            android:id="@+id/iv_car_mark"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -73,6 +74,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_account_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -105,6 +107,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_dealership_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -137,6 +140,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -169,6 +173,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -201,6 +206,7 @@
             android:textSize="13dp" />
 
         <TextView
+            android:id="@+id/tv_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

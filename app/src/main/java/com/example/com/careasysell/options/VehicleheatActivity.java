@@ -108,7 +108,7 @@ public class VehicleheatActivity extends BaseActivity {
         todayTime = TimeUtils.getTodayTime();
         calendar = Calendar.getInstance();
         for(int i = 0 ;i<data.length;i++){
-            data[i] = calendar.get(Calendar.MONTH) + 1 - i +"月";
+            data[i] = Calendar.getInstance().get(Calendar.MONTH) + 1 - i +"月";
         }
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }

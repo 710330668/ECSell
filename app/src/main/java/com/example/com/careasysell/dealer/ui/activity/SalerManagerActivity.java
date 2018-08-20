@@ -2,6 +2,7 @@ package com.example.com.careasysell.dealer.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -81,6 +82,12 @@ public class SalerManagerActivity extends BaseActivity {
                             BaseAdapter baseAdapter = new BaseAdapter(userLists, new SettingDelegate(), new onItemClickListener() {
                                 @Override
                                 public void onClick(View v, Object data) {
+                                    UserListModel model = (UserListModel) data;
+                                    Intent intent = new Intent();
+                                    intent.putExtra("saleName",model.getUserName());
+                                    intent.putExtra("xsUserId",model.getUserId());
+                                    setResult(RESULT_OK,intent);
+                                    finish();
                                 }
 
                                 @Override
