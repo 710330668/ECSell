@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
 
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.com.careasysell"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -14,6 +15,23 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+MobSDK {
+    appKey "277b8297516c2"
+    appSecret "60fcc2ecab10c8d2e06451bdbfe8b260"
+    ShareSDK {
+        devInfo {
+            Wechat {
+                appId "wx9dcadfab00b72712"
+                appSecret "976a1ae11135a6763c849d8344b412b6"
+                userName "gh_afb25ac019c9"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+                bypassApproval false
+            }
         }
     }
 }

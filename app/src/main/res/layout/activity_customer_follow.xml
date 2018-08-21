@@ -73,6 +73,23 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="true" />
 
+            <RelativeLayout
+                android:id="@+id/lly_local_image"
+                android:layout_width="108dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_edittext"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_local"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/add_photo" />
+            </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="7dp"
@@ -89,12 +106,13 @@
                 android:textSize="14sp" />
 
             <RadioGroup
-                android:id="@+id/rg_command_type"
+                android:id="@+id/rb_command_type"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/rb_type_daodian"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -107,6 +125,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_type_dianhua"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -119,6 +138,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_type_weixin"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -131,6 +151,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_type_duanxin"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -160,6 +181,7 @@
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/rb_status_weidaodain"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -172,6 +194,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_status_yidaodian"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -184,6 +207,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_status_yiyuding"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -196,6 +220,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_status_yichengjiao"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -208,6 +233,7 @@
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton
+                    android:id="@+id/rb_status_zhanbai"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4.5dp"
@@ -226,6 +252,7 @@
                 android:background="#F5F5F5" />
 
             <LinearLayout
+                android:id="@+id/ll_dealer"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
@@ -240,6 +267,7 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_dealer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="添加"
@@ -247,6 +275,11 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rl_deal_car"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -258,13 +291,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/home_page_bg"
+                    android:gravity="center"
                     android:text="保存"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />
 
 
             </LinearLayout>
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

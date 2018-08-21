@@ -66,28 +66,28 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked() {
         String userName = etUserName.getText().toString();
         String passWord = etPassword.getText().toString();
-        if(TextUtils.isEmpty(userName)||TextUtils.isEmpty(passWord)){
-            Toast.makeText(this,"用户名或密码不能为空",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(passWord)) {
+            Toast.makeText(this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        Injection.provideApiService().login(userName,passWord)
+        Injection.provideApiService().login(userName, passWord)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<LoginResponse>() {
                     @Override
                     public void accept(LoginResponse loginResponse) throws Exception {
-                        if(loginResponse.getCode() == 200){
+                        if (loginResponse.getCode() == 200) {
                             saveUserInfor(loginResponse);
                             startActivity(StartActivity.class);
-                        }else{
-                            Toast.makeText(LoginActivity.this,loginResponse.getMsg(),Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, loginResponse.getMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
     private void saveUserInfor(LoginResponse loginResponse) {
-        SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_TOKEN,loginResponse.getData().getToken());
-        SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_TYPE,loginResponse.getData().getUserType());
+        SP.getInstance(C.USER_DB, LoginActivity.this).put(C.USER_TOKEN, loginResponse.getData().getToken());
+        SP.getInstance(C.USER_DB, LoginActivity.this).put(C.USER_TYPE, loginResponse.getData().getUserType());
     }
 }

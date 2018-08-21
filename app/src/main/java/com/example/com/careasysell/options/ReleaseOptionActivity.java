@@ -141,7 +141,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private ArrayList<String> imgPaths;
     private CustomDatePicker customDatePicker;
     private String now;
-    private int ziDingYiFlag = 0 ;
+    private int ziDingYiFlag = 0;
     private final int APPEARANCE_COLOR = 1;
     private final int INTERIOR_COLOR = 2;
     private final int FORMALITIES = 3;
@@ -367,7 +367,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
             R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
-            R.id.lly_local_image, R.id.btn_release_options,R.id.btn_zidingyi})
+            R.id.lly_local_image, R.id.btn_release_options, R.id.btn_zidingyi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -423,13 +423,13 @@ public class ReleaseOptionActivity extends BaseActivity {
                 saveCarInfo();
                 break;
             case R.id.btn_zidingyi:
-                dialog =new KeyMapDailog("自定义", new KeyMapDailog.SendBackListener() {
+                dialog = new KeyMapDailog("自定义", new KeyMapDailog.SendBackListener() {
                     @Override
                     public void sendBack(String inputText) {
                         //TODO  点击发表后业务逻辑
                         mainDrawerLayout.closeDrawer(mainRightDrawerLayout);
                         dialog.dismiss();
-                        switch (ziDingYiFlag){
+                        switch (ziDingYiFlag) {
                             case APPEARANCE_COLOR:
                                 tvApprenceColor.setText(inputText);
                                 break;

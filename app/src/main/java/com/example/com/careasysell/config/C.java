@@ -12,7 +12,7 @@ public interface C {
 
 
     //测试
-    String TEST_BASE_URL = "http://39.104.136.205:8080/";
+    String TEST_BASE_URL = "http://39.104.136.205/";
 
     //http缓存大小
     int httpCacheSize = 10 * 1024 * 1024;

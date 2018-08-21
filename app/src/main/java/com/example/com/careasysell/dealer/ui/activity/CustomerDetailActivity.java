@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -132,6 +133,8 @@ public class CustomerDetailActivity extends BaseActivity {
         mRecyclerFollow.setNestedScrollingEnabled(false);
 
         mTvBrand.setText(customer.getBrandName());
+
+        initStatus(customer.getStatusName());
     }
 
     @Override
@@ -147,7 +150,6 @@ public class CustomerDetailActivity extends BaseActivity {
             @Override
             public void accept(CustomerDetailResponse s) throws Exception {
                 if (s != null && s.getCode() == 200) {
-                    initStatus(s.getData().getStatusName());
                     mTvWechat.setText(s.getData().getWeBcat());
                     mTvPhone.setText(s.getData().getPhone());
                     mTvName.setText(s.getData().getName());
@@ -201,10 +203,10 @@ public class CustomerDetailActivity extends BaseActivity {
     @OnClick({R.id.tv_message_edit, R.id.tv_customer_need_edit, R.id.tv_want_car_edit, R.id.ll_customer_message, R.id.ll_customer_phone, R.id.ll_customer_wechat, R.id.tv_follow})
     public void onViewClicked(View view) {
         Intent intent;
+        Bundle bundle = new Bundle();
+        bundle.putString("customerId", customerId);
         switch (view.getId()) {
             case R.id.tv_message_edit:
-                Bundle bundle = new Bundle();
-                bundle.putString("customerId", customerId);
                 startActivity(EditCustomerMessageActivity.class, bundle);
                 break;
             case R.id.tv_customer_need_edit:
@@ -235,13 +237,12 @@ public class CustomerDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_follow:
-                startActivity(CustomerFollowActivity.class);
+                startActivity(CustomerFollowActivity.class, bundle);
                 // TODO: 2018/8/20 跟进
                 break;
 
         }
     }
-
 
     public void getCustomerInfo() {
 
@@ -252,7 +253,7 @@ public class CustomerDetailActivity extends BaseActivity {
             case "已成交":
                 mTvState4.setBackgroundColor(Color.parseColor("#FF5755"));
                 mLine6.setBackgroundColor(Color.parseColor("#FF5755"));
-            case "预定":
+            case "已预定":
                 mTvState3.setBackgroundColor(Color.parseColor("#FF5755"));
                 mLine5.setBackgroundColor(Color.parseColor("#FF5755"));
                 mLine4.setBackgroundColor(Color.parseColor("#FF5755"));

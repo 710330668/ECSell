@@ -303,4 +303,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("order/getMySaleCount")
     Observable<MySaleCountResponse> getMySaleCount(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
+
+    //用户跟进保存
+
+    @Multipart
+    @POST("customer/saveCustomerProgressInfo")
+    Observable<EasyResponse> saveCustomerProgressInfo(@Header("token") String token, @Part List<MultipartBody.Part> files, @PartMap Map<String, RequestBody> params);
 }
