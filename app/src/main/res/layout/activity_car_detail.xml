@@ -142,12 +142,20 @@
                 android:background="#F5F5F5"
                 android:orientation="horizontal">
 
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="#999999"
+                    android:layout_margin="@dimen/dimens_5dp"
+                    />
+
                 <TextView
                     android:id="@+id/tv_advise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="12dp"
                     android:text="建议售价28.00万|销售提成2000元"
+                    android:layout_gravity="center"
                     android:textColor="#333333"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -653,6 +661,12 @@
                 android:layout_height="10dp"
                 android:background="#F5F5F5" />
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical"></LinearLayout>
+
             <Button
                 android:id="@+id/btn_car_share"
                 android:layout_width="match_parent"
@@ -666,7 +680,10 @@
                 android:background="@mipmap/home_bg"
                 android:textColor="#FFFFFF"/>
 
+
         </LinearLayout>
+
+
 
     </ScrollView>
 
@@ -703,14 +720,27 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_release_options"
+            android:id="@+id/btn_browse_car"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="14dp"
+            android:text="上架车辆"
+            android:background="@mipmap/home_bg"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"/>
+
+
+        <Button
+            android:id="@+id/btn_share_car"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginRight="14dp"
             android:text="分享车辆"
             android:background="@mipmap/home_bg"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:visibility="gone"/>
     </LinearLayout>
 
 

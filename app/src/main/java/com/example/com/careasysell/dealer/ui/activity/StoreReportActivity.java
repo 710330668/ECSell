@@ -23,6 +23,7 @@ import com.example.com.careasysell.dealer.ui.model.response.NearDaySaleResponse;
 import com.example.com.careasysell.dealer.ui.model.response.XsUserStatResponse;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
+import com.example.com.careasysell.view.ChartView;
 import com.example.com.careasysell.view.CustomDatePicker;
 import com.example.com.careasysell.view.DrawableCenterRadioButton;
 import com.example.com.common.BaseActivity;
@@ -91,6 +92,8 @@ public class StoreReportActivity extends BaseActivity {
     TextView tvSaleNum;
     @BindView(R.id.tv_money_num)
     TextView tvMoneyNum;
+    @BindView(R.id.chartview)
+    ChartView chartview;
 
 
     private List<ItemData> sellRankLists = new ArrayList<>();
@@ -108,6 +111,7 @@ public class StoreReportActivity extends BaseActivity {
     private String endDate;
     private int count;
     private BaseAdapter baseAdapter;
+    private String[] xLabel,data;
 
     @Override
     public int bindLayout() {
@@ -231,8 +235,8 @@ public class StoreReportActivity extends BaseActivity {
                     public void accept(MySaleCountResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
-                            tvSaleNum.setText(response.getData().getSaleCount()+"");
-                            tvMoneyNum.setText(response.getData().getSaleMoney()+"");
+                            tvSaleNum.setText(response.getData().getSaleCount() + "");
+                            tvMoneyNum.setText(response.getData().getSaleMoney() + "");
                         }
 
                     }
@@ -250,7 +254,15 @@ public class StoreReportActivity extends BaseActivity {
                     @Override
                     public void accept(NearDaySaleResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-
+                        xLabel = new String[response.getData().size()];
+                        data = new String[response.getData().size()];
+                        for(int i =0 ;i<response.getData().size();i++){
+                            xLabel[i] = response.getData().get(i).getCreateDate();
+                            data[i] = response.getData().get(i).getSaleMoney()+"";
+                        }
+                        chartview.setData(data);
+                        chartview.setxLabel(xLabel);
+                        chartview.fresh();
                     }
                 });
     }

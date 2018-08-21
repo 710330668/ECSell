@@ -69,9 +69,8 @@ public class ChartView extends View {
         }
 
         // 根据设置的数据值生成Y坐标刻度值
-        yLabel = createYLabel();
 
-        mDataLineColors = new String[]{"#ff5755", "#ff5755", "#ff5755", "#ff5755", "#ff5755", "#ff5755", "#ff5755"};
+        mDataLineColors = new String[]{"#ff5755"};
         // 新建画笔
         mDataLinePaint = new Paint();       // 数据(点和连线)画笔
         mScaleLinePaint = new Paint();      // 坐标(刻度线条)值画笔
@@ -95,6 +94,7 @@ public class ChartView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        yLabel = createYLabel();
         drawYAxisAndXScaleValue(canvas);    // 绘制y轴和x刻度值
         drawXAxisAndYScaleValue(canvas);    // 绘制x轴和y刻度值
         drawDataLines(canvas);              // 绘制数据连线
@@ -120,7 +120,7 @@ public class ChartView extends View {
     }
 
     private void drawYAxisAndXScaleValue(Canvas canvas) {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < xLabel.length; i++) {
             canvas.drawLine(startPointX + i * xScale,
                     startPointY,
                     startPointX + i * xScale,
@@ -176,8 +176,8 @@ public class ChartView extends View {
      */
     private void drawDataLines(Canvas canvas) {
         getDataRoords();
-        for (int i = 0; i < 6; i++) {
-            mDataLinePaint.setColor(Color.parseColor(mDataLineColors[i]));
+        for (int i = 0; i < data.length -1 ; i++) {
+            mDataLinePaint.setColor(Color.parseColor(mDataLineColors[0]));
             canvas.drawLine(mDataCoords[i][0], mDataCoords[i][1], mDataCoords[i + 1][0], mDataCoords[i + 1][1], mDataLinePaint);
         }
     }
@@ -190,11 +190,11 @@ public class ChartView extends View {
     private void drawDataPoints(Canvas canvas) {
         // 点击后，绘制数据点
         if (isClick && clickIndex > -1) {
-            mDataLinePaint.setColor(Color.parseColor(mDataLineColors[clickIndex]));
+            mDataLinePaint.setColor(Color.parseColor(mDataLineColors[0]));
             canvas.drawCircle(mDataCoords[clickIndex][0], mDataCoords[clickIndex][1], xScale / 10, mDataLinePaint);
             mDataLinePaint.setColor(Color.WHITE);
             canvas.drawCircle(mDataCoords[clickIndex][0], mDataCoords[clickIndex][1], xScale / 20, mDataLinePaint);
-            mDataLinePaint.setColor(Color.parseColor(mDataLineColors[clickIndex]));
+            mDataLinePaint.setColor(Color.parseColor(mDataLineColors[0]));
         }
     }
 
@@ -269,10 +269,10 @@ public class ChartView extends View {
         int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
 
         yScale = height / 7.5f;         // y轴刻度
-        xScale = width / 7.5f;          // x轴刻度
+        xScale = width / data.length;          // x轴刻度
         startPointX = xScale / 2;       // 开始绘图的x坐标
-        startPointY = yScale / 2;       // 开始UI图的y坐标
-        xLength = 6.5f * xScale;        // x轴长度
+        startPointY = yScale/2;       // 开始UI图的y坐标
+        xLength = data.length * xScale;        // x轴长度
         yLength = 5.5f * yScale;        // y轴长度
 
         float chartLineStrokeWidth = xScale / 50;     // 图表线条的线宽
@@ -296,16 +296,16 @@ public class ChartView extends View {
      * @return y轴坐标刻度值数组
      */
     private String[] createYLabel() {
-        float[] dataFloats = new float[7];
-        for (int i = 0; i < data.length; i++) {
+        float[] dataFloats = new float[data.length];
+        for (int i = 0; i < data.length ; i++) {
             dataFloats[i] = Float.parseFloat(data[i]);
         }
         // 将数据值从小到大排序
         Arrays.sort(dataFloats);
         // 中间值
-        float middle = format3Bit((dataFloats[0] + dataFloats[6]) / 2f);
+        float middle = format3Bit((dataFloats[0] + dataFloats[data.length - 1]) / 2f);
         // Y刻度值
-        float scale = format3Bit((dataFloats[6] - dataFloats[0]) / 4 + 0.01f);
+        float scale = format3Bit((dataFloats[data.length -1] - dataFloats[0]) / 4 + 0.01f);
         String[] yText = new String[5];
         yText[0] = (middle - 2 * scale) + "";
         yText[1] = (middle - scale) + "";
@@ -325,7 +325,7 @@ public class ChartView extends View {
      */
     private void getDataRoords() {
         float originalPointX = startPointX;
-        float originalPointY = startPointY + yLength - yScale;
+        float originalPointY = startPointY + yLength ;
         for (int i = 0; i < data.length; i++) {
             mDataCoords[i][0] = originalPointX + i * xScale;
             float dataY = Float.parseFloat(data[i]);
@@ -352,6 +352,7 @@ public class ChartView extends View {
      * 格式化数据 ###.000
      *
      * @param numberStr 格式化后的字符串形式
+     *
      * @return ###.000
      */
     private String format3Bit(String numberStr) {
@@ -383,6 +384,7 @@ public class ChartView extends View {
      */
     public void setData(String[] data) {
         this.data = data;
+        mDataCoords = new float[data.length][2];
     }
 
     /**

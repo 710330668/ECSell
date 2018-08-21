@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -57,14 +58,16 @@ public class OrderListActivity extends BaseActivity {
     DrawableCenterRadioButton rbSales;
     @BindView(R.id.ll_tab)
     RadioGroup llTab;
+    @BindView(R.id.et_search)
+    EditText etSearch;
     private List<ItemData> mSearchResultData = new ArrayList<>();
     private BaseAdapter mDataAdapter;
     private int selectState = 0;
     private int selectOrder = 0;
     private String token;
-    private   int CURRENT_PAGE = 1;
-    private   int PAGE_SIZE = 6;
-    private int count ;
+    private int CURRENT_PAGE = 1;
+    private int PAGE_SIZE = 6;
+    private int count;
     private String orderType;
     private static final int REQUEST_CLIENT = 1;
     private String xsUserId;
@@ -97,10 +100,10 @@ public class OrderListActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 mDataAdapter.setLoadState(mDataAdapter.LOADING);
-                if(mSearchResultData.size() < count){
+                if (mSearchResultData.size() < count) {
                     ++CURRENT_PAGE;
                     getOrderList();
-                }else{
+                } else {
                     mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
                 }
             }
@@ -111,8 +114,8 @@ public class OrderListActivity extends BaseActivity {
                 OrderListResponse.DataBean.ListsBean model = (OrderListResponse.DataBean.ListsBean) data;
                 Bundle bundle = new Bundle();
                 bundle.putString("orderItemId", model.getOrderItemId());
-                bundle.putString("source",C.SOURCE_ORDER);
-                startActivity(CarDetailActivity.class,bundle);
+                bundle.putString("source", C.SOURCE_ORDER);
+                startActivity(CarDetailActivity.class, bundle);
             }
 
             @Override
@@ -126,20 +129,20 @@ public class OrderListActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getOrderList() {
-        if(mSearchResultData.size()>0){
-            mSearchResultData.remove(mSearchResultData.size()-1);
+        if (mSearchResultData.size() > 0) {
+            mSearchResultData.remove(mSearchResultData.size() - 1);
         }
-        Injection.provideApiService().findMyOrderList(token,CURRENT_PAGE+"",PAGE_SIZE+"",xsUserId,
-                "","","","","",orderType).
+        Injection.provideApiService().findMyOrderList(token, CURRENT_PAGE + "", PAGE_SIZE + "", xsUserId,
+                "", "", "", "", etSearch.getText().toString(), orderType).
                 subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<OrderListResponse>() {
                     @Override
                     public void accept(OrderListResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
                             count = response.getData().getCount();
-                            for(int i =0 ;i<response.getData().getLists().size();i++){
+                            for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 OrderListResponse.DataBean.ListsBean bean = response.getData().getLists().get(i);
                                 ItemData e = new ItemData(0, SettingDelegate.ORDER_LIST_TYPE, bean);
                                 mSearchResultData.add(e);
@@ -160,7 +163,7 @@ public class OrderListActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.et_search, R.id.rb_default_sort, R.id.rb_sale_time, R.id.rb_deal_valence, R.id.rb_sales})
+    @OnClick({R.id.iv_back, R.id.et_search, R.id.rb_default_sort, R.id.rb_sale_time, R.id.rb_deal_valence, R.id.rb_sales, R.id.tv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -178,8 +181,13 @@ public class OrderListActivity extends BaseActivity {
                 showPopupWindow(R.id.rb_deal_valence);
                 break;
             case R.id.rb_sales:
-                Intent intent = new Intent(OrderListActivity.this,SalerManagerActivity.class);
-                startActivityForResult(intent,REQUEST_CLIENT);
+                Intent intent = new Intent(OrderListActivity.this, SalerManagerActivity.class);
+                startActivityForResult(intent, REQUEST_CLIENT);
+                break;
+            case R.id.tv_search:
+                mSearchResultData.clear();
+                CURRENT_PAGE = 1;
+                getOrderList();
                 break;
         }
     }
@@ -187,8 +195,8 @@ public class OrderListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode == REQUEST_CLIENT){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CLIENT) {
                 rbSales.setText(data.getStringExtra("saleName"));
                 xsUserId = data.getStringExtra("xsUserId");
                 mSearchResultData.clear();

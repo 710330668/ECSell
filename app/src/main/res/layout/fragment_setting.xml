@@ -137,6 +137,7 @@
             android:background="#F5F5F5" />
 
         <RelativeLayout
+            android:id="@+id/rl_dealer_modify_password"
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
@@ -199,6 +200,7 @@
             android:background="#F5F5F5" />
 
         <RelativeLayout
+            android:id="@+id/rl_modify_password"
             android:layout_width="match_parent"
             android:layout_height="50dp">
 

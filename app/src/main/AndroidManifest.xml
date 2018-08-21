@@ -16,6 +16,9 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".MyApplication"
@@ -101,6 +104,7 @@
         <activity android:name=".dealer.ui.activity.EditCustomerNeedActivity" />
         <activity android:name=".dealer.ui.activity.CustomerCarWantActivity" />
         <activity android:name=".dealer.ui.activity.SalerManagerActivity" />
+        <activity android:name=".usercenter.ModifyPasswordActivity" />
         <activity android:name=".dealer.ui.activity.CustomerFollowActivity"></activity>
     </application>
 

@@ -53,7 +53,7 @@ public class UserManagerActivity extends BaseActivity {
     private List<ItemData> userLists = new ArrayList<>();
     private String token;
     private   int CURRENT_PAGE = 1;
-    private   int PAGE_SIZE = 6;
+    private   int PAGE_SIZE = 10;
     private BaseAdapter baseAdapter;
     private int count;
 
@@ -165,14 +165,11 @@ public class UserManagerActivity extends BaseActivity {
         @Override
         public void afterTextChanged(Editable s) {
             Log.d("TAG", "afterTextChanged--------------->");
-            CURRENT_PAGE = 1;
-            userLists.clear();
-            getUserList();
         }
     };
 
 
-        @OnClick({R.id.iv_back, R.id.tv_add_saler})
+        @OnClick({R.id.iv_back, R.id.tv_add_saler,R.id.tv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -180,6 +177,11 @@ public class UserManagerActivity extends BaseActivity {
                 break;
             case R.id.tv_add_saler:
                 startActivity(AddSalerActivity.class);
+                break;
+            case R.id.tv_search:
+                CURRENT_PAGE = 1;
+                userLists.clear();
+                getUserList();
                 break;
         }
     }

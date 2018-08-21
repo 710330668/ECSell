@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -106,12 +107,14 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
         Bundle bundle = new Bundle();
         bundle.putString("carBrand", carBrand);
         bundle.putString("brandId", id);
-        if (paramsString.equals("filter")) {
-            Intent intent = new Intent();
-            intent.putExtra("carBrand", carBrand);
-            intent.putExtra("brandId", id);
-            this.setResult(RESULT_OK, intent);
-            finish();
+        if(!TextUtils.isEmpty(paramsString)){
+            if (paramsString.equals("filter")) {
+                Intent intent = new Intent();
+                intent.putExtra("carBrand", carBrand);
+                intent.putExtra("brandId", id);
+                this.setResult(RESULT_OK, intent);
+                finish();
+            }
         } else {
             startActivity(ChooseCarsActivity.class, bundle);
         }

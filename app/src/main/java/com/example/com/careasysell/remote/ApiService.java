@@ -25,6 +25,7 @@ import com.example.com.careasysell.options.model.response.CarsResponse;
 import com.example.com.careasysell.options.model.response.CommonResponse;
 import com.example.com.careasysell.options.model.response.HotCarCountResponse;
 import com.example.com.careasysell.options.model.response.HotCarListResponse;
+import com.example.com.careasysell.options.model.response.ModifyCarInforResponse;
 import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
 import com.example.com.careasysell.order.response.OrderDetailResponse;
@@ -152,6 +153,11 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("user/resetXsUserPass")
     Observable<EasyResponse> resetXsUserPass(@Header("token") String token, @Field("userId") String userId, @Field("password") String password);
+
+    //修改密码
+    @FormUrlEncoded
+    @POST("user/updateMyPassword")
+    Observable<EasyResponse> updateMyPassword(@Header("token") String token, @Field("password") String password, @Field("repwd") String repwd,@Field("oldPass") String oldPass);
 
     //新增客户
     @Multipart
@@ -303,4 +309,20 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("order/getMySaleCount")
     Observable<MySaleCountResponse> getMySaleCount(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
+
+    //车源下架
+    @FormUrlEncoded
+    @POST("sale/soldOutCarInfo")
+    Observable<EasyResponse> soldOutCarInfo(@Field("token") String token,@Field("saleId") String saleId);
+
+    //编辑销售车辆信息
+    @FormUrlEncoded
+    @POST("sale/findSaleCarInfoBySaleId")
+    Observable<ModifyCarInforResponse> findSaleCarInfoBySaleId(@Field("token") String token, @Field("saleId") String saleId);
+
+    //保存销售车辆信息
+    @FormUrlEncoded
+    @POST("sale/updateSaleCarInfo")
+    Observable<EasyResponse> updateSaleCarInfo(@Field("token") String token,@Field("saleId") String saleId,@Field("saleCarPrice") String saleCarPrice,
+                                               @Field("insuranceRebates") String insuranceRebates,@Field("loanRebates") String loanRebates);
 }

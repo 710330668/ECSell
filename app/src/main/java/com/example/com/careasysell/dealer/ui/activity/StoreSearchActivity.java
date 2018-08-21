@@ -21,6 +21,7 @@ import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.fragment.SearchResultFragment;
 import com.example.com.careasysell.dealer.ui.model.ColorFilterModel;
 import com.example.com.careasysell.dealer.ui.model.PriceModel;
+import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
 import com.example.com.careasysell.options.ChooseCarsActivity;
@@ -91,6 +92,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
 
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private String carBrand;
+    StoreManagerResponse.DataBean dataBean;
 
     @C.INVENTORY
     public int INVENTORY = C.INVENTORY_OPTION;
@@ -109,8 +111,10 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     public void initParams(Bundle params) {
         INVENTORY = ParamManager.getInstance(this).getChannelType();
         if (params != null) {
+            dataBean = (StoreManagerResponse.DataBean) params.getSerializable("data");
             if (mSearchResultFragment == null) {
                 mSearchResultFragment = new SearchResultFragment();
+                mSearchResultFragment.setArguments(params);
             }
             mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
         }

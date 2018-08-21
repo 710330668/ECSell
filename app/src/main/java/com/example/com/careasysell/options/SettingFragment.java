@@ -14,12 +14,15 @@ import android.widget.Toast;
 import com.example.com.careasysell.MyApplication;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.main.login.LoginActivity;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.usercenter.DealershipActivity;
+import com.example.com.careasysell.usercenter.ModifyPasswordActivity;
 import com.example.com.careasysell.usercenter.UserInforActivity;
 import com.example.com.careasysell.usercenter.model.UserInforModel;
 import com.example.com.careasysell.utils.DataCleanManager;
 import com.example.com.careasysell.utils.ParamManager;
+import com.example.com.careasysell.view.CommonDialog;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
 
@@ -158,7 +161,7 @@ public class SettingFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache})
+    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache,R.id.btn_logout,R.id.rl_modify_password,R.id.rl_dealer_modify_password})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_car_infor:
@@ -170,6 +173,27 @@ public class SettingFragment extends BaseFragment {
                 startActivity(UserInforActivity.class);
                 break;
             case R.id.rl_clean_cache:
+                showCacheDialog("清除缓存", "确定清除缓存？", "取消", "确定");
+                break;
+            case R.id.btn_logout:
+                showDialog("退出登录", "确定退出登录？", "取消", "确定");
+                break;
+            case R.id.rl_modify_password:
+                startActivity(ModifyPasswordActivity.class);
+                break;
+            case R.id.rl_dealer_modify_password:
+                startActivity(ModifyPasswordActivity.class);
+                break;
+        }
+    }
+
+    private void showCacheDialog(String title, String content, String cancel, String confirm) {
+        final CommonDialog dialog = new CommonDialog(getActivity(), title, content, confirm, cancel);
+        dialog.show();
+        dialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
+            @Override
+            public void doConfirm() {
+                // TODO Auto-generated method stub
                 Toast.makeText(getActivity(), "缓存清理中,请耐心等待..", Toast.LENGTH_SHORT).show();
                 DataCleanManager.cleanInternalCache(MyApplication.getContext());
                 Handler mHandler = new Handler();
@@ -184,7 +208,45 @@ public class SettingFragment extends BaseFragment {
 
 
                 mHandler.postDelayed(r, 5000);//延时100毫秒
-                break;
-        }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void doConfirm(String etContent) {
+
+            }
+
+            @Override
+            public void doCancel() {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+    private void showDialog(String title, String content, String cancel, String confirm) {
+        final CommonDialog dialog = new CommonDialog(getActivity(), title, content, confirm, cancel);
+        dialog.show();
+        dialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
+            @Override
+            public void doConfirm() {
+                // TODO Auto-generated method stub
+                startActivity(LoginActivity.class);
+                getActivity().finish();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void doConfirm(String etContent) {
+
+            }
+
+            @Override
+            public void doCancel() {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
     }
 }

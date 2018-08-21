@@ -79,6 +79,7 @@ public class LoginActivity extends BaseActivity {
                         if(loginResponse.getCode() == 200){
                             saveUserInfor(loginResponse);
                             startActivity(StartActivity.class);
+                            finish();
                         }else{
                             Toast.makeText(LoginActivity.this,loginResponse.getMsg(),Toast.LENGTH_SHORT).show();
                         }

@@ -1,7 +1,6 @@
 package com.example.com.careasysell.dealer.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -21,9 +20,9 @@ import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.AllOptionResponse;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
+import com.example.com.careasysell.dealer.ui.model.response.StoreManagerResponse;
 import com.example.com.careasysell.market.ui.MarketStoreShareActivity;
 import com.example.com.careasysell.options.CarDetailActivity;
-import com.example.com.careasysell.options.ChooseBrandActivity;
 import com.example.com.careasysell.remote.Injection;
 import com.example.com.careasysell.remote.SettingDelegate;
 import com.example.com.careasysell.utils.EndlessRecyclerOnScrollListener;
@@ -89,7 +88,7 @@ public class SearchResultFragment extends BaseFragment {
     private int PAGE_SIZE = 6;
     private int count;
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
-
+    StoreManagerResponse.DataBean dataBean;
 
     @Override
     protected int setLayoutResouceId() {
@@ -105,6 +104,10 @@ public class SearchResultFragment extends BaseFragment {
     @Override
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
+        dataBean = (StoreManagerResponse.DataBean) arguments.getSerializable("data");
+        if(dataBean!=null){
+            carStatus = dataBean.getCarStatus();
+        }
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {

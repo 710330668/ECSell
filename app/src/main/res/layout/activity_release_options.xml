@@ -399,6 +399,7 @@
                         android:layout_marginRight="14dp"
                         android:layout_toLeftOf="@+id/tv_unit"
                         android:background="@null"
+                        android:gravity="right"
                         android:hint="请输入价格"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -441,6 +442,7 @@
                         android:layout_marginRight="14dp"
                         android:layout_toLeftOf="@+id/tv_lingshou_unit"
                         android:background="@null"
+                        android:gravity="right"
                         android:hint="请输入价格"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -482,6 +484,7 @@
                         android:layout_marginRight="14dp"
                         android:layout_toLeftOf="@+id/tv_ticheng_unit"
                         android:background="@null"
+                        android:gravity="right"
                         android:hint="请输入提成比例"
                         android:textSize="14sp" />
                 </RelativeLayout>

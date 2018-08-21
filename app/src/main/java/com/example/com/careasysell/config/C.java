@@ -12,7 +12,7 @@ public interface C {
 
 
     //测试
-    String TEST_BASE_URL = "http://39.104.136.205:8080/";
+    String TEST_BASE_URL = "http://39.104.136.205/";
 
     //http缓存大小
     int httpCacheSize = 10 * 1024 * 1024;
@@ -50,6 +50,8 @@ public interface C {
     int INVENTORY_DEALER = 1; //库存 - 经销
     int INVENTORY_MARKET = 2;  //库存 - 销售
 
+    int ORDER_DEALER = 3;
+
 
     String SOURCE_ORDER = "order";  //订单
 
@@ -64,6 +66,10 @@ public interface C {
     String SOURCE_DAY_SHOP = "day_shop";  //日进店
 
     String SOURCE_MONTH_SHOP = "month_shop";  //月进店
+
+    String  SOURCE_CAR_DETAIL_NATION = "nation_source";
+
+    String SOURCE_CAR_DETAIL_STORE = "store";
 
     @IntDef({INVENTORY_OPTION, INVENTORY_DEALER, INVENTORY_MARKET})
     public @interface INVENTORY {

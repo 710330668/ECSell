@@ -151,25 +151,18 @@
             android:textColor="#999999"
             android:textSize="13dp" />
 
-        <LinearLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_edittext"
-            android:layout_marginLeft="14dp">
 
         <ImageView
             android:id="@+id/iv_head"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
             android:textColor="#333333"
             android:textSize="13dp"
-            android:src="@mipmap/add_photo"
+            android:src="@mipmap/icon_add"
             />
 
-        </LinearLayout>
 
     </LinearLayout>
 
