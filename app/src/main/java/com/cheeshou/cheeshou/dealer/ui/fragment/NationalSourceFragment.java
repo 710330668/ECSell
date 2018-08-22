@@ -22,6 +22,7 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
@@ -93,6 +94,7 @@ public class NationalSourceFragment extends BaseFragment {
     private int PAGE_SIZE = 12;
     private int count;
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
+    private boolean isOpen;
 
     @Override
     protected int setLayoutResouceId() {
@@ -124,7 +126,17 @@ public class NationalSourceFragment extends BaseFragment {
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-                startActivity(CarDetailActivity.class);
+                if (data instanceof SearchResultModel) {
+                    SearchResultModel model = (SearchResultModel) data;
+                    if (!isOpen) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("carId", model.getId());
+                        startActivity(CarDetailActivity.class, bundle);
+                    } else {
+                        model.setPut(!model.isPut());
+                        mDataAdapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
@@ -203,6 +215,7 @@ public class NationalSourceFragment extends BaseFragment {
                     if (bean.getData() instanceof SearchResultModel) {
                         ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
 //                    mTvPutAway.setText(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? "取消" : "上架车辆");
+                        isOpen = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
                         mLinearPut.setVisibility(((SearchResultModel) bean.getData()).isOpenPutEntrance() ? View.VISIBLE : View.GONE);
                     }
                 }
@@ -214,13 +227,17 @@ public class NationalSourceFragment extends BaseFragment {
                         dataList.add((SearchResultModel) bean.getData());
                     }
                 }
+                Bundle bundle;
                 switch (INVENTORY) {
                     case C.INVENTORY_MARKET:
                         //todo销售 分享
+                        bundle = new Bundle();
+                        bundle.putParcelableArrayList("data", dataList);
+                        startActivity(MarketShareCarActivity.class, bundle);
                         break;
                     case C.INVENTORY_DEALER:
 //                经销商  上架
-                        Bundle bundle = new Bundle();
+                        bundle = new Bundle();
                         bundle.putParcelableArrayList("data", dataList);
                         startActivity(PutAwayDetailActivity.class, bundle);
                         break;
