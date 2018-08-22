@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 public class CarPhotoModel {
 
     private Bitmap bitmap;
+    //分享显示图片的url，非bitmap
+    private String imageUrl;
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -19,5 +21,18 @@ public class CarPhotoModel {
 
     public CarPhotoModel(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public CarPhotoModel(Bitmap bitmap, String imageUrl) {
+        this.bitmap = bitmap;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -28,6 +28,7 @@ import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.model.ColorFilterModel;
 import com.example.com.careasysell.dealer.ui.model.PriceModel;
 import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
+import com.example.com.careasysell.market.ui.MarketShareCarActivity;
 import com.example.com.careasysell.options.CarDetailActivity;
 import com.example.com.careasysell.options.ChooseAreaActivity;
 import com.example.com.careasysell.options.ChooseBrandActivity;
@@ -194,13 +195,14 @@ public class NationSourceActivity extends BaseActivity {
             @Override
             public void onClick(View v, Object data) {
                 SearchResultModel model = (SearchResultModel) data;
-                Bundle bundle = new Bundle();
-                bundle.putString("carId", model.getId());
-                bundle.putString("dealer_source",C.SOURCE_CAR_DETAIL_NATION);
-                mPutAwayData.clear();
-                mPutAwayData.add(model);
-                bundle.putParcelableArrayList("shelves_data", mPutAwayData);
-                startActivity(CarDetailActivity.class, bundle);
+                if (!isOpen) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("carId", model.getId());
+                    startActivity(CarDetailActivity.class, bundle);
+                } else {
+                    model.setPut(!model.isPut());
+                    mDataAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

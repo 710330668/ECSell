@@ -47,15 +47,19 @@ public class CarPhotoViewHolder extends BaseViewHolder {
             }
         });
 
+        if (model.getBitmap() == null) {
+            ivDelete.setImageResource(R.mipmap.checked_true);
+        }
+
     }
 
 
-    public interface OnImageDeleteListener{
+    public interface OnImageDeleteListener {
         void removeImage(int position);
     }
 
 
-    public void setOnImageDeleteListener(OnImageDeleteListener listener){
+    public void setOnImageDeleteListener(OnImageDeleteListener listener) {
         this.listener = listener;
     }
 }

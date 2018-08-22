@@ -83,13 +83,13 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         if (!TextUtils.isEmpty(resultModel.getImageUrl())) {
             ImageLoader.getInstance().displayImage(resultModel.getImageUrl(), mCarPoster);
         }
-
-        mCarPutAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                resultModel.setPut(mCarPutAway.isChecked());
-            }
-        });
+//
+//        mCarPutAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                resultModel.setPut(mCarPutAway.isChecked());
+//            }
+//        });
     }
 
     private String formatDate(String format, long date) {

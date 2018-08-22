@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.com.careasysell">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -27,7 +28,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:name">
         <activity android:name=".main.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -106,6 +108,9 @@
         <activity android:name=".dealer.ui.activity.SalerManagerActivity" />
         <activity android:name=".usercenter.ModifyPasswordActivity" />
         <activity android:name=".dealer.ui.activity.CustomerFollowActivity"></activity>
+        <activity android:name=".dealer.ui.activity.CustomerFollowActivity" />
+        <activity android:name=".market.ui.MarketShareCarActivity" />
+        <activity android:name=".market.ui.MarketShareWechatActivity"></activity>
     </application>
 
 </manifest>

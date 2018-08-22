@@ -8,6 +8,7 @@ import com.example.com.careasysell.config.Environment;
 import com.example.com.careasysell.remote.ApiService;
 import com.example.com.net.HttpClient;
 import com.example.com.net.config.HttpConfig;
+import com.mob.MobSDK;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -31,6 +32,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MobSDK.init(this);
         initHttpConfig();
         context = getApplicationContext();
         initImageLoader();
