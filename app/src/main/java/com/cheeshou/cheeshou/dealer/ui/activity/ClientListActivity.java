@@ -9,12 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.ClientModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.ToShopResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -47,7 +47,7 @@ public class ClientListActivity extends BaseActivity {
     private List<ItemData> clientLists = new ArrayList<>();
     private String token;
     private   int CURRENT_PAGE = 1;
-    private   int PAGE_SIZE = 6;
+    private   int PAGE_SIZE = 12;
     private int count ;
     private BaseAdapter mDataAdapter;
     private String source;

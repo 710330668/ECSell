@@ -15,13 +15,6 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.cheeshou.cheeshou.config.C;
-import com.cheeshou.cheeshou.dealer.ui.activity.SalerManagerActivity;
-import com.cheeshou.cheeshou.options.CarDetailActivity;
-import com.cheeshou.cheeshou.order.response.OrderListResponse;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.SalerManagerActivity;
@@ -73,7 +66,7 @@ public class OrderListActivity extends BaseActivity {
     private int selectOrder = 0;
     private String token;
     private int CURRENT_PAGE = 1;
-    private int PAGE_SIZE = 6;
+    private int PAGE_SIZE = 12;
     private int count;
     private String orderType;
     private static final int REQUEST_CLIENT = 1;

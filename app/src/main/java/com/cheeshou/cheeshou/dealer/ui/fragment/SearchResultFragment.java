@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.dealer.ui.fragment;
 
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,10 +17,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.market.ui.MarketStoreShareActivity;
-import com.cheeshou.cheeshou.options.CarDetailActivity;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
@@ -89,7 +86,7 @@ public class SearchResultFragment extends BaseFragment {
     private BaseAdapter mDataAdapter;
     private String token;
     private int CURRENT_PAGE = 1;
-    private int PAGE_SIZE = 6;
+    private int PAGE_SIZE = 12;
     private int count;
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     StoreManagerResponse.DataBean dataBean;

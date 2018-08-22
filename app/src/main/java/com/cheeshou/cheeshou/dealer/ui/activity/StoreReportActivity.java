@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SellRankModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MySaleCountResponse;
@@ -25,7 +26,6 @@ import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.view.ChartView;
 import com.cheeshou.cheeshou.view.CustomDatePicker;
 import com.cheeshou.cheeshou.view.DrawableCenterRadioButton;
-import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -111,7 +111,7 @@ public class StoreReportActivity extends BaseActivity {
     private String endDate;
     private int count;
     private BaseAdapter baseAdapter;
-    private String[] xLabel, data;
+    private String[] xLabel,data;
 
     @Override
     public int bindLayout() {
@@ -168,7 +168,7 @@ public class StoreReportActivity extends BaseActivity {
         baseAdapter = new BaseAdapter(sellRankLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-                startActivity(SalerDetailActivity.class);
+//                startActivity(SalerDetailActivity.class);
             }
 
             @Override
@@ -256,9 +256,9 @@ public class StoreReportActivity extends BaseActivity {
                         LogUtils.e(response.getMsg());
                         xLabel = new String[response.getData().size()];
                         data = new String[response.getData().size()];
-                        for (int i = 0; i < response.getData().size(); i++) {
+                        for(int i =0 ;i<response.getData().size();i++){
                             xLabel[i] = response.getData().get(i).getCreateDate();
-                            data[i] = response.getData().get(i).getSaleMoney() + "";
+                            data[i] = response.getData().get(i).getSaleMoney()+"";
                         }
                         chartview.setData(data);
                         chartview.setxLabel(xLabel);

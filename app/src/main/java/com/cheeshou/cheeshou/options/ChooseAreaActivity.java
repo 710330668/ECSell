@@ -1,30 +1,32 @@
 package com.cheeshou.cheeshou.options;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.cheeshou.cheeshou.options.model.AddressModel;
-import com.cheeshou.cheeshou.options.model.AreasModel;
-import com.cheeshou.cheeshou.options.model.response.AreaProvinceResponse;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.MyApplication;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.options.model.AddressModel;
@@ -39,6 +41,7 @@ import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -72,12 +75,17 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     LinearLayout mainRightDrawerLayout;
     @BindView(R.id.main_drawer_layout)
     DrawerLayout mainDrawerLayout;
+    @BindView(R.id.tv_loaction)
+    TextView tvLoaction;
 
     private List<AddressModel> areas = new ArrayList<>();
     private List<ItemData> areaLists = new ArrayList<>();
     private String token;
     private BaseAdapter baseAdapter;
     private String areaId;
+    private Location location;
+    private Geocoder geocoder;
+    private static final int REQUEST_PERMISSION_LOCATION = 255;
 
     @Override
     public int bindLayout() {
@@ -125,10 +133,17 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onResume() {
         super.onResume();
-        getLocation();
+        if (ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+        } else {
+            // We have already permission to use the location
+            getLocation(this);
+        }
+
     }
 
 
@@ -191,12 +206,15 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_location})
+    @OnClick({R.id.iv_back, R.id.iv_location,R.id.tv_loaction})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
+                finish();
                 break;
             case R.id.iv_location:
+                break;
+            case R.id.tv_loaction:
                 break;
         }
     }
@@ -217,75 +235,64 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         }
     }
 
-    public void getLocation() {
-        String locationProvider;
-        //获取地理位置管理器
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //获取所有可用的位置提供器
-        List<String> providers = locationManager.getProviders(true);
-        if (providers.contains(LocationManager.GPS_PROVIDER)) {
-            //如果是GPS
-            locationProvider = LocationManager.GPS_PROVIDER;
-        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
-            //如果是Network
-            locationProvider = LocationManager.NETWORK_PROVIDER;
+    @SuppressLint("MissingPermission")
+    private Location getLocation(Context context) {
+        LocationManager manager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+        //若GPS未开启
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(ChooseAreaActivity.this, "请开启GPS！", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            ChooseAreaActivity.this.startActivityForResult(intent, 0); //此为设置完成后返回到获取界面
+        }
+        //获得GPS支持
+        location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.v("location1", location + "");
+        if (location == null) {
+            //获得PASSIVE支持
+            location = manager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            Log.v("location2", location + "");
         } else {
-            Toast.makeText(this, "没有可用的位置提供器", Toast.LENGTH_SHORT).show();
-            return;
+            //获得NETWORK支持
+            location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Log.v("location3", location + "");
+
         }
-        //获取Location
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+
+        geocoder = new Geocoder(ChooseAreaActivity.this);
+        try {
+            List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 5);
+            Log.v("location", location.getLatitude() + "," + location.getLongitude());
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    Address address = list.get(i);
+                    String add = "";
+                    int maxLine = address.getMaxAddressLineIndex();
+                    Log.v("maxline", maxLine + "");
+//                    if (maxLine >= 2) {
+//                        add = address.getAddressLine(1) + address.getAddressLine(2);
+//                    } else {
+//                        add = address.getAddressLine(1);
+//                    }
+                    tvLoaction.setText(address.getLocality());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        Location location = locationManager.getLastKnownLocation(locationProvider);
-        if (location != null) {
-            //不为空,显示地理位置经纬度
-            showLocation(location);
-        }
-        //监视地理位置变化
-        locationManager.requestLocationUpdates(locationProvider, 3000, 1, locationListener);
+        return location;
+
     }
 
-
-    private void showLocation(Location location) {
-        String locationStr = "纬度：" + location.getLatitude() + "\n"
-                + "经度：" + location.getLongitude();
-//        updateVersion(location.getLatitude() + "", location.getLongitude() + "");
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSION_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // We now have permission to use the location
+                getLocation(ChooseAreaActivity.this);
+            }
+        }
     }
-
-
-
-    LocationListener locationListener = new LocationListener() {
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle arg2) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-
-        @Override
-        public void onLocationChanged(Location location) {
-            //如果位置发生变化,重新显示
-            showLocation(location);
-        }
-    };
-
 
 
 }

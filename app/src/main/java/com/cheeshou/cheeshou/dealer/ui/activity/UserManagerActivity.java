@@ -13,9 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserResponse;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.UserListModel;
@@ -56,7 +53,7 @@ public class UserManagerActivity extends BaseActivity {
     private List<ItemData> userLists = new ArrayList<>();
     private String token;
     private   int CURRENT_PAGE = 1;
-    private   int PAGE_SIZE = 10;
+    private   int PAGE_SIZE = 12;
     private BaseAdapter baseAdapter;
     private int count;
 
@@ -172,7 +169,7 @@ public class UserManagerActivity extends BaseActivity {
     };
 
 
-        @OnClick({R.id.iv_back, R.id.tv_add_saler,R.id.tv_search})
+    @OnClick({R.id.iv_back, R.id.tv_add_saler,R.id.tv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:

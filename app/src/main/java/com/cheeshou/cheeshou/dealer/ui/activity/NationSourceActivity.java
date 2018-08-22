@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +45,6 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
-import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -128,7 +127,7 @@ public class NationSourceActivity extends BaseActivity {
     private BaseAdapter mDataAdapter;
     private String token;
     private int CURRENT_PAGE = 1;
-    private int PAGE_SIZE = 6;
+    private int PAGE_SIZE = 12;
     private int count;
     private String carType, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private String brandId = "";
@@ -459,7 +458,8 @@ public class NationSourceActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.img_back, R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next})
+    @OnClick({R.id.img_back, R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away, R.id.bt_search_reset, R.id.bt_search_sure,
+            R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next,R.id.tv_search})
     public void onDrawerViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -566,6 +566,10 @@ public class NationSourceActivity extends BaseActivity {
             case R.id.img_next:
                 mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) + 1 + "");
                 carYear = mTvYear.getText().toString();
+                break;
+            case R.id.tv_search:
+                queryKey = mEditSearch.getText().toString();
+                getAllOptions();
                 break;
             default:
         }

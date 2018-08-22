@@ -8,9 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.cheeshou.cheeshou.options.CarDetailActivity;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
@@ -55,7 +52,7 @@ public class ReportCarListActivity extends BaseActivity {
     private String token;
 
     private  int CURRENT_PAGE = 1;
-    private  int PAGE_SIZE = 6;
+    private  int PAGE_SIZE = 12;
     private int count ;
     private String source;
 

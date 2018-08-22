@@ -18,9 +18,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.options.model.VehicleHeatModel;
-import com.cheeshou.cheeshou.options.model.response.HotCarCountResponse;
-import com.cheeshou.cheeshou.options.model.response.HotCarListResponse;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.options.model.VehicleHeatModel;
@@ -95,7 +92,7 @@ public class VehicleheatActivity extends BaseActivity {
     private String []data = new String [3];
     private PopupWindow pop;
     private   int CURRENT_PAGE = 1;
-    private   int PAGE_SIZE = 6;
+    private   int PAGE_SIZE = 12;
     private int count ;
     private BaseAdapter<ItemData> adapter;
 
@@ -169,7 +166,7 @@ public class VehicleheatActivity extends BaseActivity {
         refreshData();
         mData.clear();
         CURRENT_PAGE = 1;
-        PAGE_SIZE = 6;
+        PAGE_SIZE = 12;
         refreshCarData();
         pop.dismiss();
     }
@@ -228,7 +225,7 @@ public class VehicleheatActivity extends BaseActivity {
                 refreshData();
                 mData.clear();
                 CURRENT_PAGE = 1;
-                PAGE_SIZE = 6;
+                PAGE_SIZE = 12;
                 refreshCarData();
                 break;
             case R.id.rb_the_week:
@@ -237,7 +234,7 @@ public class VehicleheatActivity extends BaseActivity {
                 refreshData();
                 mData.clear();
                 CURRENT_PAGE = 1;
-                PAGE_SIZE = 6;
+                PAGE_SIZE = 12;
                 refreshCarData();
                 break;
             case R.id.rb_last_week:
@@ -246,7 +243,7 @@ public class VehicleheatActivity extends BaseActivity {
                 refreshData();
                 mData.clear();
                 CURRENT_PAGE = 1;
-                PAGE_SIZE = 6;
+                PAGE_SIZE = 12;
                 refreshCarData();
                 break;
             default:
