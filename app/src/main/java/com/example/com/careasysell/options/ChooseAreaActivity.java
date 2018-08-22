@@ -1,9 +1,15 @@
 package com.example.com.careasysell.options;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
@@ -97,10 +104,10 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                 String areaName = tvAreaName.getText().toString();
                 AreasModel model = (AreasModel) data;
                 Intent intent = new Intent();
-                intent.putExtra("area",areaName+""+model.getAreasName());
-                intent.putExtra("provinceCode",areaId);
-                intent.putExtra("cityCode",model.getAreasId());
-                setResult(RESULT_OK,intent);
+                intent.putExtra("area", areaName + "" + model.getAreasName());
+                intent.putExtra("provinceCode", areaId);
+                intent.putExtra("cityCode", model.getAreasId());
+                setResult(RESULT_OK, intent);
                 finish();
             }
 
@@ -112,19 +119,27 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         rlArea.setAdapter(baseAdapter);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getLocation();
+    }
+
+
     //车源所在地
     @SuppressLint("CheckResult")
     private void getRegionList() {
-        Injection.provideApiService().getRegionList(token,"0")
+        Injection.provideApiService().getRegionList(token, "0")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AreaProvinceResponse>() {
                     @Override
                     public void accept(AreaProvinceResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        if(response.getCode() == 200){
+                        if (response.getCode() == 200) {
                             for (int i = 0; i < response.getData().size(); i++) {
-                                areas.add(new AddressModel(response.getData().get(i).getCityName(),response.getData().get(i).getId()));
+                                areas.add(new AddressModel(response.getData().get(i).getCityName(), response.getData().get(i).getId()));
                             }
                             //对集合排序
                             Collections.sort(areas, new Comparator<AddressModel>() {
@@ -145,16 +160,16 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
     @SuppressLint("CheckResult")
     private void getCity(String areaId) {
-        Injection.provideApiService().getRegionList(token,areaId)
+        Injection.provideApiService().getRegionList(token, areaId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<AreaProvinceResponse>() {
                     @Override
                     public void accept(AreaProvinceResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        if(response.getCode() == 200){
-                            for (int i =0;i<response.getData().size();i++) {
-                                AreasModel areasModel = new AreasModel(response.getData().get(i).getCityName(),response.getData().get(i).getId()+"");
+                        if (response.getCode() == 200) {
+                            for (int i = 0; i < response.getData().size(); i++) {
+                                AreasModel areasModel = new AreasModel(response.getData().get(i).getCityName(), response.getData().get(i).getId() + "");
                                 ItemData itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
                                 areaLists.add(itemData);
                             }
@@ -182,8 +197,8 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     }
 
     @Override
-    public void selectBrand(String areaBrand,String id) {
-        areaId = id+"";
+    public void selectBrand(String areaBrand, String id) {
+        areaId = id + "";
         getCity(areaId);
         tvAreaName.setText(areaBrand);
         openRightLayout();
@@ -196,4 +211,76 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
             mainDrawerLayout.openDrawer(mainRightDrawerLayout);
         }
     }
+
+    public void getLocation() {
+        String locationProvider;
+        //获取地理位置管理器
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //获取所有可用的位置提供器
+        List<String> providers = locationManager.getProviders(true);
+        if (providers.contains(LocationManager.GPS_PROVIDER)) {
+            //如果是GPS
+            locationProvider = LocationManager.GPS_PROVIDER;
+        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
+            //如果是Network
+            locationProvider = LocationManager.NETWORK_PROVIDER;
+        } else {
+            Toast.makeText(this, "没有可用的位置提供器", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //获取Location
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationProvider);
+        if (location != null) {
+            //不为空,显示地理位置经纬度
+            showLocation(location);
+        }
+        //监视地理位置变化
+        locationManager.requestLocationUpdates(locationProvider, 3000, 1, locationListener);
+    }
+
+
+    private void showLocation(Location location) {
+        String locationStr = "纬度：" + location.getLatitude() + "\n"
+                + "经度：" + location.getLongitude();
+//        updateVersion(location.getLatitude() + "", location.getLongitude() + "");
+    }
+
+
+
+    LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle arg2) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            //如果位置发生变化,重新显示
+            showLocation(location);
+        }
+    };
+
+
+
 }

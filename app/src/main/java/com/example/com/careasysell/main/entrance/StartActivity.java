@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.com.careasysell.MainActivity;
 import com.example.com.careasysell.MainTabActivity;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
@@ -48,19 +47,23 @@ public class StartActivity extends BaseActivity {
                 ParamManager.getInstance(this).setChannelType(C.INVENTORY_OPTION);
                 bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_OPTIONS);
                 startActivity(MainTabActivity.class, bundle);
+                finish();
                 break;
             case R.id.btn_dealers_traders:
                 ParamManager.getInstance(this).setChannelType(C.INVENTORY_DEALER);
                 bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_DEALER);
                 startActivity(MainTabActivity.class, bundle);
+                finish();
                 break;
             case R.id.btn_sales_traders:
                 ParamManager.getInstance(this).setChannelType(C.INVENTORY_MARKET);
                 bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_MARKET);
                 startActivity(MainTabActivity.class, bundle);
+                finish();
                 break;
             case R.id.btn_share:
                 startActivity(SharedActivity.class);
+                finish();
                 break;
             default:
         }

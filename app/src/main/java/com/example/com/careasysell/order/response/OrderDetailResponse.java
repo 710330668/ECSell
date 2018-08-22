@@ -1,11 +1,12 @@
 package com.example.com.careasysell.order.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by 71033 on 2018/8/16.
  */
-public class OrderDetailResponse {
+public class OrderDetailResponse implements Serializable{
 
 
     /**
@@ -42,7 +43,7 @@ public class OrderDetailResponse {
         this.msg = msg;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * advicePrice : 10
          * brand : Agile Automotive
@@ -407,7 +408,7 @@ public class OrderDetailResponse {
             this.imgs = imgs;
         }
 
-        public static class DiscountsBean {
+        public static class DiscountsBean implements Serializable {
             /**
              * discountName : 店内上保险，店内置换
              */
@@ -423,7 +424,7 @@ public class OrderDetailResponse {
             }
         }
 
-        public static class ImgsBean {
+        public static class ImgsBean implements Serializable{
             /**
              * imgThumUrl : http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg
              * imgUrl : http://39.104.136.205:8888/20180729/car/1532859956333.jpg

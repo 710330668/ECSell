@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,6 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
-import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -198,6 +196,10 @@ public class NationSourceActivity extends BaseActivity {
                 SearchResultModel model = (SearchResultModel) data;
                 Bundle bundle = new Bundle();
                 bundle.putString("carId", model.getId());
+                bundle.putString("dealer_source",C.SOURCE_CAR_DETAIL_NATION);
+                mPutAwayData.clear();
+                mPutAwayData.add(model);
+                bundle.putParcelableArrayList("shelves_data", mPutAwayData);
                 startActivity(CarDetailActivity.class, bundle);
             }
 

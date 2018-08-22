@@ -33,6 +33,7 @@ import com.example.com.careasysell.options.model.ColorModel;
 import com.example.com.careasysell.options.model.FormalityModel;
 import com.example.com.careasysell.options.model.OptionTypeModel;
 import com.example.com.careasysell.options.model.SalesAreaModel;
+import com.example.com.careasysell.options.model.response.CarDetailResponse;
 import com.example.com.careasysell.options.model.response.CommonResponse;
 import com.example.com.careasysell.options.model.response.OptionTypeResponse;
 import com.example.com.careasysell.options.model.response.SalesAreaResponse;
@@ -146,6 +147,8 @@ public class ReleaseOptionActivity extends BaseActivity {
     private final int INTERIOR_COLOR = 2;
     private final int FORMALITIES = 3;
     private KeyMapDailog dialog;
+    private CarDetailResponse response;
+    private List<String> discounts;
 
     @Override
     public int bindLayout() {
@@ -156,6 +159,9 @@ public class ReleaseOptionActivity extends BaseActivity {
     public void initParams(Bundle params) {
         imgPaths = new ArrayList<>();
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
+        if(params!=null){
+            response = (CarDetailResponse) params.getSerializable("carDetailResponse");
+        }
     }
 
     @Override
@@ -171,6 +177,48 @@ public class ReleaseOptionActivity extends BaseActivity {
         }, "1990-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(false); // 不显示时和分
         customDatePicker.setIsLoop(false); // 不允许循环滚动
+        if(response!=null){
+            //车辆详情页进入
+            tvOptionsType.setText(response.getData().getTypeName());
+            tvCarModel.setText(response.getData().getVname());
+            tvApprenceColor.setText(response.getData().getOutsiteColor());
+            tvInteriorColor.setText(response.getData().getWithinColor());
+            tvArea.setText(response.getData().getProvinceName());
+            tvSalesArea.setText(response.getData().getSaleArea());
+            tvFormalities.setText(response.getData().getCarFormality());
+            tvYear.setText(response.getData().getCarYear());
+            etCarPrice.setText(response.getData().getCarPrice()+"");
+            etGuidedPrice.setText(response.getData().getGuidPrice()+"");
+            etCommission.setText(response.getData().getSaleCommission()+"");
+//            for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
+//                discounts = Arrays.asList(response.getData().getDiscounts().get(i).getDiscountName().split(","));
+//            }
+//            addDiscounts(discounts);
+            etSpecificDiscount.setText(response.getData().getDiscountContent());
+            etConfiguration.setText(response.getData().getCarSetting());
+            etNote.setText(response.getData().getRemark());
+        }
+    }
+
+
+    private void addDiscounts(List<String> discounts) {
+        if (discounts == null) {
+            return;
+        }
+        for (int i = 0; i < discounts.size(); i++) {
+            final Button button = new Button(ReleaseOptionActivity.this);
+            button.setText(discounts.get(i));
+            button.setBackgroundResource(R.drawable.bg_edittext_red);
+            button.setPadding(10, 10, 10, 10);
+            button.setGravity(Gravity.CENTER);
+            button.setTextColor(getResources().getColor(R.color.color_FF5754));
+            llyYouhui.addView(button);
+            LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) button.getLayoutParams();
+            linearParams.setMargins(20, 20, 10, 10);
+            linearParams.height = 80;
+            linearParams.width = 240;
+            button.setLayoutParams(linearParams);
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -613,7 +661,9 @@ public class ReleaseOptionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        tvCarModel.setText(ParamManager.getInstance(this).getCarFullName());
+        if(response == null){
+            tvCarModel.setText(ParamManager.getInstance(this).getCarFullName());
+        }
     }
 
     @Override

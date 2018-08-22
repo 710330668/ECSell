@@ -16,9 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:hint=""
-            android:background="@drawable/bg_text"
+            android:background="@drawable/bg_edittext"
             android:layout_weight="10"
             android:layout_margin="16dp"
+            android:padding="5dp"
             />
 
         <Button

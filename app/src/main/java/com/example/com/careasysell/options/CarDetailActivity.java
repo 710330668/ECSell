@@ -2,6 +2,7 @@ package com.example.com.careasysell.options;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
+import com.example.com.careasysell.dealer.ui.activity.PutAwayDetailActivity;
+import com.example.com.careasysell.dealer.ui.model.SearchResultModel;
 import com.example.com.careasysell.dealer.ui.model.response.EasyResponse;
 import com.example.com.careasysell.options.model.response.CarDetailResponse;
 import com.example.com.careasysell.order.response.OrderDetailResponse;
@@ -30,8 +33,10 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
+import com.example.com.common.util.ToastUtils;
 import com.example.com.imageloader.LoaderManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -98,8 +103,6 @@ public class CarDetailActivity extends BaseActivity {
     TextView tvCarSetting;
     @BindView(R.id.tv_remark)
     TextView tvRemark;
-    @BindView(R.id.btn_release_options)
-    Button btnReleaseOptions;
     @BindView(R.id.lly_order_infor)
     LinearLayout llyOrderInfor;
     @BindView(R.id.tv_customer_name)
@@ -108,6 +111,10 @@ public class CarDetailActivity extends BaseActivity {
     TextView tvSalerName;
     @BindView(R.id.tv_deal_valence)
     TextView tvDealValence;
+    @BindView(R.id.btn_browse_car)
+    Button btnBrowseCar;
+    @BindView(R.id.btn_share_car)
+    Button btnShareCar;
     private PopupWindow pop;
     private View popView;
     private Button modifyBtn, shelvesBtn, reservateBtn;
@@ -124,6 +131,9 @@ public class CarDetailActivity extends BaseActivity {
 
     private String source;
     private String orderItemId;
+    private String dealerSource;
+    private CarDetailResponse carDetailResponse;
+    private ArrayList<SearchResultModel> mPutAwayData = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -139,6 +149,8 @@ public class CarDetailActivity extends BaseActivity {
             carId = params.getString("carId");
             source = params.getString("source");
             orderItemId = params.getString("orderItemId");
+            dealerSource = params.getString("dealer_source");
+            mPutAwayData = params.getParcelableArrayList("shelves_data");
         }
 
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
@@ -164,9 +176,13 @@ public class CarDetailActivity extends BaseActivity {
     public void setView(Bundle savedInstanceState) {
         if (!TextUtils.isEmpty(source)) {
             llyOrderInfor.setVisibility(View.VISIBLE);
+            llyShare.setVisibility(View.GONE);
+            btnCarShare.setVisibility(View.GONE);
+            ivMore.setVisibility(View.GONE);
         } else {
             llyOrderInfor.setVisibility(View.GONE);
         }
+        tvCarGuidePrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
     @Override
@@ -184,6 +200,12 @@ public class CarDetailActivity extends BaseActivity {
                 LayoutInflateView(INVENTORY);
                 break;
             case C.INVENTORY_DEALER:
+                if (!TextUtils.isEmpty(dealerSource)) {
+                    btnBrowseCar.setVisibility(View.VISIBLE);
+                    ivMore.setVisibility(View.GONE);
+                } else {
+                    btnShareCar.setVisibility(View.VISIBLE);
+                }
                 llyShare.setVisibility(View.VISIBLE);
                 btnCarShare.setVisibility(View.GONE);
                 LayoutInflateView(INVENTORY);
@@ -192,6 +214,8 @@ public class CarDetailActivity extends BaseActivity {
                 llyShare.setVisibility(View.GONE);
                 btnCarShare.setVisibility(View.VISIBLE);
                 LayoutInflateView(INVENTORY);
+                break;
+            default:
                 break;
         }
     }
@@ -212,7 +236,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
                             tvCarGuidePrice.setText(response.getData().getGuidPrice() + "万");
                             tvSellStatus.setText(response.getData().getCarStatusName());
-                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次");
+                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
                             tvCarType.setText(response.getData().getCarType());
@@ -258,7 +282,8 @@ public class CarDetailActivity extends BaseActivity {
                     public void accept(CarDetailResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
-                            saleId = response.getData().getCarId();
+                            carDetailResponse = response;
+                            saleId = response.getData().getSaleId();
                             tvAdvise.setText("建议售价" + response.getData().getAdvicePrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
@@ -323,7 +348,9 @@ public class CarDetailActivity extends BaseActivity {
                 modifyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(ReleaseOptionActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("carDetailResponse", (Serializable) carDetailResponse);
+                        startActivity(ReleaseOptionActivity.class,bundle);
                         pop.dismiss();
                     }
                 });
@@ -340,7 +367,9 @@ public class CarDetailActivity extends BaseActivity {
                 modifyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(ModifyCarInfActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("saleId",carDetailResponse.getData().getSaleId());
+                        startActivity(ModifyCarInfActivity.class,bundle);
                         pop.dismiss();
                     }
                 });
@@ -381,6 +410,7 @@ public class CarDetailActivity extends BaseActivity {
                     @Override
                     public void accept(EasyResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
+                        ToastUtils.showShort(CarDetailActivity.this,response.getMsg());
                         if (response.getCode() == 200) {
 
                         }
@@ -399,6 +429,7 @@ public class CarDetailActivity extends BaseActivity {
                     @Override
                     public void accept(EasyResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
+                        ToastUtils.showShort(CarDetailActivity.this,response.getMsg());
                         if (response.getCode() == 200) {
 
                         }
@@ -414,7 +445,7 @@ public class CarDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more})
+    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more,R.id.btn_browse_car,R.id.btn_share_car})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -427,6 +458,15 @@ public class CarDetailActivity extends BaseActivity {
             case R.id.iv_more:
                 showPopWindow();
                 break;
+            case R.id.btn_browse_car:
+                //上架车辆
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("data", mPutAwayData);
+                startActivity(PutAwayDetailActivity.class, bundle);
+                break;
+            case R.id.btn_share_car:
+                //分享车辆
+                break;
         }
     }
 
@@ -435,7 +475,7 @@ public class CarDetailActivity extends BaseActivity {
         pop.setBackgroundDrawable(new BitmapDrawable());
         pop.setFocusable(true);
         pop.setOutsideTouchable(true);
-        pop.showAsDropDown(ivMore, 10, 70);
+        pop.showAsDropDown(ivMore, 0, 2);
     }
 
     private void showDialog(String title, String content, String cancel, String confirm) {
@@ -445,6 +485,7 @@ public class CarDetailActivity extends BaseActivity {
             @Override
             public void doConfirm() {
                 // TODO Auto-generated method stub
+                soldOutCarInfo();
                 dialog.dismiss();
             }
 
@@ -459,6 +500,20 @@ public class CarDetailActivity extends BaseActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    @SuppressLint("CheckResult")
+    private void soldOutCarInfo() {
+        Injection.provideApiService().soldOutCarInfo(token,carDetailResponse.getData().getSaleId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        ToastUtils.showShort(CarDetailActivity.this,response.getMsg());
+                    }
+                });
     }
 
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.com.careasysell.R;
 import com.example.com.careasysell.config.C;
 import com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity;
+import com.example.com.careasysell.market.ui.MarketSearchActivity;
 import com.example.com.careasysell.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 
@@ -63,7 +64,7 @@ public class OptionsTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_kucun_manager, R.id.rl_car_redu, R.id.rl_release_option})
+    @OnClick({R.id.rl_kucun_manager, R.id.rl_car_redu, R.id.rl_release_option,R.id.et_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
@@ -77,6 +78,9 @@ public class OptionsTradersFragment extends BaseFragment {
             case R.id.rl_release_option:
                 //发布车源
                 startActivity(ReleaseOptionActivity.class);
+                break;
+            case R.id.et_search:
+                startActivity(MarketSearchActivity.class);
                 break;
         }
     }
