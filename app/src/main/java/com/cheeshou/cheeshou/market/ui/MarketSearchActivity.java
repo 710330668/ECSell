@@ -6,8 +6,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,6 +64,10 @@ public class MarketSearchActivity extends BaseActivity {
     LinearLayout mDrawerRight;
     @BindView(R.id.recycler_search_history)
     RecyclerView mRecyclerSearchHistory;
+    @BindView(R.id.et_search)
+    EditText mEtSearch;
+    @BindView(R.id.tv_search)
+    TextView mTvSearch;
 
     private NationalSourceFragment mNationalSourceFragment;
 
@@ -85,8 +92,28 @@ public class MarketSearchActivity extends BaseActivity {
         mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
         mNationalSourceFragment = new NationalSourceFragment();
         Bundle args = new Bundle();
-        args.putInt(C.TAG_PAGE_MAIN,C.INVENTORY_MARKET);
+        args.putInt(C.TAG_PAGE_MAIN, C.INVENTORY_MARKET);
         mNationalSourceFragment.setArguments(args);
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+                    mTvSearch.setText("搜索");
+                } else {
+                    mTvSearch.setText("取消");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -284,7 +311,7 @@ public class MarketSearchActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model})
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_search})
     public void onDrawerViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_sales_area:
@@ -296,6 +323,12 @@ public class MarketSearchActivity extends BaseActivity {
             case R.id.iv_car_model:
                 startActivity(ChooseBrandActivity.class);
                 break;
+            case R.id.tv_search:
+                if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+
+                } else {
+                    this.finish();
+                }
             default:
         }
     }

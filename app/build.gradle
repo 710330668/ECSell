@@ -22,6 +22,7 @@ MobSDK {
     appKey "277b8297516c2"
     appSecret "60fcc2ecab10c8d2e06451bdbfe8b260"
     ShareSDK {
+        version '3.2.1.1'
         devInfo {
             Wechat {
                 appId "wx9dcadfab00b72712"
@@ -43,7 +44,114 @@ MobSDK {
             }
         }
     }
+    permissions {
+        exclude "android.permission.GET_TASKS", "android.permission.INTERNET"
+    }
 }
+
+//MobSDK {
+//    appKey "x1df91de0b5968"
+//    appSecret "2b2124b3c70a855e2cd4412db2d4bc69"
+//
+//    ShareSDK {
+//        /*gui false*/
+//        version '3.2.1.1'
+//
+//        devInfo {
+//            SinaWeibo {
+//                appKey "568898243"
+//                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+//                callbackUri "http://www.sharesdk.cn"
+//                shareByAppClient true
+//            }
+//
+//            /*Wechat {}*/
+//
+//            Wechat {
+//                appId "wx4868b35061f87885"
+//                appSecret "64020361b8ec4c99936c0e3999a9f249"
+//                bypassApproval false
+//            }
+//            WechatMoments {
+//                appId "wx4868b35061f87885"
+//                appSecret "64020361b8ec4c99936c0e3999a9f249"
+//                bypassApproval false
+//            }
+//            Dingding {
+//                appId "dingoanxyrpiscaovl4qlw"
+//                bypassApproval false
+//            }
+//            QQ {
+//                appId "100371282"
+//                appKey "aed9b0303e3ed1e27bae87c33761161d"
+//                bypassApproval false
+//                shareByAppClient true
+//            }
+//            QZone {
+//                appId "100371282"
+//                appKey "aed9b0303e3ed1e27bae87c33761161d"
+//                bypassApproval false
+//                shareByAppClient false
+//            }
+//            Facebook {
+//                appKey "1412473428822331"
+//                appSecret "a42f4f3f867dc947b9ed6020c2e93558"
+//                callbackUri "https://mob.com"
+//                shareByAppClient true
+//            }
+//            Alipay{
+//                appId "2015072400185895"
+//            }
+//            FacebookMessenger{
+//                appId "107704292745179"
+//            }
+//            VKontakte{
+//                appId "您自己的applicationid"
+//            }
+//            LinkedIn {
+//                appKey "ejo5ibkye3vo"
+//                appSecret "cC7B2jpxITqPLZ5M"
+//                callbackUri "http://sharesdk.cn"
+//                shareByAppClient true
+//                enable true
+//            }
+//            Twitter {
+//                sortId 9
+//                /*appKey "if33kyNkVBGBJ3I9obcUmFH7j"
+//                appSecret "9O3XqIO6VZrx5efNYyYBvZIODAKcr4SAqlb09KtewvrKhVFjST"
+//                callbackUri "http://www.baidu.com"*/
+//                appKey "Ts82wb2LELW17cQtbyUTHxvWT"
+//                appSecret "u45IVVdXrtRSSr0A4FCLwVBwUgUSqLMNV9ObLdJjncyCdZBel3"
+//                callbackUri "http://sharesdk.cn"
+//
+//                enable true
+//            }
+//            Email {}
+//            ShortMessage{}
+//            Instagram {
+//                /*appId "ff68e3216b4f4f989121aa1c2962d058"
+//                appSecret "1b2e82f110264869b3505c3fe34e31a1"*/
+//                appId "414d53bd3d974bccbf4af8fbb86594cc"
+//                appSecret "1527955253e648deb628d4abe0c1470b"
+//                callbackUri "http://sharesdk.cn"
+//                enable true
+//            }
+//
+//            GooglePlus {
+//                appId "963096738153-s1jfgo69fknlenjo5v5ki2bjgsqd7f2u.apps.googleusercontent.com"
+//                /*appId "236300675100-am5pm8km7md1memjevq8rl9pg5c4s4b8.apps.googleusercontent.com"*/
+//                callbackUri "http://localhost"
+//                shareByAppClient true
+//                enable true
+//            }
+//
+//
+//        }
+//    }
+//
+//
+//
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

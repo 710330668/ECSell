@@ -22,6 +22,7 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
+import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.market.ui.MarketStoreShareActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -36,6 +37,7 @@ import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,8 +107,14 @@ public class SearchResultFragment extends BaseFragment {
     @Override
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
-        dataBean = (StoreManagerResponse.DataBean) arguments.getSerializable("data");
-        if(dataBean!=null){
+        if (arguments == null) {
+            arguments = new Bundle();
+        }
+        Serializable data = arguments.getSerializable("data");
+        if (data != null) {
+            dataBean = (StoreManagerResponse.DataBean) data;
+        }
+        if (dataBean != null) {
             carStatus = dataBean.getCarStatus();
         }
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
@@ -227,7 +235,8 @@ public class SearchResultFragment extends BaseFragment {
                 break;
             case R.id.tv_put_away:
                 // TODO: 2018/8/1 跳转分享
-                startActivity(MarketStoreShareActivity.class);
+//                startActivity(MarketShareCarActivity.class);
+//                startActivity(MarketStoreShareActivity.class);
                 break;
             default:
         }
