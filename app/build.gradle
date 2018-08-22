@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'cheeshou'
+            keyPassword 'Cys123456'
+            storeFile file('D:/PersonalWork/ECSell/keystore')
+            storePassword 'Cys123456'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.cheeshou.cheeshou"

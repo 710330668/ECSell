@@ -92,6 +92,8 @@ public class SearchResultFragment extends BaseFragment {
     private int count;
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     StoreManagerResponse.DataBean dataBean;
+    private boolean isOpen;
+    private ArrayList<SearchResultModel> dataList = new ArrayList<>();
 
     @Override
     protected int setLayoutResouceId() {
@@ -120,10 +122,17 @@ public class SearchResultFragment extends BaseFragment {
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
-                SearchResultModel model = (SearchResultModel) data;
-                Bundle bundle = new Bundle();
-                bundle.putString("carId", model.getId());
-                startActivity(CarDetailActivity.class, bundle);
+                if (data instanceof SearchResultModel) {
+                    SearchResultModel model = (SearchResultModel) data;
+                    if (!isOpen) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("carId", model.getId());
+                        startActivity(CarDetailActivity.class, bundle);
+                    } else {
+                        model.setPut(!model.isPut());
+                        mDataAdapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
@@ -235,8 +244,14 @@ public class SearchResultFragment extends BaseFragment {
                 break;
             case R.id.tv_put_away:
                 // TODO: 2018/8/1 跳转分享
-//                startActivity(MarketShareCarActivity.class);
-//                startActivity(MarketStoreShareActivity.class);
+                for (ItemData bean : mSearchResultData) {
+                    if (bean.getData() instanceof SearchResultModel && ((SearchResultModel) bean.getData()).isPut()) {
+                        dataList.add((SearchResultModel) bean.getData());
+                    }
+                }
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("data", dataList);
+                startActivity(MarketShareCarActivity.class, bundle);
                 break;
             default:
         }
@@ -317,6 +332,7 @@ public class SearchResultFragment extends BaseFragment {
         for (ItemData bean : mSearchResultData) {
             if (bean.getData() instanceof SearchResultModel) {
                 ((SearchResultModel) bean.getData()).setOpenPutEntrance(!((SearchResultModel) bean.getData()).isOpenPutEntrance());
+                isOpen = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
                 openPutEntrance = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
             }
         }
