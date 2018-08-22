@@ -32,6 +32,15 @@ MobSDK {
                 miniprogramType 2
                 bypassApproval false
             }
+            WechatMoments {
+                appId "wx9dcadfab00b72712"
+                appSecret "976a1ae11135a6763c849d8344b412b6"
+                userName "gh_afb25ac019c9"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+                bypassApproval false
+            }
         }
     }
 }

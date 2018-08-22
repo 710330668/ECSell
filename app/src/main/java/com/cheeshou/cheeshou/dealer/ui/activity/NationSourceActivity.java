@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.options.CarDetailActivity;
-import com.cheeshou.cheeshou.options.ChooseAreaActivity;
-import com.cheeshou.cheeshou.options.ChooseBrandActivity;
-import com.cheeshou.cheeshou.options.ChooseCarsActivity;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
@@ -50,6 +45,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -511,6 +507,14 @@ public class NationSourceActivity extends BaseActivity {
             case R.id.ll_put_away:
                 switch (INVENTORY) {
                     case C.INVENTORY_MARKET:
+                        mPutAwayData.clear();
+                        for (ItemData bean : mSearchResultData) {
+                            if ((bean.getData() instanceof SearchResultModel) && ((SearchResultModel) bean.getData()).isPut()) {
+                                mPutAwayData.add((SearchResultModel) bean.getData());
+                            }
+                        }
+                        bundle.putParcelableArrayList("data", mPutAwayData);
+                        startActivity(MarketShareCarActivity.class, bundle);
                         break;
                     case C.INVENTORY_DEALER:
                         mPutAwayData.clear();

@@ -6,6 +6,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +89,8 @@ public class CustomerManagerActivity extends BaseActivity {
     Button mBtnReset;
     @BindView(R.id.btn_sure)
     Button mBtnSure;
+    @BindView(R.id.tv_search)
+    TextView mTvSearch;
     private int count;
     private String TAG_FILTER = "tag_filter";
     private String TAG_LOAD_MORE = "tag_load_more";
@@ -104,6 +108,7 @@ public class CustomerManagerActivity extends BaseActivity {
     private String versionId = "";
     private String orderType = "CREATE";
     private String userId = "";
+    private String queryKey = "";
 
     private int selectState = 0;
     private int selectTime = 0;
@@ -126,6 +131,22 @@ public class CustomerManagerActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                queryKey = mEtSearch.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mCustomerRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mCustomerRecycler.addItemDecoration(new SpaceItemDecoration(10));
         mCustomerRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
@@ -180,6 +201,7 @@ public class CustomerManagerActivity extends BaseActivity {
         params.put("versionId", toRequestBody(versionId));
         params.put("orderType", toRequestBody(orderType));
         params.put("userId", toRequestBody(userId));
+        params.put("queryKey", toRequestBody(queryKey));
         Injection.provideApiService().getCustomerList(token, params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -216,7 +238,7 @@ public class CustomerManagerActivity extends BaseActivity {
         mCustomerRecycler.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset})
+    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset, R.id.tv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
@@ -250,6 +272,9 @@ public class CustomerManagerActivity extends BaseActivity {
             case R.id.btn_sure:
                 initRecycler(TAG_FILTER);
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                break;
+            case R.id.tv_search:
+                initRecycler(TAG_FILTER);
                 break;
             default:
         }

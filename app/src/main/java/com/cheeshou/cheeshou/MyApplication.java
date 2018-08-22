@@ -8,6 +8,7 @@ import com.cheeshou.cheeshou.config.Environment;
 import com.cheeshou.cheeshou.remote.ApiService;
 import com.example.com.net.HttpClient;
 import com.example.com.net.config.HttpConfig;
+import com.mob.MobApplication;
 import com.mob.MobSDK;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -21,7 +22,7 @@ import okhttp3.Cache;
 /**
  * Created by 71033 on 2018/7/19.
  */
-public class MyApplication extends Application {
+public class MyApplication extends MobApplication {
 
     public static MyApplication instance;
     private static Context context;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    tools:context="com.example.com.careasysell.dealer.ui.activity.StoreManagerActivity">
+    tools:context="com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity">
 
     <ImageView
         android:id="@+id/iv_background"

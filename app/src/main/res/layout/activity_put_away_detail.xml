@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.com.careasysell.dealer.ui.activity.PutAwayDetailActivity">
+    tools:context="com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity">
 
     <RelativeLayout
         android:id="@+id/layout_bar"

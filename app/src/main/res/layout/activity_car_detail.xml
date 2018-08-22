@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.example.com.careasysell.view.banner.BannerView
+                <com.cheeshou.cheeshou.view.banner.BannerView
                     android:id="@+id/banner_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                     app:bvIndicatorGravity="left"
                     app:bvTitleVisible="false">
 
-                </com.example.com.careasysell.view.banner.BannerView>
+                </com.cheeshou.cheeshou.view.banner.BannerView>
 
                 <ImageView
                     android:id="@+id/iv_amplification"

@@ -9,7 +9,7 @@
         android:scaleType="fitCenter"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />-->
-    <com.example.com.careasysell.view.banner.LazyViewPager
+    <com.cheeshou.cheeshou.view.banner.LazyViewPager
         android:id="@+id/view_pager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

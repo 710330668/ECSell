@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.example.com.careasysell.dealer.ui.activity.AllSourceSearchActivity">
+        tools:context="com.cheeshou.cheeshou.dealer.ui.activity.AllSourceSearchActivity">
 
 
         <LinearLayout
@@ -47,6 +47,13 @@
                 android:textColor="#999999"
                 android:textSize="14dp"
                 app:layout_constraintTop_toTopOf="parent" />
+            
+            <TextView
+                android:id="@+id/tv_search"
+                android:layout_marginLeft="10dp"
+                android:text="搜索"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <ImageView
                 android:id="@+id/img_add_client"
@@ -61,21 +68,21 @@
             android:layout_height="34dp"
             android:orientation="horizontal">
 
-            <com.example.com.careasysell.view.DrawableCenterRadioButton
+            <com.cheeshou.cheeshou.view.DrawableCenterRadioButton
                 android:id="@+id/rb_customer_state"
                 style="@style/customer_manager_radio_button"
                 android:layout_weight="124"
                 android:drawableRight="@drawable/drawable_left_radio_selector"
                 android:text="客户状态" />
 
-            <com.example.com.careasysell.view.DrawableCenterRadioButton
+            <com.cheeshou.cheeshou.view.DrawableCenterRadioButton
                 android:id="@+id/rb_follow_time"
                 style="@style/customer_manager_radio_button"
                 android:layout_weight="125"
                 android:drawableRight="@drawable/drawable_left_radio_selector"
                 android:text="最新跟进时间" />
 
-            <com.example.com.careasysell.view.DrawableCenterRadioButton
+            <com.cheeshou.cheeshou.view.DrawableCenterRadioButton
                 android:id="@+id/rb_customer_filter"
                 style="@style/customer_manager_radio_button"
                 android:layout_weight="124"

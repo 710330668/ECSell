@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import cn.sharesdk.wechat.friends.Wechat;
 
 public class MarketShareCarActivity extends BaseActivity {
@@ -137,17 +139,35 @@ public class MarketShareCarActivity extends BaseActivity {
 //                            Intent intent = new Intent(getApplicationContext(), MarketShareWechatActivity.class);
 //                            startActivity(intent);
 //                            intent.
-                            Wechat.ShareParams sp = new Wechat.ShareParams();
-                            sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
-                            sp.setTitle("车易售"); //分享标题
+//                            Wechat.ShareParams sp = new Wechat.ShareParams();
+//                            sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
+//                            sp.setTitle("车易售"); //分享标题
+//                            String[] toArray = new String[imageArray.size()];
+//                            sp.setImageArray(imageArray.toArray(toArray));
+//                            sp.setText(article);   //分享文本
+////                            sp.setUrl(url);   //网友点进链接后，可以看到分享的详情
+//                            Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+////                            wechat.setPlatformActionListener(platformActionListener); // 设置分享事件回调
+////                             执行分享
+//                            wechat.share(sp);
+
+                            OnekeyShare oks = new OnekeyShare();
+                            // title标题，微信、QQ和QQ空间等平台使用
+                            oks.setTitle("车易售");
+                            // titleUrl QQ和QQ空间跳转链接
+//                            oks.setTitleUrl("http://sharesdk.cn");
+                            // text是分享文本，所有平台都需要这个字段
+                            oks.setText(article);
+                            // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+//                            oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
                             String[] toArray = new String[imageArray.size()];
-                            sp.setImageArray(imageArray.toArray(toArray));
-                            sp.setText(article);   //分享文本
-//                            sp.setUrl(url);   //网友点进链接后，可以看到分享的详情
-                            Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-//                            wechat.setPlatformActionListener(platformActionListener); // 设置分享事件回调
-//                             执行分享
-                            wechat.share(sp);
+                            oks.setImageArray(imageArray.toArray(toArray));
+                            // url在微信、微博，Facebook等平台中使用
+//                            oks.setUrl("http://sharesdk.cn");
+                            // comment是我对这条分享的评论，仅在人人网使用
+//                            oks.setComment("我是测试评论文本");
+                            // 启动分享GUI
+                            oks.show(MarketShareCarActivity.this);
                         }
                     });
                     mEtShare = ((EditText) convertView.findViewById(R.id.et_share_article));

@@ -50,7 +50,7 @@
             style="@style/vehicleheat_radio_button"
             android:text="上周" />
 
-        <com.example.com.careasysell.view.DrawableCenterRadioButton
+        <com.cheeshou.cheeshou.view.DrawableCenterRadioButton
             android:id="@+id/rb_share_rank_more"
             style="@style/vehicleheat_radio_button"
             android:drawableRight="@drawable/drawable_left_radio_selector"
