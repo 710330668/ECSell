@@ -142,6 +142,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                         mTvBarRight.setText("取消");
                     }
                 }
+                queryKey = mEtSearch.getText().toString();
             }
 
             @Override
