@@ -354,6 +354,7 @@ public class SearchResultFragment extends BaseFragment {
         this.startDate = startDate;
         this.endDate = endDate;
         this.queryKey = queryKey;
+        mSearchResultData.clear();
         getOwnOption();
     }
 

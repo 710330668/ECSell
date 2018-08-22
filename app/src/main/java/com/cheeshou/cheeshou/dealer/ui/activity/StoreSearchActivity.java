@@ -42,6 +42,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.cheeshou.cheeshou.R.layout.item_drawer_filter_racter;
+import static com.cheeshou.cheeshou.config.C.INVENTORY_MARKET;
 
 public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.OnSelectListener {
 
@@ -142,6 +143,14 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                         mTvBarRight.setText("取消");
                     }
                 }
+                if (INVENTORY == C.INVENTORY_MARKET) {
+                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+                        mTvBarRight.setText("搜索");
+                        queryKey = mEtSearch.getText().toString();
+                    } else {
+                        mTvBarRight.setText("分享");
+                    }
+                }
                 queryKey = mEtSearch.getText().toString();
             }
 
@@ -154,7 +163,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
             case C.INVENTORY_DEALER:
                 mTvBarRight.setText("取消");
                 break;
-            case C.INVENTORY_MARKET:
+            case INVENTORY_MARKET:
                 mTvBarRight.setText("分享");
                 break;
             case C.INVENTORY_OPTION:
@@ -401,8 +410,16 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                                 break;
                         }
                         break;
-                    case C.INVENTORY_MARKET:
-                        mSearchResultFragment.setShareOpen();
+                    case INVENTORY_MARKET:
+                        switch (mTvBarRight.getText().toString()) {
+                            case "分享":
+//                                this.finish();
+                                mSearchResultFragment.setShareOpen();
+                                break;
+                            case "搜索":
+                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                                break;
+                        }
                         break;
                     case C.INVENTORY_OPTION:
                         this.finish();
