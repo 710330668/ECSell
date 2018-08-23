@@ -23,7 +23,6 @@ import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
-import com.cheeshou.cheeshou.market.ui.MarketStoreShareActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;

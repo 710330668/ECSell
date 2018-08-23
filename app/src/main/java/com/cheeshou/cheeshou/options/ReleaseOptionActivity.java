@@ -25,16 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cheeshou.cheeshou.options.model.CarPhotoModel;
-import com.cheeshou.cheeshou.options.model.ColorModel;
-import com.cheeshou.cheeshou.options.model.FormalityModel;
-import com.cheeshou.cheeshou.options.model.OptionTypeModel;
-import com.cheeshou.cheeshou.options.model.SalesAreaModel;
-import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
-import com.cheeshou.cheeshou.options.model.response.CommonResponse;
-import com.cheeshou.cheeshou.options.model.response.OptionTypeResponse;
-import com.cheeshou.cheeshou.options.model.response.SalesAreaResponse;
-import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
@@ -508,54 +498,58 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void saveCarInfo() {
-        prefers = "";
-        Map<String, RequestBody> params = new HashMap<>();
-        List<MultipartBody.Part> parts = new ArrayList<>();
-        for (int i = 0; i < imgPaths.size(); i++) {
-            File file = new File(imgPaths.get(i));
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
-            parts.add(body);
-        }
-        params.put("carType", toRequestBody(optionId));
-        params.put("carModel", toRequestBody(ParamManager.getInstance(this).getCarId()));
-        params.put("saleArea", toRequestBody(tvSalesArea.getText().toString().trim()));
-        params.put("carFormality", toRequestBody(tvFormalities.getText().toString()));
-        params.put("carYear", toRequestBody(tvYear.getText().toString()));
-        params.put("carSetting", toRequestBody(etConfiguration.getText().toString()));
-        for (int i = 0; i < flags.size(); i++) {
-            if (flags.get(i)) {
-                prefers = prefers + "," + preferential.get(i);
+        try {
+            prefers = "";
+            Map<String, RequestBody> params = new HashMap<>();
+            List<MultipartBody.Part> parts = new ArrayList<>();
+            for (int i = 0; i < imgPaths.size(); i++) {
+                File file = new File(imgPaths.get(i));
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+                parts.add(body);
             }
-        }
-        prefers = prefers.substring(1, prefers.length());
-        params.put("discountList", toRequestBody(prefers));
-        params.put("discountContent", toRequestBody(etSpecificDiscount.getText().toString()));
-        params.put("outsiteColor", toRequestBody(tvApprenceColor.getText().toString()));
-        params.put("withinColor", toRequestBody(tvInteriorColor.getText().toString()));
-        params.put("provinceCode", toRequestBody(provinceCode));
-        params.put("cityCode", toRequestBody(cityCode));
-        params.put("remark", toRequestBody(etNote.getText().toString()));
-        params.put("carPrice", toRequestBody(etCarPrice.getText().toString()));
-        params.put("guidPrice", toRequestBody(etGuidedPrice.getText().toString()));
-        params.put("saleCommission", toRequestBody(etCommission.getText().toString()));
-        Injection.provideApiService().saveCarInfo(token, parts, params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<EasyResponse>() {
-                    @Override
-                    public void accept(EasyResponse response) throws Exception {
-                        LogUtils.e(response.getMsg());
-                        if (response.getCode() == 200) {
-                            Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                            ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
-                            ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
-                            finish();
-                        } else {
-                            Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+            params.put("carType", toRequestBody(optionId));
+            params.put("carModel", toRequestBody(ParamManager.getInstance(this).getCarId()));
+            params.put("saleArea", toRequestBody(tvSalesArea.getText().toString().trim()));
+            params.put("carFormality", toRequestBody(tvFormalities.getText().toString()));
+            params.put("carYear", toRequestBody(tvYear.getText().toString()));
+            params.put("carSetting", toRequestBody(etConfiguration.getText().toString()));
+            for (int i = 0; i < flags.size(); i++) {
+                if (flags.get(i)) {
+                    prefers = prefers + "," + preferential.get(i);
+                }
+            }
+            prefers = prefers.substring(1, prefers.length());
+            params.put("discountList", toRequestBody(prefers));
+            params.put("discountContent", toRequestBody(etSpecificDiscount.getText().toString()));
+            params.put("outsiteColor", toRequestBody(tvApprenceColor.getText().toString()));
+            params.put("withinColor", toRequestBody(tvInteriorColor.getText().toString()));
+            params.put("provinceCode", toRequestBody(provinceCode));
+            params.put("cityCode", toRequestBody(cityCode));
+            params.put("remark", toRequestBody(etNote.getText().toString()));
+            params.put("carPrice", toRequestBody(etCarPrice.getText().toString()));
+            params.put("guidPrice", toRequestBody(etGuidedPrice.getText().toString()));
+            params.put("saleCommission", toRequestBody(etCommission.getText().toString()));
+            Injection.provideApiService().saveCarInfo(token, parts, params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<EasyResponse>() {
+                        @Override
+                        public void accept(EasyResponse response) throws Exception {
+                            LogUtils.e(response.getMsg());
+                            if (response.getCode() == 200) {
+                                Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
+                                ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
+                                finish();
+                            } else {
+                                Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }catch (Exception e){
+            LogUtils.e(e.getMessage());
+        }
 
     }
 

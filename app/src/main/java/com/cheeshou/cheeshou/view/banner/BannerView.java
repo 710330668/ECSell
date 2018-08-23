@@ -180,6 +180,7 @@ public class BannerView<Item> extends FrameLayout {
         vBottomBar.setClipToPadding(false);
         vBottomBar.setOrientation(LinearLayout.HORIZONTAL);
         vBottomBar.setGravity(Gravity.CENTER);
+        vBottomBar.setVisibility(GONE);
         addView(vBottomBar, new LayoutParams(mItemWidth, LayoutParams.WRAP_CONTENT, Gravity.BOTTOM));
 
         vIndicator = new ViewPagerIndicator(context);
@@ -425,7 +426,7 @@ public class BannerView<Item> extends FrameLayout {
             }
             mCurrentPosition = position % mDataList.size();
             setCurrentTitle(mCurrentPosition);
-            vBottomBar.setVisibility(mCurrentPosition == mDataList.size() - 1 && !mBarVisibleWhenLast ? GONE : VISIBLE);
+            vBottomBar.setVisibility(VISIBLE);
 
             if (mOnPageChangeListener != null) {
                 mOnPageChangeListener.onPageSelected(position);

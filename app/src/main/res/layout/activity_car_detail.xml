@@ -50,7 +50,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="220dp">
 
                 <com.cheeshou.cheeshou.view.banner.BannerView
                     android:id="@+id/banner_view"
@@ -58,24 +58,34 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     app:bvAspectRatio="0.6666666"
-                    app:bvBarColor="#88888888"
-                    app:bvIndicatorColor="#cccccc"
+                    app:bvBarVisibleWhenLast="false"
                     app:bvIndicatorColorSelected="@color/colorAccent"
                     app:bvIndicatorGravity="left"
-                    app:bvTitleVisible="false">
+                    app:bvTitleVisible="false"
+                    >
 
                 </com.cheeshou.cheeshou.view.banner.BannerView>
 
                 <ImageView
                     android:id="@+id/iv_amplification"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp"
+                    android:layout_marginBottom="12dp"
                     android:src="@mipmap/search" />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_margin="14dp"
+                android:textColor="@color/color3"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_vname"
@@ -83,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
                 android:layout_marginRight="14dp"
-                android:layout_marginTop="20dp"
                 android:text="上汽大众-途观2018款330TSI 自动两驱风尚版说不定还有第二行"
                 android:textColor="#333333"
                 android:textSize="16sp"
@@ -124,6 +133,7 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_reduce"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"

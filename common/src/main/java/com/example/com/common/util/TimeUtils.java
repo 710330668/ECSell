@@ -65,7 +65,7 @@ public class TimeUtils {
      *
      * 注意：SimpleDateFormat不是线程安全的，线程安全需用{@code ThreadLocal<SimpleDateFormat>}
      */
-    public static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DEFAULT_PATTERN = "yyyy-MM-dd";
 
 
     public static final String DEFAULT_PATTERN1 = "yyyy-MM-dd";

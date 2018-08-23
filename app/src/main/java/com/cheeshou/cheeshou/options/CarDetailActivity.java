@@ -17,7 +17,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
@@ -39,7 +38,6 @@ import com.example.com.imageloader.LoaderManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -116,6 +114,10 @@ public class CarDetailActivity extends BaseActivity {
     Button btnBrowseCar;
     @BindView(R.id.btn_share_car)
     Button btnShareCar;
+    @BindView(R.id.tv_reduce)
+    TextView tvReduce;
+    @BindView(R.id.tv_name)
+    TextView tvName;
     private PopupWindow pop;
     private View popView;
     private Button modifyBtn, shelvesBtn, reservateBtn;
@@ -124,7 +126,7 @@ public class CarDetailActivity extends BaseActivity {
     public static String[] titles;
     public static String[] urls;
     List<BannerItem> list = new ArrayList<>();
-    private List<String> discounts;
+    private List<String> discounts = new ArrayList<>();
     private String saleId;
 
     @C.INVENTORY
@@ -210,6 +212,7 @@ public class CarDetailActivity extends BaseActivity {
                 llyShare.setVisibility(View.VISIBLE);
                 btnCarShare.setVisibility(View.GONE);
                 LayoutInflateView(INVENTORY);
+                tvName.setVisibility(View.VISIBLE);
                 break;
             case C.INVENTORY_MARKET:
                 llyShare.setVisibility(View.GONE);
@@ -223,6 +226,7 @@ public class CarDetailActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getOrderDetail() {
+        discounts.clear();
         Injection.provideApiService().findOrderDetail(token, orderItemId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -232,19 +236,21 @@ public class CarDetailActivity extends BaseActivity {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
                             saleId = response.getData().getCarId();
-                            tvAdvise.setText("建议售价" + response.getData().getAdvicePrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
+                            tvName.setText(response.getData().getCarUserName()+"|"+response.getData().getProvinceCode()+response.getData().getCityName());
+                            tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
-                            tvCarGuidePrice.setText(response.getData().getGuidPrice() + "万");
+                            tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
+                            tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
                             tvSellStatus.setText(response.getData().getCarStatusName());
                             tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
-                            tvCarType.setText(response.getData().getCarType());
+                            tvCarType.setText(response.getData().getTypeName());
                             tvProvince.setText(response.getData().getProvinceName());
                             tvSalerArea.setText(response.getData().getSaleArea());
                             for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
-                                discounts = Arrays.asList(response.getData().getDiscounts().get(i).getDiscountName().split(","));
+                                discounts.add(response.getData().getDiscounts().get(i).getDiscountName());
                             }
                             addDiscounts(discounts);
                             tvDiscountContent.setText(response.getData().getDiscountContent());
@@ -257,7 +263,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvDealValence.setText(response.getData().getOrderPrice() + "万");
                             urls = new String[response.getData().getImgs().size()];
                             for (int i = 0; i < response.getData().getImgs().size(); i++) {
-                                urls[i] = response.getData().getImgs().get(i).getImgThumUrl();
+                                urls[i] = response.getData().getImgs().get(i).getImgUrl();
                             }
                             for (int i = 0; i < urls.length; i++) {
                                 BannerItem item = new BannerItem();
@@ -267,7 +273,6 @@ public class CarDetailActivity extends BaseActivity {
                             bannerView.setViewFactory(new BannerViewFactory());
                             bannerView.setDataList(list);
                             bannerView.start();
-
                         }
                     }
                 });
@@ -275,6 +280,7 @@ public class CarDetailActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getCarDetail() {
+        discounts.clear();
         Injection.provideApiService().getCarDetail(token, carId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -285,19 +291,29 @@ public class CarDetailActivity extends BaseActivity {
                         if (response.getCode() == 200) {
                             carDetailResponse = response;
                             saleId = response.getData().getSaleId();
-                            tvAdvise.setText("建议售价" + response.getData().getAdvicePrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
-                            tvVname.setText(response.getData().getVname());
+                            tvName.setText(response.getData().getCarUserName()+"|"+response.getData().getProvinceCode()+response.getData().getCityName());
+                            if(INVENTORY == C.INVENTORY_DEALER){
+                                tvAdvise.setText("车源价"+response.getData().getCarPrice()+"万|"
+                                        +"建议售价" + response.getData().getGuidPrice() + "万|"
+                                        + "销售提成" + response.getData().getSaleCommission() + "万");
+                            }else if(INVENTORY == C.INVENTORY_MARKET){
+                                tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万");
+                            } else{
+                                tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
+                            }
+                            tvVname.setText(response.getData().getBrand() + "-" + response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
-                            tvCarGuidePrice.setText(response.getData().getGuidPrice() + "万");
+                            tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
+                            tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
                             tvSellStatus.setText(response.getData().getCarStatusName());
-                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次");
+                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
-                            tvCarType.setText(response.getData().getCarType());
-                            tvProvince.setText(response.getData().getProvinceName());
+                            tvCarType.setText(response.getData().getTypeName());
+                            tvProvince.setText(response.getData().getProvinceName() + " " + response.getData().getCityName());
                             tvSalerArea.setText(response.getData().getSaleArea());
                             for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
-                                discounts = Arrays.asList(response.getData().getDiscounts().get(i).getDiscountName().split(","));
+                                discounts.add(response.getData().getDiscounts().get(i).getDiscountName());
                             }
                             addDiscounts(discounts);
                             tvDiscountContent.setText(response.getData().getDiscountContent());
@@ -307,7 +323,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvRemark.setText(response.getData().getRemark());
                             urls = new String[response.getData().getImgs().size()];
                             for (int i = 0; i < response.getData().getImgs().size(); i++) {
-                                urls[i] = response.getData().getImgs().get(i).getImgThumUrl();
+                                urls[i] = response.getData().getImgs().get(i).getImgUrl();
                             }
                             for (int i = 0; i < urls.length; i++) {
                                 BannerItem item = new BannerItem();
@@ -317,7 +333,6 @@ public class CarDetailActivity extends BaseActivity {
                             bannerView.setViewFactory(new BannerViewFactory());
                             bannerView.setDataList(list);
                             bannerView.start();
-
                         }
                     }
                 });
@@ -532,6 +547,7 @@ public class CarDetailActivity extends BaseActivity {
         @Override
         public View create(BannerItem item, int position, ViewGroup container) {
             ImageView iv = new ImageView(container.getContext());
+            iv.setScaleType(ImageView.ScaleType.FIT_XY);
             LoaderManager.getLoader().loadNet(iv, item.image);
             return iv;
         }
