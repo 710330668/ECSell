@@ -2,7 +2,6 @@ package com.cheeshou.cheeshou.dealer.ui.fragment;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +10,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -34,7 +31,6 @@ import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
 import com.cheeshou.cheeshou.utils.ParamManager;
-import com.cheeshou.cheeshou.utils.ScreenUtils;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.adapter.BaseAdapter;
@@ -235,10 +231,11 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                                 SearchResultModel data = new SearchResultModel();
                                 data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
-                                data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
+                                data.setPrice("车源价"+response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
-                                data.setTitle(response.getData().getLists().get(i).getVname());
+                                data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
+                                        response.getData().getLists().get(i).getBrowseNum() + "次");
+                                data.setTitle(response.getData().getLists().get(i).getBrand() + "-" +response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);

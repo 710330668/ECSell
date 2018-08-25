@@ -1,18 +1,5 @@
 package com.cheeshou.cheeshou.remote;
 
-import com.cheeshou.cheeshou.options.model.response.AreaProvinceResponse;
-import com.cheeshou.cheeshou.options.model.response.CarBrandResponse;
-import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
-import com.cheeshou.cheeshou.options.model.response.CarsModelResponse;
-import com.cheeshou.cheeshou.options.model.response.CarsResponse;
-import com.cheeshou.cheeshou.options.model.response.CommonResponse;
-import com.cheeshou.cheeshou.options.model.response.HotCarCountResponse;
-import com.cheeshou.cheeshou.options.model.response.HotCarListResponse;
-import com.cheeshou.cheeshou.options.model.response.ModifyCarInforResponse;
-import com.cheeshou.cheeshou.options.model.response.OptionTypeResponse;
-import com.cheeshou.cheeshou.options.model.response.SalesAreaResponse;
-import com.cheeshou.cheeshou.usercenter.model.DealerShipResponse;
-import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerDetailResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerInfoResponse;
@@ -155,6 +142,10 @@ public interface ApiService {
     @POST("user/saveXsUserInfo")
     Observable<EasyResponse> saveXsUserInfo(@Header("token") String token, @Part MultipartBody.Part file, @PartMap Map<String, RequestBody> params);
 
+    //新增销售人员 无File
+    @Multipart
+    @POST("user/saveXsUserInfo")
+    Observable<EasyResponse> saveXsUserInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     //销售人员详情
     @FormUrlEncoded

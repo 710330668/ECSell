@@ -118,6 +118,10 @@ public class CarDetailActivity extends BaseActivity {
     TextView tvReduce;
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.tv_rebates)
+    TextView tvRebates;
+    @BindView(R.id.lly_rebates)
+    LinearLayout llyRebates;
     private PopupWindow pop;
     private View popView;
     private Button modifyBtn, shelvesBtn, reservateBtn;
@@ -193,11 +197,13 @@ public class CarDetailActivity extends BaseActivity {
         if (TextUtils.isEmpty(source)) {
             getCarDetail();
         } else {
+            tvRebates.setVisibility(View.VISIBLE);
             getOrderDetail();
         }
 
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
+                llyRebates.setVisibility(View.GONE);
                 llyShare.setVisibility(View.GONE);
                 btnCarShare.setVisibility(View.GONE);
                 LayoutInflateView(INVENTORY);
@@ -236,23 +242,24 @@ public class CarDetailActivity extends BaseActivity {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
                             saleId = response.getData().getCarId();
-                            tvName.setText(response.getData().getCarUserName()+"|"+response.getData().getProvinceCode()+response.getData().getCityName());
-                            tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
+                            tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceCode() + response.getData().getCityName());
+                            tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万" + "销售底价" + response.getData().getSaleCarPrice() + "万");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
                             tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
                             tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
                             tvSellStatus.setText(response.getData().getCarStatusName());
-                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
+                            tvShareShelvesNum.setText("分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
                             tvCarType.setText(response.getData().getTypeName());
-                            tvProvince.setText(response.getData().getProvinceName());
+                            tvProvince.setText(response.getData().getProvinceName() + " " + response.getData().getCityName());
                             tvSalerArea.setText(response.getData().getSaleArea());
                             for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
                                 discounts.add(response.getData().getDiscounts().get(i).getDiscountName());
                             }
                             addDiscounts(discounts);
+                            tvRebates.setText("保险返点" + response.getData().getInsuranceRebates() + "%" + "|贷款返点" + response.getData().getLoanRebates() + "%");
                             tvDiscountContent.setText(response.getData().getDiscountContent());
                             tvCarFormality.setText(response.getData().getCarFormality());
                             tvCarYear.setText(response.getData().getCarYear());
@@ -278,6 +285,7 @@ public class CarDetailActivity extends BaseActivity {
                 });
     }
 
+
     @SuppressLint("CheckResult")
     private void getCarDetail() {
         discounts.clear();
@@ -291,19 +299,20 @@ public class CarDetailActivity extends BaseActivity {
                         if (response.getCode() == 200) {
                             carDetailResponse = response;
                             saleId = response.getData().getSaleId();
-                            tvName.setText(response.getData().getCarUserName()+"|"+response.getData().getProvinceCode()+response.getData().getCityName());
-                            if(INVENTORY == C.INVENTORY_DEALER){
-                                tvAdvise.setText("车源价"+response.getData().getCarPrice()+"万|"
-                                        +"建议售价" + response.getData().getGuidPrice() + "万|"
+                            tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceCode() + response.getData().getCityName());
+                            if (INVENTORY == C.INVENTORY_DEALER) {
+                                tvAdvise.setText("车源价" + response.getData().getCarPrice() + "万|"
+                                        + "建议售价" + response.getData().getGuidPrice() + "万|"
                                         + "销售提成" + response.getData().getSaleCommission() + "万");
-                            }else if(INVENTORY == C.INVENTORY_MARKET){
+                            } else if (INVENTORY == C.INVENTORY_MARKET) {
                                 tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万");
-                            } else{
+                            } else {
                                 tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
                             }
                             tvVname.setText(response.getData().getBrand() + "-" + response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
                             tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
+                            tvRebates.setText("保险返点" + response.getData().getInsuranceRebates() + "%" + "|贷款返点" + response.getData().getLoanRebates() + "%");
                             tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
                             tvSellStatus.setText(response.getData().getCarStatusName());
                             tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");

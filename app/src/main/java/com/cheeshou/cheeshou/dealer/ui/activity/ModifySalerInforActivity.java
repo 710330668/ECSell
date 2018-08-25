@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,13 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cheeshou.cheeshou.remote.Injection;
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserDetailResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.view.CommonDialog;
-import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.ContractUtil;
 import com.example.com.common.util.LogUtils;
@@ -105,6 +105,7 @@ public class ModifySalerInforActivity extends BaseActivity {
         etName.setText(response.getData().getUserName());
         etPhone.setText(response.getData().getPhone());
         etPassword.setText("********");
+        etWechat.setText(response.getData().getWeChat());
         LoaderManager.getLoader().loadNet(ivHead, response.getData().getUserPic());
     }
 
@@ -288,9 +289,6 @@ public class ModifySalerInforActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     private void savaInfor() {
         Map<String, RequestBody> params = new HashMap<>();
-        File file = new File(imgUrl);
-        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
         params.put("account", toRequestBody(etAccount.getText().toString()));
         params.put("password", toRequestBody(etPassword.getText().toString()));
         params.put("phone", toRequestBody(etPhone.getText().toString().trim()));
@@ -298,21 +296,44 @@ public class ModifySalerInforActivity extends BaseActivity {
         params.put("weChat", toRequestBody(etWechat.getText().toString()));
         params.put("sex", toRequestBody("0"));
         params.put("userId", toRequestBody(userId));
-        Injection.provideApiService().saveXsUserInfo(token, body, params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<EasyResponse>() {
-                    @Override
-                    public void accept(EasyResponse response) throws Exception {
-                        LogUtils.e(response.getMsg());
-                        if (response.getCode() == 200) {
-                            Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+        if(!TextUtils.isEmpty(imgUrl)){
+            File file = new File(imgUrl);
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+            Injection.provideApiService().saveXsUserInfo(token, body, params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<EasyResponse>() {
+                        @Override
+                        public void accept(EasyResponse response) throws Exception {
+                            LogUtils.e(response.getMsg());
+                            if (response.getCode() == 200) {
+                                Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }else{
+            Injection.provideApiService().saveXsUserInfo(token, params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<EasyResponse>() {
+                        @Override
+                        public void accept(EasyResponse response) throws Exception {
+                            LogUtils.e(response.getMsg());
+                            if (response.getCode() == 200) {
+                                Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+
+
 
     }
 

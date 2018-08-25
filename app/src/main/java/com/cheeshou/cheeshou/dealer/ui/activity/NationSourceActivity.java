@@ -45,6 +45,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.TimeUtils;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -235,16 +236,15 @@ public class NationSourceActivity extends BaseActivity {
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
-                                AllOptionResponse.DataBean.ListsBean listsBean = response.getData().getLists().get(i);
-                                data.setDate(response.getData().getLists().get(i).getCreateDate() + "");
+                                data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
-                                data.setPrice(response.getData().getLists().get(i).getBrowseNum() + "万");
+                                data.setPrice("车源价"+response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" + response.getData().getLists().get(i).getBrowseNum() + "次");
-                                data.setTitle(response.getData().getLists().get(i).getVname());
+                                data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
+                                        response.getData().getLists().get(i).getBrowseNum() + "次");
+                                data.setTitle(response.getData().getLists().get(i).getBrand() + "-" +response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
-                                data.setOpenPutEntrance(isOpen);
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

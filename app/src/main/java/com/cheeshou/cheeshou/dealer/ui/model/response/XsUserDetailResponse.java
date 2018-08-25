@@ -10,7 +10,7 @@ public class XsUserDetailResponse implements Serializable{
 
     /**
      * code : 200
-     * data : {"account":"xs123","createDate":1533571200000,"phone":"5555228243","sex":0,"userId":"308c226ede2c4e3b8e2a19e636ad2e4f","userName":"Anna Haro","userPic":"http://39.104.136.205:8888/user/20180807/1533628404951.jpg"}
+     * data : {"account":"c002","createDate":1534176000000,"phone":"18363671109","sex":0,"userId":"2a24119c20a04624982ad65305fca433","userName":"cys002","userPic":"http://39.104.136.205:8888/user/20180814/1534213425288.png","weChat":"123456"}
      * msg : 操作成功
      */
 
@@ -44,13 +44,14 @@ public class XsUserDetailResponse implements Serializable{
 
     public static class DataBean implements Serializable{
         /**
-         * account : xs123
-         * createDate : 1533571200000
-         * phone : 5555228243
+         * account : c002
+         * createDate : 1534176000000
+         * phone : 18363671109
          * sex : 0
-         * userId : 308c226ede2c4e3b8e2a19e636ad2e4f
-         * userName : Anna Haro
-         * userPic : http://39.104.136.205:8888/user/20180807/1533628404951.jpg
+         * userId : 2a24119c20a04624982ad65305fca433
+         * userName : cys002
+         * userPic : http://39.104.136.205:8888/user/20180814/1534213425288.png
+         * weChat : 123456
          */
 
         private String account;
@@ -60,6 +61,7 @@ public class XsUserDetailResponse implements Serializable{
         private String userId;
         private String userName;
         private String userPic;
+        private String weChat;
 
         public String getAccount() {
             return account;
@@ -115,6 +117,14 @@ public class XsUserDetailResponse implements Serializable{
 
         public void setUserPic(String userPic) {
             this.userPic = userPic;
+        }
+
+        public String getWeChat() {
+            return weChat;
+        }
+
+        public void setWeChat(String weChat) {
+            this.weChat = weChat;
         }
     }
 }

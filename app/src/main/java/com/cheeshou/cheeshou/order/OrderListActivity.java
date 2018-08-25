@@ -136,7 +136,7 @@ public class OrderListActivity extends BaseActivity {
             mSearchResultData.remove(mSearchResultData.size() - 1);
         }
         Injection.provideApiService().findMyOrderList(token, CURRENT_PAGE + "", PAGE_SIZE + "", xsUserId,
-                startDate, endDate, "", "", etSearch.getText().toString(), orderType).
+                startDate, endDate, minPrice, maxPrice, etSearch.getText().toString(), orderType).
                 subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<OrderListResponse>() {
@@ -293,18 +293,29 @@ public class OrderListActivity extends BaseActivity {
                                     maxPrice = "";
                                     break;
                                 case "5万以下":
-                                    minPrice = "";
-                                    maxPrice = "";
+                                    minPrice = "0";
+                                    maxPrice = "5";
                                     break;
                                 case "5万-10万":
+                                    minPrice = "5";
+                                    maxPrice = "10";
                                     break;
                                 case "50-100万":
+                                    minPrice = "50";
+                                    maxPrice = "100";
                                     break;
                                 case "100万及以上":
+                                    minPrice = "100";
+                                    maxPrice = "";
                                     break;
                                 default:
+                                    minPrice = rbDealValence.getText().toString().substring(0,2);
+                                    maxPrice = rbDealValence.getText().toString().substring(4,5);
                                     break;
                             }
+                            mSearchResultData.clear();
+                            CURRENT_PAGE = 1;
+                            getOrderList();
                             selectOrder = radioGroup.indexOfChild(selectButton);
                             mPopupWindow.dismiss();
                             break;

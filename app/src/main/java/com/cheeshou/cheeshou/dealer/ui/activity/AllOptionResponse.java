@@ -9,7 +9,7 @@ public class AllOptionResponse {
 
     /**
      * code : 200
-     * data : {"count":5,"lists":[{"brand":"Agile Automotive","browseNum":7,"carId":"0d76e55458a644d49dc79f3a46f069d5","carSeries":"奥迪A5","carStatusName":"已上架","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859956000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":4,"shelvesNum":1,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":7,"carId":"0a6a1f00182548cebfa2f4f5b8a375f1","carSeries":"奥迪A5","carStatusName":"已上架","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859948000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859948243_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":7,"shelvesNum":1,"typeName":"全国","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":0,"carId":"bc85396b98b94e5a86d2445f81168f56","carSeries":"奥迪A5","carStatusName":"在售","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859936000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859935683_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":0,"shelvesNum":0,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":0,"carId":"3237dce78c674c9eae8ac83f3b37eb92","carSeries":"奥迪A5","carStatusName":"在售","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859923000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859924535_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":0,"shelvesNum":0,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":0,"carId":"f7fd2cad76e14b6b87b26af55fab5e17","carSeries":"奥迪A5","carStatusName":"在售","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859769000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859769622_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":0,"shelvesNum":0,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"}]}
+     * data : {"count":1,"lists":[{"advicePrice":10,"brand":"Agile Automotive","browseNum":433,"carId":"0a6a1f00182548cebfa2f4f5b8a375f1","carPrice":130,"carSeries":"奥迪A5","carStatusName":"已预订","carUserName":"山东青岛","carUserPhone":"13869647062","cityName":"蚌埠市","createDate":1532859948000,"guidPrice":240,"imgThumUrl":"http://39.104.136.205:8888/car/20180815/1534304526428_small.jpg","provinceName":"安徽省","saleCommission":2,"shareNum":8,"shelvesNum":3,"typeName":"全国","vname":"2017款 Sportback 45 TFSI quattro 运动型"}]}
      * msg : 操作成功
      */
 
@@ -43,8 +43,8 @@ public class AllOptionResponse {
 
     public static class DataBean {
         /**
-         * count : 5
-         * lists : [{"brand":"Agile Automotive","browseNum":7,"carId":"0d76e55458a644d49dc79f3a46f069d5","carSeries":"奥迪A5","carStatusName":"已上架","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859956000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":4,"shelvesNum":1,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":7,"carId":"0a6a1f00182548cebfa2f4f5b8a375f1","carSeries":"奥迪A5","carStatusName":"已上架","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859948000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859948243_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":7,"shelvesNum":1,"typeName":"全国","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":0,"carId":"bc85396b98b94e5a86d2445f81168f56","carSeries":"奥迪A5","carStatusName":"在售","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859936000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859935683_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":0,"shelvesNum":0,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":0,"carId":"3237dce78c674c9eae8ac83f3b37eb92","carSeries":"奥迪A5","carStatusName":"在售","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859923000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859924535_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":0,"shelvesNum":0,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"},{"brand":"Agile Automotive","browseNum":0,"carId":"f7fd2cad76e14b6b87b26af55fab5e17","carSeries":"奥迪A5","carStatusName":"在售","carUserName":"18866195678","cityName":"蚌埠市","createDate":1532859769000,"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859769622_small.jpg","provinceName":"安徽省","saleCommission":2000,"shareNum":0,"shelvesNum":0,"typeName":"国产-现车","vname":"2017款 Sportback 45 TFSI quattro 运动型"}]
+         * count : 1
+         * lists : [{"advicePrice":10,"brand":"Agile Automotive","browseNum":433,"carId":"0a6a1f00182548cebfa2f4f5b8a375f1","carPrice":130,"carSeries":"奥迪A5","carStatusName":"已预订","carUserName":"山东青岛","carUserPhone":"13869647062","cityName":"蚌埠市","createDate":1532859948000,"guidPrice":240,"imgThumUrl":"http://39.104.136.205:8888/car/20180815/1534304526428_small.jpg","provinceName":"安徽省","saleCommission":2,"shareNum":8,"shelvesNum":3,"typeName":"全国","vname":"2017款 Sportback 45 TFSI quattro 运动型"}]
          */
 
         private int count;
@@ -68,31 +68,39 @@ public class AllOptionResponse {
 
         public static class ListsBean {
             /**
+             * advicePrice : 10
              * brand : Agile Automotive
-             * browseNum : 7
-             * carId : 0d76e55458a644d49dc79f3a46f069d5
+             * browseNum : 433
+             * carId : 0a6a1f00182548cebfa2f4f5b8a375f1
+             * carPrice : 130
              * carSeries : 奥迪A5
-             * carStatusName : 已上架
-             * carUserName : 18866195678
+             * carStatusName : 已预订
+             * carUserName : 山东青岛
+             * carUserPhone : 13869647062
              * cityName : 蚌埠市
-             * createDate : 1532859956000
-             * imgThumUrl : http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg
+             * createDate : 1532859948000
+             * guidPrice : 240
+             * imgThumUrl : http://39.104.136.205:8888/car/20180815/1534304526428_small.jpg
              * provinceName : 安徽省
-             * saleCommission : 2000
-             * shareNum : 4
-             * shelvesNum : 1
-             * typeName : 国产-现车
+             * saleCommission : 2
+             * shareNum : 8
+             * shelvesNum : 3
+             * typeName : 全国
              * vname : 2017款 Sportback 45 TFSI quattro 运动型
              */
 
+            private int advicePrice;
             private String brand;
             private int browseNum;
             private String carId;
+            private int carPrice;
             private String carSeries;
             private String carStatusName;
             private String carUserName;
+            private String carUserPhone;
             private String cityName;
             private long createDate;
+            private int guidPrice;
             private String imgThumUrl;
             private String provinceName;
             private int saleCommission;
@@ -100,6 +108,14 @@ public class AllOptionResponse {
             private int shelvesNum;
             private String typeName;
             private String vname;
+
+            public int getAdvicePrice() {
+                return advicePrice;
+            }
+
+            public void setAdvicePrice(int advicePrice) {
+                this.advicePrice = advicePrice;
+            }
 
             public String getBrand() {
                 return brand;
@@ -123,6 +139,14 @@ public class AllOptionResponse {
 
             public void setCarId(String carId) {
                 this.carId = carId;
+            }
+
+            public int getCarPrice() {
+                return carPrice;
+            }
+
+            public void setCarPrice(int carPrice) {
+                this.carPrice = carPrice;
             }
 
             public String getCarSeries() {
@@ -149,6 +173,14 @@ public class AllOptionResponse {
                 this.carUserName = carUserName;
             }
 
+            public String getCarUserPhone() {
+                return carUserPhone;
+            }
+
+            public void setCarUserPhone(String carUserPhone) {
+                this.carUserPhone = carUserPhone;
+            }
+
             public String getCityName() {
                 return cityName;
             }
@@ -163,6 +195,14 @@ public class AllOptionResponse {
 
             public void setCreateDate(long createDate) {
                 this.createDate = createDate;
+            }
+
+            public int getGuidPrice() {
+                return guidPrice;
+            }
+
+            public void setGuidPrice(int guidPrice) {
+                this.guidPrice = guidPrice;
             }
 
             public String getImgThumUrl() {

@@ -182,7 +182,7 @@ public class SearchResultFragment extends BaseFragment {
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价"+response.getData().getLists().get(i).getBrowseNum() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
+                                data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" + response.getData().getLists().get(i).getBrowseNum() + "次");
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" +response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());

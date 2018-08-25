@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserDetailResponse;
@@ -85,6 +84,7 @@ public class SalerDetailActivity extends BaseActivity {
                             tvAccount.setText(response.getData().getAccount());
                             tvName.setText(response.getData().getUserName());
                             tvPhone.setText(response.getData().getPhone());
+                            tvWechat.setText(response.getData().getWeChat());
                             tvTime.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             LoaderManager.getLoader().loadNet(ivHead,response.getData().getUserPic());
                         }

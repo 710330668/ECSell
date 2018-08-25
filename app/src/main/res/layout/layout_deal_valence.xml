@@ -53,7 +53,7 @@
         android:gravity="center"
         android:button="@null"
         android:background="@drawable/bg_rb_selector"
-        android:text="30万-50万"
+        android:text="30-50万"
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_margin="2dp"/>
@@ -62,7 +62,7 @@
         android:gravity="center"
         android:button="@null"
         android:background="@drawable/bg_rb_selector"
-        android:text="50万-100万"
+        android:text="50-100万"
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_margin="2dp"/>
