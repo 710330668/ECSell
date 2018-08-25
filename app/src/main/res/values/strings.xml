@@ -16,4 +16,5 @@
     <string name="select_time">选择时间</string>
     <string name="current_time">当前时间</string>
     <string name="customer_need">预算%1$d-%2$d万 | %3$s 等%4$d款车</string>
+    <string name="affine_article">今天为您推荐的%1$s辆车，都是资深评估师检测，车况一流，外观内饰保养非常好，详情点击:http://www.cheeshou.com,朋友圈首发哦，先约先得，可接受分期,联系方式: %2$s %3$s</string>
 </resources>

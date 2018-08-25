@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.options.viewHolder;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -8,6 +9,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.imageloader.LoaderManager;
 
 /**
  * Created by 71033 on 2018/8/4.
@@ -17,6 +19,8 @@ public class CarPhotoViewHolder extends BaseViewHolder {
     private ImageView ivCarPhoto;
     private ImageView ivDelete;
     private OnImageDeleteListener listener;
+
+    private static final String TAG = "CarPhotoViewHolder";
 
     /**
      * TODO
@@ -39,7 +43,12 @@ public class CarPhotoViewHolder extends BaseViewHolder {
     public void onBindViewHolder(Object data) {
         final ItemData itemData = (ItemData) data;
         CarPhotoModel model = (CarPhotoModel) itemData.data;
-        ivCarPhoto.setImageBitmap(model.getBitmap());
+        if (model.getBitmap() != null) {
+            ivCarPhoto.setImageBitmap(model.getBitmap());
+        } else {
+            Log.e(TAG, "onBindViewHolder: " + model.getImageUrl() );
+            LoaderManager.getLoader().loadNet(ivCarPhoto, model.getImageUrl());
+        }
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

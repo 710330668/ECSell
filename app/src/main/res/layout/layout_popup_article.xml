@@ -49,9 +49,10 @@
             app:layout_constraintLeft_toLeftOf="@id/fm_article_root"
             app:layout_constraintRight_toRightOf="@+id/fm_article_root"
             app:layout_constraintTop_toTopOf="@+id/fm_article_root"
-            tl:tl_textSelectColor="@color/color_FF5754"
-            tl:tl_textUnselectColor="@color/color_C5C5C5"
-            tl:tl_underline_height="0dp" />
+
+            app:tl_textSelectColor="@color/color_FF5754"
+            app:tl_textUnselectColor="@color/color_333333"
+            tl:tl_underline_height="5dp" />
 
         <View
             android:layout_width="match_parent"
@@ -68,6 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/drawable_empty"
+            android:enabled="true"
             app:layout_constraintBottom_toBottomOf="@+id/fm_article_root"
             app:layout_constraintLeft_toLeftOf="@+id/mainTabBar"
             app:layout_constraintRight_toRightOf="@+id/mainTabBar"
@@ -87,11 +89,27 @@
 
             <TextView
                 android:id="@+id/tv_to_share"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@mipmap/home_bg"
                 android:gravity="center"
                 android:text="去分享"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_to_copy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@mipmap/home_bg"
+                android:gravity="center"
+                android:text="复制"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
         </LinearLayout>
