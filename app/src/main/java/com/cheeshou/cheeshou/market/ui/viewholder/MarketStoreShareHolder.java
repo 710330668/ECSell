@@ -32,7 +32,7 @@ public class MarketStoreShareHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         String data1 = (String) data.getData();
         LoaderManager.getLoader().loadNet(mImagePoster, data1);
     }

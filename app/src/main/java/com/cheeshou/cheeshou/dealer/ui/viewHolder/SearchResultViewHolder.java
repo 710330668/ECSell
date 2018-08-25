@@ -57,7 +57,7 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         final SearchResultModel resultModel = (SearchResultModel) data.data;
 
         mCarPoster.setImageResource(R.mipmap.ic_launcher);

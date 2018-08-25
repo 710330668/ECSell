@@ -33,7 +33,7 @@ public class AreasViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data,int position) {
         ItemData itemData = (ItemData) data;
         AreasModel model = (AreasModel) itemData.data;
         tvAreasType.setText(model.getAreasName());

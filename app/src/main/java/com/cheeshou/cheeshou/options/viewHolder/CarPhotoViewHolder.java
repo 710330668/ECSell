@@ -36,20 +36,20 @@ public class CarPhotoViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data, final int position) {
         final ItemData itemData = (ItemData) data;
         CarPhotoModel model = (CarPhotoModel) itemData.data;
         ivCarPhoto.setImageBitmap(model.getBitmap());
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.removeImage(itemData.tag);
+                listener.removeImage(position);
             }
         });
 
-        if (model.getBitmap() == null) {
-            ivDelete.setImageResource(R.mipmap.checked_true);
-        }
+//        if (model.getBitmap() == null) {
+//            ivDelete.setImageResource(R.mipmap.checked_true);
+//        }
 
     }
 

@@ -32,7 +32,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
      *
      * @param data
      */
-    public abstract void onBindViewHolder(T data);
+    public abstract void onBindViewHolder(T data,int position);
 
     /**
      * holder click enable

@@ -41,7 +41,7 @@ public class ClientViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data,int position) {
         ItemData itemData = (ItemData) data;
         ClientModel model = (ClientModel) itemData.data;
         tvName.setText(model.getName());

@@ -33,7 +33,7 @@ public class FormalityViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data,int position) {
         ItemData itemData = (ItemData) data;
         FormalityModel model = (FormalityModel) itemData.data;
         tvFormality.setText(model.getFormalityName());

@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
-import com.cheeshou.cheeshou.dealer.ui.model.PutCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
@@ -44,7 +43,7 @@ public class PutAwayHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         SearchResultModel data1 = (SearchResultModel) data.getData();
         mCarTitle.setText(data1.getTitle());
         mCarPrice.setText(data1.getPrice());

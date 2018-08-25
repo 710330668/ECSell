@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.market.ui.model.ShareRankModel;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.market.ui.model.ShareRankModel;
 import com.example.com.common.adapter.BaseViewHolder;
@@ -39,7 +38,7 @@ public class ShareRankHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         ShareRankModel data1 = (ShareRankModel) data.getData();
         switch (data1.getRank()) {
             case 1:

@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.market.ui.model.MarketShareHeaderModel;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareHeaderModel;
 import com.example.com.common.adapter.BaseViewHolder;
@@ -46,7 +45,7 @@ public class MarketShareHeaderHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         MarketShareHeaderModel data1 = (MarketShareHeaderModel) data.getData();
         mHumanName.setText(data1.getHumanNmae());
         mCompanyName.setText(data1.getCompanyName());

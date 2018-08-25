@@ -43,7 +43,7 @@ public class CustomerDetailWantHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         CustomerDetailWantModel data1 = (CustomerDetailWantModel) data.getData();
         mTime.setText(data1.getTime());
         mTitle.setText(data1.getTitle());

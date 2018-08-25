@@ -38,7 +38,7 @@ public class RefreshFooterViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
     }
 
     public void changeStatus(int v1,int v2, int v3){

@@ -32,7 +32,7 @@ public class StoreManagerViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         StoreManagerResponse.DataBean data1 = (StoreManagerResponse.DataBean) data.getData();
         mCarStatus.setText(data1.getCarStatusName());
         mCarNumber.setText(data1.getCarCount() + "辆");

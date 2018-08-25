@@ -33,7 +33,7 @@ public class OptionTypeViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data,int position) {
         ItemData itemData = (ItemData) data;
         OptionTypeModel model = (OptionTypeModel) itemData.data;
         tvOptionType.setText(model.getOptionType());

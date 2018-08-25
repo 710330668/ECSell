@@ -33,7 +33,7 @@ public class ColorViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data,int position) {
         ItemData itemData = (ItemData) data;
         ColorModel model = (ColorModel) itemData.data;
         tvColorType.setText(model.getApprearceColor());

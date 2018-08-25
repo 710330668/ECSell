@@ -36,7 +36,7 @@ public class SearchHistoryViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         SearchHistoryModel data1 = (SearchHistoryModel) data.getData();
         mTvHistory.setText(data1.getSearchHistory());
     }

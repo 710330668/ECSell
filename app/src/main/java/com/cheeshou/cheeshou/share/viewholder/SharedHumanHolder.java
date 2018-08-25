@@ -40,7 +40,7 @@ public class SharedHumanHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         HumanShareModel data1 = (HumanShareModel) data.getData();
         mCompanyName.setText(data1.getCompany());
         mJobPosition.setText(data1.getJobPosition());

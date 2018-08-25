@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
 import com.example.com.common.adapter.BaseViewHolder;
@@ -44,7 +43,7 @@ public class MarketShareHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         MarketShareModel data1 = (MarketShareModel) data.getData();
         mShareCount.setText(data1.getShareCount() + "人看过");
         mShareTime.setText(data1.getShareTime());

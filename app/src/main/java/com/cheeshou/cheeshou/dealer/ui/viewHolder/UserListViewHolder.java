@@ -43,7 +43,7 @@ public class UserListViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         UserListModel model = (UserListModel) data.getData();
         userName.setText(model.getUserName());
         userAccount.setText(model.getAccount());

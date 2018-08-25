@@ -11,7 +11,7 @@ public class CarDetailResponse implements Serializable{
 
     /**
      * code : 200
-     * data : {"advicePrice":10,"audiId":10,"brand":"AC Schnitzer","brandId":2,"browseNum":34,"carFormality":"不填","carId":"8c777efacec2453789b867c06d580821","carPrice":2,"carSeries":"奥迪RS 4","carSetting":"hj","carStatusName":"已上架","carType":"1","carUserName":"山东青岛","carYear":"2018","cityCode":"340100","cityName":"合肥市","createDate":1534562562000,"discountContent":"hhh","discounts":[{"discountName":"店内贷款"},{"discountName":"店内保养"}],"guidPrice":3,"imgs":[{"imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562562844.jpg"},{"imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562561922_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562561922.jpg"}],"insuranceRebates":12,"loanRebates":12,"outsiteColor":"红","provinceCode":"340000","provinceName":"安徽省","remark":"hhj","saleArea":"北京","saleCarPrice":2.2,"saleCommission":1,"saleId":"a4391258c8d14309b3069bd67275c86f","shareNum":0,"shelvesNum":1,"typeName":"全国","versionId":1,"vname":"2018款 30周年年型 Sportback 35 TFSI 进取型","withinColor":"红"}
+     * data : {"advicePrice":10,"audiId":10,"brand":"AC Schnitzer","brandId":2,"browseNum":50,"carFormality":"不填","carId":"8c777efacec2453789b867c06d580821","carPrice":2,"carSeries":"奥迪RS 4","carSetting":"hj","carStatusName":"已上架","carType":"1","carUserName":"山东青岛","carUserPhone":"13869647062","carYear":"2018","cityCode":"340100","cityName":"合肥市","createDate":1534562562000,"discountContent":"hhh","discounts":[{"discountName":"店内贷款"},{"discountName":"店内保养"}],"guidPrice":3,"imgs":[{"imgId":"32874048afa64f478c87a43a8904d98a","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562562844.jpg"},{"imgId":"bcac71729f934bb291ac4f0ccbdce203","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562561922_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562561922.jpg"}],"insuranceRebates":8,"loanRebates":8,"outsiteColor":"红","provinceCode":"340000","provinceName":"安徽省","remark":"hhj","saleArea":"北京","saleCarPrice":2.2,"saleCommission":1,"saleId":"a4391258c8d14309b3069bd67275c86f","shareNum":0,"shelvesNum":1,"typeName":"全国","versionId":1,"vname":"2018款 30周年年型 Sportback 35 TFSI 进取型","withinColor":"红"}
      * msg : 操作成功
      */
 
@@ -49,7 +49,7 @@ public class CarDetailResponse implements Serializable{
          * audiId : 10
          * brand : AC Schnitzer
          * brandId : 2
-         * browseNum : 34
+         * browseNum : 50
          * carFormality : 不填
          * carId : 8c777efacec2453789b867c06d580821
          * carPrice : 2
@@ -58,6 +58,7 @@ public class CarDetailResponse implements Serializable{
          * carStatusName : 已上架
          * carType : 1
          * carUserName : 山东青岛
+         * carUserPhone : 13869647062
          * carYear : 2018
          * cityCode : 340100
          * cityName : 合肥市
@@ -65,9 +66,9 @@ public class CarDetailResponse implements Serializable{
          * discountContent : hhh
          * discounts : [{"discountName":"店内贷款"},{"discountName":"店内保养"}]
          * guidPrice : 3
-         * imgs : [{"imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562562844.jpg"},{"imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562561922_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562561922.jpg"}]
-         * insuranceRebates : 12
-         * loanRebates : 12
+         * imgs : [{"imgId":"32874048afa64f478c87a43a8904d98a","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562562844.jpg"},{"imgId":"bcac71729f934bb291ac4f0ccbdce203","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562561922_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562561922.jpg"}]
+         * insuranceRebates : 8
+         * loanRebates : 8
          * outsiteColor : 红
          * provinceCode : 340000
          * provinceName : 安徽省
@@ -97,6 +98,7 @@ public class CarDetailResponse implements Serializable{
         private String carStatusName;
         private String carType;
         private String carUserName;
+        private String carUserPhone;
         private String carYear;
         private String cityCode;
         private String cityName;
@@ -224,6 +226,14 @@ public class CarDetailResponse implements Serializable{
 
         public void setCarUserName(String carUserName) {
             this.carUserName = carUserName;
+        }
+
+        public String getCarUserPhone() {
+            return carUserPhone;
+        }
+
+        public void setCarUserPhone(String carUserPhone) {
+            this.carUserPhone = carUserPhone;
         }
 
         public String getCarYear() {
@@ -436,12 +446,22 @@ public class CarDetailResponse implements Serializable{
 
         public static class ImgsBean implements Serializable{
             /**
+             * imgId : 32874048afa64f478c87a43a8904d98a
              * imgThumUrl : http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg
              * imgUrl : http://39.104.136.205:8888/car/20180818/1534562562844.jpg
              */
 
+            private String imgId;
             private String imgThumUrl;
             private String imgUrl;
+
+            public String getImgId() {
+                return imgId;
+            }
+
+            public void setImgId(String imgId) {
+                this.imgId = imgId;
+            }
 
             public String getImgThumUrl() {
                 return imgThumUrl;

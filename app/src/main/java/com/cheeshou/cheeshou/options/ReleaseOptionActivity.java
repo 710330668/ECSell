@@ -16,6 +16,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
@@ -122,6 +126,8 @@ public class ReleaseOptionActivity extends BaseActivity {
     EditText etSpecificDiscount;
     @BindView(R.id.btn_zidingyi)
     Button btnZidingyi;
+    @BindView(R.id.et_car_number)
+    EditText etCarNumber;
 
     private List<ItemData> optionTypes = new ArrayList<>();
     private List<ItemData> apprenceColorTypes = new ArrayList<>();
@@ -132,6 +138,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private List<String> preferential = new ArrayList<>();
     private List<Boolean> flags = new ArrayList<>();
     private List<Bitmap> photos = new ArrayList<>();
+    private List<String> photoIds = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_LOCAL = 2;
@@ -154,6 +161,9 @@ public class ReleaseOptionActivity extends BaseActivity {
     private List<String> discounts = new ArrayList<>();
     private Bitmap bitmap;
     private File currentFile;
+    private String deleteId = "";
+    private String carId;
+
 
     @Override
     public int bindLayout() {
@@ -198,45 +208,47 @@ public class ReleaseOptionActivity extends BaseActivity {
             for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
                 discounts.add(response.getData().getDiscounts().get(i).getDiscountName());
             }
-            addDiscounts(discounts);
-//            for (int i = 0; i < response.getData().getImgs().size(); i++) {
-//                try {
-//                    bitmap = Glide.with(ReleaseOptionActivity.this)
-//                            .load(response.getData().getImgs().get(i).getImgUrl())
-//                            .asBitmap()
-//                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-//                            .get();
-//                    if (bitmap != null){
-//                        // 在这里执行图片保存方法
-//                        saveImageToGallery(ReleaseOptionActivity.this,bitmap);
-//                    }
-//                    photos.add(bitmap);
-//
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            for (int i = 0; i < response.getData().getImgs().size(); i++) {
+                final int finalI = i;
+                Glide.with(this).load(response.getData().getImgs().get(i).getImgUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        photos.add(resource);
+                        photoIds.add(response.getData().getImgs().get(finalI).getImgId());
+                        if(photos.size() >= response.getData().getImgs().size()){
+                            showCarImg();
+                        }
+                    }
+                });
+            }
 //            showCarImg();
             etSpecificDiscount.setText(response.getData().getDiscountContent());
             etConfiguration.setText(response.getData().getCarSetting());
             etNote.setText(response.getData().getRemark());
+            optionId = response.getData().getCarType();
+            carId = response.getData().getCarId();
+            provinceCode = response.getData().getProvinceCode();
+            cityCode = response.getData().getCityCode();
 
         }
     }
 
     private void showCarImg() {
-        carPhotos.clear();
         for (int i = 0; i < photos.size(); i++) {
             final CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
             ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
             carPhotos.add(itemData);
-            rlCarPhoto.setLayoutManager(new GridLayoutManager(this, 3));
-            SettingDelegate delegate = new SettingDelegate();
+            rlCarPhoto.setLayoutManager(new GridLayoutManager(ReleaseOptionActivity.this, 3));
+            final SettingDelegate delegate = new SettingDelegate();
             delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
                 @Override
                 public void removeImage(int position) {
+                    if (TextUtils.isEmpty(deleteId)) {
+                        deleteId = deleteId +  photoIds.get(position) + "," ;
+                    }else{
+                        deleteId = deleteId +"," +photoIds.get(position) + "," ;
+                    }
+                    deleteId = deleteId.substring(0, deleteId.length()-1);
                     carPhotos.remove(position);
                     photos.remove(position);
                     imageDeleteAdapter.notifyDataSetChanged();
@@ -289,7 +301,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     }
 
 
-        private void addDiscounts(List<String> discounts) {
+    private void addDiscounts(List<String> discounts) {
         if (discounts == null) {
             return;
         }
@@ -344,12 +356,27 @@ public class ReleaseOptionActivity extends BaseActivity {
                             if (response.getCode() == 200) {
                                 for (int i = 0; i < response.getData().size(); i++) {
                                     preferential.add(response.getData().get(i).getDataName());
-                                    flags.add(true);
                                     final Button button = new Button(ReleaseOptionActivity.this);
                                     button.setText(response.getData().get(i).getDataName());
-                                    button.setBackgroundResource(R.drawable.bg_edittext);
                                     button.setPadding(10, 10, 10, 10);
                                     button.setGravity(Gravity.CENTER);
+                                    if (response != null) {
+                                        //车辆详情进入
+                                        if (discounts.contains(response.getData().get(i).getDataName())) {
+                                            //包含优惠政策
+                                            flags.add(false);
+                                            button.setBackgroundResource(R.drawable.bg_edittext_red);
+                                            button.setTextColor(getResources().getColor(R.color.color_FF5754));
+                                        } else {
+                                            button.setBackgroundResource(R.drawable.bg_edittext);
+                                            button.setTextColor(getResources().getColor(R.color.color_333333));
+                                            flags.add(true);
+                                        }
+                                    } else {
+                                        button.setBackgroundResource(R.drawable.bg_edittext);
+                                        button.setTextColor(getResources().getColor(R.color.color_333333));
+                                        flags.add(true);
+                                    }
                                     llyYouhui.addView(button);
                                     LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) button.getLayoutParams();
                                     linearParams.setMargins(20, 20, 10, 10);
@@ -556,6 +583,9 @@ public class ReleaseOptionActivity extends BaseActivity {
                 break;
             case R.id.btn_release_options:
                 //发布车源
+                if(TextUtils.isEmpty(carId)){
+                    carId = ParamManager.getInstance(this).getCarId();
+                }
                 saveCarInfo();
                 break;
             case R.id.btn_zidingyi:
@@ -589,15 +619,8 @@ public class ReleaseOptionActivity extends BaseActivity {
         try {
             prefers = "";
             Map<String, RequestBody> params = new HashMap<>();
-            List<MultipartBody.Part> parts = new ArrayList<>();
-            for (int i = 0; i < imgPaths.size(); i++) {
-                File file = new File(imgPaths.get(i));
-                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
-                parts.add(body);
-            }
             params.put("carType", toRequestBody(optionId));
-            params.put("carModel", toRequestBody(ParamManager.getInstance(this).getCarId()));
+            params.put("carModel", toRequestBody(carId));
             params.put("saleArea", toRequestBody(tvSalesArea.getText().toString().trim()));
             params.put("carFormality", toRequestBody(tvFormalities.getText().toString()));
             params.put("carYear", toRequestBody(tvYear.getText().toString()));
@@ -618,23 +641,54 @@ public class ReleaseOptionActivity extends BaseActivity {
             params.put("carPrice", toRequestBody(etCarPrice.getText().toString()));
             params.put("guidPrice", toRequestBody(etGuidedPrice.getText().toString()));
             params.put("saleCommission", toRequestBody(etCommission.getText().toString()));
-            Injection.provideApiService().saveCarInfo(token, parts, params)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<EasyResponse>() {
-                        @Override
-                        public void accept(EasyResponse response) throws Exception {
-                            LogUtils.e(response.getMsg());
-                            if (response.getCode() == 200) {
-                                Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                                ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
-                                ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
-                                finish();
-                            } else {
-                                Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+            params.put("chassisNo", toRequestBody(etCarNumber.getText().toString()));
+            params.put("delImgIds", toRequestBody(deleteId));
+            if(imgPaths.size() != 0){
+                List<MultipartBody.Part> parts = new ArrayList<>();
+                for (int i = 0; i < imgPaths.size(); i++) {
+                    File file = new File(imgPaths.get(i));
+                    RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                    MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+                    parts.add(body);
+                }
+                Injection.provideApiService().saveCarInfo(token, parts, params)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<EasyResponse>() {
+                            @Override
+                            public void accept(EasyResponse response) throws Exception {
+                                LogUtils.e(response.getMsg());
+                                if (response.getCode() == 200) {
+                                    Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                    ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
+                                    ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
+                                    finish();
+                                } else {
+                                    Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+            }else{
+                Injection.provideApiService().saveCarInfo(token, params)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<EasyResponse>() {
+                            @Override
+                            public void accept(EasyResponse response) throws Exception {
+                                LogUtils.e(response.getMsg());
+                                if (response.getCode() == 200) {
+                                    Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                    ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
+                                    ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
+                                    finish();
+                                } else {
+                                    Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+
+
         } catch (Exception e) {
             LogUtils.e(e.getMessage());
         }

@@ -48,7 +48,7 @@ public class SharedCarHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         CarShareModel data1 = (CarShareModel) data.getData();
         mCarTitle.setText(data1.getCarTitle());
         mCarPriceSale.setText(data1.getCarPriceSale());

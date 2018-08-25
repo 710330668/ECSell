@@ -33,7 +33,7 @@ public class SeriesViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data) {
+    public void onBindViewHolder(Object data,int position) {
         ItemData itemData = (ItemData) data;
         CarsSeriesModel model = (CarsSeriesModel) itemData.data;
         tvSeriesType.setText(model.getSeriesName());

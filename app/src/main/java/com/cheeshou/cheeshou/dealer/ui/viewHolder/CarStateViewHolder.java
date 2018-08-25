@@ -33,7 +33,7 @@ public class CarStateViewHolder extends BaseViewHolder<ItemData> {
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         CarStateModel data1 = (CarStateModel) data.getData();
         mRb.setText(data1.getStateName());
         if (data1.isSelected()) {

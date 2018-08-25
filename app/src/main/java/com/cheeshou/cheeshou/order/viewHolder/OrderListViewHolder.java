@@ -48,7 +48,7 @@ public class OrderListViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         OrderListResponse.DataBean.ListsBean resultModel = (OrderListResponse.DataBean.ListsBean) data.data;
 
         mCarPoster.setImageResource(R.mipmap.ic_launcher);

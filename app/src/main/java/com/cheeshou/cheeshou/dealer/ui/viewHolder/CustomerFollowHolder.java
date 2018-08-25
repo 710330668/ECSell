@@ -39,7 +39,7 @@ public class CustomerFollowHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         CustomerFollowModel data1 = (CustomerFollowModel) data.getData();
         mTvDate.setText(data1.getDate());
         mTvTime.setText(data1.getTime());

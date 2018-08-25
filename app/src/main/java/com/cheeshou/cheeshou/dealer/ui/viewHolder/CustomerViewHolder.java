@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
-import com.cheeshou.cheeshou.dealer.ui.model.CustomerModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
@@ -46,7 +45,7 @@ public class CustomerViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         CustomerResponse.DataBean.ListsBean data1 = (CustomerResponse.DataBean.ListsBean) data.getData();
         Log.e(TAG, "onBindViewHolder: " + new Gson().toJson(data1));
         mName.setText(data1.getName());

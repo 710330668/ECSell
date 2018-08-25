@@ -94,7 +94,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
                 footViewHolder.changeStatus(View.GONE,View.GONE,View.VISIBLE);
             }
         }else {
-            holder.onBindViewHolder(dataList.get(position));
+            holder.onBindViewHolder(dataList.get(position),position);
             if (listener != null && holder.enable()) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -199,6 +199,12 @@ public interface ApiService {
     Observable<EasyResponse> saveCarInfo(@Header("token") String token, @Part List<MultipartBody.Part> files, @PartMap Map<String, RequestBody> params);
 
 
+    //保存车源信息
+    @Multipart
+    @POST("car/saveCarInfo")
+    Observable<EasyResponse> saveCarInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
+
     //订单列表
     @FormUrlEncoded
     @POST("order/findMyOrderList")

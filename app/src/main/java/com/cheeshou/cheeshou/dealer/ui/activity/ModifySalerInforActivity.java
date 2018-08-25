@@ -187,9 +187,10 @@ public class ModifySalerInforActivity extends BaseActivity {
                     @Override
                     public void accept(EasyResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
+                        Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                         if (response.getCode() == 200) {
-                            Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
+                            finish();
                         }
                     }
                 });

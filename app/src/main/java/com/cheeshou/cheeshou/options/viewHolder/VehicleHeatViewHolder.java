@@ -38,7 +38,7 @@ public class VehicleHeatViewHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data) {
+    public void onBindViewHolder(ItemData data,int position) {
         VehicleHeatModel data1 = (VehicleHeatModel) data.data;
         mCarRankings.setText(data1.getCarRankings() + "");
         switch (data1.getCarRankings()) {
