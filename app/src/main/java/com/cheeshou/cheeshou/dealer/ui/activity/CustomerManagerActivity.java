@@ -2,8 +2,10 @@ package com.cheeshou.cheeshou.dealer.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -14,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.StatusModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -91,9 +95,14 @@ public class CustomerManagerActivity extends BaseActivity {
     Button mBtnSure;
     @BindView(R.id.tv_search)
     TextView mTvSearch;
+    @BindView(R.id.rg_filter)
+    RadioGroup mRadioGroup;
     private int count;
     private String TAG_FILTER = "tag_filter";
     private String TAG_LOAD_MORE = "tag_load_more";
+
+    private List<ItemData> stateData;
+    private List<ItemData> orderDate;
 
     private String pageSize = "10";
     private String page = "1";
@@ -106,7 +115,7 @@ public class CustomerManagerActivity extends BaseActivity {
     private String status = "";
     private String brandId = "";
     private String versionId = "";
-    private String orderType = "CREATE";
+    private String orderType = "PROGRESS";
     private String userId = "";
     private String queryKey = "";
 
@@ -165,8 +174,24 @@ public class CustomerManagerActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+        initPopupWindowData();
         initTagFlowLayout();
         initRecycler(TAG_LOAD_MORE);
+    }
+
+    private void initPopupWindowData() {
+        stateData = new ArrayList<>();
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("未到店", "NO_STORE")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已到店", "YES_STORE")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已成交", "SUCCESS")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("战败", "FAIL")));
+
+        orderDate = new ArrayList<>();
+        orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("最新跟进时间", "PROGRESS", true)));
+        orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("最新创建时间", "CREATE")));
+
     }
 
     @SuppressLint("CheckResult")
@@ -248,10 +273,10 @@ public class CustomerManagerActivity extends BaseActivity {
                 startActivity(CreateNewCustomerActivity.class);
                 break;
             case R.id.rb_customer_state:
-                showPopUpWindow(R.id.rb_customer_state);
+                showPopupWindow(R.id.rb_customer_state);
                 break;
             case R.id.rb_follow_time:
-                showPopUpWindow(R.id.rb_follow_time);
+                showPopupWindow(R.id.rb_follow_time);
                 break;
             case R.id.rb_customer_filter:
                 if (mPopupWindow != null) {
@@ -268,6 +293,8 @@ public class CustomerManagerActivity extends BaseActivity {
                 mEtCreateEndTime.setText("");
                 mEtFollowStartTime.setText("");
                 mEtFollowEndTime.setText("");
+                mCreateTimeTag.getAdapter().setSelectedList(0);
+                mFollowTimeTag.getAdapter().setSelectedList(0);
                 break;
             case R.id.btn_sure:
                 initRecycler(TAG_FILTER);
@@ -280,79 +307,28 @@ public class CustomerManagerActivity extends BaseActivity {
         }
     }
 
-
-    public void showPopUpWindow(int id) {
-
-        TagFlowLayout convertView = null;
-        if (mPopupWindow != null) {
-            mPopupWindow.dismiss();
-        }
-        switch (id) {
-            case R.id.rb_customer_state:
-                convertView = (TagFlowLayout) LayoutInflater.from(this).inflate(R.layout.layout_popup_customer_state, null);
-                final List<StatusModel> dataSize = new ArrayList<>();
-                dataSize.add(new StatusModel("全部", ""));
-                dataSize.add(new StatusModel("未到店", "NO_STORE"));
-                dataSize.add(new StatusModel("已到店", "YES_STORE"));
-                dataSize.add(new StatusModel("已预订", "RESERVE"));
-                dataSize.add(new StatusModel("已成交", "SUCCESS"));
-                dataSize.add(new StatusModel("战败", "FAIL"));
-                final TagFlowLayout finalConvertView = convertView;
-                TagAdapter<StatusModel> stateAdapter = new TagAdapter<StatusModel>(dataSize) {
-                    @Override
-                    public View getView(FlowLayout parent, int position, StatusModel o) {
-                        TextView textView = (TextView) getLayoutInflater().inflate(R.layout.tv_tag_customer_state, finalConvertView, false);
-//                        textView.getLayoutParams().width = getWindowManager().getDefaultDisplay().getWidth() / 5;
-                        textView.setText(o.getStatusName());
-                        return textView;
-                    }
-                };
-                stateAdapter.setSelectedList(selectState);
-                convertView.setAdapter(stateAdapter);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPopupWindow.showAsDropDown(viewLine);
-                convertView.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-                    @Override
-                    public boolean onTagClick(View view, int position, FlowLayout parent) {
-                        mRbState.setText(dataSize.get(position).getStatusName());
-                        selectState = position;
-                        mPopupWindow.dismiss();
-                        // TODO: 2018/8/11 刷新数据
-                        status = dataSize.get(position).getStatusCode();
-//                        Log.e(TAG, "onTagClick: " + status);
-                        initRecycler(TAG_FILTER);
-                        return true;
-                    }
-                });
+    public void showPopupWindow(final int viewId) {
+        ColorDrawable dw = new ColorDrawable(0xb0000000);
+        switch (viewId) {
+            case R.id.rb_car_state:
+                LinearLayout convertFrame = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_state_recycler, null);
+                RecyclerView stateRecycler = (RecyclerView) convertFrame.findViewById(R.id.recycler_car_state);
+                initStateRecycler(stateRecycler);
+                mPopupWindow = new PopupWindow(convertFrame, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                mPopupWindow.setBackgroundDrawable(dw);
+                mPopupWindow.showAsDropDown(mRadioGroup, 0, 0);
                 break;
-            case R.id.rb_follow_time:
-                final RadioGroup content = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_customer_time_popou, null);
-                ((RadioButton) content.getChildAt(selectTime)).setChecked(true);
-                content.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        RadioButton selectButton = ((RadioButton) content.findViewById(checkedId));
-                        mRbTime.setText(selectButton.getText());
-                        selectTime = content.indexOfChild(selectButton);
-                        mPopupWindow.dismiss();
-                        // TODO: 2018/8/11 刷新数据
-                        switch (checkedId) {
-                            case R.id.latest_follow_time:
-                                orderType = "PROGRESS";
-                                break;
-                            case R.id.latest_create_time:
-                                orderType = "CREATE";
-                                break;
-                            default:
-                        }
-                        initRecycler(TAG_FILTER);
-                    }
-                });
-                mPopupWindow = new PopupWindow(content, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPopupWindow.showAsDropDown(viewLine);
+            case R.id.rb_car_order:
+                LinearLayout convertLinear = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order_recycler, null);
+                RecyclerView orderRecycler = (RecyclerView) convertLinear.findViewById(R.id.recycler_car_order);
+                orderRecycler.addItemDecoration(new SpaceItemDecoration(5));
+                initOrderRecycler(orderRecycler);
+                mPopupWindow = new PopupWindow(convertLinear, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                mPopupWindow.setBackgroundDrawable(dw);
+                mPopupWindow.showAsDropDown(mRadioGroup, 0, 0);
                 break;
+            default:
         }
-
     }
 
     public void initTagFlowLayout() {
@@ -376,12 +352,73 @@ public class CustomerManagerActivity extends BaseActivity {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
                 TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_tag_create_time, mFollowTimeTag, false);
-//                        textView.getLayoutParams().width = getWindowManager().getDefaultDisplay().getWidth() / 5;
                 textView.setText(o);
                 return textView;
             }
         };
         mFollowTimeTag.setAdapter(followTimeAdapter);
+    }
+
+    /**
+     * 初始化 状态recycler
+     *
+     * @param stateRecycler
+     */
+    private void initStateRecycler(RecyclerView stateRecycler) {
+        stateRecycler.setLayoutManager(new GridLayoutManager(this, 4));
+        stateRecycler.setAdapter(new BaseAdapter(stateData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                for (ItemData bean : stateData) {
+                    ((CarStateModel) bean.getData()).setSelected(false);
+                }
+                if (data instanceof CarStateModel) {
+                    ((CarStateModel) data).setSelected(true);
+                    status = ((CarStateModel) data).getStateCode();
+                    mRbState.setText(((CarStateModel) data).getStateName());
+                }
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+                initRecycler(TAG_FILTER);
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        }));
+    }
+
+    /**
+     * 初始化 order recycler
+     *
+     * @param orderRecycler
+     */
+    private void initOrderRecycler(RecyclerView orderRecycler) {
+        orderRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        orderRecycler.setAdapter(new BaseAdapter(orderDate, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                for (ItemData bean : orderDate) {
+                    ((CarStateModel) bean.getData()).setSelected(false);
+                }
+                if (data instanceof CarStateModel) {
+                    ((CarStateModel) data).setSelected(true);
+                    orderType = ((CarStateModel) data).getStateCode();
+                    mRbTime.setText(((CarStateModel) data).getStateName());
+                }
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+                initRecycler(TAG_FILTER);
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        }));
     }
 
     public RequestBody toRequestBody(String value) {

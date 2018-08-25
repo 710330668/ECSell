@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,7 +39,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -141,10 +144,15 @@ public class CustomerDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Map<String, RequestBody> params = new HashMap<>();
-        params.put("customerId", RequestBody.create(MediaType.parse("text/plain"), customerId));
-        Injection.provideApiService().getCustomerDetailInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<CustomerDetailResponse>() {
+        params.put("customerId", RequestBody.create(MediaType.parse("application/json"), customerId));
+        Injection.provideApiService().getCustomerDetailInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<CustomerDetailResponse>() {
             @Override
-            public void accept(CustomerDetailResponse s) throws Exception {
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(CustomerDetailResponse s) {
                 if (s != null && s.getCode() == 200) {
                     mTvWechat.setText(s.getData().getWeBcat());
                     mTvPhone.setText(s.getData().getPhone());
@@ -192,6 +200,16 @@ public class CustomerDetailActivity extends BaseActivity {
                     mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
 
                 }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }

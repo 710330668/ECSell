@@ -47,13 +47,13 @@
                 android:textColor="#999999"
                 android:textSize="14dp"
                 app:layout_constraintTop_toTopOf="parent" />
-            
+
             <TextView
                 android:id="@+id/tv_search"
-                android:layout_marginLeft="10dp"
-                android:text="搜索"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="搜索" />
 
             <ImageView
                 android:id="@+id/img_add_client"
@@ -64,6 +64,7 @@
         </LinearLayout>
 
         <RadioGroup
+            android:id="@+id/rg_filter"
             android:layout_width="match_parent"
             android:layout_height="34dp"
             android:orientation="horizontal">
@@ -343,7 +344,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
-                        android:background="@drawable/bg_edittext"
+                        android:background="@drawable/bg_radiobutton"
                         android:gravity="center"
                         android:hint="开始时间"
                         android:textColor="#888888"
@@ -362,7 +363,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
-                        android:background="@drawable/bg_edittext"
+                        android:background="@drawable/bg_radiobutton"
                         android:gravity="center"
                         android:hint="结束时间"
                         android:textColor="#888888"
@@ -425,7 +426,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
-                        android:background="@drawable/bg_edittext"
+                        android:background="@drawable/bg_radiobutton"
                         android:gravity="center"
                         android:hint="开始时间"
                         android:textColor="#888888"
@@ -444,7 +445,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="99"
-                        android:background="@drawable/bg_edittext"
+                        android:background="@drawable/bg_radiobutton"
                         android:gravity="center"
                         android:hint="结束时间"
                         android:textColor="#888888"
@@ -494,7 +495,7 @@
                 android:layout_width="131dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/drawable_empty"
+                android:background="@drawable/bg_radiobutton"
                 android:text="重置" />
 
             <Button

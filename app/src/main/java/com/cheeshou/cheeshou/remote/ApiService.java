@@ -175,6 +175,7 @@ public interface ApiService {
     Observable<CustomerInfoResponse> getCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     //获取客户详细信息
+//    CustomerDetailResponse
     @Multipart
     @POST("customer/findCustomerDetailInfo")
     Observable<CustomerDetailResponse> getCustomerDetailInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
