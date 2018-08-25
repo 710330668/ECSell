@@ -251,7 +251,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
                         android:layout_toLeftOf="@+id/ll_choose_year"
-                        android:background="@drawable/bg_edittext"
+                        android:background="@drawable/bg_radiobutton"
                         android:gravity="center"
                         android:text="不限" />
 
@@ -262,7 +262,7 @@
                         android:layout_height="32dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/bg_edittext"
+                        android:background="@drawable/bg_radiobutton"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -319,7 +319,7 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/bg_edit_text_selector"
+                        android:background="@drawable/bg_radiobutton_selector"
                         android:gravity="center"
                         android:hint="最低价"
                         android:inputType="number"
@@ -336,7 +336,7 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/bg_edit_text_selector"
+                        android:background="@drawable/bg_radiobutton_selector"
                         android:gravity="center"
                         android:hint="最高价"
                         android:inputType="number"
@@ -485,7 +485,7 @@
                 android:layout_width="131dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/bg_edittext"
+                android:background="@drawable/bg_radiobutton"
                 android:text="重置" />
 
             <Button

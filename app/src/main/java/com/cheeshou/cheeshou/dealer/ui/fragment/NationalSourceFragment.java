@@ -2,12 +2,15 @@ package com.cheeshou.cheeshou.dealer.ui.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +24,14 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
+import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.adapter.BaseAdapter;
@@ -72,8 +77,10 @@ public class NationalSourceFragment extends BaseFragment {
     TextView mTvBottom;
     Unbinder unbinder;
 
-    @C.INVENTORY
-    public int INVENTORY = C.INVENTORY_OPTION;
+    private List<ItemData> stateData;
+    private List<ItemData> orderDate;
+
+    public int INVENTORY = ParamManager.getInstance(getContext()).getChannelType();
 
     private int selectState = 0;
     private int selectOrder = 0;
@@ -86,15 +93,16 @@ public class NationalSourceFragment extends BaseFragment {
     private String TAG_LOAD_MORE = "tag_load_more";
     private String TAG_FILTER = "tag_filter";
 
-    private static final String TAG = "SearchResultFragment";
     private BaseAdapter mDataAdapter;
     private String token;
+    private static final String TAG = "NationalSourceFragment";
 
     private int CURRENT_PAGE = 1;
     private int PAGE_SIZE = 12;
     private int count;
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private boolean isOpen;
+    private String scopeType = "own";
 
     @Override
     protected int setLayoutResouceId() {
@@ -111,7 +119,7 @@ public class NationalSourceFragment extends BaseFragment {
                 mDataAdapter.setLoadState(mDataAdapter.LOADING);
                 if (mSearchResultData.size() < count) {
                     ++CURRENT_PAGE;
-                    initRecycler();
+                    getAllOptions();
                 } else {
                     mDataAdapter.setLoadState(mDataAdapter.LOADING_END);
                 }
@@ -122,6 +130,11 @@ public class NationalSourceFragment extends BaseFragment {
     @Override
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
+        if (INVENTORY == C.INVENTORY_DEALER) {
+            scopeType = "all";
+        } else {
+            scopeType = "own";
+        }
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
@@ -144,7 +157,7 @@ public class NationalSourceFragment extends BaseFragment {
             }
         });
         mSearchResult.setAdapter(mDataAdapter);
-        initRecycler();
+        getAllOptions();
         switch (INVENTORY) {
             case C.INVENTORY_MARKET:
                 //销售 分享
@@ -157,6 +170,22 @@ public class NationalSourceFragment extends BaseFragment {
                 mTvBottom.setText("上架选中车辆");
                 break;
             default:
+        }
+        switch (INVENTORY) {
+            case C.INVENTORY_DEALER:
+                stateData = new ArrayList<>();
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+
+                orderDate = new ArrayList<>();
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("默认排序", "", true)));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最高", "1")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最低", "2")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最高", "3")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最低", "4")));
+                break;
         }
     }
 
@@ -248,81 +277,35 @@ public class NationalSourceFragment extends BaseFragment {
     }
 
     public void showPopupWindow(final int viewId) {
-        RadioGroup convertView = null;
-
+        ColorDrawable dw = new ColorDrawable(0xb0000000);
         switch (viewId) {
             case R.id.rb_car_state:
-                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_state, null);
-                ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LinearLayout convertFrame = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_state_recycler, null);
+                RecyclerView stateRecycler = (RecyclerView) convertFrame.findViewById(R.id.recycler_car_state);
+                initStateRecycler(stateRecycler);
+                mPopupWindow = new PopupWindow(convertFrame, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                mPopupWindow.setBackgroundDrawable(dw);
+                mPopupWindow.showAsDropDown(mRadioGroup, 0, 0);
                 break;
             case R.id.rb_car_order:
-                convertView = (RadioGroup) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_order, null);
-                ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+                LinearLayout convertLinear = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_order_recycler, null);
+                RecyclerView orderRecycler = (RecyclerView) convertLinear.findViewById(R.id.recycler_car_order);
+                orderRecycler.addItemDecoration(new SpaceItemDecoration(5));
+                initOrderRecycler(orderRecycler);
+                mPopupWindow = new PopupWindow(convertLinear, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                mPopupWindow.setBackgroundDrawable(dw);
+                mPopupWindow.showAsDropDown(mRadioGroup, 0, 0);
                 break;
             default:
         }
-
-        if (convertView != null) {
-            convertView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    RadioButton selectButton;
-                    switch (viewId) {
-                        case R.id.rb_car_state:
-                            selectButton = ((RadioButton) radioGroup.findViewById(i));
-                            mRbState.setText(selectButton.getText());
-                            selectState = radioGroup.indexOfChild(selectButton);
-                            switch (mRbState.getText().toString()) {
-                                case "全部":
-                                    carStatus = "";
-                                    break;
-                                case "在售":
-                                    carStatus = "IN_SALE";
-                                    break;
-                                case "已上架":
-                                    carStatus = "SHELVES";
-                                    break;
-                                case "已预定":
-                                    carStatus = "RESERVE";
-                                    break;
-                            }
-                            selectState = radioGroup.indexOfChild(selectButton);
-                            CURRENT_PAGE = 1;
-                            mSearchResultData.clear();
-                            initRecycler();
-                            mPopupWindow.dismiss();
-                            break;
-                        case R.id.rb_car_order:
-                            selectButton = ((RadioButton) radioGroup.findViewById(i));
-                            mRbOrder.setText(selectButton.getText());
-                            selectOrder = radioGroup.indexOfChild(selectButton);
-                            orderType = (i % 5 == 1 ? "" : i % 5 - 1) + "";
-                            CURRENT_PAGE = 1;
-                            mSearchResultData.clear();
-                            initRecycler();
-                            mPopupWindow.dismiss();
-                            break;
-                        default:
-                    }
-                }
-            });
-        }
-
-        mPopupWindow.setFocusable(true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setOutsideTouchable(false);
-        mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
     }
 
     @SuppressLint("CheckResult")
-    private void initRecycler() {
+    private void getAllOptions() {
         if (mSearchResultData.size() > 0) {
             mSearchResultData.remove(mSearchResultData.size() - 1);
         }
-        Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "own",
+        Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", scopeType,
                 carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
                 startDate, endDate, queryKey, carStatus, orderType)
                 .subscribeOn(Schedulers.io())
@@ -368,6 +351,68 @@ public class NationalSourceFragment extends BaseFragment {
         this.startDate = startDate;
         this.endDate = endDate;
         this.queryKey = queryKey;
-        initRecycler();
+        getAllOptions();
+    }
+
+    /**
+     * 初始化 状态recycler
+     *
+     * @param stateRecycler
+     */
+    private void initStateRecycler(RecyclerView stateRecycler) {
+        stateRecycler.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        stateRecycler.setAdapter(new BaseAdapter(stateData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                for (ItemData bean : stateData) {
+                    ((CarStateModel) bean.getData()).setSelected(false);
+                }
+                if (data instanceof CarStateModel) {
+                    ((CarStateModel) data).setSelected(true);
+                    carType = ((CarStateModel) data).getStateCode();
+                    mRbState.setText(((CarStateModel) data).getStateName());
+                }
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+                getAllOptions();
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        }));
+    }
+
+    /**
+     * 初始化 order recycler
+     *
+     * @param orderRecycler
+     */
+    private void initOrderRecycler(RecyclerView orderRecycler) {
+        orderRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        orderRecycler.setAdapter(new BaseAdapter(orderDate, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                for (ItemData bean : orderDate) {
+                    ((CarStateModel) bean.getData()).setSelected(false);
+                }
+                if (data instanceof CarStateModel) {
+                    ((CarStateModel) data).setSelected(true);
+                    orderType = ((CarStateModel) data).getStateCode();
+                    mRbOrder.setText(((CarStateModel) data).getStateName());
+                }
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                }
+                getAllOptions();
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        }));
     }
 }

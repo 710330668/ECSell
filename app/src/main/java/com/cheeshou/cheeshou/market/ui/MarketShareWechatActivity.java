@@ -10,12 +10,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.cheeshou.cheeshou.R;
+import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
+import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +34,9 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.favorite.WechatFavorite;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MarketShareWechatActivity extends BaseActivity {
 
@@ -42,6 +50,8 @@ public class MarketShareWechatActivity extends BaseActivity {
     private List<String> imageArray = new ArrayList<>();
     private String article;
     private String shareUrl = "http://www.cheeshou.com";
+    private String mToken;
+    private String shareDirect = "";
 
     @Override
     public int bindLayout() {
@@ -52,6 +62,7 @@ public class MarketShareWechatActivity extends BaseActivity {
     public void initParams(Bundle params) {
         data = params.getParcelableArrayList("data");
         article = params.getString("article");
+        mToken = SP.getInstance(this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -61,6 +72,18 @@ public class MarketShareWechatActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+        for (SearchResultModel bean : data) {
+            shareDirect += (bean.getId() + ",");
+        }
+        Injection.provideApiService().saveShareInfo(mToken, "", "朋友圈", shareDirect, article).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse easyResponse) throws Exception {
+                        Log.e(TAG, "accept: " + new Gson().toJson(easyResponse));
+                    }
+                });
+
         mRecyclerSharePhoto.setLayoutManager(new GridLayoutManager(this, 3));
         imageDeleteAdapter = new BaseAdapter(carPhotos, new SettingDelegate());
         for (int i = 0; i < data.size(); i++) {

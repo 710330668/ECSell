@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity;
+import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerItemClickActivity;
 import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseFragment;
@@ -26,7 +27,7 @@ public class OptionsTradersFragment extends BaseFragment {
 
     Unbinder unbinder;
 
-    public int INVENTORY = C.INVENTORY_OPTION;
+    public int INVENTORY = ParamManager.getInstance(getContext()).getChannelType();
     @BindView(R.id.tv_company)
     TextView tvCompany;
 
@@ -76,7 +77,6 @@ public class OptionsTradersFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
                 //库存管理
-                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:
@@ -87,7 +87,7 @@ public class OptionsTradersFragment extends BaseFragment {
                 startActivity(ReleaseOptionActivity.class);
                 break;
             case R.id.et_search:
-                startActivity(MarketSearchActivity.class);
+                startActivity(StoreManagerItemClickActivity.class);
                 break;
         }
     }

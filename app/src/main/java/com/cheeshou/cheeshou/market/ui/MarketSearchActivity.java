@@ -2,8 +2,8 @@ package com.cheeshou.cheeshou.market.ui;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -15,20 +15,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.options.ChooseAreaActivity;
-import com.cheeshou.cheeshou.options.ChooseBrandActivity;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
-import com.cheeshou.cheeshou.config.C;
-import com.cheeshou.cheeshou.dealer.ui.activity.AllSourceSearchActivity;
 import com.cheeshou.cheeshou.dealer.ui.fragment.NationalSourceFragment;
-import com.cheeshou.cheeshou.dealer.ui.fragment.SearchResultFragment;
+import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryDeleteModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModelDao;
 import com.cheeshou.cheeshou.options.ChooseAreaActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.DaoUtils;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -69,7 +67,13 @@ public class MarketSearchActivity extends BaseActivity {
     @BindView(R.id.tv_search)
     TextView mTvSearch;
 
-    private NationalSourceFragment mNationalSourceFragment;
+    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
+
+
+    private StoreManagerItemClickFragment mNationalSourceFragment;
+    private static final String TAG = "MarketSearchActivity";
+
+    private int INVENTORY = ParamManager.getInstance(this).getChannelType();
 
 
     private List<ItemData> mSearchData = new ArrayList<>();
@@ -90,7 +94,7 @@ public class MarketSearchActivity extends BaseActivity {
     public void setView(Bundle savedInstanceState) {
         mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
-        mNationalSourceFragment = new NationalSourceFragment();
+        mNationalSourceFragment = new StoreManagerItemClickFragment();
         Bundle args = new Bundle();
         mNationalSourceFragment.setArguments(args);
         mEtSearch.addTextChangedListener(new TextWatcher() {
@@ -123,16 +127,18 @@ public class MarketSearchActivity extends BaseActivity {
 
     private void initSearchHistory() {
         mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
-        for (int i = 0; i < 20; i++) {
-            SearchHistoryModel data = new SearchHistoryModel();
-            data.setSearchHistory("保时捷 911");
-            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, data));
+        List<SearchHistoryModel> list = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY)).list();
+        for (SearchHistoryModel bean : list) {
+            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, bean));
         }
         mSearchAdapter = new BaseAdapter<>(mSearchData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 if (data instanceof SearchHistoryModel) {
+
                     getSupportFragmentManager().beginTransaction().add(R.id.fm_fragment_container, mNationalSourceFragment).commit();
+                    mNationalSourceFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+
                     mRecyclerSearchHistory.setVisibility(View.GONE);
                 }
                 if (data instanceof SearchHistoryDeleteModel) {

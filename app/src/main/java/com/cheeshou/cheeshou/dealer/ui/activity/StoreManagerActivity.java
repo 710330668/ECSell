@@ -111,7 +111,8 @@ public class StoreManagerActivity extends BaseActivity {
                 switch (INVENTORY) {
                     //车源商 UE无操作
                     case C.INVENTORY_OPTION:
-                        startActivity(MarketSearchActivity.class);
+//                        startActivity(MarketSearchActivity.class);
+                        startActivity(StoreManagerItemClickActivity.class);
                         break;
                     //销售
                     case C.INVENTORY_MARKET:

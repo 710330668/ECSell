@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -79,14 +81,12 @@ public class StoreManagerItemClickFragment extends BaseFragment {
     private String TAG_LOAD_MORE = "tag_load_more";
     private String TAG_FILTER = "tag_filter";
 
-    private int selectState = 0;
-    private int selectOrder = 0;
 
     PopupWindow mPopupWindow;
 
     private List<ItemData> mSearchResultData = new ArrayList<>();
 
-    private static final String TAG = "SearchResultFragment";
+    private static final String TAG = "StoreManagerItemClickFragment";
     private final int REQUEST_BRAND = 0;
     private BaseAdapter mDataAdapter;
     private String token;
@@ -100,6 +100,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
     private List<ItemData> stateData;
     private List<ItemData> orderDate;
     public int INVENTORY = ParamManager.getInstance(getContext()).getChannelType();
+    private String scopType = "own";
 
     @Override
     protected int setLayoutResouceId() {
@@ -216,7 +217,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
         if (mSearchResultData.size() > 0) {
             mSearchResultData.remove(mSearchResultData.size() - 1);
         }
-        Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", "own",
+        Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", scopType,
                 carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
                 startDate, endDate, queryKey, carStatus, orderType)
                 .subscribeOn(Schedulers.io())
@@ -226,16 +227,17 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                     public void accept(AllOptionResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
+                            Log.e(TAG, "accept: " + new Gson().toJson(response));
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
                                 data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
-                                data.setPrice("车源价"+response.getData().getLists().get(i).getCarPrice() + "万");
+                                data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
                                 data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
                                         response.getData().getLists().get(i).getBrowseNum() + "次");
-                                data.setTitle(response.getData().getLists().get(i).getBrand() + "-" +response.getData().getLists().get(i).getVname());
+                                data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
@@ -322,6 +324,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
             case R.id.rb_car_order:
                 LinearLayout convertLinear = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.layout_popup_car_order_recycler, null);
                 RecyclerView orderRecycler = (RecyclerView) convertLinear.findViewById(R.id.recycler_car_order);
+                orderRecycler.addItemDecoration(new SpaceItemDecoration(5));
                 initOrderRecycler(orderRecycler);
                 mPopupWindow = new PopupWindow(convertLinear, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 mPopupWindow.setBackgroundDrawable(dw);
@@ -352,6 +355,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
+                mSearchResultData.clear();
                 getOwnOption();
             }
 
@@ -383,6 +387,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
+                mSearchResultData.clear();
                 getOwnOption();
             }
 
@@ -410,7 +415,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
 
 
     public void filterRecycler(String carType, String brandId, String versionId, String carYear, String outsiteColor, String withinColor, String minCarPrice, String maxCarPrice, String startDate, String endDate, String queryKey) {
-        this.carType = carType;
+//        this.carType = carType;
         this.brandId = brandId;
         this.versionId = versionId;
         this.carYear = carYear;

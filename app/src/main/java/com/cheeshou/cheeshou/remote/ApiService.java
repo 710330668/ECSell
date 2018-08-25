@@ -42,6 +42,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -161,7 +162,7 @@ public interface ApiService {
     //修改密码
     @FormUrlEncoded
     @POST("user/updateMyPassword")
-    Observable<EasyResponse> updateMyPassword(@Header("token") String token, @Field("password") String password, @Field("repwd") String repwd,@Field("oldPass") String oldPass);
+    Observable<EasyResponse> updateMyPassword(@Header("token") String token, @Field("password") String password, @Field("repwd") String repwd, @Field("oldPass") String oldPass);
 
     //新增客户
     @Multipart
@@ -323,7 +324,7 @@ public interface ApiService {
     //车源下架
     @FormUrlEncoded
     @POST("sale/soldOutCarInfo")
-    Observable<EasyResponse> soldOutCarInfo(@Field("token") String token,@Field("saleId") String saleId);
+    Observable<EasyResponse> soldOutCarInfo(@Field("token") String token, @Field("saleId") String saleId);
 
     //编辑销售车辆信息
     @FormUrlEncoded
@@ -333,12 +334,19 @@ public interface ApiService {
     //保存销售车辆信息
     @FormUrlEncoded
     @POST("sale/updateSaleCarInfo")
-    Observable<EasyResponse> updateSaleCarInfo(@Field("token") String token,@Field("saleId") String saleId,@Field("saleCarPrice") String saleCarPrice,
-                                               @Field("insuranceRebates") String insuranceRebates,@Field("loanRebates") String loanRebates);
+    Observable<EasyResponse> updateSaleCarInfo(@Field("token") String token, @Field("saleId") String saleId, @Field("saleCarPrice") String saleCarPrice,
+                                               @Field("insuranceRebates") String insuranceRebates, @Field("loanRebates") String loanRebates);
 
     //用户跟进保存
 
     @Multipart
     @POST("customer/saveCustomerProgressInfo")
     Observable<EasyResponse> saveCustomerProgressInfo(@Header("token") String token, @Part List<MultipartBody.Part> files, @PartMap Map<String, RequestBody> params);
+
+    //生成分享URL
+
+    @Multipart
+    @FormUrlEncoded
+    @POST("/share/saveShareInfo")
+    Observable<EasyResponse> saveShareInfo(@Header("token") String token, @Field("shareType") String shareType, @Field("shareDirect") String shareDirect, @Field("shareDirect") String shareDirect1, @Field("shareAtt") String shareAtt);
 }

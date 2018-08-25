@@ -108,6 +108,7 @@ public class DealerTradersFragment extends BaseFragment {
                 startActivity(MyReportActivity.class);
                 break;
             case R.id.et_search:
+                //经销商 搜索 分库存 和车源
                 startActivity(AllSourceSearchActivity.class);
                 break;
             case R.id.rl_my_share:

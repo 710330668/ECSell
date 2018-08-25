@@ -24,13 +24,25 @@ public class SearchHistoryModel {
     //
     private Long timeShamp;
 
-    @Generated(hash = 961335598)
+    //搜索 的身份  经销 车源商  销售
+    private int inventory;
+
+    public int getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(int inventory) {
+        this.inventory = inventory;
+    }
+
+    @Generated(hash = 1012127238)
     public SearchHistoryModel(Long historyId, String searchPosition,
-            String searchHistory, Long timeShamp) {
+                              String searchHistory, Long timeShamp, int inventory) {
         this.historyId = historyId;
         this.searchPosition = searchPosition;
         this.searchHistory = searchHistory;
         this.timeShamp = timeShamp;
+        this.inventory = inventory;
     }
 
     @Generated(hash = 2050687136)

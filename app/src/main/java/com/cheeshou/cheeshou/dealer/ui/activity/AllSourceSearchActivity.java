@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -22,12 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.dealer.ui.fragment.NationalSourceFragment;
-import com.cheeshou.cheeshou.dealer.ui.fragment.SearchResultFragment;
 import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
-import com.cheeshou.cheeshou.dealer.ui.model.DaoSession;
 import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryDeleteModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModel;
@@ -37,14 +34,13 @@ import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ChooseCarsActivity;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.DaoUtils;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
-import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.flyco.tablayout.SlidingTabLayout;
-import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -55,7 +51,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.cheeshou.cheeshou.R.layout.item_drawer_filter_racter;
 
 public class AllSourceSearchActivity extends BaseActivity {
 
@@ -123,6 +118,8 @@ public class AllSourceSearchActivity extends BaseActivity {
     private StoreManagerItemClickFragment searchResultFragment;
     private NationalSourceFragment nationAlFragment;
 
+    private int INVENTORY = ParamManager.getInstance(this).getChannelType();
+
 
     @Override
     public int bindLayout() {
@@ -180,6 +177,9 @@ public class AllSourceSearchActivity extends BaseActivity {
                 if (data instanceof SearchHistoryModel) {
                     // TODO: 2018/8/24 调用搜索
                     mRecyclerSearchHistory.setVisibility(View.GONE);
+                    queryKey = ((SearchHistoryModel) data).getSearchHistory();
+                    nationAlFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                    searchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                 }
                 if (data instanceof SearchHistoryDeleteModel) {
                     List<SearchHistoryModel> list = DaoUtils.getDaoSession(AllSourceSearchActivity.this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG)).list();
@@ -253,7 +253,7 @@ public class AllSourceSearchActivity extends BaseActivity {
         TagAdapter<PriceModel> priceAdapter = new TagAdapter<PriceModel>(dataSize) {
             @Override
             public View getView(FlowLayout parent, int position, PriceModel o) {
-                TextView textView = (TextView) getLayoutInflater().inflate(item_drawer_filter_racter, mTagFlowPrice, false);
+                TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_drawer_filter_racter, mTagFlowPrice, false);
                 textView.setText(o.getText());
                 return textView;
             }
@@ -474,14 +474,14 @@ public class AllSourceSearchActivity extends BaseActivity {
                 searchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                 break;
             case R.id.tv_year_all:
-                mTvSelectYear.setBackgroundResource(R.drawable.bg_edittext_red);
+                mTvSelectYear.setBackgroundResource(R.drawable.bg_radiobutton_red);
                 carYear = "";
-                mLLChooseYear.setBackgroundResource(R.drawable.bg_edittext);
+                mLLChooseYear.setBackgroundResource(R.drawable.bg_radiobutton);
                 break;
             case R.id.ll_choose_year:
-                mLLChooseYear.setBackgroundResource(R.drawable.bg_edittext_red);
+                mLLChooseYear.setBackgroundResource(R.drawable.bg_radiobutton_red);
                 carYear = mTvYear.getText().toString();
-                mTvSelectYear.setBackgroundResource(R.drawable.bg_edittext);
+                mTvSelectYear.setBackgroundResource(R.drawable.bg_radiobutton);
                 break;
             case R.id.img_last:
                 mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) - 1 + "");

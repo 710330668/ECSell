@@ -67,6 +67,8 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         addActivity(this);
         try {
+            super.setContentView(bindLayout());
+            ButterKnife.bind(this);
             Bundle bundle = getIntent().getExtras();
             initParams(bundle);
             if (mAllowFullScreen) {
@@ -79,9 +81,7 @@ public abstract class BaseActivity extends FragmentActivity {
                 highApiEffects();
             }
             appContext = getApplicationContext();
-            super.setContentView(bindLayout());
             setStatusBarMode(isDarkStatusBar);
-            ButterKnife.bind(this);
             setView(savedInstanceState);
             doBusiness(this);
         } catch (Exception e) {

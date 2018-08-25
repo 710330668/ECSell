@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,17 +27,27 @@ import com.cheeshou.cheeshou.dealer.ui.fragment.SearchResultFragment;
 import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
 import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryDeleteModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModelDao;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
 import com.cheeshou.cheeshou.options.ChooseAreaActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ChooseCarsActivity;
+import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.DaoUtils;
 import com.cheeshou.cheeshou.utils.ParamManager;
+import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
+import com.example.com.common.adapter.BaseAdapter;
+import com.example.com.common.adapter.ItemData;
+import com.example.com.common.adapter.onItemClickListener;
 import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +55,6 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.cheeshou.cheeshou.R.layout.item_drawer_filter_racter;
 import static com.cheeshou.cheeshou.config.C.INVENTORY_MARKET;
 
 /**
@@ -94,13 +105,17 @@ public class StoreManagerItemClickActivity extends BaseActivity {
     @BindView(R.id.tv_back)
     TextView mTvBack;
 
+    @BindView(R.id.recycler_search_history)
+    RecyclerView mRecyclerSearchHistory;
+    private BaseAdapter<ItemData> mSearchAdapter;
+    private List<ItemData> mSearchData = new ArrayList<>();
+
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_CAR = 2;
 
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private String carBrand;
-    StoreManagerResponse.DataBean dataBean;
 
     public int INVENTORY = ParamManager.getInstance(this).getChannelType();
 
@@ -114,18 +129,23 @@ public class StoreManagerItemClickActivity extends BaseActivity {
         return R.layout.activity_store_manager_item_click;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void initParams(Bundle params) {
-        dataBean = (StoreManagerResponse.DataBean) params.getSerializable("data");
         if (mSearchResultFragment == null) {
             mSearchResultFragment = new StoreManagerItemClickFragment();
             mSearchResultFragment.setArguments(params);
+            mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
         }
-        mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
+        if (params != null) {
+            mRecyclerSearchHistory.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
         mEtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -151,12 +171,12 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                     }
                 }
                 if (INVENTORY == C.INVENTORY_OPTION) {
-//                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
-//                        mTvBarRight.setText("搜索");
-//                        queryKey = mEtSearch.getText().toString();
-//                    } else {
-//                        mTvBarRight.setText("取消");
-//                    }
+                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+                        mTvBarRight.setText("搜索");
+                        queryKey = mEtSearch.getText().toString();
+                    } else {
+                        mTvBarRight.setText("取消");
+                    }
                 }
                 queryKey = mEtSearch.getText().toString();
             }
@@ -175,7 +195,6 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 break;
             case C.INVENTORY_OPTION:
                 mTvBarRight.setText("取消");
-                mTvBarRight.setVisibility(View.GONE);
                 break;
             default:
         }
@@ -184,6 +203,41 @@ public class StoreManagerItemClickActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initDrawerTagList();
+        initSearchHistory();
+    }
+
+    private void initSearchHistory() {
+        mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
+        List<SearchHistoryModel> list = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY)).list();
+        for (SearchHistoryModel bean : list) {
+            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, bean));
+        }
+        mSearchAdapter = new BaseAdapter<>(mSearchData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                if (data instanceof SearchHistoryModel) {
+
+                    mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+
+                    mRecyclerSearchHistory.setVisibility(View.GONE);
+                }
+                if (data instanceof SearchHistoryDeleteModel) {
+                    List<SearchHistoryModel> list = DaoUtils.getDaoSession(StoreManagerItemClickActivity.this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY)).list();
+                    for (SearchHistoryModel bean : list) {
+                        DaoUtils.getDaoSession(StoreManagerItemClickActivity.this).getSearchHistoryModelDao().delete(bean);
+                    }
+                    mSearchData.clear();
+                    mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
+                    mSearchAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        mRecyclerSearchHistory.setAdapter(mSearchAdapter);
     }
 
     private void initDrawerTagList() {
@@ -398,17 +452,33 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                         }
                         break;
                     case C.INVENTORY_OPTION:
-                        this.finish();
+                        switch (mTvBarRight.getText().toString()) {
+                            case "取消":
+                                this.finish();
+                                break;
+                            case "搜索":
+                                SearchHistoryModel entity = new SearchHistoryModel();
+                                entity.setTimeShamp(System.currentTimeMillis());
+                                entity.setSearchHistory(queryKey);
+                                entity.setSearchPosition(TAG);
+                                entity.setInventory(INVENTORY);
+                                SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
+                                if (unique == null) {
+                                    DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
+                                } else {
+                                    unique.setTimeShamp(System.currentTimeMillis());
+                                }
+                                mRecyclerSearchHistory.setVisibility(View.GONE);
+                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                                break;
+                        }
                         break;
                     default:
                 }
                 break;
             case R.id.bt_search_sure:
                 //搜索确认
-//                mSearchResultData.clear();
-//                getAllOptions();
                 mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
-//                searchResultFragment.
                 mDrawer.closeDrawer(Gravity.RIGHT);
                 break;
             case R.id.bt_search_reset:
@@ -421,7 +491,6 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 mTagFlowColorInside.getAdapter().setSelectedList(0);
                 mTagFlowColorOut.getAdapter().setSelectedList(0);
                 mTagFlowTime.getAdapter().setSelectedList(0);
-//                getAllOptions();
                 mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                 break;
             case R.id.tv_year_all:
@@ -451,7 +520,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (mDrawer.isDrawerOpen(mDrawerRightContent)) {
+        if (mDrawer != null && mDrawer.isDrawerOpen(mDrawerRightContent)) {
             mDrawer.closeDrawer(mDrawerRightContent);
             return;
         }
