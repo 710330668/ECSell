@@ -429,6 +429,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_bar_right:
+                Log.e(TAG, "onViewClicked: " + INVENTORY);
                 switch (INVENTORY) {
                     case C.INVENTORY_DEALER:
                         switch (mTvBarRight.getText().toString()) {

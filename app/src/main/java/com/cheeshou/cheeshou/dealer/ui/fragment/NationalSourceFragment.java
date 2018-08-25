@@ -90,9 +90,6 @@ public class NationalSourceFragment extends BaseFragment {
     private List<ItemData> mSearchResultData = new ArrayList<>();
     private ArrayList<SearchResultModel> dataList = new ArrayList<>();
 
-    private String TAG_LOAD_MORE = "tag_load_more";
-    private String TAG_FILTER = "tag_filter";
-
     private BaseAdapter mDataAdapter;
     private String token;
     private static final String TAG = "NationalSourceFragment";
@@ -178,6 +175,7 @@ public class NationalSourceFragment extends BaseFragment {
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
                 orderDate = new ArrayList<>();
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("默认排序", "", true)));
@@ -340,7 +338,7 @@ public class NationalSourceFragment extends BaseFragment {
 
 
     public void filterRecycler(String carType, String brandId, String versionId, String carYear, String outsiteColor, String withinColor, String minCarPrice, String maxCarPrice, String startDate, String endDate, String queryKey) {
-        this.carType = carType;
+//        this.carType = carType;
         this.brandId = brandId;
         this.versionId = versionId;
         this.carYear = carYear;
@@ -351,6 +349,7 @@ public class NationalSourceFragment extends BaseFragment {
         this.startDate = startDate;
         this.endDate = endDate;
         this.queryKey = queryKey;
+        mSearchResultData.clear();
         getAllOptions();
     }
 
@@ -369,12 +368,13 @@ public class NationalSourceFragment extends BaseFragment {
                 }
                 if (data instanceof CarStateModel) {
                     ((CarStateModel) data).setSelected(true);
-                    carType = ((CarStateModel) data).getStateCode();
+                    carStatus = ((CarStateModel) data).getStateCode();
                     mRbState.setText(((CarStateModel) data).getStateName());
                 }
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
+                mSearchResultData.clear();
                 getAllOptions();
             }
 
@@ -406,6 +406,7 @@ public class NationalSourceFragment extends BaseFragment {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
+                mSearchResultData.clear();
                 getAllOptions();
             }
 

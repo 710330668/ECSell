@@ -175,7 +175,6 @@ public class AllSourceSearchActivity extends BaseActivity {
             @Override
             public void onClick(View v, Object data) {
                 if (data instanceof SearchHistoryModel) {
-                    // TODO: 2018/8/24 调用搜索
                     mRecyclerSearchHistory.setVisibility(View.GONE);
                     queryKey = ((SearchHistoryModel) data).getSearchHistory();
                     nationAlFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);

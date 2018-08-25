@@ -90,13 +90,13 @@
         app:layout_constraintBottom_toBottomOf="@+id/tv_car_deduct"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <CheckBox
+    <TextView
         android:id="@+id/cb_car_put_away"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:layout_marginBottom="13dp"
         android:layout_marginRight="14dp"
-        android:background="@drawable/bg_checked_selector"
+        android:background="@drawable/bg_cb_put_away_normal"
         android:button="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

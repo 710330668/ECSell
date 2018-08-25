@@ -31,7 +31,7 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
     private TextView mCarDeduct;
     private TextView mCarState;
     private TextView mCarDate;
-    private CheckBox mCarPutAway;
+    private TextView mCarPutAway;
 
     /**
      * TODO
@@ -53,11 +53,11 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarDeduct = ((TextView) itemView.findViewById(R.id.tv_car_deduct));
         mCarState = ((TextView) itemView.findViewById(R.id.tv_car_state));
         mCarDate = ((TextView) itemView.findViewById(R.id.tv_car_date));
-        mCarPutAway = ((CheckBox) itemView.findViewById(R.id.cb_car_put_away));
+        mCarPutAway = ((TextView) itemView.findViewById(R.id.cb_car_put_away));
     }
 
     @Override
-    public void onBindViewHolder(ItemData data,int position) {
+    public void onBindViewHolder(ItemData data, int position) {
         final SearchResultModel resultModel = (SearchResultModel) data.data;
 
         mCarPoster.setImageResource(R.mipmap.ic_launcher);
@@ -73,8 +73,7 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
 //        mCarDate.setText(resultModel.getDate());
         mCarPrice.setText(resultModel.getPrice());
         mCarDeduct.setText(resultModel.getDeduct());
-        mCarPutAway.setChecked(resultModel.isPut());
-
+        mCarPutAway.setBackgroundResource(resultModel.isPut() ? R.mipmap.checked_true : R.drawable.bg_cb_put_away_normal);
         mCarDate.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
         mCarState.setVisibility(resultModel.isOpenPutEntrance() ? View.GONE : View.VISIBLE);
         mCarPutAway.setVisibility(resultModel.isOpenPutEntrance() ? View.VISIBLE : View.GONE);
