@@ -8,11 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
+import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.ParamManager;
@@ -112,6 +111,7 @@ public class StoreManagerActivity extends BaseActivity {
                 switch (INVENTORY) {
                     //车源商 UE无操作
                     case C.INVENTORY_OPTION:
+                        startActivity(MarketSearchActivity.class);
                         break;
                     //销售
                     case C.INVENTORY_MARKET:
@@ -119,7 +119,7 @@ public class StoreManagerActivity extends BaseActivity {
                         break;
                     //经销商
                     case C.INVENTORY_DEALER:
-                        startActivity(StoreSearchActivity.class);
+                        startActivity(MarketSearchActivity.class);
                         break;
                 }
                 break;

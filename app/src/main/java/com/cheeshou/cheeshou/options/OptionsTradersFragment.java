@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -11,7 +12,9 @@ import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity;
 import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseFragment;
+import com.example.com.common.util.SP;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -23,7 +26,11 @@ public class OptionsTradersFragment extends BaseFragment {
 
     Unbinder unbinder;
 
-//    public int INVENTORY = C.INVENTORY_OPTION;
+    public int INVENTORY = C.INVENTORY_OPTION;
+    @BindView(R.id.tv_company)
+    TextView tvCompany;
+
+    private String companyName;
 
     @Override
     protected int setLayoutResouceId() {
@@ -37,12 +44,12 @@ public class OptionsTradersFragment extends BaseFragment {
 
     @Override
     public void initData(Bundle arguments) {
-
+        companyName = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_COMPANYNAME);
     }
 
     @Override
     public void onLazyLoad() {
-
+        tvCompany.setText(companyName);
     }
 
     @Override
@@ -69,6 +76,7 @@ public class OptionsTradersFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
                 //库存管理
+                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:
@@ -79,8 +87,7 @@ public class OptionsTradersFragment extends BaseFragment {
                 startActivity(ReleaseOptionActivity.class);
                 break;
             case R.id.et_search:
-                // TODO: 2018/8/22 UE  无操作
-//                startActivity(MarketSearchActivity.class);
+                startActivity(MarketSearchActivity.class);
                 break;
         }
     }

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -52,6 +53,8 @@ import com.example.com.common.util.SP;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -148,7 +151,9 @@ public class ReleaseOptionActivity extends BaseActivity {
     private final int FORMALITIES = 3;
     private KeyMapDailog dialog;
     private CarDetailResponse response;
-    private List<String> discounts;
+    private List<String> discounts = new ArrayList<>();
+    private Bitmap bitmap;
+    private File currentFile;
 
     @Override
     public int bindLayout() {
@@ -159,7 +164,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     public void initParams(Bundle params) {
         imgPaths = new ArrayList<>();
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
-        if(params!=null){
+        if (params != null) {
             response = (CarDetailResponse) params.getSerializable("carDetailResponse");
         }
     }
@@ -177,7 +182,7 @@ public class ReleaseOptionActivity extends BaseActivity {
         }, "1990-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(false); // 不显示时和分
         customDatePicker.setIsLoop(false); // 不允许循环滚动
-        if(response!=null){
+        if (response != null) {
             //车辆详情页进入
             tvOptionsType.setText(response.getData().getTypeName());
             tvCarModel.setText(response.getData().getVname());
@@ -187,21 +192,104 @@ public class ReleaseOptionActivity extends BaseActivity {
             tvSalesArea.setText(response.getData().getSaleArea());
             tvFormalities.setText(response.getData().getCarFormality());
             tvYear.setText(response.getData().getCarYear());
-            etCarPrice.setText(response.getData().getCarPrice()+"");
-            etGuidedPrice.setText(response.getData().getGuidPrice()+"");
-            etCommission.setText(response.getData().getSaleCommission()+"");
-//            for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
-//                discounts = Arrays.asList(response.getData().getDiscounts().get(i).getDiscountName().split(","));
+            etCarPrice.setText(response.getData().getCarPrice() + "");
+            etGuidedPrice.setText(response.getData().getGuidPrice() + "");
+            etCommission.setText(response.getData().getSaleCommission() + "");
+            for (int i = 0; i < response.getData().getDiscounts().size(); i++) {
+                discounts.add(response.getData().getDiscounts().get(i).getDiscountName());
+            }
+            addDiscounts(discounts);
+//            for (int i = 0; i < response.getData().getImgs().size(); i++) {
+//                try {
+//                    bitmap = Glide.with(ReleaseOptionActivity.this)
+//                            .load(response.getData().getImgs().get(i).getImgUrl())
+//                            .asBitmap()
+//                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+//                            .get();
+//                    if (bitmap != null){
+//                        // 在这里执行图片保存方法
+//                        saveImageToGallery(ReleaseOptionActivity.this,bitmap);
+//                    }
+//                    photos.add(bitmap);
+//
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                }
 //            }
-//            addDiscounts(discounts);
+//            showCarImg();
             etSpecificDiscount.setText(response.getData().getDiscountContent());
             etConfiguration.setText(response.getData().getCarSetting());
             etNote.setText(response.getData().getRemark());
+
+        }
+    }
+
+    private void showCarImg() {
+        carPhotos.clear();
+        for (int i = 0; i < photos.size(); i++) {
+            final CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
+            ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
+            carPhotos.add(itemData);
+            rlCarPhoto.setLayoutManager(new GridLayoutManager(this, 3));
+            SettingDelegate delegate = new SettingDelegate();
+            delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
+                @Override
+                public void removeImage(int position) {
+                    carPhotos.remove(position);
+                    photos.remove(position);
+                    imageDeleteAdapter.notifyDataSetChanged();
+                }
+            });
+            imageDeleteAdapter = new BaseAdapter(carPhotos, delegate, new onItemClickListener() {
+                @Override
+                public void onClick(View v, Object data) {
+                }
+
+                @Override
+                public boolean onLongClick(View v, Object data) {
+                    return false;
+                }
+            });
+            rlCarPhoto.setAdapter(imageDeleteAdapter);
         }
     }
 
 
-    private void addDiscounts(List<String> discounts) {
+    public void saveImageToGallery(Context context, Bitmap bmp) {
+        // 首先保存图片
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
+        String mainfileName = "img";
+        File appDir = new File(file, mainfileName);
+        if (!appDir.exists()) {
+            appDir.mkdirs();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        currentFile = new File(appDir, fileName);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(currentFile);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+        private void addDiscounts(List<String> discounts) {
         if (discounts == null) {
             return;
         }
@@ -547,7 +635,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                             }
                         }
                     });
-        }catch (Exception e){
+        } catch (Exception e) {
             LogUtils.e(e.getMessage());
         }
 
@@ -665,7 +753,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(response == null){
+        if (response == null) {
             tvCarModel.setText(ParamManager.getInstance(this).getCarFullName());
         }
     }

@@ -2,6 +2,7 @@ package com.example.com.common.util;
 
 import android.annotation.SuppressLint;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1085,6 +1086,63 @@ public class TimeUtils {
                 cal.getActualMaximum(Calendar.DAY_OF_YEAR));
         return dateFormater.format(cal.getTime());
     }
+
+
+    //获取前一天
+    public static String getBeforeTime(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1); //得到前一天
+        Date date = calendar.getTime();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(df.format(date));
+    }
+
+    //获取本周的起始时间
+    public static String getTimeOfWeekStart(){
+        SimpleDateFormat dateFormater = new SimpleDateFormat(
+                "yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, 1);
+        cal.getTime();
+        return  dateFormater.format(cal.getTime()) + "";
+    }
+
+    //获取本周的起始时间
+    public static String getTimeOfWeekEnd(){
+        SimpleDateFormat dateFormater = new SimpleDateFormat(
+                "yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK,
+                cal.getActualMaximum(Calendar.DAY_OF_WEEK));
+        cal.getTime();
+        return  dateFormater.format(cal.getTime());
+    }
+
+
+    //获取本月的起始时间
+    public static String getTimeOfMonthStart(){
+        SimpleDateFormat dateFormater = new SimpleDateFormat(
+                "yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.getTime();
+        return dateFormater.format(cal.getTime()) + "";
+
+    }
+
+
+    //获取本月的结束时间
+    public static String getTimeOfMonthEnd(){
+        SimpleDateFormat dateFormater = new SimpleDateFormat(
+                "yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH,
+                cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.getTime();
+        return dateFormater.format(cal.getTime());
+    }
+
+
 
 
 }

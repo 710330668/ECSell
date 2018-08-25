@@ -2,9 +2,6 @@ package com.cheeshou.cheeshou.config;
 
 import android.support.annotation.IntDef;
 
-import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
-
 /**
  * Created by 71033 on 2018/7/19.
  */
@@ -28,6 +25,12 @@ public interface C {
     String TAG_PAGE_DUANJIE = "首页";
     String TAG_PAGE_SETTING = "设置";
 
+
+    //页面tag
+    String TAG_PAGE_MAIN = "TAG_PAGE_MAIN";
+    String TAG_PAGE_OPTIONS = "options";
+    String TAG_PAGE_DEALER = "dealer";
+    String TAG_PAGE_MARKET = "market";
 
     //库存管理 跳转搜索tag
     String TAG_PAGE_STORE_MANAGER = "TAG_PAGE_STORE_MANAGER";
@@ -64,7 +67,7 @@ public interface C {
 
     String SOURCE_MONTH_SHOP = "month_shop";  //月进店
 
-    String SOURCE_CAR_DETAIL_NATION = "nation_source";
+    String  SOURCE_CAR_DETAIL_NATION = "nation_source";
 
     String SOURCE_CAR_DETAIL_STORE = "store";
 
@@ -77,6 +80,14 @@ public interface C {
     String USER_TOKEN = "token";
 
     String USER_TYPE = "user_type";
+
+    String USER_NAME = "user_name";
+
+    String USER_PHONE = "user_phone";
+
+    String USER_COMPANYNAME = "user_compnayName";
+
+    String USER_ADDRESS = "user_address";
 
 //    	"code":200,	"data":[
 //    {
@@ -91,14 +102,5 @@ public interface C {
 //        "dataCode":"FAIL",			"dataName":"战败"
 //    }
 //    	],	"msg":"操作成功"
-
-//   汽车状态
-//    CarStateModel("全部","")));
-//
-//    CarStateModel("在售","IN_SALE")));
-//
-//    CarStateModel("已上架","SHELVES")));
-//
-//    CarStateModel("已预定","RESERVE")))
 
 }

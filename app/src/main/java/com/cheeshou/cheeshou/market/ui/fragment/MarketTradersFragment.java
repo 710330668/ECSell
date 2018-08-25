@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -14,7 +15,9 @@ import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseFragment;
+import com.example.com.common.util.SP;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -29,6 +32,9 @@ public class MarketTradersFragment extends BaseFragment {
     Unbinder unbinder;
 
     public int INVENTORY = C.INVENTORY_MARKET;
+    @BindView(R.id.tv_company)
+    TextView tvCompany;
+    private String companyName;
 
     @Override
     protected int setLayoutResouceId() {
@@ -42,12 +48,12 @@ public class MarketTradersFragment extends BaseFragment {
 
     @Override
     public void initData(Bundle arguments) {
-
+        companyName = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_COMPANYNAME);
     }
 
     @Override
     public void onLazyLoad() {
-
+        tvCompany.setText(companyName);
     }
 
     @Override
@@ -73,7 +79,7 @@ public class MarketTradersFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_store_manager:
-//                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
+                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_client_manager:

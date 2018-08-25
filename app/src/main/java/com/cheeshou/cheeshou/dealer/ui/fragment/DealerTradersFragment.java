@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -17,7 +18,9 @@ import com.cheeshou.cheeshou.dealer.ui.activity.UserManagerActivity;
 import com.cheeshou.cheeshou.order.OrderListActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseFragment;
+import com.example.com.common.util.SP;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -32,6 +35,9 @@ public class DealerTradersFragment extends BaseFragment {
     Unbinder unbinder;
 
     public int INVENTORY = C.INVENTORY_DEALER;
+    @BindView(R.id.tv_company)
+    TextView tvCompany;
+    private String companyName;
 
 
     @Override
@@ -46,12 +52,12 @@ public class DealerTradersFragment extends BaseFragment {
 
     @Override
     public void initData(Bundle arguments) {
-
+        companyName = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_COMPANYNAME);
     }
 
     @Override
     public void onLazyLoad() {
-
+        tvCompany.setText(companyName);
     }
 
     @Override
@@ -82,6 +88,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_store_manager:
                 //库存管理
+                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_human_manager:

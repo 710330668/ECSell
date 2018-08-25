@@ -8,7 +8,7 @@ public class LoginResponse {
 
     /**
      * code : 200
-     * data : {"token":"7B18867E93F346E6998B7D6A7A39355E","userType":"USER_DTRY"}
+     * data : {"token":"030D665798144FB4AECED38D9402C5C8","userType":"USER_CYS","phone":"13869647062","userName":"山东青岛","compnayName":"122","address":"fasdfads"}
      * msg : 操作成功
      */
 
@@ -42,12 +42,20 @@ public class LoginResponse {
 
     public static class DataBean {
         /**
-         * token : 7B18867E93F346E6998B7D6A7A39355E
-         * userType : USER_DTRY
+         * token : 030D665798144FB4AECED38D9402C5C8
+         * userType : USER_CYS
+         * phone : 13869647062
+         * userName : 山东青岛
+         * compnayName : 122
+         * address : fasdfads
          */
 
         private String token;
         private String userType;
+        private String phone;
+        private String userName;
+        private String compnayName;
+        private String address;
 
         public String getToken() {
             return token;
@@ -63,6 +71,38 @@ public class LoginResponse {
 
         public void setUserType(String userType) {
             this.userType = userType;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getCompnayName() {
+            return compnayName;
+        }
+
+        public void setCompnayName(String compnayName) {
+            this.compnayName = compnayName;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
         }
     }
 }

@@ -30,6 +30,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,8 @@ public class OrderListActivity extends BaseActivity {
     private String orderType;
     private static final int REQUEST_CLIENT = 1;
     private String xsUserId;
+    private String startDate, endDate;
+    private String minPrice, maxPrice;
 
 
     PopupWindow mPopupWindow;
@@ -133,7 +136,7 @@ public class OrderListActivity extends BaseActivity {
             mSearchResultData.remove(mSearchResultData.size() - 1);
         }
         Injection.provideApiService().findMyOrderList(token, CURRENT_PAGE + "", PAGE_SIZE + "", xsUserId,
-                "", "", "", "", etSearch.getText().toString(), orderType).
+                startDate, endDate, "", "", etSearch.getText().toString(), orderType).
                 subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<OrderListResponse>() {
@@ -247,12 +250,61 @@ public class OrderListActivity extends BaseActivity {
                         case R.id.rb_sale_time:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             rbSaleTime.setText(selectButton.getText());
+                            switch (rbSaleTime.getText().toString()) {
+                                case "不限":
+                                    startDate = "";
+                                    endDate = "";
+                                    break;
+                                case "昨天":
+                                    startDate = TimeUtils.getBeforeTime();
+                                    endDate = TimeUtils.getBeforeTime();
+                                    break;
+                                case "今天":
+                                    startDate = TimeUtils.getTodayTime();
+                                    endDate = TimeUtils.getTodayTime();
+                                    break;
+                                case "本周":
+                                    startDate = TimeUtils.getTimeOfWeekStart();
+                                    endDate = TimeUtils.getTimeOfWeekEnd();
+                                    break;
+                                case "本月":
+                                    startDate = TimeUtils.getTimeOfMonthStart();
+                                    endDate = TimeUtils.getTimeOfMonthEnd();
+                                    break;
+                                case "本年":
+                                    startDate = TimeUtils.getTimeOfYearStart();
+                                    endDate = TimeUtils.getTimeOfYearEnd();
+                                    break;
+                                case "更早":
+                                    break;
+                            }
+                            mSearchResultData.clear();
+                            CURRENT_PAGE = 1;
+                            getOrderList();
                             selectOrder = radioGroup.indexOfChild(selectButton);
                             mPopupWindow.dismiss();
                             break;
                         case R.id.rb_deal_valence:
                             selectButton = ((RadioButton) radioGroup.findViewById(i));
                             rbDealValence.setText(selectButton.getText());
+                            switch (rbDealValence.getText().toString()) {
+                                case "不限":
+                                    minPrice = "";
+                                    maxPrice = "";
+                                    break;
+                                case "5万以下":
+                                    minPrice = "";
+                                    maxPrice = "";
+                                    break;
+                                case "5万-10万":
+                                    break;
+                                case "50-100万":
+                                    break;
+                                case "100万及以上":
+                                    break;
+                                default:
+                                    break;
+                            }
                             selectOrder = radioGroup.indexOfChild(selectButton);
                             mPopupWindow.dismiss();
                             break;
