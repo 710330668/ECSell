@@ -11,6 +11,7 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.CustomerManagerActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.MyReportActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity;
+import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerItemClickActivity;
 import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
@@ -79,7 +80,6 @@ public class MarketTradersFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_store_manager:
-                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_client_manager:
@@ -90,7 +90,7 @@ public class MarketTradersFragment extends BaseFragment {
                 startActivity(MyReportActivity.class);
                 break;
             case R.id.et_search:
-                startActivity(MarketSearchActivity.class);
+                startActivity(StoreManagerItemClickActivity.class);
                 break;
             case R.id.rl_my_share:
                 startActivity(MarketShareActivity.class);

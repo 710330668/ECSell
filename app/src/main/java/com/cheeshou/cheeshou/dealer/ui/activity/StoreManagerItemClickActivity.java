@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -165,7 +166,6 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 if (INVENTORY == C.INVENTORY_MARKET) {
                     if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
                         mTvBarRight.setText("搜索");
-                        queryKey = mEtSearch.getText().toString();
                     } else {
                         mTvBarRight.setText("分享");
                     }
@@ -436,7 +436,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                                 this.finish();
                                 break;
                             case "搜索":
-                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                                clickSearch();
                                 break;
                         }
                         break;
@@ -444,10 +444,27 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                         switch (mTvBarRight.getText().toString()) {
                             case "分享":
 //                                this.finish();
-                                mSearchResultFragment.setShareOpen();
+                                if (mRecyclerSearchHistory.getVisibility() == View.VISIBLE) {
+                                    Toast.makeText(appContext, "暂无内容", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    mSearchResultFragment.setShareOpen();
+                                }
                                 break;
                             case "搜索":
-                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                                clickSearch();
+//                                SearchHistoryModel entity = new SearchHistoryModel();
+//                                entity.setTimeShamp(System.currentTimeMillis());
+//                                entity.setSearchHistory(queryKey);
+//                                entity.setSearchPosition(TAG);
+//                                entity.setInventory(INVENTORY);
+//                                SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
+//                                if (unique == null) {
+//                                    DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
+//                                } else {
+//                                    unique.setTimeShamp(System.currentTimeMillis());
+//                                }
+//                                mRecyclerSearchHistory.setVisibility(View.GONE);
+//                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                                 break;
                         }
                         break;
@@ -457,19 +474,20 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                                 this.finish();
                                 break;
                             case "搜索":
-                                SearchHistoryModel entity = new SearchHistoryModel();
-                                entity.setTimeShamp(System.currentTimeMillis());
-                                entity.setSearchHistory(queryKey);
-                                entity.setSearchPosition(TAG);
-                                entity.setInventory(INVENTORY);
-                                SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
-                                if (unique == null) {
-                                    DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
-                                } else {
-                                    unique.setTimeShamp(System.currentTimeMillis());
-                                }
-                                mRecyclerSearchHistory.setVisibility(View.GONE);
-                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                                clickSearch();
+//                                SearchHistoryModel entity = new SearchHistoryModel();
+//                                entity.setTimeShamp(System.currentTimeMillis());
+//                                entity.setSearchHistory(queryKey);
+//                                entity.setSearchPosition(TAG);
+//                                entity.setInventory(INVENTORY);
+//                                SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
+//                                if (unique == null) {
+//                                    DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
+//                                } else {
+//                                    unique.setTimeShamp(System.currentTimeMillis());
+//                                }
+//                                mRecyclerSearchHistory.setVisibility(View.GONE);
+//                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                                 break;
                         }
                         break;
@@ -516,6 +534,23 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 break;
             default:
         }
+    }
+
+    private void clickSearch() {
+        SearchHistoryModel entity = new SearchHistoryModel();
+        entity.setTimeShamp(System.currentTimeMillis());
+        entity.setSearchHistory(queryKey);
+        entity.setSearchPosition(TAG);
+        entity.setInventory(INVENTORY);
+        SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
+        if (unique == null) {
+            DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
+        } else {
+            unique.setTimeShamp(System.currentTimeMillis());
+        }
+        mRecyclerSearchHistory.setVisibility(View.GONE);
+        mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+
     }
 
     @Override

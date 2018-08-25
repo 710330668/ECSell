@@ -116,7 +116,7 @@ public class StoreManagerActivity extends BaseActivity {
                         break;
                     //销售
                     case C.INVENTORY_MARKET:
-                        startActivity(NationSourceActivity.class);
+                        startActivity(StoreManagerItemClickActivity.class);
                         break;
                     //经销商
                     case C.INVENTORY_DEALER:
