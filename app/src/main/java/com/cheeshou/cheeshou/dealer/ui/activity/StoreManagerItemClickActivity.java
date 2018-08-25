@@ -1,14 +1,17 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -16,12 +19,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.options.ChooseAreaActivity;
-import com.cheeshou.cheeshou.options.ChooseBrandActivity;
-import com.cheeshou.cheeshou.options.ChooseCarsActivity;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.fragment.SearchResultFragment;
+import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
 import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
@@ -30,6 +31,7 @@ import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ChooseCarsActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
+import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -44,12 +46,12 @@ import butterknife.OnClick;
 import static com.cheeshou.cheeshou.R.layout.item_drawer_filter_racter;
 import static com.cheeshou.cheeshou.config.C.INVENTORY_MARKET;
 
-public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.OnSelectListener {
+/**
+ * 库存管理 点击下方item跳转的activity  三条业务线共用
+ */
+public class StoreManagerItemClickActivity extends BaseActivity {
+    private static final String TAG = "StoreManagerItemClickActivity";
 
-    private static final String TAG = "StoreSearchActivity";
-
-    @BindView(R.id.flow_layout_hot_character)
-    TagFlowLayout mFlowLayout;
     @BindView(R.id.tag_flow_price)
     TagFlowLayout mTagFlowPrice;
     @BindView(R.id.tag_flow_time)
@@ -89,6 +91,8 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
     ImageView mImgNextYear;
     @BindView(R.id.tv_year)
     TextView mTvYear;
+    @BindView(R.id.tv_back)
+    TextView mTvBack;
 
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
@@ -102,29 +106,26 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
 
 
     private FragmentManager mFragmentManager = getSupportFragmentManager();
-    private SearchResultFragment mSearchResultFragment;
+    private StoreManagerItemClickFragment mSearchResultFragment;
 
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_store_search;
+        return R.layout.activity_store_manager_item_click;
     }
 
     @Override
     public void initParams(Bundle params) {
-        if (params != null) {
-            dataBean = (StoreManagerResponse.DataBean) params.getSerializable("data");
-            if (mSearchResultFragment == null) {
-                mSearchResultFragment = new SearchResultFragment();
-                mSearchResultFragment.setArguments(params);
-            }
-            mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
+        dataBean = (StoreManagerResponse.DataBean) params.getSerializable("data");
+        if (mSearchResultFragment == null) {
+            mSearchResultFragment = new StoreManagerItemClickFragment();
+            mSearchResultFragment.setArguments(params);
         }
+        mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
-        mFlowLayout.setOnSelectListener(this);
         mEtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,6 +150,14 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                         mTvBarRight.setText("分享");
                     }
                 }
+                if (INVENTORY == C.INVENTORY_OPTION) {
+//                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+//                        mTvBarRight.setText("搜索");
+//                        queryKey = mEtSearch.getText().toString();
+//                    } else {
+//                        mTvBarRight.setText("取消");
+//                    }
+                }
                 queryKey = mEtSearch.getText().toString();
             }
 
@@ -166,6 +175,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                 break;
             case C.INVENTORY_OPTION:
                 mTvBarRight.setText("取消");
+                mTvBarRight.setVisibility(View.GONE);
                 break;
             default:
         }
@@ -173,27 +183,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
 
     @Override
     public void doBusiness(Context mContext) {
-        initHotCharcter();
         initDrawerTagList();
-    }
-
-    /**
-     * 初始化热词
-     */
-    private void initHotCharcter() {
-        List<String> data = new ArrayList<>();
-        data.add("奔驰");
-        data.add("奔驰");
-        data.add("奔驰");
-        data.add("奔驰");
-        mFlowLayout.setAdapter(new TagAdapter<String>(data) {
-            @Override
-            public View getView(FlowLayout parent, int position, String o) {
-                TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_hot_character, mFlowLayout, false);
-                textView.setText(o);
-                return textView;
-            }
-        });
     }
 
     private void initDrawerTagList() {
@@ -209,7 +199,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
         TagAdapter<PriceModel> priceAdapter = new TagAdapter<PriceModel>(dataSize) {
             @Override
             public View getView(FlowLayout parent, int position, PriceModel o) {
-                TextView textView = (TextView) getLayoutInflater().inflate(item_drawer_filter_racter, mTagFlowPrice, false);
+                TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_drawer_filter_racter, mTagFlowPrice, false);
                 textView.setText(o.getText());
                 return textView;
             }
@@ -217,6 +207,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
         priceAdapter.setSelectedList(0);
         mTagFlowPrice.setAdapter(priceAdapter);
         mTagFlowPrice.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @SuppressLint("LongLogTag")
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 PriceModel priceModel = dataSize.get(position);
@@ -361,20 +352,7 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
         mTagFlowSourceType.setAdapter(sourceCarTypeAdapter);
     }
 
-    /**
-     * 热词点击 响应
-     *
-     * @param selectPosSet
-     */
-    @Override
-    public void onSelected(Set<Integer> selectPosSet) {
-        if (mSearchResultFragment == null) {
-            mSearchResultFragment = new SearchResultFragment();
-        }
-        mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
-    }
-
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next})
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_back})
     public void onViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -447,14 +425,14 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
                 mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                 break;
             case R.id.tv_year_all:
-                mTvSelectYear.setBackgroundResource(R.drawable.bg_edittext_red);
+                mTvSelectYear.setBackgroundResource(R.drawable.bg_radiobutton_red);
                 carYear = "";
-                mLLChooseYear.setBackgroundResource(R.drawable.bg_edittext);
+                mLLChooseYear.setBackgroundResource(R.drawable.bg_radiobutton);
                 break;
             case R.id.ll_choose_year:
-                mLLChooseYear.setBackgroundResource(R.drawable.bg_edittext_red);
+                mLLChooseYear.setBackgroundResource(R.drawable.bg_radiobutton_red);
                 carYear = mTvYear.getText().toString();
-                mTvSelectYear.setBackgroundResource(R.drawable.bg_edittext);
+                mTvSelectYear.setBackgroundResource(R.drawable.bg_radiobutton);
                 break;
             case R.id.img_last:
                 mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) - 1 + "");
@@ -463,6 +441,9 @@ public class StoreSearchActivity extends BaseActivity implements TagFlowLayout.O
             case R.id.img_next:
                 mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) + 1 + "");
                 carYear = mTvYear.getText().toString();
+                break;
+            case R.id.tv_back:
+                finish();
                 break;
             default:
         }

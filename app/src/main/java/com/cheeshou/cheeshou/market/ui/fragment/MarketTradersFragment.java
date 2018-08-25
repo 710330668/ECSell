@@ -73,7 +73,7 @@ public class MarketTradersFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_store_manager:
-                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
+//                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_client_manager:

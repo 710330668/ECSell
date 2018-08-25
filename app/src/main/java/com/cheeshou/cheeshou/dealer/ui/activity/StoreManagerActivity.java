@@ -47,8 +47,7 @@ public class StoreManagerActivity extends BaseActivity {
 
     private List<ItemData> mData = new ArrayList<>();
 
-    @C.INVENTORY
-    public int INVENTORY = C.INVENTORY_OPTION;
+    public int INVENTORY = ParamManager.getInstance(this).getChannelType();
 
     private static final String TAG = "StoreManagerActivity";
 
@@ -62,7 +61,6 @@ public class StoreManagerActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        INVENTORY = ParamManager.getInstance(this).getChannelType();
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
@@ -77,7 +75,7 @@ public class StoreManagerActivity extends BaseActivity {
                 StoreManagerResponse.DataBean data1 = (StoreManagerResponse.DataBean) data;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("data", data1);
-                startActivity(StoreSearchActivity.class, bundle);
+                startActivity(StoreManagerItemClickActivity.class, bundle);
             }
 
             @Override
@@ -107,15 +105,26 @@ public class StoreManagerActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.et_search})
+    @OnClick({R.id.et_search, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.et_search:
-                if (INVENTORY != C.INVENTORY_MARKET) {
-                    startActivity(StoreSearchActivity.class);
-                } else {
-                    startActivity(NationSourceActivity.class);
+                switch (INVENTORY) {
+                    //车源商 UE无操作
+                    case C.INVENTORY_OPTION:
+                        break;
+                    //销售
+                    case C.INVENTORY_MARKET:
+                        startActivity(NationSourceActivity.class);
+                        break;
+                    //经销商
+                    case C.INVENTORY_DEALER:
+                        startActivity(StoreSearchActivity.class);
+                        break;
                 }
+                break;
+            case R.id.iv_back:
+                finish();
                 break;
             default:
         }

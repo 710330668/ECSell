@@ -92,7 +92,6 @@ public class MarketSearchActivity extends BaseActivity {
         mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
         mNationalSourceFragment = new NationalSourceFragment();
         Bundle args = new Bundle();
-        args.putInt(C.TAG_PAGE_MAIN, C.INVENTORY_MARKET);
         mNationalSourceFragment.setArguments(args);
         mEtSearch.addTextChangedListener(new TextWatcher() {
             @Override

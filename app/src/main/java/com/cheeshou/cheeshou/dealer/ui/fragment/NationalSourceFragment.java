@@ -121,7 +121,6 @@ public class NationalSourceFragment extends BaseFragment {
 
     @Override
     public void initData(Bundle arguments) {
-        INVENTORY = arguments.getInt(C.TAG_PAGE_MAIN);
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
             @Override

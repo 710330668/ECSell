@@ -23,7 +23,7 @@ public class OptionsTradersFragment extends BaseFragment {
 
     Unbinder unbinder;
 
-    public int INVENTORY = C.INVENTORY_OPTION;
+//    public int INVENTORY = C.INVENTORY_OPTION;
 
     @Override
     protected int setLayoutResouceId() {
@@ -64,12 +64,11 @@ public class OptionsTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_kucun_manager, R.id.rl_car_redu, R.id.rl_release_option,R.id.et_search})
+    @OnClick({R.id.rl_kucun_manager, R.id.rl_car_redu, R.id.rl_release_option, R.id.et_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_kucun_manager:
                 //库存管理
-                ParamManager.getInstance(getActivity()).setChannelType(INVENTORY);
                 startActivity(StoreManagerActivity.class);
                 break;
             case R.id.rl_car_redu:
@@ -80,7 +79,8 @@ public class OptionsTradersFragment extends BaseFragment {
                 startActivity(ReleaseOptionActivity.class);
                 break;
             case R.id.et_search:
-                startActivity(MarketSearchActivity.class);
+                // TODO: 2018/8/22 UE  无操作
+//                startActivity(MarketSearchActivity.class);
                 break;
         }
     }

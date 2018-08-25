@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -24,14 +25,18 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.fragment.NationalSourceFragment;
 import com.cheeshou.cheeshou.dealer.ui.fragment.SearchResultFragment;
+import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
+import com.cheeshou.cheeshou.dealer.ui.model.DaoSession;
 import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryDeleteModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModelDao;
 import com.cheeshou.cheeshou.options.ChooseAreaActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ChooseCarsActivity;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.DaoUtils;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
@@ -39,6 +44,7 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -52,6 +58,8 @@ import butterknife.OnClick;
 import static com.cheeshou.cheeshou.R.layout.item_drawer_filter_racter;
 
 public class AllSourceSearchActivity extends BaseActivity {
+
+    private static final String TAG = "AllSourceSearchActivity";
 
     @BindView(R.id.tab_search_result)
     SlidingTabLayout mTabSearchResult;
@@ -112,7 +120,7 @@ public class AllSourceSearchActivity extends BaseActivity {
     private final int REQUEST_CAR = 2;
 
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
-    private SearchResultFragment searchResultFragment;
+    private StoreManagerItemClickFragment searchResultFragment;
     private NationalSourceFragment nationAlFragment;
 
 
@@ -143,7 +151,6 @@ public class AllSourceSearchActivity extends BaseActivity {
                 } else {
                     mTvSearch.setText("取消");
                 }
-                queryKey = mEtSearch.getText().toString();
             }
 
             @Override
@@ -163,18 +170,22 @@ public class AllSourceSearchActivity extends BaseActivity {
 
     private void initSearchHistory() {
         mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
-        for (int i = 0; i < 5; i++) {
-            SearchHistoryModel data = new SearchHistoryModel();
-            data.setSearchHistory("保时捷 911");
-            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, data));
+        List<SearchHistoryModel> searchHistoryModels = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG)).list();
+        for (SearchHistoryModel bean : searchHistoryModels) {
+            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, bean));
         }
         mSearchAdapter = new BaseAdapter<>(mSearchData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 if (data instanceof SearchHistoryModel) {
+                    // TODO: 2018/8/24 调用搜索
                     mRecyclerSearchHistory.setVisibility(View.GONE);
                 }
                 if (data instanceof SearchHistoryDeleteModel) {
+                    List<SearchHistoryModel> list = DaoUtils.getDaoSession(AllSourceSearchActivity.this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG)).list();
+                    for (SearchHistoryModel bean : list) {
+                        DaoUtils.getDaoSession(AllSourceSearchActivity.this).getSearchHistoryModelDao().delete(bean);
+                    }
                     mSearchData.clear();
                     mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
                     mSearchAdapter.notifyDataSetChanged();
@@ -192,10 +203,9 @@ public class AllSourceSearchActivity extends BaseActivity {
     private void initViewPager() {
         nationAlFragment = new NationalSourceFragment();
         Bundle args = new Bundle();
-        args.putInt(C.TAG_PAGE_MAIN, C.INVENTORY_DEALER);
         nationAlFragment.setArguments(args);
         mTagFragments.add(nationAlFragment);
-        searchResultFragment = new SearchResultFragment();
+        searchResultFragment = new StoreManagerItemClickFragment();
         mTagFragments.add(searchResultFragment);
         mContentAdapter = new ContentPagerAdapter(getSupportFragmentManager());
         mVpContent.setAdapter(mContentAdapter);
@@ -423,8 +433,21 @@ public class AllSourceSearchActivity extends BaseActivity {
                     this.finish();
                 } else {
                     mRecyclerSearchHistory.setVisibility(View.GONE);
+                    queryKey = mEtSearch.getText().toString();
                     nationAlFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                     searchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+
+                    SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
+                    if (unique != null) {
+                        unique.setTimeShamp(System.currentTimeMillis());
+                        DaoUtils.getDaoSession(this).getSearchHistoryModelDao().update(unique);
+                    } else {
+                        SearchHistoryModel entity = new SearchHistoryModel();
+                        entity.setTimeShamp(System.currentTimeMillis());
+                        entity.setSearchHistory(queryKey);
+                        entity.setSearchPosition(TAG);
+                        DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
+                    }
                 }
                 break;
             case R.id.bt_search_sure:

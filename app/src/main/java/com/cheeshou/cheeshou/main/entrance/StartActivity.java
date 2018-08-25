@@ -49,19 +49,16 @@ public class StartActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.btn_options_traders:
                 ParamManager.getInstance(this).setChannelType(C.INVENTORY_OPTION);
-                bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_OPTIONS);
                 startActivity(MainTabActivity.class, bundle);
                 finish();
                 break;
             case R.id.btn_dealers_traders:
                 ParamManager.getInstance(this).setChannelType(C.INVENTORY_DEALER);
-                bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_DEALER);
                 startActivity(MainTabActivity.class, bundle);
                 finish();
                 break;
             case R.id.btn_sales_traders:
                 ParamManager.getInstance(this).setChannelType(C.INVENTORY_MARKET);
-                bundle.putString(C.TAG_PAGE_MAIN, C.TAG_PAGE_MARKET);
                 startActivity(MainTabActivity.class, bundle);
                 finish();
                 break;

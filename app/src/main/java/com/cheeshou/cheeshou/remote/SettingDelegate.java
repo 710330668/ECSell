@@ -2,6 +2,8 @@ package com.cheeshou.cheeshou.remote;
 
 import android.view.ViewGroup;
 
+import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarOrderViewHolder;
+import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarStateViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.AreasViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.CarsViewHolder;
@@ -92,6 +94,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int CUSTOMER_DETAIL_FOLLOW_TYPE = 25;
 
     public static final int ORDER_LIST_TYPE = 26;
+    //汽车状态
+    public static final int POPUP_WINDOW_CAR_STATE_TYPE = 27;
+    //汽车排序
+    public static final int POPUP_WINDOW_CAR_ORDER_TYPE = 28;
 
     public static final int FOOT_TYPE = 99;
 
@@ -158,6 +164,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new CustomerFollowHolder(parent, getItemView(parent, viewType));
             case ORDER_LIST_TYPE:
                 return new OrderListViewHolder(parent, getItemView(parent, viewType));
+            case POPUP_WINDOW_CAR_STATE_TYPE:
+                return new CarStateViewHolder(parent, getItemView(parent, viewType));
+            case POPUP_WINDOW_CAR_ORDER_TYPE:
+                return new CarOrderViewHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -227,6 +237,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_layout_customer_follow;
             case ORDER_LIST_TYPE:
                 return R.layout.item_order_list;
+            case POPUP_WINDOW_CAR_STATE_TYPE:
+                return R.layout.popup_window_item_state_layout;
+            case POPUP_WINDOW_CAR_ORDER_TYPE:
+                return R.layout.popup_window_item_order_layout;
             default:
         }
         return 0;

@@ -13,6 +13,7 @@ import com.cheeshou.cheeshou.market.ui.fragment.MarketTradersFragment;
 import com.cheeshou.cheeshou.options.OptionsTradersFragment;
 import com.cheeshou.cheeshou.options.SettingFragment;
 import com.cheeshou.cheeshou.options.TabEntity;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.NoScrollViewPager;
 import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
@@ -44,7 +45,7 @@ public class MainTabActivity extends BaseActivity {
     private SettingFragment settingFragment;
     private DealerTradersFragment dealerTradersFragment;
     private MarketTradersFragment marketTradersFragment;
-    private String mPageType;
+    private int INVENTORY;
 
     @Override
     public int bindLayout() {
@@ -53,7 +54,7 @@ public class MainTabActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-        mPageType = params.getString(C.TAG_PAGE_MAIN);
+        INVENTORY = ParamManager.getInstance(this).getChannelType();
     }
 
     @Override
@@ -131,20 +132,20 @@ public class MainTabActivity extends BaseActivity {
      * 根据Tag初始化fragment
      */
     private void initSubFragment() {
-        switch (mPageType) {
-            case C.TAG_PAGE_OPTIONS:
+        switch (INVENTORY) {
+            case C.INVENTORY_OPTION:
                 tradersFragment = new OptionsTradersFragment();
                 settingFragment = new SettingFragment();
                 mFragments.add(tradersFragment);
                 mFragments.add(settingFragment);
                 break;
-            case C.TAG_PAGE_DEALER:
+            case C.INVENTORY_DEALER:
                 dealerTradersFragment = new DealerTradersFragment();
                 settingFragment = new SettingFragment();
                 mFragments.add(dealerTradersFragment);
                 mFragments.add(settingFragment);
                 break;
-            case C.TAG_PAGE_MARKET:
+            case C.INVENTORY_MARKET:
                 marketTradersFragment = new MarketTradersFragment();
                 settingFragment = new SettingFragment();
                 mFragments.add(marketTradersFragment);

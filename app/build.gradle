@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     signingConfigs {
@@ -20,28 +21,28 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-//    signingConfigs {
-//        business {
-//            keyAlias 'cheeshou'
-//            keyPassword 'Cys123456'
-//            storeFile file('keystore')
-//            storePassword 'Cys123456'
-//        }
-//    }
-//    buildTypes {
-//        release {
-//            //是否启用代码混淆
-//            shrinkResources false
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.business
-//
-//        }
-//        debug {
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.business
-//        }
-//    }
+    signingConfigs {
+        business {
+            keyAlias 'cheeshou'
+            keyPassword 'Cys123456'
+            storeFile file('keystore')
+            storePassword 'Cys123456'
+        }
+    }
+    buildTypes {
+        release {
+            //是否启用代码混淆
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.business
+
+        }
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.business
+        }
+    }
 }
 
 
@@ -72,6 +73,11 @@ MobSDK {
             }
         }
     }
+
+    SMSSDK {
+        gui false
+    }
+
     permissions {
         exclude "android.permission.GET_TASKS", "android.permission.INTERNET"
     }
@@ -198,4 +204,9 @@ dependencies {
     implementation files('libs/pinyin4j-2.5.0.jar')
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     implementation files('libs/universal-image-loader-1.9.2-with-sources.jar')
+    implementation 'org.greenrobot:greendao:3.2.2'
+}
+
+greendao {
+    schemaVersion 1
 }

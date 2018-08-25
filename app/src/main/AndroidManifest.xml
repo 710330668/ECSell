@@ -26,6 +26,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        tools:replace="android:name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -106,9 +107,10 @@
         <activity android:name=".dealer.ui.activity.CustomerCarWantActivity" />
         <activity android:name=".dealer.ui.activity.SalerManagerActivity" />
         <activity android:name=".usercenter.ModifyPasswordActivity" />
-        <activity android:name=".dealer.ui.activity.CustomerFollowActivity"></activity>
+        <activity android:name=".dealer.ui.activity.CustomerFollowActivity" />
         <activity android:name=".market.ui.MarketShareCarActivity" />
-        <activity android:name=".market.ui.MarketShareWechatActivity"></activity>
+        <activity android:name=".market.ui.MarketShareWechatActivity" />
+        <activity android:name=".dealer.ui.activity.StoreManagerItemClickActivity"></activity>
     </application>
 
 </manifest>
