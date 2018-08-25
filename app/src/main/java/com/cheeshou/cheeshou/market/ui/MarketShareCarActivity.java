@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.market.ui;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,20 +15,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.R;
-import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.options.TabEntity;
-import com.cheeshou.cheeshou.options.model.CarPhotoModel;
-import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.SP;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -37,10 +38,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.wechat.friends.Wechat;
 
 public class MarketShareCarActivity extends BaseActivity {
 
@@ -64,14 +61,19 @@ public class MarketShareCarActivity extends BaseActivity {
     private List<ItemData> carPhotos = new ArrayList<>();
     private BaseAdapter imageDeleteAdapter;
     private String[] mTitles = {"标准版", "配置版"};
-    private int[] mIconUnselectIds = {R.drawable.drawable_empty_small, R.drawable.drawable_empty_small};
-    private int[] mIconSelectIds = {R.drawable.drawable_empty_small, R.drawable.drawable_empty_small};
+    //    private int[] mIconUnselectIds = {R.drawable.drawable_empty_small, R.drawable.drawable_empty_small};
+//    private int[] mIconSelectIds = {R.drawable.drawable_empty_small, R.drawable.drawable_empty_small};
     private View convertView;
     private EditText mEtShare;
     private PopupWindow mPopupWindow;
-    private String article;
+    private String normalArticle = "";
+    private String affineArticle = "";
     private List<String> imageArray = new ArrayList<>();
     private static final String TAG = "MarketShareCarActivity";
+    private String mPhone;
+    private String mAddress;
+    private String mName;
+    private String mCompany;
 
 
     @Override
@@ -82,6 +84,10 @@ public class MarketShareCarActivity extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
         data = params.getParcelableArrayList("data");
+        mPhone = SP.getInstance(this).getString(C.USER_PHONE);
+        mAddress = SP.getInstance(this).getString(C.USER_ADDRESS);
+        mName = SP.getInstance(this).getString(C.USER_NAME);
+        mCompany = SP.getInstance(this).getString(C.USER_COMPANYNAME);
     }
 
     @Override
@@ -91,31 +97,21 @@ public class MarketShareCarActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        normalArticle += ("  [诚信车商] " + mCompany + " \n");
+        normalArticle += ("  [优质车源] http://www.cheeshou.com \n");
+        normalArticle += ("  [联系方式]  " + mPhone + "  " + mName + "\n");
+        normalArticle += ("  [看车地址]  " + mAddress + "\n");
+
+        affineArticle = getResources().getString(R.string.affine_article, data.size() + "", mPhone, mName);
+
+        mRecycler.setLayoutManager(new GridLayoutManager(this, 3));
+        imageDeleteAdapter = new BaseAdapter(carPhotos, new SettingDelegate());
         for (int i = 0; i < data.size(); i++) {
             final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
-            article += data.get(i).getTitle() + "\n";
             imageArray.add(data.get(i).getImageUrl());
             ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
             carPhotos.add(itemData);
-            mRecycler.setLayoutManager(new GridLayoutManager(this, 3));
-            SettingDelegate delegate = new SettingDelegate();
-            delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
-                @Override
-                public void removeImage(int position) {
-//                    carPhotos.remove(position);
-//                    imageDeleteAdapter.notifyDataSetChanged();
-                }
-            });
-            imageDeleteAdapter = new BaseAdapter(carPhotos, delegate, new onItemClickListener() {
-                @Override
-                public void onClick(View v, Object data) {
-                }
-
-                @Override
-                public boolean onLongClick(View v, Object data) {
-                    return false;
-                }
-            });
             mRecycler.setAdapter(imageDeleteAdapter);
         }
     }
@@ -139,6 +135,7 @@ public class MarketShareCarActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), MarketShareWechatActivity.class);
                             Bundle extras = new Bundle();
                             extras.putParcelableArrayList("data", data);
+                            extras.putString("article", mEtShare.getText().toString());
                             intent.putExtras(extras);
                             startActivity(intent);
 //                            Wechat.ShareParams sp = new Wechat.ShareParams();
@@ -146,7 +143,7 @@ public class MarketShareCarActivity extends BaseActivity {
 //                            sp.setTitle("车易售"); //分享标题
 //                            String[] toArray = new String[imageArray.size()];
 //                            sp.setImageArray(imageArray.toArray(toArray));
-//                            sp.setText(article);   //分享文本
+//                            sp.setText(normalArticle);   //分享文本
 ////                            sp.setUrl(url);   //网友点进链接后，可以看到分享的详情
 //                            Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
 ////                            wechat.setPlatformActionListener(platformActionListener); // 设置分享事件回调
@@ -159,7 +156,7 @@ public class MarketShareCarActivity extends BaseActivity {
 //                            // titleUrl QQ和QQ空间跳转链接
 ////                            oks.setTitleUrl("http://sharesdk.cn");
 //                            // text是分享文本，所有平台都需要这个字段
-//                            oks.setText(article);
+//                            oks.setText(normalArticle);
 //                            // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
 ////                            oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
 ////                            String[] toArray = new String[imageArray.size()];
@@ -172,17 +169,31 @@ public class MarketShareCarActivity extends BaseActivity {
 //                            oks.show(MarketShareCarActivity.this);
                         }
                     });
+
+                    convertView.findViewById(R.id.tv_to_copy).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            cm.setText(mEtShare.getText());
+                            Toast.makeText(appContext, "复制成功", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     mEtShare = ((EditText) convertView.findViewById(R.id.et_share_article));
-                    mEtShare.setText(article);
+                    mEtShare.setText(normalArticle);
                     mainTabBar = convertView.findViewById(R.id.mainTabBar);
                     mTabEntities.clear();
                     for (int i = 0; i < mTitles.length; i++) {
-                        mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
+                        mTabEntities.add(new TabEntity(mTitles[i]));
                     }
                     mainTabBar.setTabData(mTabEntities);
                     mainTabBar.setOnTabSelectListener(new OnTabSelectListener() {
                         @Override
                         public void onTabSelect(int position) {
+                            if (position == 0) {
+                                mEtShare.setText(normalArticle);
+                            } else {
+                                mEtShare.setText(affineArticle);
+                            }
                         }
 
                         @Override
