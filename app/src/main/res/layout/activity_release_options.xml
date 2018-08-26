@@ -474,7 +474,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="14dp"
-                        android:text="%"
+                        android:text="元"
                         android:textSize="14sp" />
 
                     <EditText
@@ -583,6 +583,7 @@
                         android:layout_marginRight="14dp"
                         android:background="@null"
                         android:hint="请输入车架号"
+                        android:gravity="center"
                         android:textSize="14sp" />
 
                 </RelativeLayout>

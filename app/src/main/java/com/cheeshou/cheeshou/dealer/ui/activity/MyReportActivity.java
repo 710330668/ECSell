@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MyReportResponse;
@@ -39,7 +38,12 @@ public class MyReportActivity extends BaseActivity {
     TextView tvMonthDaodian;
     @BindView(R.id.tv_month_yishou)
     TextView tvMonthYishou;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_company)
+    TextView tvCompany;
     private String token;
+    private String companyName, userName;
 
     @Override
     public int bindLayout() {
@@ -48,17 +52,19 @@ public class MyReportActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-
+        companyName = SP.getInstance(C.USER_DB, this).getString(C.USER_COMPANYNAME);
+        userName = SP.getInstance(C.USER_DB, this).getString(C.USER_NAME);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
-
     }
 
     @SuppressLint("CheckResult")
     @Override
     public void doBusiness(Context mContext) {
+        tvName.setText(userName);
+        tvCompany.setText(companyName);
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
         Injection.provideApiService().findCustomerCount(token)
                 .subscribeOn(Schedulers.io())
@@ -68,12 +74,12 @@ public class MyReportActivity extends BaseActivity {
                     public void accept(MyReportResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
-                            tvXinzeng.setText(response.getData().getDayCustomerCount()+"");
-                            tvDaodian.setText(response.getData().getDayEnterCount()+"");
-                            tvYishou.setText(response.getData().getDaySaleCount()+"");
-                            tvMonthXinzeng.setText(response.getData().getMonthCustomerCount()+"");
-                            tvMonthDaodian.setText(response.getData().getMonthEnterCount()+"");
-                            tvMonthYishou.setText(response.getData().getMonthSaleCount()+"");
+                            tvXinzeng.setText(response.getData().getDayCustomerCount() + "");
+                            tvDaodian.setText(response.getData().getDayEnterCount() + "");
+                            tvYishou.setText(response.getData().getDaySaleCount() + "");
+                            tvMonthXinzeng.setText(response.getData().getMonthCustomerCount() + "");
+                            tvMonthDaodian.setText(response.getData().getMonthEnterCount() + "");
+                            tvMonthYishou.setText(response.getData().getMonthSaleCount() + "");
                         }
                     }
                 });

@@ -195,10 +195,10 @@ public class ReleaseOptionActivity extends BaseActivity {
         if (response != null) {
             //车辆详情页进入
             tvOptionsType.setText(response.getData().getTypeName());
-            tvCarModel.setText(response.getData().getVname());
+            tvCarModel.setText(response.getData().getTypeName() + " " + response.getData().getVname());
             tvApprenceColor.setText(response.getData().getOutsiteColor());
             tvInteriorColor.setText(response.getData().getWithinColor());
-            tvArea.setText(response.getData().getProvinceName());
+            tvArea.setText(response.getData().getProvinceName()+" "+response.getData().getCityName());
             tvSalesArea.setText(response.getData().getSaleArea());
             tvFormalities.setText(response.getData().getCarFormality());
             tvYear.setText(response.getData().getCarYear());

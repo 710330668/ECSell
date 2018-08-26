@@ -53,10 +53,10 @@ public class OrderListViewHolder extends BaseViewHolder<ItemData> {
 
         mCarPoster.setImageResource(R.mipmap.ic_launcher);
 
-        mCarTitle.setText(resultModel.getVname());
+        mCarTitle.setText(resultModel.getBrand()+"-"+resultModel.getVname());
         mOrderSubTitle.setText("客户"+resultModel.getCustomerName() + "" + "销售"+resultModel.getUserName());
-        mOrderDate.setText(TimeUtils.millis2String(resultModel.getComDate()));
-        mOrderPrice.setText(resultModel.getOrderPrice()+"万");
+        mOrderDate.setText("售出时间"+TimeUtils.millis2String(resultModel.getComDate()));
+        mOrderPrice.setText("成交价"+resultModel.getOrderPrice()+"万");
 
 
         if(!TextUtils.isEmpty(resultModel.getImgThumUrl())){

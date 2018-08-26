@@ -112,7 +112,7 @@
             android:layout_height="match_parent"
             android:layout_weight="103"
             android:button="@null"
-            android:drawableRight="@drawable/drawable_left_radio_selector"
+            android:drawableRight="@drawable/drawable_left_radio_filter_selector"
             android:gravity="center"
             android:text="销售"
             android:textColor="#333333" />

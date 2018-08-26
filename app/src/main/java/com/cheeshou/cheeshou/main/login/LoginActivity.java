@@ -8,10 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.cheeshou.cheeshou.MainTabActivity;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
-import com.cheeshou.cheeshou.main.entrance.StartActivity;
 import com.cheeshou.cheeshou.remote.Injection;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.SP;
 
@@ -64,7 +65,7 @@ public class LoginActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     @OnClick(R.id.btn_login)
     public void onViewClicked() {
-        String userName = etUserName.getText().toString();
+        final String userName = etUserName.getText().toString();
         String passWord = etPassword.getText().toString();
         if(TextUtils.isEmpty(userName)||TextUtils.isEmpty(passWord)){
             Toast.makeText(this,"用户名或密码不能为空",Toast.LENGTH_SHORT).show();
@@ -78,7 +79,19 @@ public class LoginActivity extends BaseActivity {
                     public void accept(LoginResponse loginResponse) throws Exception {
                         if(loginResponse.getCode() == 200){
                             saveUserInfor(loginResponse);
-                            startActivity(StartActivity.class);
+                            String userType = loginResponse.getData().getUserType();
+                            switch (userType){
+                                case C.USER_TYPE_CYS:
+                                    ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_OPTION);
+                                    break;
+                                case C.USER_TYPE_JXS:
+                                    ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_DEALER);
+                                    break;
+                                case C.USER_TYPE_XS:
+                                    ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_MARKET);
+                                    break;
+                            }
+                            startActivity(MainTabActivity.class);
                             finish();
                         }else{
                             Toast.makeText(LoginActivity.this,loginResponse.getMsg(),Toast.LENGTH_SHORT).show();

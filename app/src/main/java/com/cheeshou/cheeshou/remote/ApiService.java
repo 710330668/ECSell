@@ -27,6 +27,7 @@ import com.cheeshou.cheeshou.options.model.response.HotCarCountResponse;
 import com.cheeshou.cheeshou.options.model.response.HotCarListResponse;
 import com.cheeshou.cheeshou.options.model.response.ModifyCarInforResponse;
 import com.cheeshou.cheeshou.options.model.response.OptionTypeResponse;
+import com.cheeshou.cheeshou.options.model.response.RegisonNameResponse;
 import com.cheeshou.cheeshou.options.model.response.SalesAreaResponse;
 import com.cheeshou.cheeshou.order.response.OrderDetailResponse;
 import com.cheeshou.cheeshou.order.response.OrderListResponse;
@@ -343,6 +344,11 @@ public interface ApiService {
     @Multipart
     @POST("customer/saveCustomerProgressInfo")
     Observable<EasyResponse> saveCustomerProgressInfo(@Header("token") String token, @Part List<MultipartBody.Part> files, @PartMap Map<String, RequestBody> params);
+
+    //通过区域名称获得区域信息
+    @FormUrlEncoded
+    @POST("region/findRegionByName")
+    Observable<RegisonNameResponse> findRegionByName(@Field("token") String token, @Field("cityName") String cityName);
 
     //生成分享URL
 

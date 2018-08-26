@@ -15,6 +15,7 @@ import com.cheeshou.cheeshou.dealer.ui.activity.MyReportActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.NationSourceActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.UserManagerActivity;
+import com.cheeshou.cheeshou.market.ui.MarketShareActivity;
 import com.cheeshou.cheeshou.order.OrderListActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseFragment;
@@ -113,6 +114,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_my_share:
                 // TODO: 2018/8/18   我的分享
+                startActivity(MarketShareActivity.class);
                 break;
             default:
 

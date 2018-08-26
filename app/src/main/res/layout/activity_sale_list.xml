@@ -17,14 +17,14 @@
             android:layout_height="18dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:src="@mipmap/back" />
+            android:src="@mipmap/icon_white_back" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="人员管理"
+            android:text="选择创建人"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
 

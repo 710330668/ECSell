@@ -42,6 +42,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="216dp"
                 android:layout_height="26dp"
                 android:layout_marginTop="10dp"
@@ -51,6 +52,7 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@id/tv_company"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -84,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="4"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <TextView
@@ -114,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="4"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <TextView
@@ -144,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="4"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <TextView
@@ -182,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="4"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <TextView
@@ -212,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="4"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <TextView
@@ -242,7 +244,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="4"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <TextView

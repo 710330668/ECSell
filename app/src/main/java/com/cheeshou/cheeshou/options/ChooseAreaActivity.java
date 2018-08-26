@@ -26,12 +26,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.cheeshou.cheeshou.MyApplication;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.options.model.AddressModel;
 import com.cheeshou.cheeshou.options.model.AreasModel;
 import com.cheeshou.cheeshou.options.model.response.AreaProvinceResponse;
+import com.cheeshou.cheeshou.options.model.response.RegisonNameResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
@@ -86,6 +88,9 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     private Location location;
     private Geocoder geocoder;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
+    private String provinceCode,cityCode,cityName;
+    private AreasModel areasModel;
+    private ItemData itemData;
 
     @Override
     public int bindLayout() {
@@ -188,9 +193,12 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                     public void accept(AreaProvinceResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
+                            areasModel = new AreasModel("全省",  "");
+                            itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
+                            areaLists.add(itemData);
                             for (int i = 0; i < response.getData().size(); i++) {
-                                AreasModel areasModel = new AreasModel(response.getData().get(i).getCityName(), response.getData().get(i).getId() + "");
-                                ItemData itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
+                                areasModel = new AreasModel(response.getData().get(i).getCityName(), response.getData().get(i).getId() + "");
+                                itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
                                 areaLists.add(itemData);
                             }
                         }
@@ -215,6 +223,12 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
             case R.id.iv_location:
                 break;
             case R.id.tv_loaction:
+                Intent intent = new Intent();
+                intent.putExtra("area", cityName);
+                intent.putExtra("provinceCode", provinceCode);
+                intent.putExtra("cityCode", cityCode);
+                setResult(RESULT_OK, intent);
+                finish();
                 break;
         }
     }
@@ -274,6 +288,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 //                        add = address.getAddressLine(1);
 //                    }
                     tvLoaction.setText(address.getLocality());
+                    getCityInfor(address.getLocality());
                 }
             }
         } catch (IOException e) {
@@ -281,6 +296,24 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         }
         return location;
 
+    }
+
+    @SuppressLint("CheckResult")
+    private void getCityInfor(String locality) {
+        cityName = locality;
+        Injection.provideApiService().findRegionByName(token,locality)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<RegisonNameResponse>() {
+                    @Override
+                    public void accept(RegisonNameResponse response) throws Exception {
+                        LogUtils.e(response.getMsg());
+                        if(response.getCode() == 200){
+                            provinceCode = response.getData().getPid()+"";
+                            cityCode = response.getData().getId()+"";
+                        }
+                    }
+                });
     }
 
     @Override

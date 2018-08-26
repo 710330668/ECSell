@@ -3,12 +3,14 @@ package com.cheeshou.cheeshou.dealer.ui.viewHolder;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cheeshou.cheeshou.MyApplication;
 import com.cheeshou.cheeshou.R;
+import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,6 +34,7 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
     private TextView mCarState;
     private TextView mCarDate;
     private TextView mCarPutAway;
+    public int INVENTORY = ParamManager.getInstance(MyApplication.getContext()).getChannelType();
 
     /**
      * TODO
@@ -66,7 +69,7 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
         mCarSubTitle.setText(resultModel.getSubTitle());
         mCarState.setText(resultModel.getState());
         try {
-            mCarDate.setText(formatDate("yyyy/MM/dd", Long.parseLong(resultModel.getDate())));
+            mCarDate.setText(resultModel.getDate());
         } catch (Exception e) {
 
         }
@@ -80,6 +83,10 @@ public class SearchResultViewHolder extends BaseViewHolder<ItemData> {
 
         if (!TextUtils.isEmpty(resultModel.getImageUrl())) {
             ImageLoader.getInstance().displayImage(resultModel.getImageUrl(), mCarPoster);
+        }
+
+        if(INVENTORY == C.INVENTORY_MARKET){
+            mCarDeduct.setVisibility(View.GONE);
         }
 //
 //        mCarPutAway.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

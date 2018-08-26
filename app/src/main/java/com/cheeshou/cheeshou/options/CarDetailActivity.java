@@ -154,8 +154,10 @@ public class CarDetailActivity extends BaseActivity {
 
         if (params != null) {
             carId = params.getString("carId");
+            //订单来源
             source = params.getString("source");
             orderItemId = params.getString("orderItemId");
+            //全国来源
             dealerSource = params.getString("dealer_source");
             mPutAwayData = params.getParcelableArrayList("shelves_data");
         }
@@ -201,6 +203,10 @@ public class CarDetailActivity extends BaseActivity {
             getOrderDetail();
         }
 
+        if(!TextUtils.isEmpty(dealerSource)){
+            llyRebates.setVisibility(View.GONE);
+        }
+
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
                 llyRebates.setVisibility(View.GONE);
@@ -215,7 +221,12 @@ public class CarDetailActivity extends BaseActivity {
                 } else {
                     btnShareCar.setVisibility(View.VISIBLE);
                 }
-                llyShare.setVisibility(View.VISIBLE);
+                if(source.equals(C.SOURCE_ORDER)){
+                    llyShare.setVisibility(View.GONE);
+                }else{
+                    llyShare.setVisibility(View.VISIBLE);
+                }
+
                 btnCarShare.setVisibility(View.GONE);
                 LayoutInflateView(INVENTORY);
                 tvName.setVisibility(View.VISIBLE);
@@ -232,6 +243,7 @@ public class CarDetailActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void getOrderDetail() {
+        llyShare.setVisibility(View.GONE);
         discounts.clear();
         Injection.provideApiService().findOrderDetail(token, orderItemId)
                 .subscribeOn(Schedulers.io())
@@ -249,7 +261,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
                             tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
                             tvSellStatus.setText(response.getData().getCarStatusName());
-                            tvShareShelvesNum.setText("分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
+                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享"+ response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
                             tvCarType.setText(response.getData().getTypeName());
@@ -300,7 +312,7 @@ public class CarDetailActivity extends BaseActivity {
                             carDetailResponse = response;
                             saleId = response.getData().getSaleId();
                             tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceCode() + response.getData().getCityName());
-                            if (INVENTORY == C.INVENTORY_DEALER) {
+                            if (INVENTORY == C.INVENTORY_DEALER && TextUtils.isEmpty(dealerSource)) {
                                 tvAdvise.setText("车源价" + response.getData().getCarPrice() + "万|"
                                         + "建议售价" + response.getData().getGuidPrice() + "万|"
                                         + "销售提成" + response.getData().getSaleCommission() + "万");
@@ -388,7 +400,7 @@ public class CarDetailActivity extends BaseActivity {
                 reservateBtn.setVisibility(View.GONE);
                 break;
             case C.INVENTORY_DEALER:
-                reservateBtn.setText("取消预定");
+                reservateBtn.setText("预定车辆");
                 modifyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -407,18 +419,19 @@ public class CarDetailActivity extends BaseActivity {
                 reservateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        unReserveSaleCarInfo();
+                        reservate();
                         pop.dismiss();
                     }
                 });
                 break;
             case C.INVENTORY_MARKET:
+                reservateBtn.setText("取消预定");
                 modifyBtn.setVisibility(View.GONE);
                 shelvesBtn.setVisibility(View.GONE);
                 reservateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        reservate();
+                        unReserveSaleCarInfo();
                         pop.dismiss();
                     }
                 });

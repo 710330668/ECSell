@@ -155,6 +155,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:text="车源类型"
+                        android:textColor="@color/color_333333"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_options_type"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/more_gray" />
+
+                    <TextView
+                        android:id="@+id/tv_options_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="14dp"
+                        android:layout_toLeftOf="@+id/iv_options_type"
+                        android:textColor="#FF5755"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginRight="14dp"
+                    android:background="#F5F5F5" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:text="品牌"
                         android:textColor="@color/color_333333"
                         android:textSize="14sp" />
@@ -456,13 +495,15 @@
                     android:gravity="center"
                     android:text="车源类型"
                     android:textColor="@color/color_333333"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
 
                 <com.zhy.view.flowlayout.TagFlowLayout
                     android:id="@+id/tag_flow_car_source_type"
                     android:layout_width="match_parent"
                     android:layout_height="320dp"
-                    app:max_select="1" />
+                    app:max_select="1"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

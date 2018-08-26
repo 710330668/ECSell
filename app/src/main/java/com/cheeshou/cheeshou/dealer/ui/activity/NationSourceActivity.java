@@ -205,6 +205,7 @@ public class NationSourceActivity extends BaseActivity {
                 if (!isOpen) {
                     Bundle bundle = new Bundle();
                     bundle.putString("carId", model.getId());
+                    bundle.putString("dealer_source","nationSource");
                     startActivity(CarDetailActivity.class, bundle);
                 } else {
                     model.setPut(!model.isPut());
@@ -264,8 +265,8 @@ public class NationSourceActivity extends BaseActivity {
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
-                                        response.getData().getLists().get(i).getBrowseNum() + "次");
+                                data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() +"|销售区域:"
+                                        );
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());

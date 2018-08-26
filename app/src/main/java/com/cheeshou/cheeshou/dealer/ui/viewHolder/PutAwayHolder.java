@@ -9,6 +9,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.imageloader.LoaderManager;
 
 /**
  * Author ： DasonYu
@@ -47,6 +48,7 @@ public class PutAwayHolder extends BaseViewHolder<ItemData> {
         SearchResultModel data1 = (SearchResultModel) data.getData();
         mCarTitle.setText(data1.getTitle());
         mCarPrice.setText(data1.getPrice());
+        LoaderManager.getLoader().loadNet(mCarPoster,data.getItemDesc());
 //        mCarPriceSuggestion.setText(data1.getPriceSuggestion());
     }
 }

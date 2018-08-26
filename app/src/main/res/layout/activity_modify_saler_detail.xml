@@ -183,15 +183,16 @@
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tv_name"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:text="姓名"
             android:textColor="#999999"
@@ -201,8 +202,9 @@
             android:id="@+id/et_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginLeft="14dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_name"
             android:hint="请输入销售姓名"
             android:background="@null"
             android:textColor="#333333"
@@ -210,16 +212,24 @@
 
         <TextView
             android:id="@+id/tv_address_hook"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="right|center"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:text="通讯录"
             android:textSize="12sp"
             android:textColor="#999999"
             android:layout_marginRight="14dp"/>
 
-    </LinearLayout>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@mipmap/contacts"
+            android:layout_toLeftOf="@+id/tv_address_hook"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="2dp"/>
+
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
