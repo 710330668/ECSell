@@ -221,12 +221,15 @@ public class CarDetailActivity extends BaseActivity {
                 } else {
                     btnShareCar.setVisibility(View.VISIBLE);
                 }
-                if(source.equals(C.SOURCE_ORDER)){
-                    llyShare.setVisibility(View.GONE);
+                if(source!=null){
+                    if(source.equals(C.SOURCE_ORDER)){
+                        llyShare.setVisibility(View.GONE);
+                    }else{
+                        llyShare.setVisibility(View.VISIBLE);
+                    }
                 }else{
                     llyShare.setVisibility(View.VISIBLE);
                 }
-
                 btnCarShare.setVisibility(View.GONE);
                 LayoutInflateView(INVENTORY);
                 tvName.setVisibility(View.VISIBLE);
@@ -255,7 +258,8 @@ public class CarDetailActivity extends BaseActivity {
                         if (response.getCode() == 200) {
                             saleId = response.getData().getCarId();
                             tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceCode() + response.getData().getCityName());
-                            tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万" + "销售底价" + response.getData().getSaleCarPrice() + "万");
+                            tvAdvise.setText("车源价" + response.getData().getCarPrice() + "万|"
+                                    + "建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getCarPrice() + "万");
                             tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
