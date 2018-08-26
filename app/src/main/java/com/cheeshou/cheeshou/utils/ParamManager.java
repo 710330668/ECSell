@@ -20,6 +20,15 @@ public class ParamManager {
     private String carId;
 
     private CustomerWantCarModel model;
+    private String createCustomerWantCarId;
+
+    public String getCreateCustomerWantCarId() {
+        return createCustomerWantCarId;
+    }
+
+    public void setCreateCustomerWantCarId(String createCustomerWantCarId) {
+        this.createCustomerWantCarId = createCustomerWantCarId;
+    }
 
     public static ParamManager getInstance(Context context) {
 

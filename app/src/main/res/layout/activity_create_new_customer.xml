@@ -29,7 +29,7 @@
             android:textSize="16sp" />
     </RelativeLayout>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -288,6 +288,7 @@
                     android:textColor="#333333" />
 
                 <TextView
+                    android:id="@+id/tv_add_car"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -295,49 +296,11 @@
                     android:textColor="#FF5755" />
             </LinearLayout>
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_want_car"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="奥迪-奥迪A6"
-                    android:textColor="#999999" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="删除"
-                    android:textColor="#FF5755" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="奥迪-奥迪A6"
-                    android:textColor="#999999" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="删除"
-                    android:textColor="#FF5755" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -347,6 +310,7 @@
                 android:background="#F5F5F5" />
 
             <LinearLayout
+                android:id="@+id/ll_want_car"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
@@ -409,7 +373,7 @@
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="14dp"
-                android:text="详细需求"
+                android:text="备注"
                 android:textColor="#333333" />
 
             <EditText
@@ -458,7 +422,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/dimens_9dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_rb_selector"
+                    android:background="@drawable/bg_radiobutton_selector"
                     android:button="@null"
                     android:gravity="center"
                     android:text="到店"
@@ -469,7 +433,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/dimens_9dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_rb_selector"
+                    android:background="@drawable/bg_radiobutton_selector"
                     android:button="@null"
                     android:gravity="center"
                     android:text="电话"
@@ -480,7 +444,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/dimens_9dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_rb_selector"
+                    android:background="@drawable/bg_radiobutton_selector"
                     android:button="@null"
                     android:gravity="center"
                     android:text="微信"
@@ -490,7 +454,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_rb_selector"
+                    android:background="@drawable/bg_radiobutton_selector"
                     android:button="@null"
                     android:gravity="center"
                     android:text="短信"
@@ -516,5 +480,5 @@
 
 
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

@@ -147,10 +147,10 @@ public class EditCustomerNeedActivity extends BaseActivity {
         params.put("minBudget", toRequestBody(mEtMinMoney.getText().toString()));
         params.put("maxBudget", toRequestBody(mEtMaxMoney.getText().toString()));
         params.put("remark", toRequestBody(mEtRemark.getText().toString()));
-        String[] strings = new String[dataList.size()];
+        CustomerWantCarModel.CodeBean[] strings = new CustomerWantCarModel.CodeBean[dataList.size()];
         for (int i = 0; i < dataList.size(); i++) {
             CustomerWantCarModel.CodeBean code = ((CustomerWantCarModel) dataList.get(i).getData()).getCode();
-            strings[i] = new Gson().toJson(code);
+            strings[i] = code;
         }
         params.put("versionJson", toRequestBody(new Gson().toJson(strings)));
         Injection.provideApiService().updateCustomerNeedInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<EasyResponse>() {

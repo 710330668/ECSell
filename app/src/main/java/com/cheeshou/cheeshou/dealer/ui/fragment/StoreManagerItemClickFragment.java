@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +103,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
     private List<ItemData> orderDate;
     public int INVENTORY = ParamManager.getInstance(getContext()).getChannelType();
     private String scopType = "own";
+    private String customer;
 
     @Override
     protected int setLayoutResouceId() {
@@ -120,6 +122,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
         if (arguments == null) {
             arguments = new Bundle();
         }
+        customer = arguments.getString("customer");
         Serializable data = arguments.getSerializable("data");
         if (data != null) {
             dataBean = (StoreManagerResponse.DataBean) data;
@@ -161,6 +164,9 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 }
             }
         });
+        if (!TextUtils.isEmpty(customer)) {
+            mTvBottom.setText("确定");
+        }
         initPopupWindowData();
         getOwnOption();
     }
@@ -272,6 +278,9 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                         }
                         mDataAdapter.notifyDataSetChanged();
                         mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        if (!TextUtils.isEmpty(customer)) {
+                            setShareOpen();
+                        }
                     }
                 });
     }
@@ -326,13 +335,23 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                         dataList.add((SearchResultModel) bean.getData());
                     }
                 }
-                if (dataList.size() > 0) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("data", dataList);
-                    startActivity(MarketShareCarActivity.class, bundle);
+                if (TextUtils.isEmpty(customer)) {
+                    if (dataList.size() > 0) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("data", dataList);
+                        startActivity(MarketShareCarActivity.class, bundle);
+                    } else {
+                        Toast.makeText(getContext(), "未选中分享车辆", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getContext(), "未选中分享车辆", Toast.LENGTH_SHORT).show();
+                    String s = "";
+                    for (SearchResultModel bean : dataList) {
+                        s += (bean.getId() + ",");
+                    }
+                    ParamManager.getInstance(getContext()).setCreateCustomerWantCarId(s);
+                    getActivity().finish();
                 }
+
 
                 break;
             default:

@@ -111,6 +111,7 @@
         <activity android:name=".market.ui.MarketShareCarActivity" />
         <activity android:name=".market.ui.MarketShareWechatActivity" />
         <activity android:name=".dealer.ui.activity.StoreManagerItemClickActivity"></activity>
+        <activity android:name=".dealer.ui.activity.CustomerWantCarActivity"/>
     </application>
 
 </manifest>

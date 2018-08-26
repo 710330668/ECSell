@@ -3,21 +3,37 @@ package com.cheeshou.cheeshou.dealer.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerWantCarViewHolder;
+import com.cheeshou.cheeshou.options.ChooseBrandActivity;
+import com.cheeshou.cheeshou.options.contract.ICarSell;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.R;
+import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
+import com.example.com.common.adapter.BaseAdapter;
+import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -49,6 +65,16 @@ public class CreateNewCustomerActivity extends BaseActivity {
     EditText mEtNeed;
     @BindView(R.id.rg_common_type)
     RadioGroup mRgType;
+    @BindView(R.id.et_customer_order)
+    EditText mEtRemark;
+    @BindView(R.id.recycler_want_car)
+    RecyclerView mRecycler;
+    private SettingDelegate delegate;
+    private BaseAdapter adapter;
+    private List<ItemData> dataList = new ArrayList<>();
+    private boolean optionId;
+    @BindView(R.id.tv_want_car_number)
+    TextView mTvCarNum;
 
     @Override
     public int bindLayout() {
@@ -62,15 +88,48 @@ public class CreateNewCustomerActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
-
     }
 
     @Override
     public void doBusiness(Context mContext) {
+        mRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        delegate = new SettingDelegate();
+        delegate.setCustomerWantCarDeleteListener(new CustomerWantCarViewHolder.OnDeleteListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                dataList.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter = new BaseAdapter(dataList, delegate);
+        mRecycler.setAdapter(adapter);
 
+        NotifyCallBackManager.getInstance().registPagerCloseCallBack(new ICarSell.IPagerClose() {
+            @Override
+            public void close() {
+                CustomerWantCarModel model = ParamManager.getInstance(CreateNewCustomerActivity.this).getModel();
+                dataList.add(new ItemData(0, SettingDelegate.CUSTOMER_WANT_CAR, model));
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    @OnClick({R.id.ll_contacts, R.id.save_customer, R.id.img_back})
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String createCustomerWantCarId = ParamManager.getInstance(CreateNewCustomerActivity.this).getCreateCustomerWantCarId();
+        int num = 0;
+        if (!TextUtils.isEmpty(createCustomerWantCarId)) {
+            for (int i = 0; i < createCustomerWantCarId.length(); i++) {
+                if (createCustomerWantCarId.substring(i, (i + 1)).indexOf(',') != -1) {
+                    num = num + 1;
+                }
+            }
+        }
+        mTvCarNum.setText(num + "辆");
+    }
+
+    @OnClick({R.id.ll_contacts, R.id.save_customer, R.id.img_back, R.id.tv_add_car, R.id.ll_want_car})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_contacts:
@@ -85,6 +144,14 @@ public class CreateNewCustomerActivity extends BaseActivity {
                 break;
             case R.id.img_back:
                 finish();
+                break;
+            case R.id.tv_add_car:
+                intent = new Intent(this, ChooseBrandActivity.class);
+                intent.putExtra("optionId", optionId);
+                startActivity(intent);
+                break;
+            case R.id.ll_want_car:
+                startActivity(CustomerWantCarActivity.class);
                 break;
             default:
         }
@@ -104,10 +171,16 @@ public class CreateNewCustomerActivity extends BaseActivity {
             params.put("minBudget", toRequestBody(mEtMinMoney.getText().toString()));
             params.put("maxBudget", toRequestBody(mEtMaxMoney.getText().toString()));
             params.put("needTxt", toRequestBody(mEtNeed.getText().toString()));
+            params.put("remark", toRequestBody(mEtRemark.getText().toString()));
             params.put("commType", toRequestBody(((RadioButton) findViewById(mRgType.getCheckedRadioButtonId())).getText().toString()));
-            params.put("saleIds", toRequestBody("1,1,1"));
-            params.put("versionJson", toRequestBody(""));
-            params.put("remark", toRequestBody(""));
+            Log.e(TAG, "createNewCustomer: " + ParamManager.getInstance(this).getCreateCustomerWantCarId() );
+            params.put("saleIds", toRequestBody(ParamManager.getInstance(this).getCreateCustomerWantCarId()));
+            CustomerWantCarModel.CodeBean[] strings = new CustomerWantCarModel.CodeBean[dataList.size()];
+            for (int i = 0; i < dataList.size(); i++) {
+                CustomerWantCarModel.CodeBean code = ((CustomerWantCarModel) dataList.get(i).getData()).getCode();
+                strings[i] = code;
+            }
+            params.put("versionJson", toRequestBody(new Gson().toJson(strings)));
             Injection.provideApiService().saveCustomerInfo(token, params).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<EasyResponse>() {
