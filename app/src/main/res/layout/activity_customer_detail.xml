@@ -172,7 +172,7 @@
                     android:id="@+id/tv_customer_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="张达"
+                    android:text=""
                     android:textColor="#333333"
                     android:textSize="20sp"
                     android:textStyle="bold" />

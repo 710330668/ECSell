@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.options.contract.ICarSell;
 import com.cheeshou.cheeshou.options.model.AddressModel;
 import com.cheeshou.cheeshou.options.model.response.CarBrandResponse;
@@ -18,6 +20,7 @@ import com.cheeshou.cheeshou.options.model.AddressModel;
 import com.cheeshou.cheeshou.options.model.response.CarBrandResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.SP;
 
@@ -119,6 +122,11 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
                 finish();
             }
         } else {
+            CustomerWantCarModel model = ParamManager.getInstance(this).getModel();
+            CustomerWantCarModel.CodeBean code = model.getCode();
+            code.setBrandId(id);
+            model.setCode(code);
+            ParamManager.getInstance(this).setModel(model);
             startActivity(ChooseCarsActivity.class, bundle);
         }
     }

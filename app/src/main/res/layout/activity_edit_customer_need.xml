@@ -30,7 +30,7 @@
             android:textSize="16sp" />
     </RelativeLayout>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rv_bottom_layout"
@@ -57,13 +57,15 @@
 
 
                 <EditText
+                    android:id="@+id/et_min_money"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/drawable_empty"
                     android:gravity="center"
-                    android:hint="14"
+                    android:hint=""
+                    android:inputType="number"
                     android:textColor="#999999"
                     android:textSize="14sp" />
 
@@ -77,13 +79,15 @@
 
 
                 <EditText
+                    android:id="@+id/et_max_money"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/drawable_empty"
                     android:gravity="center"
-                    android:hint="14"
+                    android:hint=""
+                    android:inputType="number"
                     android:textColor="#999999"
                     android:textSize="14sp" />
 
@@ -118,6 +122,7 @@
                     android:textColor="#333333" />
 
                 <TextView
+                    android:id="@+id/tv_add_brand"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -125,49 +130,12 @@
                     android:textColor="#FF5755" />
             </LinearLayout>
 
-            <LinearLayout
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_want_car"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="奥迪-奥迪A6"
-                    android:textColor="#999999" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="删除"
-                    android:textColor="#FF5755" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="奥迪-奥迪A6"
-                    android:textColor="#999999" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="删除"
-                    android:textColor="#FF5755" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -179,6 +147,7 @@
                 android:textSize="14sp" />
 
             <EditText
+                android:id="@+id/tv_need_text"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:background="@drawable/bg_edittext"
@@ -198,6 +167,7 @@
                 android:textSize="14sp" />
 
             <EditText
+                android:id="@+id/tv_remark"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:background="@drawable/bg_edittext"
@@ -208,7 +178,7 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <RelativeLayout
         android:id="@+id/rv_bottom_layout"
@@ -222,6 +192,7 @@
         android:paddingTop="25dp">
 
         <TextView
+            android:id="@+id/tv_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@mipmap/home_bg"

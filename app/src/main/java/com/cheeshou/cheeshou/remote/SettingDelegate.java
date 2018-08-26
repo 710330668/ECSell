@@ -4,6 +4,7 @@ import android.view.ViewGroup;
 
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarOrderViewHolder;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarStateViewHolder;
+import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerWantCarViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.AreasViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.CarsViewHolder;
@@ -81,6 +82,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     private MarketShareHeaderHolder.ShareRankClickListener listener;
 
     private CarPhotoViewHolder.OnImageDeleteListener imageDeleteListener;
+    private CustomerWantCarViewHolder.OnDeleteListener wantCatDeleteListener;
 
     public static final int USER_LIST_TYPE = 20;
 
@@ -98,6 +100,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int POPUP_WINDOW_CAR_STATE_TYPE = 27;
     //汽车排序
     public static final int POPUP_WINDOW_CAR_ORDER_TYPE = 28;
+
+    public static final int CUSTOMER_WANT_CAR = 29;
 
     public static final int FOOT_TYPE = 99;
 
@@ -168,6 +172,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new CarStateViewHolder(parent, getItemView(parent, viewType));
             case POPUP_WINDOW_CAR_ORDER_TYPE:
                 return new CarOrderViewHolder(parent, getItemView(parent, viewType));
+            case CUSTOMER_WANT_CAR:
+                CustomerWantCarViewHolder customerWantCarViewHolder = new CustomerWantCarViewHolder(parent, getItemView(parent, viewType));
+                customerWantCarViewHolder.setOnDeleteListener(wantCatDeleteListener);
+                return customerWantCarViewHolder;
             default:
         }
         return null;
@@ -241,6 +249,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.popup_window_item_state_layout;
             case POPUP_WINDOW_CAR_ORDER_TYPE:
                 return R.layout.popup_window_item_order_layout;
+            case CUSTOMER_WANT_CAR:
+                return R.layout.customer_want_car_item_layout;
             default:
         }
         return 0;
@@ -252,5 +262,9 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public void setOnImageDeleteListener(CarPhotoViewHolder.OnImageDeleteListener listener) {
         this.imageDeleteListener = listener;
+    }
+
+    public void setCustomerWantCarDeleteListener(CustomerWantCarViewHolder.OnDeleteListener listener) {
+        this.wantCatDeleteListener = listener;
     }
 }

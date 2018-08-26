@@ -34,6 +34,8 @@ import com.cheeshou.cheeshou.order.response.OrderListResponse;
 import com.cheeshou.cheeshou.usercenter.model.DealerShipResponse;
 import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Map;
 
@@ -179,7 +181,7 @@ public interface ApiService {
 //    CustomerDetailResponse
     @Multipart
     @POST("customer/findCustomerDetailInfo")
-    Observable<CustomerDetailResponse> getCustomerDetailInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+    Observable<JSONObject> getCustomerDetailInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     @Multipart
     @POST("customer/updateCustomerBaseInfo")
@@ -350,8 +352,13 @@ public interface ApiService {
     @POST("region/findRegionByName")
     Observable<RegisonNameResponse> findRegionByName(@Field("token") String token, @Field("cityName") String cityName);
 
-    //生成分享URL
+    //修改客户需求
+    @Multipart
+    @POST("customer/updateCustomerNeedInfo")
+    Observable<EasyResponse> updateCustomerNeedInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
+
+    //生成分享URL
     @Multipart
     @FormUrlEncoded
     @POST("/share/saveShareInfo")

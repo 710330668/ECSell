@@ -158,9 +158,8 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 if (INVENTORY == C.INVENTORY_DEALER) {
                     if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
                         mTvBarRight.setText("搜索");
-                        queryKey = mEtSearch.getText().toString();
                     } else {
-                        mTvBarRight.setText("取消");
+                        mTvBarRight.setText("分享");
                     }
                 }
                 if (INVENTORY == C.INVENTORY_MARKET) {
@@ -173,7 +172,6 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 if (INVENTORY == C.INVENTORY_OPTION) {
                     if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
                         mTvBarRight.setText("搜索");
-                        queryKey = mEtSearch.getText().toString();
                     } else {
                         mTvBarRight.setText("取消");
                     }
@@ -188,7 +186,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
         });
         switch (INVENTORY) {
             case C.INVENTORY_DEALER:
-                mTvBarRight.setText("取消");
+                mTvBarRight.setText("分享");
                 break;
             case INVENTORY_MARKET:
                 mTvBarRight.setText("分享");
@@ -216,6 +214,8 @@ public class StoreManagerItemClickActivity extends BaseActivity {
             @Override
             public void onClick(View v, Object data) {
                 if (data instanceof SearchHistoryModel) {
+
+                    queryKey = ((SearchHistoryModel) data).getSearchHistory();
 
                     mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
 
@@ -429,12 +429,16 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_bar_right:
-                Log.e(TAG, "onViewClicked: " + INVENTORY);
                 switch (INVENTORY) {
                     case C.INVENTORY_DEALER:
                         switch (mTvBarRight.getText().toString()) {
-                            case "取消":
-                                this.finish();
+                            case "分享":
+                                if (mRecyclerSearchHistory.getVisibility() == View.VISIBLE) {
+                                    Toast.makeText(appContext, "暂无内容", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    mSearchResultFragment.setShareOpen();
+                                }
+//                                this.finish();
                                 break;
                             case "搜索":
                                 clickSearch();
@@ -538,6 +542,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
     }
 
     private void clickSearch() {
+        queryKey = mEtSearch.getText().toString();
         SearchHistoryModel entity = new SearchHistoryModel();
         entity.setTimeShamp(System.currentTimeMillis());
         entity.setSearchHistory(queryKey);

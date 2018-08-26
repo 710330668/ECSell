@@ -74,6 +74,7 @@ public class MarketShareCarActivity extends BaseActivity {
     private String mAddress;
     private String mName;
     private String mCompany;
+    private SettingDelegate delegate;
 
 
     @Override
@@ -106,7 +107,15 @@ public class MarketShareCarActivity extends BaseActivity {
         affineArticle = getResources().getString(R.string.affine_article, data.size() + "", mPhone, mName);
 
         mRecycler.setLayoutManager(new GridLayoutManager(this, 3));
-        imageDeleteAdapter = new BaseAdapter(carPhotos, new SettingDelegate());
+        delegate = new SettingDelegate();
+        delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
+            @Override
+            public void removeImage(int position) {
+                carPhotos.remove(position);
+                imageDeleteAdapter.notifyDataSetChanged();
+            }
+        });
+        imageDeleteAdapter = new BaseAdapter(carPhotos, delegate);
         for (int i = 0; i < data.size(); i++) {
             final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
             imageArray.add(data.get(i).getImageUrl());

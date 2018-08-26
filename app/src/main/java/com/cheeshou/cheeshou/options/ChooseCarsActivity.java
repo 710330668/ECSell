@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.options.contract.ICarSell;
 import com.cheeshou.cheeshou.options.model.CarsModel;
 import com.cheeshou.cheeshou.options.model.response.CarsResponse;
@@ -22,6 +23,7 @@ import com.cheeshou.cheeshou.options.model.response.CarsResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -99,6 +101,10 @@ public class ChooseCarsActivity extends BaseActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString("carCombinate", carCombinate);
                     bundle.putString("audiId", audiId);
+                    CustomerWantCarModel wantCarModel = ParamManager.getInstance(ChooseCarsActivity.this).getModel();
+                    CustomerWantCarModel.CodeBean code = wantCarModel.getCode();
+                    code.setAudiId(audiId);
+                    wantCarModel.setCode(code);
                     startActivity(ChooseModelActivity.class, bundle);
                 }
             }

@@ -2,6 +2,8 @@ package com.cheeshou.cheeshou.dealer.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -26,6 +28,9 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.StatusModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
+import com.cheeshou.cheeshou.options.ChooseBrandActivity;
+import com.cheeshou.cheeshou.options.ChooseCarsActivity;
+import com.cheeshou.cheeshou.order.OrderListActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
@@ -58,6 +63,12 @@ public class CustomerManagerActivity extends BaseActivity {
     private PopupWindow mPopupWindow;
 
     private static final String TAG = "CustomerManagerActivity";
+
+
+    private final int REQUEST_BRAND = 0;
+    private static final int REQUEST_CLIENT = 1;
+    private final int REQUEST_CAR = 2;
+    private String carBrand;
 
     @BindView(R.id.rb_customer_state)
     RadioButton mRbState;
@@ -97,6 +108,18 @@ public class CustomerManagerActivity extends BaseActivity {
     TextView mTvSearch;
     @BindView(R.id.rg_filter)
     RadioGroup mRadioGroup;
+    @BindView(R.id.ll_want_brand)
+    LinearLayout mWantBrand;
+    @BindView(R.id.ll_want_type)
+    LinearLayout mWantType;
+    @BindView(R.id.ll_create_person)
+    LinearLayout mCreatePerson;
+    @BindView(R.id.tv_want_brand)
+    TextView mTvWantBrand;
+    @BindView(R.id.tv_want_type)
+    TextView mTvWantType;
+    @BindView(R.id.tv_username)
+    TextView mTvUserName;
     private int count;
     private String TAG_FILTER = "tag_filter";
     private String TAG_LOAD_MORE = "tag_load_more";
@@ -263,8 +286,9 @@ public class CustomerManagerActivity extends BaseActivity {
         mCustomerRecycler.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset, R.id.tv_search})
+    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset, R.id.tv_search, R.id.ll_want_brand, R.id.ll_want_type, R.id.ll_create_person})
     public void onViewClicked(View view) {
+        Bundle bundle = new Bundle();
         switch (view.getId()) {
             case R.id.img_back:
                 this.finish();
@@ -293,6 +317,14 @@ public class CustomerManagerActivity extends BaseActivity {
                 mEtCreateEndTime.setText("");
                 mEtFollowStartTime.setText("");
                 mEtFollowEndTime.setText("");
+                carBrand = "";
+                versionId = "";
+                mTvWantBrand.setText("不限");
+                mTvWantBrand.setTextColor(Color.parseColor("#333333"));
+                mTvWantType.setText("不限");
+                mTvWantType.setTextColor(Color.parseColor("#333333"));
+                mTvUserName.setText("不限");
+                mTvUserName.setTextColor(Color.parseColor("#333333"));
                 mCreateTimeTag.getAdapter().setSelectedList(0);
                 mFollowTimeTag.getAdapter().setSelectedList(0);
                 break;
@@ -302,6 +334,25 @@ public class CustomerManagerActivity extends BaseActivity {
                 break;
             case R.id.tv_search:
                 initRecycler(TAG_FILTER);
+                break;
+            case R.id.ll_want_brand:
+                bundle.putString("params", "filter");
+                startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
+                break;
+            case R.id.ll_want_type:
+                if ("".equals(brandId)) {
+                    bundle.putString("params", "filter");
+                    startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
+                } else {
+                    bundle.putString("carBrand", carBrand);
+                    bundle.putString("brandId", brandId);
+                    bundle.putString("params", "filter");
+                    startActivityForResult(ChooseCarsActivity.class, bundle, REQUEST_CAR);
+                }
+                break;
+            case R.id.ll_create_person:
+                Intent intent = new Intent(this, SalerManagerActivity.class);
+                startActivityForResult(intent, REQUEST_CLIENT);
                 break;
             default:
         }
@@ -423,5 +474,41 @@ public class CustomerManagerActivity extends BaseActivity {
 
     public RequestBody toRequestBody(String value) {
         return RequestBody.create(MediaType.parse("text/plain"), value);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_BRAND:
+                    carBrand = data.getStringExtra("carBrand");
+                    mTvWantBrand.setText(carBrand);
+                    mTvWantBrand.setTextColor(Color.parseColor("#FF5745"));
+                    brandId = data.getStringExtra("brandId");
+                    break;
+                case REQUEST_CAR:
+                    String carCombinate = data.getStringExtra("carCombinate");
+                    String audiId = data.getStringExtra("audiId");
+                    mTvWantType.setTextColor(Color.parseColor("#FF5745"));
+                    mTvWantType.setText(carCombinate);
+                    versionId = audiId;
+                    break;
+                case REQUEST_CLIENT:
+                    mTvUserName.setText(data.getStringExtra("saleName"));
+                    mTvUserName.setTextColor(Color.parseColor("#FF5745"));
+                    userId = data.getStringExtra("xsUserId");
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+            mDrawerLayout.closeDrawer(Gravity.RIGHT);
+            return;
+        }
+        super.onBackPressed();
     }
 }

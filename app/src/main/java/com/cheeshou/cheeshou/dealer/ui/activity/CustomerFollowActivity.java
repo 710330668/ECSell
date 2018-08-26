@@ -75,11 +75,11 @@ public class CustomerFollowActivity extends BaseActivity {
 
     private final int REQUEST_LOCAL = 2;
     private BaseAdapter imageDeleteAdapter;
-    private String imgUrl;
-    private String customerId;
-    private String commandType;
-    private String status;
-    private String token;
+    private String imgUrl = "";
+    private String customerId = "";
+    private String commandType = "";
+    private String status = "";
+    private String token = "";
 
     @Override
     public int bindLayout() {

@@ -30,6 +30,8 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,72 +146,73 @@ public class CustomerDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Map<String, RequestBody> params = new HashMap<>();
-        params.put("customerId", RequestBody.create(MediaType.parse("application/json"), customerId));
-        Injection.provideApiService().getCustomerDetailInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<CustomerDetailResponse>() {
+        params.put("customerId", RequestBody.create(MediaType.parse("text/plain"), customerId));
+        Injection.provideApiService().getCustomerDetailInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<JSONObject>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                Log.e(TAG, "onSubscribe: --");
             }
 
             @Override
-            public void onNext(CustomerDetailResponse s) {
-                if (s != null && s.getCode() == 200) {
-                    mTvWechat.setText(s.getData().getWeBcat());
-                    mTvPhone.setText(s.getData().getPhone());
-                    mTvName.setText(s.getData().getName());
-                    mTvSex.setText(s.getData().getSex() == 0 ? "先生" : "女士");
-                    mTvOfferName.setText(s.getData().getUserName());
-                    mTvPrice.setText(s.getData().getMinBudget() + "-" + s.getData().getMaxBudget() + "万");
-                    List<String> lists = s.getData().getLists();
-                    StringBuffer stringBuffer = new StringBuffer();
-                    if (lists != null) {
-                        for (String s1 : lists) {
-                            stringBuffer.append(s1);
-                        }
-                    }
-                    mTvBrand.setText(stringBuffer.toString());
-                    mTvNeedText.setText(s.getData().getNeedTxt());
-                    mTvRemark.setText(s.getData().getRemark());
-
-                    mData.clear();
-                    List<CustomerDetailResponse.DataBean.SaleCarInfoBean> saleCarInfos = s.getData().getSaleCarInfos();
-                    for (CustomerDetailResponse.DataBean.SaleCarInfoBean bean : saleCarInfos) {
-                        CustomerDetailWantModel data = new CustomerDetailWantModel();
-                        data.setDeduct("销售提成" + bean.getSaleCommission() + "元   ");
-                        data.setMessage(bean.getCarUserName() + " | " + bean.getProvinceName() + " | " + bean.getCityName());
-                        data.setPrice(bean.getCarPrice() + "万");
-                        data.setState(bean.getCarStatusName());
-                        data.setTime("今天");
-                        data.setTitle(bean.getBrand() + "  " + bean.getCarSeries() + "  " + bean.getVname());
-                        mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
-                    }
-                    BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
-                    mRecyclerWantCar.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-
-                    mFollowData.clear();
-                    List<CustomerDetailResponse.DataBean.ProgressesBean> progresses = s.getData().getProgresses();
-                    for (CustomerDetailResponse.DataBean.ProgressesBean bean : progresses) {
-                        CustomerFollowModel data = new CustomerFollowModel();
-                        data.setDate(formatDate("yyyy-MM-dd", bean.getCreateDate()));
-                        data.setTime(formatDate("hh:mm", bean.getCreateDate()));
-                        data.setMessage(bean.getContent());
-                        data.setFrom(bean.getSource());
-                        mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
-                    }
-                    mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
-
-                }
+            public void onNext(JSONObject s) {
+                Log.e(TAG, "onNext: " + s);
+//                if (s != null && s.getCode() == 200) {
+//                    mTvWechat.setText(s.getData().getWeBcat());
+//                    mTvPhone.setText(s.getData().getPhone());
+//                    mTvName.setText(s.getData().getName());
+//                    mTvSex.setText(s.getData().getSex() == 0 ? "先生" : "女士");
+//                    mTvOfferName.setText(s.getData().getUserName());
+//                    mTvPrice.setText(s.getData().getMinBudget() + "-" + s.getData().getMaxBudget() + "万");
+//                    List<String> lists = s.getData().getLists();
+//                    StringBuffer stringBuffer = new StringBuffer();
+//                    if (lists != null) {
+//                        for (String s1 : lists) {
+//                            stringBuffer.append(s1);
+//                        }
+//                    }
+//                    mTvBrand.setText(stringBuffer.toString());
+//                    mTvNeedText.setText(s.getData().getNeedTxt());
+//                    mTvRemark.setText(s.getData().getRemark());
+//
+//                    mData.clear();
+//                    List<CustomerDetailResponse.DataBean.SaleCarInfoBean> saleCarInfos = s.getData().getSaleCarInfos();
+//                    for (CustomerDetailResponse.DataBean.SaleCarInfoBean bean : saleCarInfos) {
+//                        CustomerDetailWantModel data = new CustomerDetailWantModel();
+//                        data.setDeduct("销售提成" + bean.getSaleCommission() + "元   ");
+//                        data.setMessage(bean.getCarUserName() + " | " + bean.getProvinceName() + " | " + bean.getCityName());
+//                        data.setPrice(bean.getCarPrice() + "万");
+//                        data.setState(bean.getCarStatusName());
+//                        data.setTime("今天");
+//                        data.setTitle(bean.getBrand() + "  " + bean.getCarSeries() + "  " + bean.getVname());
+//                        mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
+//                    }
+//                    BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
+//                    mRecyclerWantCar.setAdapter(adapter);
+//                    adapter.notifyDataSetChanged();
+//
+//                    mFollowData.clear();
+//                    List<CustomerDetailResponse.DataBean.ProgressesBean> progresses = s.getData().getProgresses();
+//                    for (CustomerDetailResponse.DataBean.ProgressesBean bean : progresses) {
+//                        CustomerFollowModel data = new CustomerFollowModel();
+//                        data.setDate(formatDate("yyyy-MM-dd", bean.getCreateDate()));
+//                        data.setTime(formatDate("hh:mm", bean.getCreateDate()));
+//                        data.setMessage(bean.getContent());
+//                        data.setFrom(bean.getSource());
+//                        mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
+//                    }
+//                    mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
+//
+//                }
             }
 
             @Override
             public void onError(Throwable e) {
-
+                Log.e(TAG, "onError: " + e.toString());
             }
 
             @Override
             public void onComplete() {
-
+                Log.e(TAG, "onComplete: ----");
             }
         });
     }
@@ -224,10 +227,10 @@ public class CustomerDetailActivity extends BaseActivity {
                 startActivity(EditCustomerMessageActivity.class, bundle);
                 break;
             case R.id.tv_customer_need_edit:
-                startActivity(EditCustomerNeedActivity.class);
+                startActivity(EditCustomerNeedActivity.class, bundle);
                 break;
             case R.id.tv_want_car_edit:
-                startActivity(CustomerCarWantActivity.class);
+                startActivity(CustomerCarWantActivity.class, bundle);
                 break;
             case R.id.ll_customer_message:
                 // TODO: 2018/8/20 短信

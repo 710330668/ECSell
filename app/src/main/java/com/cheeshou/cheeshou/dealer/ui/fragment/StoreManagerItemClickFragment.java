@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -124,7 +125,6 @@ public class StoreManagerItemClickFragment extends BaseFragment {
             dataBean = (StoreManagerResponse.DataBean) data;
         }
         if (dataBean != null) {
-            Log.e(TAG, "initData: " + dataBean.getCarStatus());
             carStatus = dataBean.getCarStatus();
         }
         mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
@@ -161,6 +161,11 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 }
             }
         });
+        initPopupWindowData();
+        getOwnOption();
+    }
+
+    private void initPopupWindowData() {
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
                 stateData = new ArrayList<>();
@@ -172,25 +177,31 @@ public class StoreManagerItemClickFragment extends BaseFragment {
 
                 orderDate = new ArrayList<>();
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("默认排序", "", true)));
-                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最高", "1")));
-                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最低", "2")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车源价最高", "1")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车源价最低", "2")));
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最高", "3")));
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最低", "4")));
                 break;
             case C.INVENTORY_DEALER:
                 stateData = new ArrayList<>();
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
-                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
+//                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
                 orderDate = new ArrayList<>();
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("默认排序", "", true)));
-                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最高", "1")));
-                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最低", "2")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车源价最高", "1")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车源价最低", "2")));
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最高", "3")));
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最低", "4")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("经销商价格最高", "5")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("经销商价格最低", "6")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("贷款返点最高", "7")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("贷款返点最低", "8")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("保险返点最高", "9")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("保险返点最低", "10")));
                 break;
             case C.INVENTORY_MARKET:
                 stateData = new ArrayList<>();
@@ -202,13 +213,12 @@ public class StoreManagerItemClickFragment extends BaseFragment {
 
                 orderDate = new ArrayList<>();
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("默认排序", "", true)));
-                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最高", "1")));
-                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车原价最低", "2")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车源价最高", "1")));
+                orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("车源价最低", "2")));
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最高", "3")));
                 orderDate.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_ORDER_TYPE, new CarStateModel("销售提成最低", "4")));
                 break;
         }
-        getOwnOption();
     }
 
     @Override
@@ -231,7 +241,6 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                     public void accept(AllOptionResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
-                            Log.e(TAG, "accept: " + new Gson().toJson(response));
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
@@ -311,15 +320,20 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 }
                 break;
             case R.id.tv_put_away:
-                // TODO: 2018/8/1 跳转分享
+                dataList.clear();
                 for (ItemData bean : mSearchResultData) {
                     if (bean.getData() instanceof SearchResultModel && ((SearchResultModel) bean.getData()).isPut()) {
                         dataList.add((SearchResultModel) bean.getData());
                     }
                 }
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("data", dataList);
-                startActivity(MarketShareCarActivity.class, bundle);
+                if (dataList.size() > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("data", dataList);
+                    startActivity(MarketShareCarActivity.class, bundle);
+                } else {
+                    Toast.makeText(getContext(), "未选中分享车辆", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
         }

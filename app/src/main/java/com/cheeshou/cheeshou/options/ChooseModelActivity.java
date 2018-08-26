@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.options.model.CarsSeriesModel;
 import com.cheeshou.cheeshou.options.model.response.CarsModelResponse;
 import com.cheeshou.cheeshou.R;
@@ -92,6 +93,13 @@ public class ChooseModelActivity extends BaseActivity {
                 carFullName = carCombinate + "|" + model.getSeriesName();
                 ParamManager.getInstance(ChooseModelActivity.this).setCarId(model.getId());
                 ParamManager.getInstance(ChooseModelActivity.this).setCarFullName(carFullName);
+
+                CustomerWantCarModel wantCarModel = ParamManager.getInstance(ChooseModelActivity.this).getModel();
+                CustomerWantCarModel.CodeBean code = wantCarModel.getCode();
+                code.setVersionId(model.getId());
+                wantCarModel.setCode(code);
+                wantCarModel.setName(carFullName);
+
                 NotifyCallBackManager.getInstance().onCloseCallBack();
                 finish();
             }
@@ -144,12 +152,20 @@ public class ChooseModelActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_zidingyi:
-                KeyMapDailog dialog =new KeyMapDailog("自定义车型", new KeyMapDailog.SendBackListener() {
+                KeyMapDailog dialog = new KeyMapDailog("自定义车型", new KeyMapDailog.SendBackListener() {
                     @Override
                     public void sendBack(String inputText) {
                         //TODO  点击发表后业务逻辑
                         carFullName = carCombinate + "|" + inputText;
                         ParamManager.getInstance(ChooseModelActivity.this).setCarFullName(carFullName);
+
+                        CustomerWantCarModel wantCarModel = ParamManager.getInstance(ChooseModelActivity.this).getModel();
+                        CustomerWantCarModel.CodeBean code = wantCarModel.getCode();
+                        code.setVersionId("0");
+                        wantCarModel.setCode(code);
+                        wantCarModel.setName(carFullName);
+
+
                         NotifyCallBackManager.getInstance().onCloseCallBack();
                         finish();
                     }
