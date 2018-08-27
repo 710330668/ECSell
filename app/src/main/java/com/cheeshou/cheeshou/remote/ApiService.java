@@ -16,6 +16,9 @@ import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserDetailResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserStatResponse;
 import com.cheeshou.cheeshou.main.login.LoginResponse;
+import com.cheeshou.cheeshou.market.ui.response.MyShareResponse;
+import com.cheeshou.cheeshou.market.ui.response.ShareRankResponse;
+import com.cheeshou.cheeshou.market.ui.response.ShareStateResponse;
 import com.cheeshou.cheeshou.options.model.response.AreaProvinceResponse;
 import com.cheeshou.cheeshou.options.model.response.CarBrandResponse;
 import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
@@ -35,12 +38,14 @@ import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
@@ -310,7 +315,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("user/findXsUserStatList")
-    Observable<XsUserStatResponse> findXsUserStatList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate,@Field("orderType") String orderType);
+    Observable<XsUserStatResponse> findXsUserStatList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate, @Field("orderType") String orderType);
 
 
     //获得30天销售量
@@ -362,4 +367,15 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/share/saveShareInfo")
     Observable<EasyResponse> saveShareInfo(@Header("token") String token, @Field("shareType") String shareType, @Field("shareDirect") String shareDirect, @Field("shareDirect") String shareDirect1, @Field("shareAtt") String shareAtt);
+
+    @POST("/share/findMyShareList")
+    Observable<MyShareResponse> findMyShareList(@Header("token") String token, @Body HashMap<String, String> params);
+
+    @POST("share/findMyStatDetail")
+    Observable<ShareStateResponse> findMyStatDetail(@Header("token") String token);
+
+    @POST("share/findShareRankList")
+    Observable<ShareRankResponse> findShareRankList(@Header("token") String token, @Body HashMap<String, String> params);
+
+
 }

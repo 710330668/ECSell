@@ -10,6 +10,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.market.ui.model.ShareRankModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.imageloader.LoaderManager;
 
 public class ShareRankHolder extends BaseViewHolder<ItemData> {
 
@@ -38,18 +39,18 @@ public class ShareRankHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data,int position) {
+    public void onBindViewHolder(ItemData data, int position) {
         ShareRankModel data1 = (ShareRankModel) data.getData();
-        switch (data1.getRank()) {
-            case 1:
+        switch (position) {
+            case 0:
                 mShareRank.setBackgroundResource(R.drawable.bg_vehicle_rankings_firstt);
                 mShareRank.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
-            case 2:
+            case 1:
                 mShareRank.setBackgroundResource(R.drawable.bg_vehicle_rankings_secod);
                 mShareRank.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
-            case 3:
+            case 2:
                 mShareRank.setBackgroundResource(R.drawable.bg_vehicle_rankings_third);
                 mShareRank.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
@@ -57,7 +58,8 @@ public class ShareRankHolder extends BaseViewHolder<ItemData> {
                 mShareRank.setBackgroundResource(R.drawable.bg_vehicle_rankings_default);
                 mShareRank.setTextColor(Color.parseColor("#333333"));
         }
-        mShareRank.setText(data1.getRank() + "");
+        LoaderManager.getLoader().loadNet(mShareImg, data1.getImgUrl());
+        mShareRank.setText((position + 1) + "");
         mShareName.setText(data1.getName());
         mShareState.setText(mShareState.getContext().getString(R.string.market_share_rank, data1.getShareCount(), data1.getBrowerCount()));
 

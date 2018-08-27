@@ -30,6 +30,7 @@
     </RelativeLayout>
 
     <RadioGroup
+        android:id="@+id/rg_date"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="#FFFFFF"

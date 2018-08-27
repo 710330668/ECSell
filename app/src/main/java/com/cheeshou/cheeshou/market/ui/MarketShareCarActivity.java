@@ -75,6 +75,7 @@ public class MarketShareCarActivity extends BaseActivity {
     private String mName;
     private String mCompany;
     private SettingDelegate delegate;
+    private String shareUrl;
 
 
     @Override
@@ -85,10 +86,10 @@ public class MarketShareCarActivity extends BaseActivity {
     @Override
     public void initParams(Bundle params) {
         data = params.getParcelableArrayList("data");
-        mPhone = SP.getInstance(this).getString(C.USER_PHONE);
-        mAddress = SP.getInstance(this).getString(C.USER_ADDRESS);
-        mName = SP.getInstance(this).getString(C.USER_NAME);
-        mCompany = SP.getInstance(this).getString(C.USER_COMPANYNAME);
+        mPhone = SP.getInstance(C.USER_DB, this).getString(C.USER_PHONE);
+        mAddress = SP.getInstance(C.USER_DB, this).getString(C.USER_ADDRESS);
+        mName = SP.getInstance(C.USER_DB, this).getString(C.USER_NAME);
+        mCompany = SP.getInstance(C.USER_DB, this).getString(C.USER_COMPANYNAME);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class MarketShareCarActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         normalArticle += ("  [诚信车商] " + mCompany + " \n");
-        normalArticle += ("  [优质车源] http://www.cheeshou.com \n");
+        normalArticle += ("  [优质车源] " + shareUrl + "\n");
         normalArticle += ("  [联系方式]  " + mPhone + "  " + mName + "\n");
         normalArticle += ("  [看车地址]  " + mAddress + "\n");
 
