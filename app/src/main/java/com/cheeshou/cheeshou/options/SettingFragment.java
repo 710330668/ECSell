@@ -63,6 +63,7 @@ public class SettingFragment extends BaseFragment {
     private String token;
     private String cacheNum;
     private String userPic;
+    private String companyName;
 
     @C.INVENTORY
     public int INVENTORY;
@@ -81,6 +82,7 @@ public class SettingFragment extends BaseFragment {
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
         userPic = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_PIC);
+        companyName = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_COMPANYNAME);
         INVENTORY = ParamManager.getInstance(getActivity()).getChannelType();
         try {
             cacheNum = DataCleanManager.getTotalCacheSize(MyApplication.getContext());
@@ -93,6 +95,7 @@ public class SettingFragment extends BaseFragment {
     public void onLazyLoad() {
         //获取个人信息
         tvCache.setText(cacheNum);
+        tvCompany.setText(companyName);
         LoaderManager.getLoader().loadNet(ivHead,userPic);
         getUserInfor();
         switch (INVENTORY) {

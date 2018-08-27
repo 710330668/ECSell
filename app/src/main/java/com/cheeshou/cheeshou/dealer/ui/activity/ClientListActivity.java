@@ -152,7 +152,7 @@ public class ClientListActivity extends BaseActivity {
                             for(int i =0 ;i<lists.size();i++){
                                 ClientModel clientModel = new ClientModel(lists.get(i).getName(), "预算"+lists.get(i).getMinBudget()+"-"+lists.get(i).getMaxBudget()+"万|"+lists.get(i).getNeedTxt()+"等"+lists.get(i).getCarCount()+"辆车",
                                         lists.get(i).getProgressDate()+" "+ lists.get(i).getProgressContent(),
-                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatus());
+                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatusName());
                                 ItemData itemData = new ItemData(0, SettingDelegate.CLIENT_LIST_TYPE, clientModel);
                                 clientLists.add(itemData);
                             }
@@ -183,7 +183,7 @@ public class ClientListActivity extends BaseActivity {
                             for(int i =0 ;i<lists.size();i++){
                                 ClientModel clientModel = new ClientModel(lists.get(i).getName(), "预算"+lists.get(i).getMinBudget()+"-"+lists.get(i).getMaxBudget()+"万|"+lists.get(i).getNeedTxt()+"等"+lists.get(i).getCarCount()+"辆车",
                                         lists.get(i).getProgressDate()+" "+ lists.get(i).getProgressContent(),
-                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatus());
+                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatusName());
                                 ItemData itemData = new ItemData(0, SettingDelegate.CLIENT_LIST_TYPE, clientModel);
                                 clientLists.add(itemData);
                             }
@@ -214,7 +214,7 @@ public class ClientListActivity extends BaseActivity {
                             for(int i =0 ;i<lists.size();i++){
                                 ClientModel clientModel = new ClientModel(lists.get(i).getName(), "预算"+lists.get(i).getMinBudget()+"-"+lists.get(i).getMaxBudget()+"万|"+lists.get(i).getNeedTxt()+"等"+lists.get(i).getCarCount()+"辆车",
                                         lists.get(i).getProgressDate()+" "+ lists.get(i).getProgressContent(),
-                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatus());
+                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatusName());
                                 ItemData itemData = new ItemData(0, SettingDelegate.CLIENT_LIST_TYPE, clientModel);
                                 clientLists.add(itemData);
                             }
@@ -246,7 +246,7 @@ public class ClientListActivity extends BaseActivity {
                             for(int i =0 ;i<lists.size();i++){
                                 ClientModel clientModel = new ClientModel(lists.get(i).getName(), "预算"+lists.get(i).getMinBudget()+"-"+lists.get(i).getMaxBudget()+"万|"+lists.get(i).getNeedTxt()+"等"+lists.get(i).getCarCount()+"辆车",
                                         lists.get(i).getProgressDate()+" "+ lists.get(i).getProgressContent(),
-                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatus());
+                                        TimeUtils.millis2String(lists.get(i).getCreateDate()) +"创建|销售"+lists.get(i).getUserName(), lists.get(i).getStatusName());
                                 ItemData itemData = new ItemData(0, SettingDelegate.CLIENT_LIST_TYPE, clientModel);
                                 clientLists.add(itemData);
                             }
