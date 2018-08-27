@@ -105,6 +105,7 @@ public class StoreReportActivity extends BaseActivity {
     private TextView tvStartTime, tvEndTime;
     private String token;
     private String todayTime;
+    private String orderType;
     private List<DayBean> weekDays;
     private String month, year;
     private String startDate;
@@ -112,6 +113,10 @@ public class StoreReportActivity extends BaseActivity {
     private int count;
     private BaseAdapter baseAdapter;
     private String[] xLabel,data;
+    private boolean clientFlag = true;
+    private boolean chengjiaoFlag = true;
+    private boolean daodianFlag = true;
+    private boolean callFlag = true;
 
     @Override
     public int bindLayout() {
@@ -186,7 +191,8 @@ public class StoreReportActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.img_back, R.id.rv_top_layout, R.id.rb_today, R.id.rb_the_week, R.id.rb_last_month, R.id.rb_last_year, R.id.rb_last_custom, R.id.rg_radio_button})
+    @OnClick({R.id.img_back, R.id.rv_top_layout, R.id.rb_today, R.id.rb_the_week, R.id.rb_last_month, R.id.rb_last_year,
+            R.id.rb_last_custom, R.id.rg_radio_button,R.id.rb_client,R.id.rb_chengjiao,R.id.rb_daodian,R.id.rb_call})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
@@ -221,6 +227,58 @@ public class StoreReportActivity extends BaseActivity {
                 showPopupWindow();
                 break;
             case R.id.rg_radio_button:
+                break;
+            case R.id.rb_client:
+                if(clientFlag){
+                    //升序
+                    orderType = "1";
+                    rbClient.setChecked(true);
+                }else{
+                    //降序
+                    rbClient.setChecked(false);
+                    orderType = "2";
+                }
+                clientFlag = !clientFlag;
+                findXsUserStatList();
+                break;
+            case R.id.rb_chengjiao:
+                if(chengjiaoFlag){
+                    //升序
+                    orderType = "5";
+                    rbChengjiao.setChecked(true);
+                }else{
+                    //降序
+                    orderType = "6";
+                    rbChengjiao.setChecked(false);
+                }
+                chengjiaoFlag = !chengjiaoFlag;
+                findXsUserStatList();
+                break;
+            case R.id.rb_daodian:
+                if(daodianFlag){
+                    //升序
+                    orderType = "3";
+                    rbDaodian.setChecked(true);
+                }else{
+                    //降序
+                    orderType = "4";
+                    rbDaodian.setChecked(false);
+                }
+                daodianFlag = !daodianFlag;
+                findXsUserStatList();
+                break;
+            case R.id.rb_call:
+                if(callFlag){
+                    //升序
+                    orderType = "7";
+                    rbCall.setChecked(true);
+                }else{
+                    //降序
+                    orderType = "8";
+                    rbCall.setChecked(false);
+                }
+                callFlag = !callFlag;
+                findXsUserStatList();
                 break;
         }
     }
@@ -271,7 +329,7 @@ public class StoreReportActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     private void findXsUserStatList() {
         sellRankLists.clear();
-        Injection.provideApiService().findXsUserStatList(token, startDate, endDate)
+        Injection.provideApiService().findXsUserStatList(token, startDate, endDate,orderType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<XsUserStatResponse>() {

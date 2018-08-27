@@ -45,7 +45,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by 71033 on 2018/8/9.
  */
-public class OrderListActivity extends BaseActivity {
+public class OrderManagerActivity extends BaseActivity {
 
     @BindView(R.id.rl_search_result)
     RecyclerView rlSearchResult;
@@ -184,7 +184,7 @@ public class OrderListActivity extends BaseActivity {
                 showPopupWindow(R.id.rb_deal_valence);
                 break;
             case R.id.rb_sales:
-                Intent intent = new Intent(OrderListActivity.this, SalerManagerActivity.class);
+                Intent intent = new Intent(OrderManagerActivity.this, SalerManagerActivity.class);
                 startActivityForResult(intent, REQUEST_CLIENT);
                 break;
             case R.id.tv_search:

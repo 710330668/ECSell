@@ -26,11 +26,9 @@ import android.widget.TextView;
 
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
-import com.cheeshou.cheeshou.dealer.ui.model.StatusModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ChooseCarsActivity;
-import com.cheeshou.cheeshou.order.OrderListActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;

@@ -1,7 +1,6 @@
 package com.cheeshou.cheeshou.remote;
 
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
-import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerDetailResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerInfoResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerStatusResponse;
@@ -311,7 +310,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("user/findXsUserStatList")
-    Observable<XsUserStatResponse> findXsUserStatList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
+    Observable<XsUserStatResponse> findXsUserStatList(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate,@Field("orderType") String orderType);
 
 
     //获得30天销售量

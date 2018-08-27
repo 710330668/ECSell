@@ -16,7 +16,7 @@ import com.cheeshou.cheeshou.dealer.ui.activity.NationSourceActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.UserManagerActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareActivity;
-import com.cheeshou.cheeshou.order.OrderListActivity;
+import com.cheeshou.cheeshou.order.OrderManagerActivity;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
@@ -98,7 +98,7 @@ public class DealerTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_order_manager:
                 //订单管理
-                startActivity(OrderListActivity.class);
+                startActivity(OrderManagerActivity.class);
                 break;
             case R.id.rl_client_manager:
                 //客户管理
