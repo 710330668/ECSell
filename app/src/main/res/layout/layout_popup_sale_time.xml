@@ -11,7 +11,7 @@
         android:button="@null"
         android:text="不限"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333"/>
@@ -20,7 +20,7 @@
         android:button="@null"
         android:text="昨天"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333"/>
@@ -29,7 +29,7 @@
         android:button="@null"
         android:text="今天"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333" />
@@ -38,7 +38,7 @@
         android:button="@null"
         android:text="本周"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333"/>
@@ -48,7 +48,7 @@
         android:button="@null"
         android:text="本月"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333" />
@@ -58,7 +58,7 @@
         android:button="@null"
         android:text="本年"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333" />
@@ -68,7 +68,7 @@
         android:button="@null"
         android:text="更早"
         android:background="@drawable/bg_radiobutton"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_margin="4.5dp"
         android:textColor="@color/color_333333" />

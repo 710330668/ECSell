@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -116,6 +117,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         getRegionList();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlArea.setLayoutManager(layoutManager);
+        rlArea.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         baseAdapter = new BaseAdapter(areaLists, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {

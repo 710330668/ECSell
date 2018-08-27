@@ -42,7 +42,7 @@
         android:background="@drawable/bg_edittext"
         android:drawableLeft="@mipmap/search"
         android:paddingLeft="20dp"
-        android:text="车牌型号/VIN号/车辆编号"
+        android:hint="车牌型号/VIN号/车辆编号"
         android:textSize="14dp"
         app:layout_constraintTop_toTopOf="parent" />
 

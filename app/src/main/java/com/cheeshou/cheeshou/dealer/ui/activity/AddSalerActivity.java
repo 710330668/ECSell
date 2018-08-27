@@ -1,6 +1,7 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +66,7 @@ public class AddSalerActivity extends BaseActivity {
     private final int REQUEST_LOCAL = 2;
     private String bitmap64Head;
     private String imgUrl;
+    private Dialog myDialog;
 
     @Override
     public int bindLayout() {
@@ -75,6 +77,7 @@ public class AddSalerActivity extends BaseActivity {
     public void initParams(Bundle params) {
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
         intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        myDialog = getLoadingDialog(this);
     }
 
     @Override
@@ -125,6 +128,7 @@ public class AddSalerActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void savaInfor() {
+        myDialog.show();
         if (!TextUtils.isEmpty(etAccount.getText().toString()) && !TextUtils.isEmpty(etPassword.getText().toString()) &&
                 !TextUtils.isEmpty(etSaleName.getText().toString()) && !TextUtils.isEmpty(etPhone.getText().toString())
                 && !TextUtils.isEmpty(etWechat.getText().toString()) && !TextUtils.isEmpty(bitmap64Head)) {
@@ -145,6 +149,7 @@ public class AddSalerActivity extends BaseActivity {
                         @Override
                         public void accept(EasyResponse response) throws Exception {
                             LogUtils.e(response.getMsg());
+                            myDialog.dismiss();
                             if (response.getCode() == 200) {
                                 Toast.makeText(AddSalerActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();
