@@ -1,6 +1,7 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -84,6 +85,7 @@ public class ModifySalerInforActivity extends BaseActivity {
     public XsUserDetailResponse response;
     public CommonDialog resetPassDialog;
     private CommonDialog dialog;
+    private Dialog myDialog;
 
     @Override
     public int bindLayout() {
@@ -101,6 +103,7 @@ public class ModifySalerInforActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        myDialog = getLoadingDialog(this);
         etAccount.setText(response.getData().getAccount());
         etName.setText(response.getData().getUserName());
         etPhone.setText(response.getData().getPhone());
@@ -289,6 +292,7 @@ public class ModifySalerInforActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void savaInfor() {
+        myDialog.show();
         Map<String, RequestBody> params = new HashMap<>();
         params.put("account", toRequestBody(etAccount.getText().toString()));
         params.put("password", toRequestBody(etPassword.getText().toString()));
@@ -307,6 +311,7 @@ public class ModifySalerInforActivity extends BaseActivity {
                     .subscribe(new Consumer<EasyResponse>() {
                         @Override
                         public void accept(EasyResponse response) throws Exception {
+                            myDialog.dismiss();
                             LogUtils.e(response.getMsg());
                             if (response.getCode() == 200) {
                                 Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
@@ -317,13 +322,14 @@ public class ModifySalerInforActivity extends BaseActivity {
                         }
                     });
         }else{
-            Injection.provideApiService().saveXsUserInfo(token, params)
+            Injection.provideApiService().saveXsUserInfo2(token, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<EasyResponse>() {
                         @Override
                         public void accept(EasyResponse response) throws Exception {
                             LogUtils.e(response.getMsg());
+                            myDialog.dismiss();
                             if (response.getCode() == 200) {
                                 Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();

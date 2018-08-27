@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp">
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
+        android:drawableRight="@drawable/drawable_left_order_selector"
+        android:text="默认排序"
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
+        android:drawableRight="@drawable/drawable_left_order_selector"
+        android:text="售出时间最近"
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
+        android:drawableRight="@drawable/drawable_left_order_selector"
+        android:text="售出时间最远"
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
+        android:drawableRight="@drawable/drawable_left_order_selector"
+        android:text="成交价最低"
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F5F5F5" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:button="@null"
+        android:drawableRight="@drawable/drawable_left_order_selector"
+        android:text="成交价最高"
+        android:textColor="@drawable/text_color_radio_selector"
+        android:textSize="12sp" />
+
+</RadioGroup>

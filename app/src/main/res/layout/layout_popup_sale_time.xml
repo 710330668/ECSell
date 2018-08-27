@@ -6,59 +6,72 @@
     android:orientation="horizontal"
     android:padding="9.5dp">
 
-
     <RadioButton
         android:gravity="center"
         android:button="@null"
         android:text="不限"
-        android:background="@drawable/bg_rb_selector"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333"/>
     <RadioButton
         android:gravity="center"
         android:button="@null"
         android:text="昨天"
-        android:background="@drawable/bg_rb_selector"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp"/>
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333"/>
     <RadioButton
         android:gravity="center"
         android:button="@null"
         android:text="今天"
-        android:background="@drawable/bg_rb_selector"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333" />
     <RadioButton
         android:gravity="center"
         android:button="@null"
-        android:background="@drawable/bg_rb_selector"
         android:text="本周"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333"/>
 
     <RadioButton
         android:gravity="center"
         android:button="@null"
-        android:background="@drawable/bg_rb_selector"
         android:text="本月"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333" />
 
     <RadioButton
         android:gravity="center"
         android:button="@null"
-        android:background="@drawable/bg_rb_selector"
         android:text="本年"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333" />
 
     <RadioButton
         android:gravity="center"
         android:button="@null"
-        android:background="@drawable/bg_rb_selector"
         android:text="更早"
+        android:background="@drawable/bg_radiobutton"
         android:layout_width="80dp"
-        android:layout_height="30dp" />
+        android:layout_height="30dp"
+        android:layout_margin="4.5dp"
+        android:textColor="@color/color_333333" />
 
 
 </com.cheeshou.cheeshou.utils.MyRadioGroup>

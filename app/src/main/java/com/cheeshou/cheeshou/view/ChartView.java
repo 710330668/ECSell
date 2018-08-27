@@ -5,11 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -237,28 +242,28 @@ public class ChartView extends View {
         return super.onTouchEvent(event);
     }
 
-//    /**
-//     * 点击数据点后，展示详细的数据值
-//     */
-//    private void showDetails(int index) {
-//        if (mPopWin != null) mPopWin.dismiss();
-//        TextView tv = new TextView(getContext());
-//        tv.setTextColor(Color.WHITE);
+    /**
+     * 点击数据点后，展示详细的数据值
+     */
+    private void showDetails(int index) {
+        if (mPopWin != null) mPopWin.dismiss();
+        TextView tv = new TextView(getContext());
+        tv.setTextColor(Color.WHITE);
 //        tv.setBackgroundResource(R.drawable.shape_pop_bg);
-//        GradientDrawable myGrad = (GradientDrawable) tv.getBackground();
-//        myGrad.setColor(Color.parseColor(mDataLineColors[index]));
-//        tv.setPadding(20, 0, 20, 0);
-//        tv.setGravity(Gravity.CENTER);
-//        tv.setText(data[index] + "%");
-//        mPopWin = new PopupWindow(tv, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        mPopWin.setBackgroundDrawable(new ColorDrawable(0));
-//        mPopWin.setFocusable(false);
-//        // 根据坐标点的位置计算弹窗的展示位置
-//        int xoff = (int) (mDataCoords[index][0] - 0.5 * xScale);
-//        int yoff = -(int) (getHeight() - mDataCoords[index][1] + 0.75f * yScale);
-//        mPopWin.showAsDropDown(this, xoff, yoff);
-//        mPopWin.update();
-//    }
+        GradientDrawable myGrad = (GradientDrawable) tv.getBackground();
+        myGrad.setColor(Color.parseColor(mDataLineColors[0]));
+        tv.setPadding(20, 0, 20, 0);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText(data[index] + "%");
+        mPopWin = new PopupWindow(tv, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopWin.setBackgroundDrawable(new ColorDrawable(0));
+        mPopWin.setFocusable(false);
+        // 根据坐标点的位置计算弹窗的展示位置
+        int xoff = (int) (mDataCoords[index][0] - 0.5 * xScale);
+        int yoff = -(int) (getHeight() - mDataCoords[index][1] + 0.75f * yScale);
+        mPopWin.showAsDropDown(this, xoff, yoff);
+        mPopWin.update();
+    }
 
     private void hideDetails() {
         if (mPopWin != null) mPopWin.dismiss();

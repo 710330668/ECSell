@@ -3,6 +3,7 @@ package com.example.com.common;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -119,6 +122,7 @@ public abstract class BaseActivity extends FragmentActivity {
             }
         }
     }
+
 
     /**
      * [绑定布局]
@@ -304,6 +308,23 @@ public abstract class BaseActivity extends FragmentActivity {
 
     @IntDef({GRANTED, SHOULD_SHOWREQUEST, REFUSE})
     public @interface PermissionState {
+    }
+
+
+
+    /**
+     * 显示加载数据对话框
+     *
+     * @return
+     */
+    public Dialog getLoadingDialog(Context context) {
+        final Dialog mDialog = new Dialog(context, R.style.WoDeDialog);
+        View mDialogContentView = LayoutInflater.from(context).inflate(R.layout.layout_loading, null);
+        mDialog.setContentView(mDialogContentView);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(false);
+        mDialog.getWindow().setGravity(Gravity.CENTER);
+        return mDialog;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.cheeshou.cheeshou.options;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -163,6 +164,7 @@ public class ReleaseOptionActivity extends BaseActivity {
     private File currentFile;
     private String deleteId = "";
     private String carId;
+    private Dialog myDialog;
 
 
     @Override
@@ -181,6 +183,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        myDialog = getLoadingDialog(this);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
         now = sdf.format(new Date());
 
@@ -616,6 +619,7 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void saveCarInfo() {
+        myDialog.show();
         try {
             prefers = "";
             Map<String, RequestBody> params = new HashMap<>();
@@ -658,6 +662,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                             @Override
                             public void accept(EasyResponse response) throws Exception {
                                 LogUtils.e(response.getMsg());
+                                myDialog.dismiss();
                                 if (response.getCode() == 200) {
                                     Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                                     ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
@@ -676,6 +681,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                             @Override
                             public void accept(EasyResponse response) throws Exception {
                                 LogUtils.e(response.getMsg());
+                                myDialog.dismiss();
                                 if (response.getCode() == 200) {
                                     Toast.makeText(ReleaseOptionActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                                     ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");

@@ -246,7 +246,8 @@ public class StoreReportActivity extends BaseActivity {
     //30天折线图
     @SuppressLint("CheckResult")
     private void getNearDaySale() {
-        getDayOfMonth(month);
+        startDate = TimeUtils.getMonthAgo();
+        endDate = TimeUtils.getTodayTime();
         Injection.provideApiService().getNearDaySale(token, startDate, endDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

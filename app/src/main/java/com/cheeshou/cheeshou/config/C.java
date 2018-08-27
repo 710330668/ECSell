@@ -89,6 +89,8 @@ public interface C {
 
     String USER_ADDRESS = "user_address";
 
+    String USER_PIC = "user_pic";
+
 //    	"code":200,	"data":[
 //    {
 //        "dataCode":"NO_STORE",			"dataName":"未到店"

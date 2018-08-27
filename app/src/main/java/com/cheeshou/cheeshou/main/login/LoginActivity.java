@@ -107,5 +107,6 @@ public class LoginActivity extends BaseActivity {
         SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_COMPANYNAME,loginResponse.getData().getCompnayName());
         SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_NAME,loginResponse.getData().getUserName());
         SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_ADDRESS,loginResponse.getData().getAddress());
+        SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_PIC,loginResponse.getData().getUserPic());
     }
 }

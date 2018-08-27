@@ -6,17 +6,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cheeshou.cheeshou.MyApplication;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.usercenter.DealershipActivity;
-import com.cheeshou.cheeshou.usercenter.ModifyPasswordActivity;
-import com.cheeshou.cheeshou.usercenter.UserInforActivity;
-import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 import com.cheeshou.cheeshou.MyApplication;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -31,6 +26,7 @@ import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.CommonDialog;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
+import com.example.com.imageloader.LoaderManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,8 +58,11 @@ public class SettingFragment extends BaseFragment {
     RelativeLayout rlCleanCache;
     @BindView(R.id.tv_cache)
     TextView tvCache;
+    @BindView(R.id.iv_head)
+    ImageView ivHead;
     private String token;
     private String cacheNum;
+    private String userPic;
 
     @C.INVENTORY
     public int INVENTORY;
@@ -81,6 +80,7 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
+        userPic = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_PIC);
         INVENTORY = ParamManager.getInstance(getActivity()).getChannelType();
         try {
             cacheNum = DataCleanManager.getTotalCacheSize(MyApplication.getContext());
@@ -93,6 +93,7 @@ public class SettingFragment extends BaseFragment {
     public void onLazyLoad() {
         //获取个人信息
         tvCache.setText(cacheNum);
+        LoaderManager.getLoader().loadNet(ivHead,userPic);
         getUserInfor();
         switch (INVENTORY) {
             case C.INVENTORY_OPTION:
@@ -167,7 +168,7 @@ public class SettingFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache,R.id.btn_logout,R.id.rl_modify_password,R.id.rl_dealer_modify_password})
+    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache, R.id.btn_logout, R.id.rl_modify_password, R.id.rl_dealer_modify_password})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_car_infor:

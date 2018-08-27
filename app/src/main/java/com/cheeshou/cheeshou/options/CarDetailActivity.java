@@ -439,6 +439,8 @@ public class CarDetailActivity extends BaseActivity {
                         pop.dismiss();
                     }
                 });
+                reservateBtn.setVisibility(View.GONE);
+                ivMore.setVisibility(View.GONE);
                 break;
         }
     }
@@ -487,7 +489,7 @@ public class CarDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more, R.id.btn_browse_car, R.id.btn_share_car})
+    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more, R.id.btn_browse_car, R.id.btn_share_car,R.id.fl_banner})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -508,6 +510,10 @@ public class CarDetailActivity extends BaseActivity {
                 break;
             case R.id.btn_share_car:
                 //分享车辆
+                break;
+            case R.id.fl_banner:
+                ImagPagerUtil imagPagerUtil1 = new ImagPagerUtil(CarDetailActivity.this, urls);
+                imagPagerUtil1.show();
                 break;
         }
     }

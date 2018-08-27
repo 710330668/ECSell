@@ -57,7 +57,7 @@
                 android:layout_marginTop="64dp"
                 android:layout_weight="1"
                 android:background="@drawable/home_page_bg"
-                android:drawableLeft="@mipmap/icon_search"
+                android:drawableLeft="@mipmap/icon_white_search"
                 android:hint="销售名称/电话"
                 android:textColorHint="#FFFFFF"
                 android:paddingLeft="20dp"

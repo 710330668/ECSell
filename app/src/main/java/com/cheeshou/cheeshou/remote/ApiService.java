@@ -45,7 +45,6 @@ import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -149,7 +148,8 @@ public interface ApiService {
     //新增销售人员 无File
     @Multipart
     @POST("user/saveXsUserInfo")
-    Observable<EasyResponse> saveXsUserInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+    Observable<EasyResponse> saveXsUserInfo2(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
 
     //销售人员详情
     @FormUrlEncoded

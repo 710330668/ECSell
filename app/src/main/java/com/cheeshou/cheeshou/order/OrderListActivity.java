@@ -214,7 +214,7 @@ public class OrderListActivity extends BaseActivity {
 
         switch (viewId) {
             case R.id.rb_default_sort:
-                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order, null);
+                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_order_status, null);
                 ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
                 mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 break;

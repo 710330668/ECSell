@@ -8,7 +8,7 @@ public class LoginResponse {
 
     /**
      * code : 200
-     * data : {"token":"030D665798144FB4AECED38D9402C5C8","userType":"USER_CYS","phone":"13869647062","userName":"山东青岛","compnayName":"122","address":"fasdfads"}
+     * data : {"token":"BB4762B3EA1A48AAA711EC6A652D86EB","userType":"USER_XS","phone":"18363671109","userName":"cys002","userPic":"http://39.104.136.205:8888/user/20180814/1534213425288.png","compnayName":"ddid","address":"fdasdf"}
      * msg : 操作成功
      */
 
@@ -42,18 +42,20 @@ public class LoginResponse {
 
     public static class DataBean {
         /**
-         * token : 030D665798144FB4AECED38D9402C5C8
-         * userType : USER_CYS
-         * phone : 13869647062
-         * userName : 山东青岛
-         * compnayName : 122
-         * address : fasdfads
+         * token : BB4762B3EA1A48AAA711EC6A652D86EB
+         * userType : USER_XS
+         * phone : 18363671109
+         * userName : cys002
+         * userPic : http://39.104.136.205:8888/user/20180814/1534213425288.png
+         * compnayName : ddid
+         * address : fdasdf
          */
 
         private String token;
         private String userType;
         private String phone;
         private String userName;
+        private String userPic;
         private String compnayName;
         private String address;
 
@@ -87,6 +89,14 @@ public class LoginResponse {
 
         public void setUserName(String userName) {
             this.userName = userName;
+        }
+
+        public String getUserPic() {
+            return userPic;
+        }
+
+        public void setUserPic(String userPic) {
+            this.userPic = userPic;
         }
 
         public String getCompnayName() {

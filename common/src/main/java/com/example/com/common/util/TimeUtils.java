@@ -1093,8 +1093,8 @@ public class TimeUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1); //得到前一天
         Date date = calendar.getTime();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return df.format(df.format(date));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(date);
     }
 
     //获取本周的起始时间
@@ -1142,6 +1142,21 @@ public class TimeUtils {
         return dateFormater.format(cal.getTime());
     }
 
+
+    /**
+     *获取一个月前的日期
+     * @param date 传入的日期
+     * @return
+     */
+    public static String getMonthAgo() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -1);
+        String monthAgo = simpleDateFormat.format(calendar.getTime());
+        return monthAgo;
+    }
 
 
 
