@@ -26,10 +26,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        tools:replace="android:name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:name">
         <activity android:name=".main.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -110,8 +110,9 @@
         <activity android:name=".dealer.ui.activity.CustomerFollowActivity" />
         <activity android:name=".market.ui.MarketShareCarActivity" />
         <activity android:name=".market.ui.MarketShareWechatActivity" />
-        <activity android:name=".dealer.ui.activity.StoreManagerItemClickActivity"></activity>
-        <activity android:name=".dealer.ui.activity.CustomerWantCarActivity"/>
+        <activity android:name=".dealer.ui.activity.StoreManagerItemClickActivity" />
+        <activity android:name=".dealer.ui.activity.CustomerWantCarActivity" />
+        <activity android:name=".dealer.ui.activity.CarSourceTypeActivity"></activity>
     </application>
 
 </manifest>

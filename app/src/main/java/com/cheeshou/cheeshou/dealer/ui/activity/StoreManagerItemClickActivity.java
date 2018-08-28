@@ -105,6 +105,8 @@ public class StoreManagerItemClickActivity extends BaseActivity {
     TextView mTvYear;
     @BindView(R.id.tv_back)
     TextView mTvBack;
+    @BindView(R.id.tv_options_type)
+    TextView mCarTypeName;
 
     @BindView(R.id.recycler_search_history)
     RecyclerView mRecyclerSearchHistory;
@@ -114,6 +116,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_CAR = 2;
+    private final int REQUEST_CAR_TYPE = 3;
 
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private String carBrand;
@@ -406,7 +409,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
         mTagFlowSourceType.setAdapter(sourceCarTypeAdapter);
     }
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_back})
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_back, R.id.iv_options_type})
     public void onViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -418,7 +421,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
-                if ("".equals(brandId)) {
+                if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
                     startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 } else {
@@ -457,19 +460,6 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                                 break;
                             case "搜索":
                                 clickSearch();
-//                                SearchHistoryModel entity = new SearchHistoryModel();
-//                                entity.setTimeShamp(System.currentTimeMillis());
-//                                entity.setSearchHistory(queryKey);
-//                                entity.setSearchPosition(TAG);
-//                                entity.setInventory(INVENTORY);
-//                                SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
-//                                if (unique == null) {
-//                                    DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
-//                                } else {
-//                                    unique.setTimeShamp(System.currentTimeMillis());
-//                                }
-//                                mRecyclerSearchHistory.setVisibility(View.GONE);
-//                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                                 break;
                         }
                         break;
@@ -480,19 +470,6 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                                 break;
                             case "搜索":
                                 clickSearch();
-//                                SearchHistoryModel entity = new SearchHistoryModel();
-//                                entity.setTimeShamp(System.currentTimeMillis());
-//                                entity.setSearchHistory(queryKey);
-//                                entity.setSearchPosition(TAG);
-//                                entity.setInventory(INVENTORY);
-//                                SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
-//                                if (unique == null) {
-//                                    DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
-//                                } else {
-//                                    unique.setTimeShamp(System.currentTimeMillis());
-//                                }
-//                                mRecyclerSearchHistory.setVisibility(View.GONE);
-//                                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
                                 break;
                         }
                         break;
@@ -509,6 +486,8 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 mTvSelectArea.setText("");
                 mTvSelectBrand.setText("");
                 mTvSelectedCar.setText("");
+                carType = "";
+                mCarTypeName.setText("");
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);
@@ -536,6 +515,10 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 break;
             case R.id.tv_back:
                 finish();
+                break;
+            case R.id.iv_options_type:
+                Intent intent = new Intent(this, CarSourceTypeActivity.class);
+                startActivityForResult(intent, REQUEST_CAR_TYPE);
                 break;
             default:
         }
@@ -588,6 +571,12 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                     String audiId = data.getStringExtra("audiId");
                     mTvSelectedCar.setText(carCombinate);
                     versionId = audiId;
+                    break;
+                case REQUEST_CAR_TYPE:
+                    String carTypeName = data.getStringExtra("carTypeName");
+                    String carTypeId = data.getStringExtra("carTypeId");
+                    mCarTypeName.setText(carTypeName);
+                    carType = carTypeId;
                     break;
             }
         }
