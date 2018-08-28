@@ -138,6 +138,9 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                     if (!isOpen) {
                         Bundle bundle = new Bundle();
                         bundle.putString("carId", model.getId());
+                        dataList.clear();
+                        dataList.add(model);
+                        bundle.putParcelableArrayList("data", dataList);
                         startActivity(CarDetailActivity.class, bundle);
                     } else {
                         model.setPut(!model.isPut());

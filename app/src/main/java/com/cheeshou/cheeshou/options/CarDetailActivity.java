@@ -22,6 +22,7 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
 import com.cheeshou.cheeshou.order.response.OrderDetailResponse;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -132,6 +133,7 @@ public class CarDetailActivity extends BaseActivity {
     List<BannerItem> list = new ArrayList<>();
     private List<String> discounts = new ArrayList<>();
     private String saleId;
+    private ArrayList<SearchResultModel> dataList = new ArrayList<>();
 
     @C.INVENTORY
     public int INVENTORY;
@@ -160,6 +162,8 @@ public class CarDetailActivity extends BaseActivity {
             //全国来源
             dealerSource = params.getString("dealer_source");
             mPutAwayData = params.getParcelableArrayList("shelves_data");
+
+            dataList = params.getParcelableArrayList("data");
         }
 
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
@@ -203,7 +207,7 @@ public class CarDetailActivity extends BaseActivity {
             getOrderDetail();
         }
 
-        if(!TextUtils.isEmpty(dealerSource)){
+        if (!TextUtils.isEmpty(dealerSource)) {
             llyRebates.setVisibility(View.GONE);
         }
 
@@ -221,13 +225,13 @@ public class CarDetailActivity extends BaseActivity {
                 } else {
                     btnShareCar.setVisibility(View.VISIBLE);
                 }
-                if(source!=null){
-                    if(source.equals(C.SOURCE_ORDER)){
+                if (source != null) {
+                    if (source.equals(C.SOURCE_ORDER)) {
                         llyShare.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         llyShare.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     llyShare.setVisibility(View.VISIBLE);
                 }
                 btnCarShare.setVisibility(View.GONE);
@@ -265,7 +269,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
                             tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
                             tvSellStatus.setText(response.getData().getCarStatusName());
-                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享"+ response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
+                            tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
                             tvCarType.setText(response.getData().getTypeName());
@@ -489,8 +493,9 @@ public class CarDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more, R.id.btn_browse_car, R.id.btn_share_car,R.id.fl_banner})
+    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more, R.id.btn_browse_car, R.id.btn_share_car, R.id.fl_banner, R.id.btn_car_share})
     public void onViewClicked(View view) {
+        Bundle bundle = null;
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
@@ -504,7 +509,7 @@ public class CarDetailActivity extends BaseActivity {
                 break;
             case R.id.btn_browse_car:
                 //上架车辆
-                Bundle bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putParcelableArrayList("data", mPutAwayData);
                 startActivity(PutAwayDetailActivity.class, bundle);
                 break;
@@ -514,6 +519,11 @@ public class CarDetailActivity extends BaseActivity {
             case R.id.fl_banner:
                 ImagPagerUtil imagPagerUtil1 = new ImagPagerUtil(CarDetailActivity.this, urls);
                 imagPagerUtil1.show();
+                break;
+            case R.id.btn_car_share:
+                bundle = new Bundle();
+                bundle.putParcelableArrayList("data", dataList);
+                startActivity(MarketShareCarActivity.class, bundle);
                 break;
         }
     }
