@@ -318,7 +318,6 @@
                     android:id="@+id/tv_car_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="16-20万"
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -350,7 +349,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="2"
-                    android:text="奥迪-奥迪A6；奥迪-奥迪A6；奥迪-奥迪A6；奥迪-奥迪A6；奥迪-奥迪A6；"
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -382,7 +380,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lines="2"
-                    android:text="奥迪-奥迪A6；奥迪-奥迪A6；奥迪-奥迪A6；奥迪-奥迪A6；奥迪-奥迪A6；"
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -415,7 +412,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:lines="2"
-                    android:text="无"
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>

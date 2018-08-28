@@ -359,7 +359,7 @@ public class CustomerManagerActivity extends BaseActivity {
     public void showPopupWindow(final int viewId) {
         ColorDrawable dw = new ColorDrawable(0xb0000000);
         switch (viewId) {
-            case R.id.rb_car_state:
+            case R.id.rb_customer_state:
                 LinearLayout convertFrame = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_state_recycler, null);
                 RecyclerView stateRecycler = (RecyclerView) convertFrame.findViewById(R.id.recycler_car_state);
                 initStateRecycler(stateRecycler);
@@ -367,7 +367,7 @@ public class CustomerManagerActivity extends BaseActivity {
                 mPopupWindow.setBackgroundDrawable(dw);
                 mPopupWindow.showAsDropDown(mRadioGroup, 0, 0);
                 break;
-            case R.id.rb_car_order:
+            case R.id.rb_follow_time:
                 LinearLayout convertLinear = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order_recycler, null);
                 RecyclerView orderRecycler = (RecyclerView) convertLinear.findViewById(R.id.recycler_car_order);
                 orderRecycler.addItemDecoration(new SpaceItemDecoration(5));

@@ -28,6 +28,15 @@ public class CustomerWantCarModel {
         private String audiId;
         private String versionId;
 
+        public CodeBean() {
+        }
+
+        public CodeBean(String brandId, String audiId, String versionId) {
+            this.brandId = brandId;
+            this.audiId = audiId;
+            this.versionId = versionId;
+        }
+
         public String getBrandId() {
             return brandId;
         }

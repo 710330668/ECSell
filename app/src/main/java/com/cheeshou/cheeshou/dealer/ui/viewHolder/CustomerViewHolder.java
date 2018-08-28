@@ -47,7 +47,6 @@ public class CustomerViewHolder extends BaseViewHolder<ItemData> {
     @Override
     public void onBindViewHolder(ItemData data,int position) {
         CustomerResponse.DataBean.ListsBean data1 = (CustomerResponse.DataBean.ListsBean) data.getData();
-        Log.e(TAG, "onBindViewHolder: " + new Gson().toJson(data1));
         mName.setText(data1.getName());
         mNeed.setText(mNeed.getContext().getResources().getString(R.string.customer_need, data1.getMinBudget(), data1.getMaxBudget(), data1.getBrandName(), data1.getCarCount()));
         mFollow.setText(formatData(data1.getProgressDate(), "MM/dd") + " " + data1.getProgressContent());

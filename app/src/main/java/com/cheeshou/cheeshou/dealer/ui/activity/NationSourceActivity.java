@@ -116,6 +116,8 @@ public class NationSourceActivity extends BaseActivity {
     TextView mTvYear;
     private int selectState = 0;
     private int selectOrder = 0;
+    @BindView(R.id.tv_options_type)
+    TextView mCarTypeName;
 
     @C.INVENTORY
     public int INVENTORY = C.INVENTORY_OPTION;
@@ -128,6 +130,7 @@ public class NationSourceActivity extends BaseActivity {
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_CAR = 2;
+    private final int REQUEST_CAR_TYPE = 3;
     private BaseAdapter mDataAdapter;
     private String token;
     private int CURRENT_PAGE = 1;
@@ -205,7 +208,7 @@ public class NationSourceActivity extends BaseActivity {
                 if (!isOpen) {
                     Bundle bundle = new Bundle();
                     bundle.putString("carId", model.getId());
-                    bundle.putString("dealer_source","nationSource");
+                    bundle.putString("dealer_source", "nationSource");
                     startActivity(CarDetailActivity.class, bundle);
                 } else {
                     model.setPut(!model.isPut());
@@ -265,8 +268,8 @@ public class NationSourceActivity extends BaseActivity {
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() +"|销售区域:"
-                                        +response.getData().getLists().get(i).getSaleArea());
+                                data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() + "|销售区域:"
+                                        + response.getData().getLists().get(i).getSaleArea());
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
@@ -484,7 +487,7 @@ public class NationSourceActivity extends BaseActivity {
 
 
     @OnClick({R.id.img_back, R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_open_put_away, R.id.ll_put_away, R.id.bt_search_reset, R.id.bt_search_sure,
-            R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_search})
+            R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_search, R.id.iv_options_type})
     public void onDrawerViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -499,7 +502,7 @@ public class NationSourceActivity extends BaseActivity {
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
-                if ("".equals(brandId)) {
+                if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
                     startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 } else {
@@ -567,6 +570,8 @@ public class NationSourceActivity extends BaseActivity {
                 mTvSelectArea.setText("");
                 mTvSelectBrand.setText("");
                 mTvSelectedCar.setText("");
+                mCarTypeName.setText("");
+                carType = "";
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);
@@ -596,6 +601,10 @@ public class NationSourceActivity extends BaseActivity {
                 queryKey = mEditSearch.getText().toString();
                 mSearchResultData.clear();
                 getAllOptions();
+                break;
+            case R.id.iv_options_type:
+                Intent intent = new Intent(this, CarSourceTypeActivity.class);
+                startActivityForResult(intent, REQUEST_CAR_TYPE);
                 break;
             default:
         }
@@ -677,6 +686,12 @@ public class NationSourceActivity extends BaseActivity {
                     String audiId = data.getStringExtra("audiId");
                     mTvSelectedCar.setText(carCombinate);
                     versionId = audiId;
+                    break;
+                case REQUEST_CAR_TYPE:
+                    String carTypeName = data.getStringExtra("carTypeName");
+                    String carTypeId = data.getStringExtra("carTypeId");
+                    mCarTypeName.setText(carTypeName);
+                    carType = carTypeId;
                     break;
             }
         }

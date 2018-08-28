@@ -20,6 +20,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.FindCustomerNeedResponse;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerWantCarViewHolder;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ReleaseOptionActivity;
@@ -112,6 +113,39 @@ public class EditCustomerNeedActivity extends BaseActivity {
                 CustomerWantCarModel model = ParamManager.getInstance(EditCustomerNeedActivity.this).getModel();
                 dataList.add(new ItemData(0, SettingDelegate.CUSTOMER_WANT_CAR, model));
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        Injection.provideApiService().findCustomerNeedInfo(token, customerId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<FindCustomerNeedResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(FindCustomerNeedResponse easyResponse) {
+                mEtMinMoney.setText(easyResponse.getData().getMinBudget() + "");
+                mEtMaxMoney.setText(easyResponse.getData().getMaxBudget() + "");
+                mEtNeedText.setText(easyResponse.getData().getNeedTxt());
+                mEtRemark.setText(easyResponse.getData().getRemark());
+                List<FindCustomerNeedResponse.DataBean.ListsBean> lists = easyResponse.getData().getLists();
+                for (FindCustomerNeedResponse.DataBean.ListsBean bean : lists) {
+                    CustomerWantCarModel model = new CustomerWantCarModel();
+                    model.setName(bean.getBrandName() + "|" + bean.getAudiName() + "|" + bean.getVersionName());
+                    model.setCode(new CustomerWantCarModel.CodeBean(bean.getBrandId(), bean.getAudiId(), bean.getVersionId()));
+                    dataList.add(new ItemData(0, SettingDelegate.CUSTOMER_WANT_CAR, model));
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }

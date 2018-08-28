@@ -1,10 +1,12 @@
 package com.cheeshou.cheeshou.remote;
 
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerDetailResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerInfoResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerStatusResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.FindCustomerNeedResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MyReportResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MySaleCountResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.NearDaySaleResponse;
@@ -184,13 +186,17 @@ public interface ApiService {
 
     //获取客户详细信息
 //    CustomerDetailResponse
-    @Multipart
+    @FormUrlEncoded
     @POST("customer/findCustomerDetailInfo")
-    Observable<JSONObject> getCustomerDetailInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+    Observable<CustomerDetailResponse> getCustomerDetailInfo(@Header("token") String token, @Field("customerId") String customerId);
 
     @Multipart
     @POST("customer/updateCustomerBaseInfo")
     Observable<EasyResponse> updateCustomerInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+
+    @FormUrlEncoded
+    @POST("customer/findCustomerNeedInfo")
+    Observable<FindCustomerNeedResponse> findCustomerNeedInfo(@Header("token") String token, @Field("customerId") String customerId);
 
 
     //获取客户列表

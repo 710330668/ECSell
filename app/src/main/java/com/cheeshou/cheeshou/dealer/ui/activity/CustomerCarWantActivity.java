@@ -1,15 +1,22 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -18,11 +25,21 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.fragment.CustomerWantFragment;
+import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
+import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryDeleteModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModelDao;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.options.ChooseAreaActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
+import com.cheeshou.cheeshou.options.ChooseCarsActivity;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.DaoUtils;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
@@ -39,7 +56,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.cheeshou.cheeshou.config.C.INVENTORY_MARKET;
+
 public class CustomerCarWantActivity extends BaseActivity {
+    private static final String TAG = "StoreManagerItemClickActivity";
 
     @BindView(R.id.tag_flow_price)
     TagFlowLayout mTagFlowPrice;
@@ -49,74 +69,166 @@ public class CustomerCarWantActivity extends BaseActivity {
     TagFlowLayout mTagFlowColorOut;
     @BindView(R.id.tag_flow_inside_color)
     TagFlowLayout mTagFlowColorInside;
-    @BindView(R.id.tag_flow_car_type)
-    TagFlowLayout mTagFlowType;
     @BindView(R.id.tag_flow_car_source_type)
     TagFlowLayout mTagFlowSourceType;
     @BindView(R.id.layout_drawer)
-    DrawerLayout mDrawerMain;
+    DrawerLayout mDrawer;
     @BindView(R.id.layout_drawer_right)
-    LinearLayout mDrawerRight;
-    @BindView(R.id.rl_search_result)
-    RecyclerView mSearchResult;
-    @BindView(R.id.ll_tab)
-    RadioGroup mRadioGroup;
-    @BindView(R.id.rb_car_state)
-    RadioButton mRbState;
-    @BindView(R.id.rb_car_order)
-    RadioButton mRbOrder;
-    @BindView(R.id.rb_car_filter)
-    RadioButton mRbFilter;
-    @BindView(R.id.ll_put_away)
-    LinearLayout mLinearPut;
-    private int selectState = 0;
-    private int selectOrder = 0;
+    LinearLayout mDrawerRightContent;
+    @BindView(R.id.tv_bar_right)
+    TextView mTvBarRight;
 
-    PopupWindow mPopupWindow;
 
-    private List<ItemData> mSearchResultData = new ArrayList<>();
+    @BindView(R.id.et_search)
+    EditText mEtSearch;
 
-    private static final String TAG = "NationSourceActivity";
-    private BaseAdapter mDataAdapter;
+    @BindView(R.id.tv_sales_area)
+    TextView mTvSelectArea;
+    @BindView(R.id.tv_car_brand)
+    TextView mTvSelectBrand;
+    @BindView(R.id.tv_car_model)
+    TextView mTvSelectedCar;
+
+    @BindView(R.id.tv_year_all)
+    TextView mTvSelectYear;
+    @BindView(R.id.ll_choose_year)
+    LinearLayout mLLChooseYear;
+
+    @BindView(R.id.img_last)
+    ImageView mImgLastYear;
+    @BindView(R.id.img_next)
+    ImageView mImgNextYear;
+    @BindView(R.id.tv_year)
+    TextView mTvYear;
+    @BindView(R.id.tv_back)
+    TextView mTvBack;
+    @BindView(R.id.tv_options_type)
+    TextView mCarTypeName;
+
+    @BindView(R.id.recycler_search_history)
+    RecyclerView mRecyclerSearchHistory;
+    private BaseAdapter<ItemData> mSearchAdapter;
+    private List<ItemData> mSearchData = new ArrayList<>();
+
+    private final int REQUEST_BRAND = 0;
+    private final int REQUEST_AREA = 1;
+    private final int REQUEST_CAR = 2;
+    private final int REQUEST_CAR_TYPE = 3;
+
+    private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
+    private String carBrand;
+
+    public int INVENTORY = ParamManager.getInstance(this).getChannelType();
+
+
+    private FragmentManager mFragmentManager = getSupportFragmentManager();
+    private CustomerWantFragment mSearchResultFragment;
 
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_customer_car_want;
+        return R.layout.activity_store_manager_item_click;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void initParams(Bundle params) {
+        if (mSearchResultFragment == null) {
+            mSearchResultFragment = new CustomerWantFragment();
+            mSearchResultFragment.setArguments(params);
+            mFragmentManager.beginTransaction().add(R.id.fm_fg_container, mSearchResultFragment).commit();
+        }
+        mRecyclerSearchHistory.setVisibility(View.GONE);
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
-        mSearchResult.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
+        mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                if (INVENTORY == C.INVENTORY_DEALER) {
+//                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+//                        mTvBarRight.setText("搜索");
+//                    } else {
+//                        mTvBarRight.setText("分享");
+//                    }
+//                }
+//                if (INVENTORY == C.INVENTORY_MARKET) {
+//                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+//                        mTvBarRight.setText("搜索");
+//                    } else {
+//                        mTvBarRight.setText("分享");
+//                    }
+//                }
+//                if (INVENTORY == C.INVENTORY_OPTION) {
+//                    if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
+//                        mTvBarRight.setText("搜索");
+//                    } else {
+//                        mTvBarRight.setText("取消");
+//                    }
+//                }
+//                queryKey = mEtSearch.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+//        switch (INVENTORY) {
+//            case C.INVENTORY_DEALER:
+//                mTvBarRight.setText("分享");
+//                break;
+//            case INVENTORY_MARKET:
+//                mTvBarRight.setText("分享");
+//                break;
+//            case C.INVENTORY_OPTION:
+//                mTvBarRight.setText("取消");
+//                break;
+//            default:
+//        }
+        mTvBarRight.setText("搜索");
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        initRecycler();
         initDrawerTagList();
+        initSearchHistory();
     }
 
-    private void initRecycler() {
-        for (int i = 0; i < 10; i++) {
-            SearchResultModel data = new SearchResultModel();
-            data.setDate("2018/06/24");
-            data.setDeduct("销售提成2000");
-            data.setPrice("16.8万");
-            data.setState("在售");
-            data.setOpenPutEntrance(true);
-            data.setSubTitle("分享20次|浏览140次");
-            data.setTitle("雪佛兰2013款  科鲁兹  16LSL天地板MT");
-            ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
-            mSearchResultData.add(e);
+    private void initSearchHistory() {
+        mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
+        List<SearchHistoryModel> list = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY)).list();
+        for (SearchHistoryModel bean : list) {
+            mSearchData.add(new ItemData(0, SettingDelegate.SEARCH_HISTORY_TYPE, bean));
         }
-        mDataAdapter = new BaseAdapter(mSearchResultData, new SettingDelegate(), new onItemClickListener() {
+        mSearchAdapter = new BaseAdapter<>(mSearchData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
+                if (data instanceof SearchHistoryModel) {
+
+                    queryKey = ((SearchHistoryModel) data).getSearchHistory();
+
+                    mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+
+                    mRecyclerSearchHistory.setVisibility(View.GONE);
+                }
+                if (data instanceof SearchHistoryDeleteModel) {
+                    List<SearchHistoryModel> list = DaoUtils.getDaoSession(getApplicationContext()).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY)).list();
+                    for (SearchHistoryModel bean : list) {
+                        DaoUtils.getDaoSession(getApplicationContext()).getSearchHistoryModelDao().delete(bean);
+                    }
+                    mSearchData.clear();
+                    mSearchData.add(new ItemData(0, SettingDelegate.DELETE_SEARCH_HISTORY_TYPE, new SearchHistoryDeleteModel()));
+                    mSearchAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -124,102 +236,39 @@ public class CustomerCarWantActivity extends BaseActivity {
                 return false;
             }
         });
-        mSearchResult.setAdapter(mDataAdapter);
-    }
-
-
-    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter})
-    public void onRadioButtonSelected(View view) {
-        switch (view.getId()) {
-//            汽车状态
-            case R.id.rb_car_state:
-                showPopupWindow(R.id.rb_car_state);
-                break;
-//                排序
-            case R.id.rb_car_order:
-                showPopupWindow(R.id.rb_car_order);
-                break;
-//                筛选  draw  open
-            case R.id.rb_car_filter:
-                if (mDrawerMain.isDrawerOpen(mDrawerRight)) {
-                    mDrawerMain.closeDrawer(mDrawerRight);
-                } else {
-                    mDrawerMain.openDrawer(mDrawerRight);
-                }
-                break;
-            default:
-        }
-    }
-
-    public void showPopupWindow(final int viewId) {
-        RadioGroup convertView = null;
-
-        switch (viewId) {
-            case R.id.rb_car_state:
-                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_state, null);
-                ((RadioButton) convertView.getChildAt(selectState)).setChecked(true);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                break;
-            case R.id.rb_car_order:
-                convertView = (RadioGroup) LayoutInflater.from(this).inflate(R.layout.layout_popup_car_order, null);
-                ((RadioButton) convertView.getChildAt(selectOrder)).setChecked(true);
-                mPopupWindow = new PopupWindow(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                break;
-            default:
-        }
-
-        if (convertView != null) {
-            convertView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    RadioButton selectButton;
-                    switch (viewId) {
-                        case R.id.rb_car_state:
-                            selectButton = ((RadioButton) radioGroup.findViewById(i));
-                            mRbState.setText(selectButton.getText());
-                            selectState = radioGroup.indexOfChild(selectButton);
-                            mPopupWindow.dismiss();
-                            break;
-                        case R.id.rb_car_order:
-                            selectButton = ((RadioButton) radioGroup.findViewById(i));
-                            mRbOrder.setText(selectButton.getText());
-                            selectOrder = radioGroup.indexOfChild(selectButton);
-                            mPopupWindow.dismiss();
-                            break;
-                        default:
-                    }
-                }
-            });
-        }
-
-        mPopupWindow.setFocusable(true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setOutsideTouchable(false);
-        mPopupWindow.showAsDropDown(mRadioGroup, 0, 2);
+        mRecyclerSearchHistory.setAdapter(mSearchAdapter);
     }
 
     private void initDrawerTagList() {
-        List<String> dataSize = new ArrayList<>();
-        dataSize.add("不限");
-        dataSize.add("5万以下");
-        dataSize.add("5-10万");
-        dataSize.add("10-15万");
-        dataSize.add("15-30万");
-        dataSize.add("30-50万");
-        dataSize.add("50-100万");
-        dataSize.add("100万及以上");
-        TagAdapter<String> priceAdapter = new TagAdapter<String>(dataSize) {
+        final List<PriceModel> dataSize = new ArrayList<>();
+        dataSize.add(new PriceModel("", "", "不限"));
+        dataSize.add(new PriceModel("", "5", "5万以下"));
+        dataSize.add(new PriceModel("5", "10", "5-10万"));
+        dataSize.add(new PriceModel("10", "15", "10-15万"));
+        dataSize.add(new PriceModel("15", "30", "15-30万"));
+        dataSize.add(new PriceModel("30", "50", "30-50万"));
+        dataSize.add(new PriceModel("50", "100", "50-100万"));
+        dataSize.add(new PriceModel("100", "", "100万及以上"));
+        TagAdapter<PriceModel> priceAdapter = new TagAdapter<PriceModel>(dataSize) {
             @Override
-            public View getView(FlowLayout parent, int position, String o) {
+            public View getView(FlowLayout parent, int position, PriceModel o) {
                 TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_drawer_filter_racter, mTagFlowPrice, false);
-                textView.setText(o);
+                textView.setText(o.getText());
                 return textView;
             }
         };
         priceAdapter.setSelectedList(0);
         mTagFlowPrice.setAdapter(priceAdapter);
-
+        mTagFlowPrice.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                PriceModel priceModel = dataSize.get(position);
+                minCarPrice = priceModel.getMinPrice();
+                maxCarPrice = priceModel.getMaxPrice();
+                return false;
+            }
+        });
 
         List<String> dataTime = new ArrayList<>();
         dataTime.add("不限");
@@ -239,7 +288,7 @@ public class CustomerCarWantActivity extends BaseActivity {
         timeAdapter.setSelectedList(0);
         mTagFlowTime.setAdapter(timeAdapter);
 
-        List<ColorFilterModel> dataColorOut = new ArrayList<>();
+        final List<ColorFilterModel> dataColorOut = new ArrayList<>();
         dataColorOut.add(new ColorFilterModel("不限", ""));
         dataColorOut.add(new ColorFilterModel("黑色", "#333333"));
         dataColorOut.add(new ColorFilterModel("白色", "#E6E6E6"));
@@ -270,9 +319,21 @@ public class CustomerCarWantActivity extends BaseActivity {
         };
         outColorAdapter.setSelectedList(0);
         mTagFlowColorOut.setAdapter(outColorAdapter);
+        mTagFlowColorOut.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                ColorFilterModel colorFilterModel = dataColorOut.get(position);
+                if (!TextUtils.isEmpty(colorFilterModel.getColor())) {
+                    outsiteColor = colorFilterModel.getText();
+                } else {
+                    outsiteColor = "";
+                }
+                return false;
+            }
+        });
 
 
-        List<ColorFilterModel> dataColorInside = new ArrayList<>();
+        final List<ColorFilterModel> dataColorInside = new ArrayList<>();
         dataColorInside.add(new ColorFilterModel("不限", ""));
         dataColorInside.add(new ColorFilterModel("黑色", "#333333"));
         dataColorInside.add(new ColorFilterModel("白色", "#E6E6E6"));
@@ -303,32 +364,18 @@ public class CustomerCarWantActivity extends BaseActivity {
         };
         insideColorAdapter.setSelectedList(0);
         mTagFlowColorInside.setAdapter(insideColorAdapter);
-
-        List<String> dataCarType = new ArrayList<>();
-        dataCarType.add("不限");
-        dataCarType.add("SUV");
-        dataCarType.add("MPV");
-        dataCarType.add("微小型车");
-        dataCarType.add("紧凑型车");
-        dataCarType.add("中型车");
-        dataCarType.add("中大型车");
-        dataCarType.add("跑车");
-        dataCarType.add("两厢车");
-        dataCarType.add("三厢车");
-
-        TagAdapter<String> carTypeAdapter = new TagAdapter<String>(dataCarType) {
+        mTagFlowColorInside.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
-            public View getView(FlowLayout parent, int position, String o) {
-                TextView textView = (TextView) getLayoutInflater().inflate(R.layout.item_drawer_filter_racter, mTagFlowType, false);
-                textView.setText(o);
-                return textView;
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                ColorFilterModel colorFilterModel = dataColorInside.get(position);
+                if (!TextUtils.isEmpty(colorFilterModel.getColor())) {
+                    withinColor = colorFilterModel.getText();
+                } else {
+                    withinColor = "";
+                }
+                return false;
             }
-        };
-        carTypeAdapter.setSelectedList(0
-
-
-        );
-        mTagFlowType.setAdapter(carTypeAdapter);
+        });
 
         List<String> dataSourceCarType = new ArrayList<>();
         dataSourceCarType.add("全部");
@@ -358,36 +405,179 @@ public class CustomerCarWantActivity extends BaseActivity {
         mTagFlowSourceType.setAdapter(sourceCarTypeAdapter);
     }
 
-
-    @OnClick({R.id.img_back, R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.ll_put_away})
-    public void onDrawerViewClicked(View view) {
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_back, R.id.iv_options_type})
+    public void onViewClicked(View view) {
+        Bundle bundle = new Bundle();
         switch (view.getId()) {
-            case R.id.img_back:
-                finish();
-                break;
             case R.id.iv_sales_area:
-                startActivity(ChooseAreaActivity.class);
+                startActivityForResult(new Intent(this, ChooseAreaActivity.class), REQUEST_AREA);
                 break;
             case R.id.iv_car_brand:
-                startActivity(ChooseBrandActivity.class);
+                bundle.putString("params", "filter");
+                startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
-                startActivity(ChooseBrandActivity.class);
+                if (TextUtils.isEmpty(brandId)) {
+                    bundle.putString("params", "filter");
+                    startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
+                } else {
+                    bundle.putString("carBrand", carBrand);
+                    bundle.putString("brandId", brandId);
+                    bundle.putString("params", "filter");
+                    startActivityForResult(ChooseCarsActivity.class, bundle, REQUEST_CAR);
+                }
                 break;
-            case R.id.ll_put_away:
-                Toast.makeText(appContext, "添加成功", Toast.LENGTH_SHORT).show();
+            case R.id.tv_bar_right:
+                switch (INVENTORY) {
+                    case C.INVENTORY_DEALER:
+                        switch (mTvBarRight.getText().toString()) {
+                            case "分享":
+//                                if (mRecyclerSearchHistory.getVisibility() == View.VISIBLE) {
+//                                    Toast.makeText(appContext, "暂无内容", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    mSearchResultFragment.setShareOpen();
+//                                }
+//                                this.finish();
+                                break;
+                            case "搜索":
+                                clickSearch();
+                                break;
+                        }
+                        break;
+                    case INVENTORY_MARKET:
+                        switch (mTvBarRight.getText().toString()) {
+                            case "分享":
+//                                this.finish();
+//                                if (mRecyclerSearchHistory.getVisibility() == View.VISIBLE) {
+//                                    Toast.makeText(appContext, "暂无内容", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    mSearchResultFragment.setShareOpen();
+//                                }
+                                break;
+                            case "搜索":
+                                clickSearch();
+                                break;
+                        }
+                        break;
+                    case C.INVENTORY_OPTION:
+                        switch (mTvBarRight.getText().toString()) {
+                            case "取消":
+//                                this.finish();
+                                break;
+                            case "搜索":
+                                clickSearch();
+                                break;
+                        }
+                        break;
+                    default:
+                }
                 break;
-
+            case R.id.bt_search_sure:
+                //搜索确认
+                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                mDrawer.closeDrawer(Gravity.RIGHT);
+                break;
+            case R.id.bt_search_reset:
+                //搜索重置
+                mTvSelectArea.setText("");
+                mTvSelectBrand.setText("");
+                mTvSelectedCar.setText("");
+                carType = "";
+                mCarTypeName.setText("");
+                mTagFlowPrice.getAdapter().setSelectedList(0);
+                mTagFlowSourceType.getAdapter().setSelectedList(0);
+                mTagFlowColorInside.getAdapter().setSelectedList(0);
+                mTagFlowColorOut.getAdapter().setSelectedList(0);
+                mTagFlowTime.getAdapter().setSelectedList(0);
+                mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+                break;
+            case R.id.tv_year_all:
+                mTvSelectYear.setBackgroundResource(R.drawable.bg_radiobutton_red);
+                carYear = "";
+                mLLChooseYear.setBackgroundResource(R.drawable.bg_radiobutton);
+                break;
+            case R.id.ll_choose_year:
+                mLLChooseYear.setBackgroundResource(R.drawable.bg_radiobutton_red);
+                carYear = mTvYear.getText().toString();
+                mTvSelectYear.setBackgroundResource(R.drawable.bg_radiobutton);
+                break;
+            case R.id.img_last:
+                mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) - 1 + "");
+                carYear = mTvYear.getText().toString();
+                break;
+            case R.id.img_next:
+                mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) + 1 + "");
+                carYear = mTvYear.getText().toString();
+                break;
+            case R.id.tv_back:
+                finish();
+                break;
+            case R.id.iv_options_type:
+                Intent intent = new Intent(this, CarSourceTypeActivity.class);
+                startActivityForResult(intent, REQUEST_CAR_TYPE);
+                break;
             default:
         }
     }
 
+    private void clickSearch() {
+        queryKey = mEtSearch.getText().toString();
+        SearchHistoryModel entity = new SearchHistoryModel();
+        entity.setTimeShamp(System.currentTimeMillis());
+        entity.setSearchHistory(queryKey);
+        entity.setSearchPosition(TAG);
+        entity.setInventory(INVENTORY);
+        SearchHistoryModel unique = DaoUtils.getDaoSession(this).getSearchHistoryModelDao().queryBuilder().where(SearchHistoryModelDao.Properties.SearchPosition.eq(TAG), SearchHistoryModelDao.Properties.Inventory.eq(INVENTORY), SearchHistoryModelDao.Properties.SearchHistory.eq(queryKey)).unique();
+        if (unique == null) {
+            DaoUtils.getDaoSession(this).getSearchHistoryModelDao().insert(entity);
+        } else {
+            unique.setTimeShamp(System.currentTimeMillis());
+        }
+        mRecyclerSearchHistory.setVisibility(View.GONE);
+        mSearchResultFragment.filterRecycler(carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey);
+
+    }
+
     @Override
     public void onBackPressed() {
-        if (mDrawerMain.isDrawerOpen(mDrawerRight)) {
-            mDrawerMain.closeDrawer(mDrawerRight);
+        if (mDrawer != null && mDrawer.isDrawerOpen(mDrawerRightContent)) {
+            mDrawer.closeDrawer(mDrawerRightContent);
             return;
         }
         super.onBackPressed();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_AREA:
+                    String area = (data.getStringExtra("area"));
+                    mTvSelectArea.setText(area);
+//                    String provinceCode = data.getStringExtra("provinceCode");
+//                    String cityCode = data.getStringExtra("cityCode");
+                    break;
+                case REQUEST_BRAND:
+                    carBrand = data.getStringExtra("carBrand");
+                    mTvSelectBrand.setText(carBrand);
+                    brandId = data.getStringExtra("brandId");
+                    break;
+                case REQUEST_CAR:
+                    String carCombinate = data.getStringExtra("carCombinate");
+                    String audiId = data.getStringExtra("audiId");
+                    mTvSelectedCar.setText(carCombinate);
+                    versionId = audiId;
+                    break;
+                case REQUEST_CAR_TYPE:
+                    String carTypeName = data.getStringExtra("carTypeName");
+                    String carTypeId = data.getStringExtra("carTypeId");
+                    mCarTypeName.setText(carTypeName);
+                    carType = carTypeId;
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
 }

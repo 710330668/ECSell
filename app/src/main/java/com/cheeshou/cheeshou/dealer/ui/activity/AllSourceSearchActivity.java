@@ -99,6 +99,8 @@ public class AllSourceSearchActivity extends BaseActivity {
     ImageView mImgNextYear;
     @BindView(R.id.tv_year)
     TextView mTvYear;
+    @BindView(R.id.tv_options_type)
+    TextView mCarTypeName;
 
     private String carBrand;
 
@@ -113,6 +115,7 @@ public class AllSourceSearchActivity extends BaseActivity {
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_CAR = 2;
+    private final int REQUEST_CAR_TYPE = 3;
 
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private StoreManagerItemClickFragment searchResultFragment;
@@ -405,7 +408,7 @@ public class AllSourceSearchActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_search, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next})
+    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_search, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.iv_options_type})
     public void onDrawerViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -417,7 +420,7 @@ public class AllSourceSearchActivity extends BaseActivity {
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
-                if ("".equals(brandId)) {
+                if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
                     startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 } else {
@@ -463,6 +466,8 @@ public class AllSourceSearchActivity extends BaseActivity {
                 mTvSelectArea.setText("");
                 mTvSelectBrand.setText("");
                 mTvSelectedCar.setText("");
+                mCarTypeName.setText("");
+                carType = "";
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);
@@ -490,6 +495,10 @@ public class AllSourceSearchActivity extends BaseActivity {
                 mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) + 1 + "");
                 carYear = mTvYear.getText().toString();
                 break;
+            case R.id.iv_options_type:
+                Intent intent = new Intent(this, CarSourceTypeActivity.class);
+                startActivityForResult(intent, REQUEST_CAR_TYPE);
+                break;
             default:
         }
     }
@@ -514,6 +523,12 @@ public class AllSourceSearchActivity extends BaseActivity {
                     String audiId = data.getStringExtra("audiId");
                     mTvSelectedCar.setText(carCombinate);
                     versionId = audiId;
+                    break;
+                case REQUEST_CAR_TYPE:
+                    String carTypeName = data.getStringExtra("carTypeName");
+                    String carTypeId = data.getStringExtra("carTypeId");
+                    mCarTypeName.setText(carTypeName);
+                    carType = carTypeId;
                     break;
             }
         }

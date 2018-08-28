@@ -371,7 +371,7 @@ public class NationalSourceFragment extends BaseFragment {
 
 
     public void filterRecycler(String carType, String brandId, String versionId, String carYear, String outsiteColor, String withinColor, String minCarPrice, String maxCarPrice, String startDate, String endDate, String queryKey) {
-//        this.carType = carType;
+        this.carType = carType;
         this.brandId = brandId;
         this.versionId = versionId;
         this.carYear = carYear;
