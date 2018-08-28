@@ -10,6 +10,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.response.MySaleCountResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.NearDaySaleResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.ReportCarResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.SalersListResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.ShareUrlResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.ToShopResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserDetailResponse;
@@ -364,9 +365,11 @@ public interface ApiService {
 
     //生成分享URL
     @Multipart
-    @FormUrlEncoded
+//    @FormUrlEncoded
     @POST("/share/saveShareInfo")
-    Observable<EasyResponse> saveShareInfo(@Header("token") String token, @Field("shareType") String shareType, @Field("shareDirect") String shareDirect, @Field("shareDirect") String shareDirect1, @Field("shareAtt") String shareAtt);
+//    Observable<ShareUrlResponse> saveShareInfo(@Header("token") String token, @Field("shareId") String shareId, @Field("shareType") String shareType,
+//                                               @Field("shareItems") String shareItems, @Field("shareDirect") String shareDirect, @Field("shareAttr") String shareAttr);
+    Observable<ShareUrlResponse> saveShareInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     @POST("/share/findMyShareList")
     Observable<MyShareResponse> findMyShareList(@Header("token") String token, @Body HashMap<String, String> params);

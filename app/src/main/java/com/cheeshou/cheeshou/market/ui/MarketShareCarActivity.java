@@ -18,11 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.ShareUrlResponse;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.options.TabEntity;
+import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -32,12 +35,21 @@ import com.example.com.common.util.SP;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class MarketShareCarActivity extends BaseActivity {
 
@@ -75,7 +87,8 @@ public class MarketShareCarActivity extends BaseActivity {
     private String mName;
     private String mCompany;
     private SettingDelegate delegate;
-    private String shareUrl;
+    private String shareUrl = "";
+    private String token = "";
 
 
     @Override
@@ -90,6 +103,7 @@ public class MarketShareCarActivity extends BaseActivity {
         mAddress = SP.getInstance(C.USER_DB, this).getString(C.USER_ADDRESS);
         mName = SP.getInstance(C.USER_DB, this).getString(C.USER_NAME);
         mCompany = SP.getInstance(C.USER_DB, this).getString(C.USER_COMPANYNAME);
+        token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
     }
 
     @Override
@@ -117,13 +131,65 @@ public class MarketShareCarActivity extends BaseActivity {
             }
         });
         imageDeleteAdapter = new BaseAdapter(carPhotos, delegate);
+        String id = "";
         for (int i = 0; i < data.size(); i++) {
+            id += (data.get(i).getId() + ",");
             final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
             imageArray.add(data.get(i).getImageUrl());
             ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
             carPhotos.add(itemData);
             mRecycler.setAdapter(imageDeleteAdapter);
         }
+
+        HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("shareId", toRequestBody(UUID.randomUUID().toString()));
+
+        if (data.size() == 1) {
+            params.put("shareType", toRequestBody("单车"));
+            params.put("shareItems", toRequestBody(data.get(0).getId()));
+        } else {
+            params.put("shareType", toRequestBody("多车"));
+            params.put("shareItems", toRequestBody(id));
+        }
+        params.put("shareAtt", toRequestBody(affineArticle));
+        params.put("shareDirect", toRequestBody("微信"));
+
+//        params.put("shareId", (UUID.randomUUID().toString()));
+//
+//        if (data.size() == 1) {
+//            params.put("shareType", ("单车"));
+//            params.put("shareItems", (data.get(0).getId()));
+//        } else {
+//            params.put("shareType", ("多车"));
+//            params.put("shareItems", (id));
+//        }
+////        params.put("shareAtt", (affineArticle));
+//        params.put("shareDirect", ("微信"));
+
+        Injection.provideApiService().saveShareInfo(token, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareUrlResponse>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ShareUrlResponse easyResponse) {
+                if (easyResponse.getCode() == 200) {
+                    shareUrl = easyResponse.getData().getShareUrl();
+                }
+                Log.e(TAG, "onNext: " + new Gson().toJson(easyResponse));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onError: -----" + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
 
@@ -216,5 +282,9 @@ public class MarketShareCarActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    public RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 }

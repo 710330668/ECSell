@@ -75,15 +75,6 @@ public class MarketShareWechatActivity extends BaseActivity {
         for (SearchResultModel bean : data) {
             shareDirect += (bean.getId() + ",");
         }
-        Injection.provideApiService().saveShareInfo(mToken, "", "朋友圈", shareDirect, article).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<EasyResponse>() {
-                    @Override
-                    public void accept(EasyResponse easyResponse) throws Exception {
-                        Log.e(TAG, "accept: " + new Gson().toJson(easyResponse));
-                    }
-                });
-
         mRecyclerSharePhoto.setLayoutManager(new GridLayoutManager(this, 3));
         imageDeleteAdapter = new BaseAdapter(carPhotos, new SettingDelegate());
         for (int i = 0; i < data.size(); i++) {
@@ -146,9 +137,9 @@ public class MarketShareWechatActivity extends BaseActivity {
         WechatMoments.ShareParams momentsSp = new WechatMoments.ShareParams();
 //        momentsSp.setShareType(Platform.SHARE_WEBPAGE); //非常重要：一定要设置分享属性
         momentsSp.setShareType(Platform.SHARE_IMAGE);
-        momentsSp.setTitle("车易售");  //分享标题
+//        momentsSp.setTitle("车易售");  //分享标题
         momentsSp.setText(article);   //分享文本
-        momentsSp.setUrl("www.baidu.com");   //网友点进链接后，可以看到分享的详情
+//        momentsSp.setUrl("www.baidu.com");   //网友点进链接后，可以看到分享的详情
         String[] image = {};
         momentsSp.setImageArray(imageArray.toArray(image));
         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
