@@ -52,6 +52,7 @@ public class MarketShareWechatActivity extends BaseActivity {
     private String shareUrl = "http://www.cheeshou.com";
     private String mToken;
     private String shareDirect = "";
+    private List<CarPhotoModel> photos = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -62,7 +63,7 @@ public class MarketShareWechatActivity extends BaseActivity {
     public void initParams(Bundle params) {
         data = params.getParcelableArrayList("data");
         article = params.getString("article");
-//        params.getParcelableArrayList("photo")
+        photos = params.getParcelableArrayList("photo");
         mToken = SP.getInstance(this).getString(C.USER_TOKEN);
     }
 
@@ -78,10 +79,11 @@ public class MarketShareWechatActivity extends BaseActivity {
         }
         mRecyclerSharePhoto.setLayoutManager(new GridLayoutManager(this, 3));
         imageDeleteAdapter = new BaseAdapter(carPhotos, new SettingDelegate());
-        for (int i = 0; i < data.size(); i++) {
-            final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
-            imageArray.add(data.get(i).getImageUrl());
-            ItemData itemData = new ItemData(i, SettingDelegate.SHARE_CAR_PHOTO_TYPE, carPhotoModel);
+        for (int i = 0; i < photos.size(); i++) {
+//            photos.get(i);
+//            final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
+            imageArray.add(photos.get(i).getImageUrl());
+            ItemData itemData = new ItemData(i, SettingDelegate.SHARE_CAR_PHOTO_TYPE, photos.get(i));
             carPhotos.add(itemData);
             mRecyclerSharePhoto.setAdapter(imageDeleteAdapter);
         }

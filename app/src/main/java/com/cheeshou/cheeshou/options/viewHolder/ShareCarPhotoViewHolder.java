@@ -1,15 +1,20 @@
 package com.cheeshou.cheeshou.options.viewHolder;
 
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.imageloader.LoaderManager;
+
+import java.io.File;
+import java.net.URI;
 
 /**
  * Created by 71033 on 2018/8/4.
@@ -43,10 +48,12 @@ public class ShareCarPhotoViewHolder extends BaseViewHolder {
     public void onBindViewHolder(Object data, final int position) {
         final ItemData itemData = (ItemData) data;
         CarPhotoModel model = (CarPhotoModel) itemData.data;
-        if (model.getBitmap() != null) {
-            ivCarPhoto.setImageBitmap(model.getBitmap());
-        } else {
+        if (model.getImageUrl().contains("http")) {
             LoaderManager.getLoader().loadNet(ivCarPhoto, model.getImageUrl());
+        } else {
+            Glide.with(ivCarPhoto.getContext()).load(Uri.parse(model.getImageUrl())).error(R.mipmap.add_client).into(ivCarPhoto);
+//            File file = new File();
+//            LoaderManager.getLoader().loadFile(ivCarPhoto, file, null);
         }
         ivDelete.setImageResource(R.mipmap.checked_true);
         ivDelete.setOnClickListener(new View.OnClickListener() {

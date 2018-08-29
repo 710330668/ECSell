@@ -247,7 +247,8 @@ public class MarketShareCarActivity extends BaseActivity {
                                     list.add(((CarPhotoModel) carPhoto.getData()));
                                 }
                             }
-//                            extras.putParcelableArrayList("photo", list);
+                            Log.e(TAG, "onClick: " + list.size());
+                            extras.putParcelableArrayList("photo", list);
                             extras.putString("article", mEtShare.getText().toString());
                             intent.putExtras(extras);
                             startActivity(intent);
@@ -330,7 +331,6 @@ public class MarketShareCarActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_LOCAL) {
             Uri uri = data.getData();
-            String img_url = uri.getPath();
             ContentResolver cr = this.getContentResolver();
             try {
                 if (carPhotos.size() == 9) {
@@ -339,7 +339,7 @@ public class MarketShareCarActivity extends BaseActivity {
                 }
                 Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                 //最多九张
-                CarPhotoModel data1 = new CarPhotoModel(bitmap, "");
+                CarPhotoModel data1 = new CarPhotoModel(null, uri.toString());
 //                data1.setImageUrl(getPath(data));
                 carPhotos.add(carPhotos.size() - 1, new ItemData(0, SettingDelegate.SHARE_CAR_PHOTO_TYPE, data1));
                 imageDeleteAdapter.notifyDataSetChanged();
