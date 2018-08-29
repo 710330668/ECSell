@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.remote;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarOrderViewHolder;
@@ -14,6 +15,8 @@ import com.cheeshou.cheeshou.options.viewHolder.FormalityViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.OptionTypeViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.SalesAreaViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.SeriesViewHolder;
+import com.cheeshou.cheeshou.options.viewHolder.ShareCarPhotoAddViewHolder;
+import com.cheeshou.cheeshou.options.viewHolder.ShareCarPhotoViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.VehicleHeatViewHolder;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerDetailWantHolder;
@@ -30,16 +33,6 @@ import com.cheeshou.cheeshou.market.ui.viewholder.MarketShareHeaderHolder;
 import com.cheeshou.cheeshou.market.ui.viewholder.MarketShareHolder;
 import com.cheeshou.cheeshou.market.ui.viewholder.MarketStoreShareHolder;
 import com.cheeshou.cheeshou.market.ui.viewholder.ShareRankHolder;
-import com.cheeshou.cheeshou.options.viewHolder.AreasViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.CarsViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.ClientViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.ColorViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.FormalityViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.OptionTypeViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.SalesAreaViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.SeriesViewHolder;
-import com.cheeshou.cheeshou.options.viewHolder.VehicleHeatViewHolder;
 import com.cheeshou.cheeshou.order.viewHolder.OrderListViewHolder;
 import com.cheeshou.cheeshou.share.viewholder.SharedCarHolder;
 import com.cheeshou.cheeshou.share.viewholder.SharedHumanHolder;
@@ -83,6 +76,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     private CarPhotoViewHolder.OnImageDeleteListener imageDeleteListener;
     private CustomerWantCarViewHolder.OnDeleteListener wantCatDeleteListener;
+    private ShareCarPhotoAddViewHolder.OnImageAddListener addCarPhotoListener;
 
     public static final int USER_LIST_TYPE = 20;
 
@@ -102,6 +96,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int POPUP_WINDOW_CAR_ORDER_TYPE = 28;
 
     public static final int CUSTOMER_WANT_CAR = 29;
+    public static final int SHARE_CAR_PHOTO_TYPE = 30;
+    public static final int SHARE_CAR_PHOTO_ADD_TYPE = 31;
 
     public static final int FOOT_TYPE = 99;
 
@@ -176,6 +172,13 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 CustomerWantCarViewHolder customerWantCarViewHolder = new CustomerWantCarViewHolder(parent, getItemView(parent, viewType));
                 customerWantCarViewHolder.setOnDeleteListener(wantCatDeleteListener);
                 return customerWantCarViewHolder;
+            case SHARE_CAR_PHOTO_TYPE:
+                return new ShareCarPhotoViewHolder(parent, getItemView(parent, viewType));
+            case SHARE_CAR_PHOTO_ADD_TYPE:
+                ShareCarPhotoAddViewHolder shareCarPhotoAddViewHolder = new ShareCarPhotoAddViewHolder(parent, getItemView(parent, viewType));
+//                Log.e("setShareCarPhotoAddListener", "setShareCarPhotoAddListener: --------------------" + (this.addCarPhotoListener == null));
+//                shareCarPhotoAddViewHolder.setOnImageAddListener(addCarPhotoListener);
+                return shareCarPhotoAddViewHolder;
             default:
         }
         return null;
@@ -251,6 +254,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.popup_window_item_order_layout;
             case CUSTOMER_WANT_CAR:
                 return R.layout.customer_want_car_item_layout;
+            case SHARE_CAR_PHOTO_TYPE:
+                return R.layout.item_car_photo;
+            case SHARE_CAR_PHOTO_ADD_TYPE:
+                return R.layout.item_car_photo;
             default:
         }
         return 0;
@@ -266,5 +273,10 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
 
     public void setCustomerWantCarDeleteListener(CustomerWantCarViewHolder.OnDeleteListener listener) {
         this.wantCatDeleteListener = listener;
+    }
+
+    public void setShareCarPhotoAddListener(ShareCarPhotoAddViewHolder.OnImageAddListener listener) {
+//        this.addCarPhotoListener = listener;
+//        Log.e("setShareCarPhotoAddListener", "setShareCarPhotoAddListener: " + (this.addCarPhotoListener == null));
     }
 }

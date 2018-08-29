@@ -1,9 +1,15 @@
 package com.cheeshou.cheeshou.market.ui;
 
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,11 +26,13 @@ import android.widget.Toast;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.ShareUrlResponse;
+import com.cheeshou.cheeshou.options.ReleaseOptionActivity;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.options.TabEntity;
+import com.cheeshou.cheeshou.options.viewHolder.ShareCarPhotoAddViewHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
@@ -37,6 +45,7 @@ import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +77,7 @@ public class MarketShareCarActivity extends BaseActivity {
     @BindView(R.id.view_line)
     View viewLine;
     CommonTabLayout mainTabBar;
+    private final int REQUEST_LOCAL = 1;
 
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private List<ItemData> carPhotos = new ArrayList<>();
@@ -123,23 +133,43 @@ public class MarketShareCarActivity extends BaseActivity {
 
         mRecycler.setLayoutManager(new GridLayoutManager(this, 3));
         delegate = new SettingDelegate();
-        delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
-            @Override
-            public void removeImage(int position) {
-                carPhotos.remove(position);
-                imageDeleteAdapter.notifyDataSetChanged();
-            }
-        });
-        imageDeleteAdapter = new BaseAdapter(carPhotos, delegate);
+//        delegate.setShareCarPhotoAddListener(new ShareCarPhotoAddViewHolder.OnImageAddListener() {
+//            @Override
+//            public void addImage(int position) {
+//                Log.e(TAG, "addImage: ----------------");
+//                Intent intent1 = new Intent();
+//                intent1.setType("image/*");
+//                intent1.setAction(Intent.ACTION_PICK);
+//                startActivityForResult(intent1, REQUEST_LOCAL);
+//            }
+//        });
         String id = "";
         for (int i = 0; i < data.size(); i++) {
             id += (data.get(i).getId() + ",");
             final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
             imageArray.add(data.get(i).getImageUrl());
-            ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
+            ItemData itemData = new ItemData(0, SettingDelegate.SHARE_CAR_PHOTO_TYPE, carPhotoModel);
             carPhotos.add(itemData);
-            mRecycler.setAdapter(imageDeleteAdapter);
         }
+        ItemData itemData = new ItemData(0, SettingDelegate.SHARE_CAR_PHOTO_ADD_TYPE);
+        carPhotos.add(itemData);
+        imageDeleteAdapter = new BaseAdapter(carPhotos, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                if (data == null) {
+                    Intent intent1 = new Intent();
+                    intent1.setType("image/*");
+                    intent1.setAction(Intent.ACTION_PICK);
+                    startActivityForResult(intent1, REQUEST_LOCAL);
+                }
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        });
+        mRecycler.setAdapter(imageDeleteAdapter);
 
         HashMap<String, RequestBody> params = new HashMap<>();
         params.put("shareId", toRequestBody(UUID.randomUUID().toString()));
@@ -211,6 +241,13 @@ public class MarketShareCarActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), MarketShareWechatActivity.class);
                             Bundle extras = new Bundle();
                             extras.putParcelableArrayList("data", data);
+                            ArrayList<CarPhotoModel> list = new ArrayList<>();
+                            for (ItemData carPhoto : carPhotos) {
+                                if (carPhoto.getData() != null) {
+                                    list.add(((CarPhotoModel) carPhoto.getData()));
+                                }
+                            }
+//                            extras.putParcelableArrayList("photo", list);
                             extras.putString("article", mEtShare.getText().toString());
                             intent.putExtras(extras);
                             startActivity(intent);
@@ -286,5 +323,41 @@ public class MarketShareCarActivity extends BaseActivity {
 
     public RequestBody toRequestBody(String value) {
         return RequestBody.create(MediaType.parse("text/plain"), value);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_LOCAL) {
+            Uri uri = data.getData();
+            String img_url = uri.getPath();
+            ContentResolver cr = this.getContentResolver();
+            try {
+                if (carPhotos.size() == 9) {
+                    Toast.makeText(MarketShareCarActivity.this, "最多可添加9张图片", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                //最多九张
+                CarPhotoModel data1 = new CarPhotoModel(bitmap, "");
+//                data1.setImageUrl(getPath(data));
+                carPhotos.add(carPhotos.size() - 1, new ItemData(0, SettingDelegate.SHARE_CAR_PHOTO_TYPE, data1));
+                imageDeleteAdapter.notifyDataSetChanged();
+            } catch (FileNotFoundException e) {
+            }
+        }
+    }
+
+    private String getPath(Intent data) {
+        String[] imgPath = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = managedQuery(data.getData(), imgPath, null, null, null);
+
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+        cursor.moveToFirst();
+
+        String path = cursor.getString(column_index);
+        return path;
     }
 }

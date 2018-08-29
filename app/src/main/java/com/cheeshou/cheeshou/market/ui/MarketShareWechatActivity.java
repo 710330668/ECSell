@@ -62,6 +62,7 @@ public class MarketShareWechatActivity extends BaseActivity {
     public void initParams(Bundle params) {
         data = params.getParcelableArrayList("data");
         article = params.getString("article");
+//        params.getParcelableArrayList("photo")
         mToken = SP.getInstance(this).getString(C.USER_TOKEN);
     }
 
@@ -80,7 +81,7 @@ public class MarketShareWechatActivity extends BaseActivity {
         for (int i = 0; i < data.size(); i++) {
             final CarPhotoModel carPhotoModel = new CarPhotoModel(null, data.get(i).getImageUrl());
             imageArray.add(data.get(i).getImageUrl());
-            ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
+            ItemData itemData = new ItemData(i, SettingDelegate.SHARE_CAR_PHOTO_TYPE, carPhotoModel);
             carPhotos.add(itemData);
             mRecyclerSharePhoto.setAdapter(imageDeleteAdapter);
         }
