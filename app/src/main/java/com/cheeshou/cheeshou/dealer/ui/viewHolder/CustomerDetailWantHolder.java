@@ -17,7 +17,6 @@ public class CustomerDetailWantHolder extends BaseViewHolder<ItemData> {
     private TextView mMessage;
     private TextView mState;
     private TextView mPrice;
-    private TextView mDeduct;
     private TextView mTime;
 
     /**
@@ -38,7 +37,6 @@ public class CustomerDetailWantHolder extends BaseViewHolder<ItemData> {
         mMessage = ((TextView) itemView.findViewById(R.id.tv_message));
         mState = ((TextView) itemView.findViewById(R.id.tv_state));
         mPrice = ((TextView) itemView.findViewById(R.id.tv_price));
-        mDeduct = ((TextView) itemView.findViewById(R.id.tv_deduct));
         mTime = ((TextView) itemView.findViewById(R.id.tv_time));
     }
 
@@ -49,7 +47,6 @@ public class CustomerDetailWantHolder extends BaseViewHolder<ItemData> {
         mTitle.setText(data1.getTitle());
         mMessage.setText(data1.getMessage());
         mPrice.setText(data1.getPrice());
-        mDeduct.setText(data1.getDeduct());
         mState.setText(data1.getState());
     }
 }

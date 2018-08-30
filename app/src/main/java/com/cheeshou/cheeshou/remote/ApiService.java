@@ -371,6 +371,11 @@ public interface ApiService {
     @POST("customer/updateCustomerNeedInfo")
     Observable<EasyResponse> updateCustomerNeedInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
+    //修改客户意向车辆
+    @FormUrlEncoded
+    @POST("customer/updateCustomerNeedInfo")
+    Observable<EasyResponse> updateCustomerNeedInfo(@Header("token") String token, @Field("customerId") String customerId, @Field("saleIds") String saleIds);
+
 
     //生成分享URL
 //    @Multipart

@@ -3,6 +3,9 @@ package com.cheeshou.cheeshou.utils;
 import android.content.Context;
 
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+
+import java.util.List;
 
 /**
  * Created by 71033 on 2018/7/29.
@@ -21,6 +24,31 @@ public class ParamManager {
 
     private CustomerWantCarModel model;
     private String createCustomerWantCarId;
+    private List<SearchResultModel> customerWantList;
+
+    public static ParamManager getInstance() {
+        return instance;
+    }
+
+    public static void setInstance(ParamManager instance) {
+        ParamManager.instance = instance;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public List<SearchResultModel> getCustomerWantList() {
+        return customerWantList;
+    }
+
+    public void setCustomerWantList(List<SearchResultModel> customerWantList) {
+        this.customerWantList = customerWantList;
+    }
 
     public String getCreateCustomerWantCarId() {
         return createCustomerWantCarId;

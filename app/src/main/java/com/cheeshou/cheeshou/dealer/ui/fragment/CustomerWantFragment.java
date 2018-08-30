@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,8 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
-import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
@@ -101,7 +102,7 @@ public class CustomerWantFragment extends BaseFragment {
     private List<ItemData> orderDate;
     public int INVENTORY = ParamManager.getInstance(getContext()).getChannelType();
     private String scopType = "own";
-    private String customer;
+    private String customerId = "";
 
     @Override
     protected int setLayoutResouceId() {
@@ -112,6 +113,7 @@ public class CustomerWantFragment extends BaseFragment {
     public void setView(View rootView) {
         mSearchResult.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
+        mLLBottom.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -120,7 +122,8 @@ public class CustomerWantFragment extends BaseFragment {
         if (arguments == null) {
             arguments = new Bundle();
         }
-        customer = arguments.getString("customer");
+        customerId = arguments.getString("customerId");
+        Log.e(TAG, "initData: " + customerId);
         Serializable data = arguments.getSerializable("data");
         if (data != null) {
             dataBean = (StoreManagerResponse.DataBean) data;
@@ -165,7 +168,7 @@ public class CustomerWantFragment extends BaseFragment {
                 }
             }
         });
-        if (!TextUtils.isEmpty(customer)) {
+        if (!TextUtils.isEmpty(customerId)) {
             mTvBottom.setText("确定");
         }
         initPopupWindowData();
@@ -257,6 +260,7 @@ public class CustomerWantFragment extends BaseFragment {
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
+                                data.setSaleId(response.getData().getLists().get(i).getSaleId());
                                 data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
@@ -286,9 +290,6 @@ public class CustomerWantFragment extends BaseFragment {
                         }
                         mDataAdapter.notifyDataSetChanged();
                         mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
-                        if (!TextUtils.isEmpty(customer)) {
-                            setShareOpen();
-                        }
                     }
                 });
     }
@@ -343,24 +344,25 @@ public class CustomerWantFragment extends BaseFragment {
                         dataList.add((SearchResultModel) bean.getData());
                     }
                 }
-                if (TextUtils.isEmpty(customer)) {
-                    if (dataList.size() > 0) {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelableArrayList("data", dataList);
-                        startActivity(MarketShareCarActivity.class, bundle);
-                    } else {
-                        Toast.makeText(getContext(), "未选中分享车辆", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    String s = "";
-                    for (SearchResultModel bean : dataList) {
-                        s += (bean.getId() + ",");
-                    }
-                    ParamManager.getInstance(getContext()).setCreateCustomerWantCarId(s);
-                    getActivity().finish();
+                String s = "";
+                for (SearchResultModel bean : dataList) {
+                    s += (bean.getSaleId() + ",");
                 }
-
-
+                final String finalS = s;
+                Log.e(TAG, "onViewClicked: " + s);
+                Injection.provideApiService().updateCustomerNeedInfo(token, customerId, s).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse easyResponse) throws Exception {
+                        if (easyResponse != null && easyResponse.getCode() == 200) {
+                            ParamManager.getInstance(getContext()).setCreateCustomerWantCarId(finalS);
+                            ParamManager.getInstance(getContext()).setCustomerWantList(dataList);
+                            Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        } else {
+                            Toast.makeText(getActivity(), easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 break;
             default:
         }
@@ -464,7 +466,7 @@ public class CustomerWantFragment extends BaseFragment {
                 openPutEntrance = ((SearchResultModel) bean.getData()).isOpenPutEntrance();
             }
         }
-        mLLBottom.setVisibility(openPutEntrance ? View.VISIBLE : View.GONE);
+        mLLBottom.setVisibility(View.VISIBLE);
         mDataAdapter.notifyDataSetChanged();
 
     }

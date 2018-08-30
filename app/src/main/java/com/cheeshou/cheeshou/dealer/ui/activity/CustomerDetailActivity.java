@@ -21,15 +21,18 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerDetailWantModel;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerFollowModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerDetailResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,10 +142,11 @@ public class CustomerDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        List<SearchResultModel> customerWantList = ParamManager.getInstance(this).getCustomerWantList();
+        Log.e(TAG, "onResume: " + new Gson().toJson(customerWantList));
         Injection.provideApiService().getCustomerDetailInfo(token, customerId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<CustomerDetailResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.e(TAG, "onSubscribe: --");
             }
 
             @Override
@@ -154,29 +158,32 @@ public class CustomerDetailActivity extends BaseActivity {
                     mTvSex.setText(s.getData().getSex() == 0 ? "先生" : "女士");
                     mTvOfferName.setText(s.getData().getUserName());
                     mTvPrice.setText(s.getData().getMinBudget() + "-" + s.getData().getMaxBudget() + "万");
-                    List<CustomerDetailResponse.DataBean.ListsBean> lists = s.getData().getLists();
-                    StringBuffer stringBuffer = new StringBuffer();
-                    if (lists != null) {
-                        for (CustomerDetailResponse.DataBean.ListsBean s1 : lists) {
-                            stringBuffer.append(s1.getBrandName() + "--" + s1.getBrandName() + "--" + s1.getVersionName() + "\n");
-                        }
-                    }
                     mTvNeedText.setText(s.getData().getNeedTxt());
                     mTvRemark.setText(TextUtils.isEmpty(s.getData().getRemark()) ? "无" : s.getData().getRemark());
-
-
                     mData.clear();
-                    List<CustomerDetailResponse.DataBean.SaleCarInfosBean> saleCarInfos = s.getData().getSaleCarInfos();
-                    for (CustomerDetailResponse.DataBean.SaleCarInfosBean bean : saleCarInfos) {
-                        CustomerDetailWantModel data = new CustomerDetailWantModel();
-                        data.setDeduct("销售提成" + bean.getSaleCommission() + "元   ");
-                        data.setMessage(bean.getCarUserName() + " | " + bean.getProvinceName() + " | " + bean.getCityName());
-                        data.setPrice(bean.getCarPrice() + "万");
-                        data.setState(bean.getCarStatusName());
-                        data.setTime("今天");
-                        data.setTitle(bean.getBrand() + "  " + bean.getCarSeries() + "  " + bean.getVname());
-                        mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
+                    List<CustomerDetailResponse.DataBean.ListsBean> lists = s.getData().getLists();
+                    if (lists != null) {
+                        for (CustomerDetailResponse.DataBean.ListsBean s1 : lists) {
+                            CustomerDetailWantModel data = new CustomerDetailWantModel();
+                            data.setMessage("分享次 浏览次");
+                            data.setPrice("万");
+                            data.setState("已上架");
+                            data.setTime("今天");
+                            data.setTitle("雪弗兰2013款 科鲁兹 1.6LSL天地版MT");
+                            mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
+                        }
                     }
+//                    List<CustomerDetailResponse.DataBean.SaleCarInfosBean> saleCarInfos = s.getData().getSaleCarInfos();
+//                    for (CustomerDetailResponse.DataBean.SaleCarInfosBean bean : saleCarInfos) {
+//                        CustomerDetailWantModel data = new CustomerDetailWantModel();
+//                        data.setDeduct("销售提成" + bean.getSaleCommission() + "元   ");
+//                        data.setMessage(bean.getCarUserName() + " | " + bean.getProvinceName() + " | " + bean.getCityName());
+//                        data.setPrice(bean.getCarPrice() + "万");
+//                        data.setState(bean.getCarStatusName());
+//                        data.setTime("今天");
+//                        data.setTitle(bean.getBrand() + "  " + bean.getCarSeries() + "  " + bean.getVname());
+//                        mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
+//                    }
                     BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
                     mRecyclerWantCar.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -198,12 +205,10 @@ public class CustomerDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, "onError: " + e.toString());
             }
 
             @Override
             public void onComplete() {
-                Log.e(TAG, "onComplete: ----");
             }
         });
     }
