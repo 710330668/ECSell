@@ -8,7 +8,7 @@ public class UserInforModel {
 
     /**
      * code : 200
-     * data : {"account":"cys","isCert":"0","userName":"山东青岛","userType":"USER_DTRY"}
+     * data : {"account":"xs","address":"","companyName":"ddid","isCert":"0","userId":"1b6ce670df034cf5b6bd20cb8fac18bf","userName":"销售","userType":"USER_XS"}
      * msg : 操作成功
      */
 
@@ -42,14 +42,20 @@ public class UserInforModel {
 
     public static class DataBean {
         /**
-         * account : cys
+         * account : xs
+         * address :
+         * companyName : ddid
          * isCert : 0
-         * userName : 山东青岛
-         * userType : USER_DTRY
+         * userId : 1b6ce670df034cf5b6bd20cb8fac18bf
+         * userName : 销售
+         * userType : USER_XS
          */
 
         private String account;
+        private String address;
+        private String companyName;
         private String isCert;
+        private String userId;
         private String userName;
         private String userType;
 
@@ -61,12 +67,36 @@ public class UserInforModel {
             this.account = account;
         }
 
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
         public String getIsCert() {
             return isCert;
         }
 
         public void setIsCert(String isCert) {
             this.isCert = isCert;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
 
         public String getUserName() {

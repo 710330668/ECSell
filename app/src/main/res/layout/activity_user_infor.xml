@@ -53,6 +53,7 @@
             android:textSize="13dp" />
 
         <ImageView
+            android:id="@+id/iv_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -83,14 +84,16 @@
             android:textColor="#999999"
             android:textSize="13dp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/tv_account_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:text="wpf"
+            android:hint="账号"
             android:textColor="#333333"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:background="@null"/>
 
     </LinearLayout>
 
@@ -115,14 +118,16 @@
             android:textColor="#999999"
             android:textSize="13dp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:text="王浩"
+            android:hint="姓名"
             android:textColor="#333333"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:background="@null"/>
 
     </LinearLayout>
 
@@ -147,14 +152,16 @@
             android:textColor="#999999"
             android:textSize="13dp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:text="13423421234"
+            android:hint="电话"
             android:textColor="#333333"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:background="@null"/>
 
     </LinearLayout>
 
@@ -179,14 +186,16 @@
             android:textColor="#999999"
             android:textSize="13dp" />
 
-        <TextView
+        <EditText
+            android:id="@+id/tv_wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:text="13789847555"
+            android:hint="微信号"
             android:textColor="#333333"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:background="@null"/>
 
     </LinearLayout>
 
@@ -196,5 +205,20 @@
         android:background="#F5F5F5"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="14dp"/>
+
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="确定"
+        android:background="@mipmap/home_bg"
+        android:textColor="#FFFFFF"
+        android:visibility="gone"/>
 
 </LinearLayout>
