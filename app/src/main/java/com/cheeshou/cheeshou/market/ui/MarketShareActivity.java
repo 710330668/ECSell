@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareHeaderModel;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
@@ -14,19 +15,12 @@ import com.cheeshou.cheeshou.market.ui.response.ShareStateResponse;
 import com.cheeshou.cheeshou.market.ui.viewholder.MarketShareHeaderHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.R;
-import com.cheeshou.cheeshou.market.ui.model.MarketShareHeaderModel;
-import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
-import com.cheeshou.cheeshou.market.ui.viewholder.MarketShareHeaderHolder;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +80,6 @@ public class MarketShareActivity extends BaseActivity {
         Injection.provideApiService().findMyStatDetail(token).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ShareStateResponse>() {
             @Override
             public void accept(ShareStateResponse myShareResponse) throws Exception {
-                Log.e(TAG, "accept: " + new Gson().toJson(myShareResponse));
                 if (myShareResponse.getCode() == 200) {
                     ((MarketShareHeaderModel) mData.get(0).getData()).setBrowerCount(myShareResponse.getData().getMyBrowseCount());
                     ((MarketShareHeaderModel) mData.get(0).getData()).setShareCount(myShareResponse.getData().getMyShareCount());
@@ -108,7 +101,19 @@ public class MarketShareActivity extends BaseActivity {
             @Override
             public void onNext(MyShareResponse myShareResponse) {
                 if (myShareResponse != null && myShareResponse.getCode() == 200) {
-
+                    List<MyShareResponse.ShareCarBean> lists = myShareResponse.getData().getLists();
+                    for (MyShareResponse.ShareCarBean bean : lists) {
+                        MarketShareModel data1 = new MarketShareModel();
+                        data1.setShareCount(bean.getBrowseNum());
+                        data1.setShareTime(bean.getCreateDate());
+                        ArrayList<String> imgUrl = new ArrayList<>();
+                        for (int j = 0; j < bean.getSaleCarInfos().size(); j++) {
+                            data1.setShareTitle(bean.getSaleCarInfos().get(j).getVname());
+                            imgUrl.add(bean.getSaleCarInfos().get(j).getImgThumUrl());
+                        }
+                        mData.add(new ItemData(0, SettingDelegate.MARKET_SHARE_TYPE, data1));
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
 

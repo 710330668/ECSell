@@ -14,6 +14,8 @@ import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MarketShareHolder extends BaseViewHolder<ItemData> {
@@ -43,10 +45,12 @@ public class MarketShareHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data,int position) {
+    public void onBindViewHolder(ItemData data, int position) {
         MarketShareModel data1 = (MarketShareModel) data.getData();
         mShareCount.setText(data1.getShareCount() + "人看过");
-        mShareTime.setText(data1.getShareTime());
+        Date date = new Date(Long.parseLong(data1.getShareTime()));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM//dd hh:mm");
+        mShareTime.setText(simpleDateFormat.format(date));
         List<String> imgUrl = data1.getImgUrl();
         switch (imgUrl.size()) {
             case 0:

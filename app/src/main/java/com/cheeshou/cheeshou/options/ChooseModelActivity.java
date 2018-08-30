@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -161,7 +162,7 @@ public class ChooseModelActivity extends BaseActivity {
 
                         CustomerWantCarModel wantCarModel = ParamManager.getInstance(ChooseModelActivity.this).getModel();
                         CustomerWantCarModel.CodeBean code = wantCarModel.getCode();
-                        code.setVersionId("0");
+                        code.setVersionId("");
                         wantCarModel.setCode(code);
                         wantCarModel.setName(carFullName);
 

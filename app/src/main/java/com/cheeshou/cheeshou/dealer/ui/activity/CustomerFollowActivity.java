@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
@@ -59,13 +60,14 @@ public class CustomerFollowActivity extends BaseActivity {
     RecyclerView rlCarPhoto;
     @BindView(R.id.rb_command_type)
     RadioGroup mCommandType;
-    @BindView(R.id.rg_costumer_status)
-    RadioGroup mCoustumerStatus;
 
     @BindView(R.id.ll_dealer)
     LinearLayout mLLDealer;
     @BindView(R.id.tv_dealer)
     TextView mTvDealer;
+
+    @BindView(R.id.rl_deal_car)
+    RecyclerView mRecycler;
 
     private static final String TAG = "CustomerFollowActivity";
 
@@ -80,6 +82,7 @@ public class CustomerFollowActivity extends BaseActivity {
     private String commandType = "";
     private String status = "";
     private String token = "";
+    private ArrayList<ItemData> stateData = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -90,10 +93,19 @@ public class CustomerFollowActivity extends BaseActivity {
     public void initParams(Bundle params) {
         customerId = params.getString("customerId");
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
+
+        stateData = new ArrayList<>();
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("未到店", "NO_STORE", true)));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已到店", "YES_STORE")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已成交", "SUCCESS")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("战败", "FAIL")));
     }
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mRecycler.setLayoutManager(new GridLayoutManager(this, 4));
+
         mCommandType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -113,35 +125,27 @@ public class CustomerFollowActivity extends BaseActivity {
                 }
             }
         });
-
-        mCoustumerStatus.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_status_weidaodain:
-                        status = "NO_STORE";
-                        break;
-                    case R.id.rb_status_yichengjiao:
-                        status = "SUCCESS";
-                        break;
-                    case R.id.rb_status_yidaodian:
-                        status = "YES_STORE";
-                        break;
-                    case R.id.rb_status_yiyuding:
-                        status = "RESERVE";
-                        break;
-                    case R.id.rb_status_zhanbai:
-                        status = "FAIL";
-                        break;
-                }
-                mLLDealer.setVisibility(checkedId == R.id.rb_status_yichengjiao ? View.VISIBLE : View.GONE);
-            }
-        });
     }
 
     @Override
     public void doBusiness(Context mContext) {
+        mRecycler.setAdapter(new BaseAdapter(stateData, new SettingDelegate(), new onItemClickListener() {
+            @Override
+            public void onClick(View v, Object data) {
+                status = ((CarStateModel) data).getStateCode();
+                if (status == "SUCCESS") {
+                    mLLDealer.setVisibility(View.VISIBLE);
+                } else {
+                    mLLDealer.setVisibility(View.GONE);
+                }
 
+            }
+
+            @Override
+            public boolean onLongClick(View v, Object data) {
+                return false;
+            }
+        }));
     }
 
     @OnClick({R.id.img_back, R.id.lly_local_image, R.id.tv_save, R.id.tv_dealer})

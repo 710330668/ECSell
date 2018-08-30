@@ -1,6 +1,7 @@
 package com.cheeshou.cheeshou.market.ui.response;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyShareResponse {
@@ -96,6 +97,9 @@ public class MyShareResponse {
         }
 
         public List<SaleCarInfosBean> getSaleCarInfos() {
+            if (saleCarInfos == null) {
+                return new ArrayList<>();
+            }
             return saleCarInfos;
         }
 

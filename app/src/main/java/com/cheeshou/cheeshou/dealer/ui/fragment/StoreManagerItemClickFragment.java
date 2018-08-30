@@ -76,6 +76,10 @@ public class StoreManagerItemClickFragment extends BaseFragment {
     LinearLayout mLLBottom;
     @BindView(R.id.tv_put_away)
     TextView mTvBottom;
+    @BindView(R.id.share_line)
+    View mShareLine;
+    @BindView(R.id.rb_car_share)
+    RadioButton mRbShare;
     Unbinder unbinder;
 
     private String TAG_LOAD_MORE = "tag_load_more";
@@ -320,7 +324,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter, R.id.tv_put_away})
+    @OnClick({R.id.rb_car_state, R.id.rb_car_order, R.id.rb_car_filter, R.id.tv_put_away, R.id.rb_car_share})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 //            汽车状态
@@ -369,6 +373,9 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 }
 
 
+                break;
+            case R.id.rb_car_share:
+                setShareOpen();
                 break;
             default:
         }
@@ -492,6 +499,11 @@ public class StoreManagerItemClickFragment extends BaseFragment {
         this.queryKey = queryKey;
         mSearchResultData.clear();
         getOwnOption();
+    }
+
+    public void setShare() {
+        mShareLine.setVisibility(View.VISIBLE);
+        mRbShare.setVisibility(View.VISIBLE);
     }
 
 }

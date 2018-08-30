@@ -42,6 +42,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -67,14 +68,15 @@ public class MarketShareRankingsActivity extends BaseActivity {
     private String token;
     private String pageSize = "10";
     private String page = "1";
-    private String startDate = "2018-09-09";
-    private String endDate = "2018-09-09";
+    private String startDate = "";
+    private String endDate = "";
     private String count;
     private BaseAdapter adapter;
     private int CURRENT_PAGE = 1;
     private PopupWindow mPopupWindow;
     private List<ItemData> stateData;
     private Calendar calendar;
+    private Calendar calendarLast;
 
     private static final String TAG = "MarketShareRankingsActi";
 
@@ -131,62 +133,85 @@ public class MarketShareRankingsActivity extends BaseActivity {
 
     private void initPopouWindowData() {
         stateData = new ArrayList<>();
+        calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel((calendar.get(Calendar.MONTH) + 1) + "月", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()), new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()), false)));
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        calendarLast = Calendar.getInstance();
+        calendarLast.set(Calendar.DAY_OF_MONTH, 1);
+        calendarLast.add(Calendar.DATE, -1);
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel((calendar.get(Calendar.MONTH) + 1) + "月", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()), new SimpleDateFormat("yyyy-MM-dd").format(calendarLast.getTime()), false)));
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -2);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        calendarLast = Calendar.getInstance();
+        calendarLast.set(Calendar.DAY_OF_MONTH, -1);
+        calendarLast.add(Calendar.DATE, -1);
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel((calendar.get(Calendar.MONTH) + 1) + "月", new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()), new SimpleDateFormat("yyyy-MM-dd").format(calendarLast.getTime()), false)));
+//        stateData.add(new ItemData())
     }
 
 
-    @OnCheckedChanged({R.id.rb_share_rank_today, R.id.rb_share_rank_the_week, R.id.rb_share_rank_last_week})
-    public void onViewCheckChanged(RadioButton view, boolean isChecked) {
-        if (isChecked) {
-            switch (view.getId()) {
-                case R.id.rb_share_rank_today:
-                    calendar = Calendar.getInstance();
-                    calendar.add(Calendar.DATE, 1);
-                    startDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-                    calendar = Calendar.getInstance();
-                    calendar.add(Calendar.DATE, 1);
-                    endDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-                    mData.clear();
-                    CURRENT_PAGE = 1;
-                    initRecycler();
-                    break;
-                case R.id.rb_share_rank_the_week:
-                    calendar = Calendar.getInstance();
-                    int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-                    if (day_of_week == 0)
-                        day_of_week = 7;
-                    calendar.add(Calendar.DATE, -day_of_week + 1);
+    @OnClick({R.id.rb_share_rank_today, R.id.rb_share_rank_the_week, R.id.rb_share_rank_last_week, R.id.rb_share_rank_more})
+    public void onViewCheckChanged(View view) {
+        switch (view.getId()) {
+            case R.id.rb_share_rank_today:
+                calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, 1);
+                startDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+                calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, 1);
+                endDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+                mData.clear();
+                CURRENT_PAGE = 1;
+                initRecycler();
+                break;
+            case R.id.rb_share_rank_the_week:
+                calendar = Calendar.getInstance();
+                int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+                if (day_of_week == 0)
+                    day_of_week = 7;
+                calendar.add(Calendar.DATE, -day_of_week + 1);
 //                    calendar.add(Calendar.DATE, -1);
-                    startDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-                    calendar = Calendar.getInstance();
-                    calendar.add(Calendar.DATE, 1);
-                    endDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-                    mData.clear();
-                    CURRENT_PAGE = 1;
-                    initRecycler();
-                    break;
-                case R.id.rb_share_rank_last_week:
+                startDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+                calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, 1);
+                endDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+                mData.clear();
+                CURRENT_PAGE = 1;
+                initRecycler();
+                break;
+            case R.id.rb_share_rank_last_week:
 
-                    calendar = Calendar.getInstance();
-                    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-                        calendar.add(Calendar.DAY_OF_WEEK, -1);
-                    }
-                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-                    int offset = 1 - dayOfWeek;
-                    calendar.add(Calendar.DATE, offset - 7);
-                    startDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+                calendar = Calendar.getInstance();
+                while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                    calendar.add(Calendar.DAY_OF_WEEK, -1);
+                }
+                int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+                int offset = 1 - dayOfWeek;
+                calendar.add(Calendar.DATE, offset - 7);
+                startDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
 
-                    calendar = Calendar.getInstance();
-                    calendar.set(Calendar.DAY_OF_WEEK, 1);
-                    endDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-                    mData.clear();
-                    CURRENT_PAGE = 1;
-                    initRecycler();
-                    break;
-                case R.id.rb_share_rank_more:
-                    showPopupWindow();
-                    break;
-            }
+                calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_WEEK, 1);
+                endDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+                mData.clear();
+                CURRENT_PAGE = 1;
+                initRecycler();
+                break;
+            case R.id.rb_share_rank_more:
+                showPopupWindow();
+                break;
         }
+
     }
 
     public void showPopupWindow() {
@@ -252,6 +277,7 @@ public class MarketShareRankingsActivity extends BaseActivity {
 
     private void initStateRecycler(RecyclerView stateRecycler) {
         stateRecycler.setLayoutManager(new GridLayoutManager(this, 3));
+        Log.e(TAG, "initStateRecycler: " + stateData.size());
         stateRecycler.setAdapter(new BaseAdapter(stateData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
@@ -261,6 +287,10 @@ public class MarketShareRankingsActivity extends BaseActivity {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                 }
+                startDate = ((CarStateModel) data).getStartTime();
+                endDate = ((CarStateModel) data).getEndTime();
+                Log.e(TAG, "onClick:startDate " + startDate);
+                Log.e(TAG, "onClick:endDate " + endDate);
                 mData.clear();
                 CURRENT_PAGE = 1;
                 initRecycler();

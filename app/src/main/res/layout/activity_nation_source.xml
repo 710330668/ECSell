@@ -459,6 +459,7 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:id="@+id/et_min_money"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:background="@drawable/bg_radiobutton_selector"
@@ -475,6 +476,7 @@
                         android:textSize="14sp" />
 
                     <EditText
+                        android:id="@+id/et_max_money"
                         android:layout_width="80dp"
                         android:layout_height="30dp"
                         android:background="@drawable/bg_radiobutton_selector"

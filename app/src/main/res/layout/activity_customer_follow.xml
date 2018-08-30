@@ -174,77 +174,10 @@
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
-            <RadioGroup
-                android:id="@+id/rg_costumer_status"
+            <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rb_status_weidaodain"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4.5dp"
-                    android:layout_marginRight="4.5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_radiobutton_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="未到店"
-                    android:textColor="@drawable/text_color_radio_selector" />
-
-                <RadioButton
-                    android:id="@+id/rb_status_yidaodian"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4.5dp"
-                    android:layout_marginRight="4.5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_radiobutton_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="已到店"
-                    android:textColor="@drawable/text_color_radio_selector" />
-
-                <RadioButton
-                    android:id="@+id/rb_status_yiyuding"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4.5dp"
-                    android:layout_marginRight="4.5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_radiobutton_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="已预订"
-                    android:textColor="@drawable/text_color_radio_selector" />
-
-                <RadioButton
-                    android:id="@+id/rb_status_yichengjiao"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4.5dp"
-                    android:layout_marginRight="4.5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_radiobutton_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="已成交"
-                    android:textColor="@drawable/text_color_radio_selector" />
-
-                <RadioButton
-                    android:id="@+id/rb_status_zhanbai"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4.5dp"
-                    android:layout_marginRight="4.5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_radiobutton_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="战败"
-                    android:textColor="@drawable/text_color_radio_selector" />
-            </RadioGroup>
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true" />
 
             <View
                 android:layout_width="match_parent"

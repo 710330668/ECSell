@@ -48,7 +48,7 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     private List<AddressModel> carBrands = new ArrayList<>();
     private String token;
     private String optionId;
-    private String paramsString;
+    private String paramsString = "";
 
     @Override
     public int bindLayout() {
@@ -59,6 +59,9 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
     public void initParams(Bundle params) {
         optionId = getIntent().getStringExtra("optionId");
         paramsString = params.getString("params");
+        if (paramsString == "filter") {
+            optionId = params.getString("optionId");
+        }
         token = SP.getInstance(C.USER_DB, this).getString(C.USER_TOKEN);
         carBrands = new ArrayList<>();
     }

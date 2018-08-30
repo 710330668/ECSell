@@ -200,6 +200,47 @@
                         android:text="确定"
                         android:textColor="#FFFFFF" />
                 </LinearLayout>
+                <!---->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="#F5F5F5" />
+
+                <LinearLayout
+                    android:id="@+id/ll_want_car_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="14dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="车源类型"
+                        android:textColor="#101010"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_want_car_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="不限"
+                        android:textColor="#101010"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@mipmap/more_gray" />
+                </LinearLayout>
+                <!---->
 
                 <View
                     android:layout_width="match_parent"

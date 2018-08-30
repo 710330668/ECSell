@@ -118,6 +118,10 @@ public class NationSourceActivity extends BaseActivity {
     private int selectOrder = 0;
     @BindView(R.id.tv_options_type)
     TextView mCarTypeName;
+    @BindView(R.id.et_min_money)
+    EditText mEtMinMoney;
+    @BindView(R.id.et_max_money)
+    EditText mEtMaxMoney;
 
     @C.INVENTORY
     public int INVENTORY = C.INVENTORY_OPTION;
@@ -156,6 +160,38 @@ public class NationSourceActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mEtMinMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                minCarPrice = mEtMinMoney.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mEtMaxMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                maxCarPrice = mEtMaxMoney.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mSearchResult.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
         mSearchResult.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
@@ -210,7 +246,7 @@ public class NationSourceActivity extends BaseActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString("carId", model.getId());
                     bundle.putString("dealer_source", "nationSource");
-                    bundle.putParcelableArrayList("shelves_data",mPutAwayData);
+                    bundle.putParcelableArrayList("shelves_data", mPutAwayData);
                     startActivity(CarDetailActivity.class, bundle);
                 } else {
                     model.setPut(!model.isPut());
@@ -502,6 +538,7 @@ public class NationSourceActivity extends BaseActivity {
                 break;
             case R.id.iv_car_brand:
                 bundle.putString("params", "filter");
+                bundle.putString("optionId", carType);
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
@@ -572,9 +609,14 @@ public class NationSourceActivity extends BaseActivity {
                 CURRENT_PAGE = 1;
                 mTvSelectArea.setText("");
                 mTvSelectBrand.setText("");
+                brandId = "";
                 mTvSelectedCar.setText("");
+                versionId = "";
                 mCarTypeName.setText("");
                 carType = "";
+                carYear = "";
+                mEtMaxMoney.setText("");
+                mEtMinMoney.setText("");
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);

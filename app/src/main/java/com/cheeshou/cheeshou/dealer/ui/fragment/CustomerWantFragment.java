@@ -133,7 +133,7 @@ public class CustomerWantFragment extends BaseFragment {
             public void onClick(View v, Object data) {
                 if (data instanceof SearchResultModel) {
                     SearchResultModel model = (SearchResultModel) data;
-                    if (!isOpen) {
+                    if (isOpen) {
                         Bundle bundle = new Bundle();
                         bundle.putString("carId", model.getId());
                         dataList.clear();

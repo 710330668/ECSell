@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -66,6 +68,7 @@ public class CustomerManagerActivity extends BaseActivity {
     private final int REQUEST_BRAND = 0;
     private static final int REQUEST_CLIENT = 1;
     private final int REQUEST_CAR = 2;
+    private final int REQUEST_CAR_TYPE = 3;
     private String carBrand;
 
     @BindView(R.id.rb_customer_state)
@@ -118,6 +121,8 @@ public class CustomerManagerActivity extends BaseActivity {
     TextView mTvWantType;
     @BindView(R.id.tv_username)
     TextView mTvUserName;
+    @BindView(R.id.tv_want_car_type)
+    TextView mTvCarType;
     private int count;
     private String TAG_FILTER = "tag_filter";
     private String TAG_LOAD_MORE = "tag_load_more";
@@ -148,6 +153,7 @@ public class CustomerManagerActivity extends BaseActivity {
     private List<ItemData> dataList = new ArrayList<>();
     private String token;
     private BaseAdapter mAdapter;
+    private String carType = "";
 
     @Override
     public int bindLayout() {
@@ -284,7 +290,7 @@ public class CustomerManagerActivity extends BaseActivity {
         mCustomerRecycler.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset, R.id.tv_search, R.id.ll_want_brand, R.id.ll_want_type, R.id.ll_create_person})
+    @OnClick({R.id.img_back, R.id.img_add_client, R.id.rb_customer_state, R.id.rb_follow_time, R.id.rb_customer_filter, R.id.btn_sure, R.id.btn_reset, R.id.tv_search, R.id.ll_want_brand, R.id.ll_want_type, R.id.ll_create_person, R.id.ll_want_car_type})
     public void onViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
@@ -307,6 +313,9 @@ public class CustomerManagerActivity extends BaseActivity {
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
                 break;
             case R.id.btn_reset:
+                // TODO: 2018/8/30  
+                CURRENT_PAGE = 1;
+                userId = "";
                 selectState = 0;
                 selectTime = 0;
                 mEtMaxMoney.setText("");
@@ -315,8 +324,12 @@ public class CustomerManagerActivity extends BaseActivity {
                 mEtCreateEndTime.setText("");
                 mEtFollowStartTime.setText("");
                 mEtFollowEndTime.setText("");
+                carType = "";
                 carBrand = "";
+                brandId = "";
                 versionId = "";
+                mTvCarType.setText("不限");
+                mTvCarType.setTextColor(Color.parseColor("#333333"));
                 mTvWantBrand.setText("不限");
                 mTvWantBrand.setTextColor(Color.parseColor("#333333"));
                 mTvWantType.setText("不限");
@@ -335,11 +348,13 @@ public class CustomerManagerActivity extends BaseActivity {
                 break;
             case R.id.ll_want_brand:
                 bundle.putString("params", "filter");
+                bundle.putString("optionId", carType);
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.ll_want_type:
                 if ("".equals(brandId)) {
                     bundle.putString("params", "filter");
+                    bundle.putString("optionId", carType);
                     startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 } else {
                     bundle.putString("carBrand", carBrand);
@@ -351,6 +366,10 @@ public class CustomerManagerActivity extends BaseActivity {
             case R.id.ll_create_person:
                 Intent intent = new Intent(this, SalerManagerActivity.class);
                 startActivityForResult(intent, REQUEST_CLIENT);
+                break;
+            case R.id.ll_want_car_type:
+                Intent inten2t = new Intent(this, CarSourceTypeActivity.class);
+                startActivityForResult(inten2t, REQUEST_CAR_TYPE);
                 break;
             default:
         }
@@ -471,6 +490,9 @@ public class CustomerManagerActivity extends BaseActivity {
     }
 
     public RequestBody toRequestBody(String value) {
+        if (value == null) {
+            value = "";
+        }
         return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 
@@ -495,6 +517,13 @@ public class CustomerManagerActivity extends BaseActivity {
                     mTvUserName.setText(data.getStringExtra("saleName"));
                     mTvUserName.setTextColor(Color.parseColor("#FF5745"));
                     userId = data.getStringExtra("xsUserId");
+                    break;
+                case REQUEST_CAR_TYPE:
+                    String carTypeName = data.getStringExtra("carTypeName");
+                    String carTypeId = data.getStringExtra("carTypeId");
+                    mTvCarType.setText(carTypeName);
+                    mTvCarType.setTextColor(Color.parseColor("#FF5745"));
+                    carType = carTypeId;
                     break;
             }
         }

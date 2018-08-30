@@ -91,22 +91,24 @@ public class ChooseCarsActivity extends BaseActivity {
                 String carsName = model.getCarsName();
                 String audiId = model.getCarsId();
                 String carCombinate = carBrand + "|" + carsName;
+                Bundle bundle = new Bundle();
                 if ("filter".equals(paramsString)) {
-                    Intent intent = new Intent();
-                    intent.putExtra("carCombinate", carCombinate);
-                    intent.putExtra("audiId", audiId);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("carCombinate", carCombinate);
-                    bundle.putString("audiId", audiId);
-                    CustomerWantCarModel wantCarModel = ParamManager.getInstance(ChooseCarsActivity.this).getModel();
-                    CustomerWantCarModel.CodeBean code = wantCarModel.getCode();
-                    code.setAudiId(audiId);
-                    wantCarModel.setCode(code);
-                    startActivity(ChooseModelActivity.class, bundle);
+                    bundle.putString("params", "filter");
+//                    Intent intent = new Intent();
+//                    intent.putExtra("carCombinate", carCombinate);
+//                    intent.putExtra("audiId", audiId);
+//                    setResult(RESULT_OK, intent);
+//                    finish();
                 }
+
+                bundle.putString("carCombinate", carCombinate);
+                bundle.putString("audiId", audiId);
+                CustomerWantCarModel wantCarModel = ParamManager.getInstance(ChooseCarsActivity.this).getModel();
+                CustomerWantCarModel.CodeBean code = wantCarModel.getCode();
+                code.setAudiId(audiId);
+                wantCarModel.setCode(code);
+                startActivity(ChooseModelActivity.class, bundle);
+
             }
 
             @Override
@@ -119,6 +121,12 @@ public class ChooseCarsActivity extends BaseActivity {
         NotifyCallBackManager.getInstance().registPagerCloseCallBack(iPagerClose = new ICarSell.IPagerClose() {
             @Override
             public void close() {
+                if (paramsString.equals("filter")) {
+                    Intent intent = new Intent();
+                    intent.putExtra("carCombinate", ParamManager.getInstance(ChooseCarsActivity.this).getCarFullName());
+                    intent.putExtra("audiId", ParamManager.getInstance(ChooseCarsActivity.this).getCarId());
+                    setResult(RESULT_OK, intent);
+                }
                 finish();
             }
         });

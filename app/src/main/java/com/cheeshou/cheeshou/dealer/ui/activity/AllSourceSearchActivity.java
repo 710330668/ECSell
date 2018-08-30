@@ -121,6 +121,11 @@ public class AllSourceSearchActivity extends BaseActivity {
     private StoreManagerItemClickFragment searchResultFragment;
     private NationalSourceFragment nationAlFragment;
 
+    @BindView(R.id.et_max_money)
+    EditText mMaxMoney;
+    @BindView(R.id.et_min_money)
+    EditText mMinMoney;
+
     private int INVENTORY = ParamManager.getInstance(this).getChannelType();
 
 
@@ -136,6 +141,38 @@ public class AllSourceSearchActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mMaxMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                maxCarPrice = mMaxMoney.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mMinMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                minCarPrice = mMinMoney.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
         mEtSearch.addTextChangedListener(new TextWatcher() {
@@ -146,6 +183,7 @@ public class AllSourceSearchActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                queryKey = mEtSearch.getText().toString();
                 if (!TextUtils.isEmpty(mEtSearch.getText().toString())) {
                     mTvSearch.setText("搜索");
                 } else {
@@ -208,6 +246,7 @@ public class AllSourceSearchActivity extends BaseActivity {
         nationAlFragment.setArguments(args);
         mTagFragments.add(nationAlFragment);
         searchResultFragment = new StoreManagerItemClickFragment();
+        searchResultFragment.setShare();
         mTagFragments.add(searchResultFragment);
         mContentAdapter = new ContentPagerAdapter(getSupportFragmentManager());
         mVpContent.setAdapter(mContentAdapter);
@@ -417,11 +456,13 @@ public class AllSourceSearchActivity extends BaseActivity {
                 break;
             case R.id.iv_car_brand:
                 bundle.putString("params", "filter");
+                bundle.putString("optionId", carType);
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
                 if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
+                    bundle.putString("optionId", carType);
                     startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 } else {
                     bundle.putString("carBrand", carBrand);
@@ -467,7 +508,14 @@ public class AllSourceSearchActivity extends BaseActivity {
                 mTvSelectBrand.setText("");
                 mTvSelectedCar.setText("");
                 mCarTypeName.setText("");
+                mMinMoney.setText("");
+                mMaxMoney.setText("");
+                mEtSearch.setText("");
+
                 carType = "";
+                brandId = "";
+                versionId = "";
+                carYear = "";
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);

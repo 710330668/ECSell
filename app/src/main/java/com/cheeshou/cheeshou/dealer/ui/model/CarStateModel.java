@@ -6,6 +6,16 @@ public class CarStateModel {
     private String stateCode;
     private boolean isSelected;
 
+    private String startTime;
+    private String endTime;
+
+    public CarStateModel(String stateName, String startTime, String endTime, boolean isSelected) {
+        this.stateName = stateName;
+        this.isSelected = isSelected;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public CarStateModel(String stateName, String stateCode, boolean isSelected) {
         this.stateName = stateName;
         this.stateCode = stateCode;
@@ -39,5 +49,21 @@ public class CarStateModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

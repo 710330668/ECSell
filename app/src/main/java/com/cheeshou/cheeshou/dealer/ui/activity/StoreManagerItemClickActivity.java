@@ -110,6 +110,11 @@ public class StoreManagerItemClickActivity extends BaseActivity {
 
     @BindView(R.id.recycler_search_history)
     RecyclerView mRecyclerSearchHistory;
+
+    @BindView(R.id.et_min_money)
+    EditText mEtMinMoney;
+    @BindView(R.id.et_max_money)
+    EditText mEtManMoney;
     private BaseAdapter<ItemData> mSearchAdapter;
     private List<ItemData> mSearchData = new ArrayList<>();
 
@@ -148,6 +153,38 @@ public class StoreManagerItemClickActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        mEtMinMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                minCarPrice = mEtMinMoney.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mEtManMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                maxCarPrice = mEtManMoney.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mRecyclerSearchHistory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerSearchHistory.addItemDecoration(new SpaceItemDecoration(5));
         mEtSearch.addTextChangedListener(new TextWatcher() {
@@ -418,11 +455,13 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 break;
             case R.id.iv_car_brand:
                 bundle.putString("params", "filter");
+                bundle.putString("optionId", carType);
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
             case R.id.iv_car_model:
                 if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
+                    bundle.putString("optionId", carType);
                     startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 } else {
                     bundle.putString("carBrand", carBrand);
@@ -484,10 +523,15 @@ public class StoreManagerItemClickActivity extends BaseActivity {
             case R.id.bt_search_reset:
                 //搜索重置
                 mTvSelectArea.setText("");
+                mCarTypeName.setText("");
                 mTvSelectBrand.setText("");
                 mTvSelectedCar.setText("");
                 carType = "";
-                mCarTypeName.setText("");
+                brandId = "";
+                versionId = "";
+                carYear = "";
+                mEtManMoney.setText("");
+                mEtMinMoney.setText("");
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);

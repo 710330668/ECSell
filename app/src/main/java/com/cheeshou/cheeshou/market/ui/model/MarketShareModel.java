@@ -6,7 +6,7 @@ import java.util.List;
 public class MarketShareModel {
 
     private String shareTime;
-    private int shareCount;
+    private String shareCount;
     private String shareTitle;
     private List<String> imgUrl;
 
@@ -18,11 +18,11 @@ public class MarketShareModel {
         this.shareTime = shareTime;
     }
 
-    public int getShareCount() {
+    public String getShareCount() {
         return shareCount;
     }
 
-    public void setShareCount(int shareCount) {
+    public void setShareCount(String shareCount) {
         this.shareCount = shareCount;
     }
 
@@ -35,6 +35,9 @@ public class MarketShareModel {
     }
 
     public List<String> getImgUrl() {
+        if (imgUrl ==null) {
+            return  new ArrayList<>();
+        }
         return imgUrl;
     }
 
