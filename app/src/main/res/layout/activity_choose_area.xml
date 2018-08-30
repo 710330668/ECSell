@@ -95,8 +95,9 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_area1"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="14dp"
                 android:layout_weight="1"
@@ -104,8 +105,9 @@
                 android:text="青岛" />
 
             <Button
+                android:id="@+id/btn_area2"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="14dp"
                 android:layout_weight="1"
@@ -113,8 +115,9 @@
                 android:text="济南" />
 
             <Button
+                android:id="@+id/btn_area3"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="14dp"
                 android:layout_weight="1"

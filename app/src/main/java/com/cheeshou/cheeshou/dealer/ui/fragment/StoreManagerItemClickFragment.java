@@ -11,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
-import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -171,7 +169,6 @@ public class StoreManagerItemClickFragment extends BaseFragment {
             mTvBottom.setText("确定");
         }
         initPopupWindowData();
-        getOwnOption();
     }
 
     private void initPopupWindowData() {
@@ -181,7 +178,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
-                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预订", "RESERVE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
                 orderDate = new ArrayList<>();
@@ -196,7 +193,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
 //                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
-                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预订", "RESERVE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
                 orderDate = new ArrayList<>();
@@ -217,7 +214,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
-                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预订", "RESERVE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
                 orderDate = new ArrayList<>();
@@ -241,6 +238,13 @@ public class StoreManagerItemClickFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSearchResultData.clear();
+        getOwnOption();
+    }
+
     @SuppressLint("CheckResult")
     private void getOwnOption() {
         if (mSearchResultData.size() > 0) {
@@ -261,24 +265,27 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                                 SearchResultModel data = new SearchResultModel();
                                 data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
-                                data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
                                 switch (INVENTORY) {
                                     case C.INVENTORY_DEALER:
+                                        data.setPrice(response.getData().getLists().get(i).getSaleCarPrice() + "万");
                                         data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
                                                 response.getData().getLists().get(i).getBrowseNum() + "次");
                                         break;
                                     case C.INVENTORY_MARKET:
+                                        data.setPrice(response.getData().getLists().get(i).getSaleCarPrice() + "万");
                                         data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
                                                 response.getData().getLists().get(i).getBrowseNum() + "次");
                                         break;
                                     default:
+                                        data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                         data.setSubTitle("上架" + response.getData().getLists().get(i).getShelvesNum() + "次|分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
                                                 response.getData().getLists().get(i).getBrowseNum() + "次");
                                 }
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
+                                data.setSaleId(response.getData().getLists().get(i).getSaleId());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

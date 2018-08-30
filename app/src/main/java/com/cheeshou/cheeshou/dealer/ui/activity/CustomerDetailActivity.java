@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerDetailWantModel;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerFollowModel;
@@ -25,30 +26,22 @@ import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
-import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
 
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class CustomerDetailActivity extends BaseActivity {
 
@@ -268,7 +261,7 @@ public class CustomerDetailActivity extends BaseActivity {
             case "已成交":
                 mTvState4.setBackgroundColor(Color.parseColor("#FF5755"));
                 mLine6.setBackgroundColor(Color.parseColor("#FF5755"));
-            case "已预定":
+            case "已预订":
                 mTvState3.setBackgroundColor(Color.parseColor("#FF5755"));
                 mLine5.setBackgroundColor(Color.parseColor("#FF5755"));
                 mLine4.setBackgroundColor(Color.parseColor("#FF5755"));

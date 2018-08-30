@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.usercenter.model.DealerShipResponse;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -73,7 +72,7 @@ public class DealershipActivity extends BaseActivity {
                             tvDealershipName.setText(response.getData().getComName());
                             tvContact.setText(response.getData().getHeadName());
                             tvPhone.setText(response.getData().getHeadPhone());
-                            tvHome.setText(response.getData().getProvinceName());
+                            tvHome.setText(response.getData().getProvinceName()+response.getData().getCityName());
                         }
                     }
                 });

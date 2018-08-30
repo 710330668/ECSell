@@ -11,7 +11,7 @@ public class CarDetailResponse implements Serializable{
 
     /**
      * code : 200
-     * data : {"advicePrice":10,"audiId":10,"brand":"AC Schnitzer","brandId":2,"browseNum":50,"carFormality":"不填","carId":"8c777efacec2453789b867c06d580821","carPrice":2,"carSeries":"奥迪RS 4","carSetting":"hj","carStatusName":"已上架","carType":"1","carUserName":"山东青岛","carUserPhone":"13869647062","carYear":"2018","cityCode":"340100","cityName":"合肥市","createDate":1534562562000,"discountContent":"hhh","discounts":[{"discountName":"店内贷款"},{"discountName":"店内保养"}],"guidPrice":3,"imgs":[{"imgId":"32874048afa64f478c87a43a8904d98a","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562562844.jpg"},{"imgId":"bcac71729f934bb291ac4f0ccbdce203","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562561922_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562561922.jpg"}],"insuranceRebates":8,"loanRebates":8,"outsiteColor":"红","provinceCode":"340000","provinceName":"安徽省","remark":"hhj","saleArea":"北京","saleCarPrice":2.2,"saleCommission":1,"saleId":"a4391258c8d14309b3069bd67275c86f","shareNum":0,"shelvesNum":1,"typeName":"全国","versionId":1,"vname":"2018款 30周年年型 Sportback 35 TFSI 进取型","withinColor":"红"}
+     * data : {"advicePrice":10,"audiId":1524,"brand":"奔驰","brandId":142,"browseNum":0,"carFormality":"手续全随车发","carId":"130598baa2f940f1b7a78407b7bea2a5","carPrice":50,"carSeries":"捷豹XE","carSetting":"配置非好","carStatusName":"已上架","carType":"1","carUserName":"车源商负责人2","carUserPhone":"13869647062","carYear":"2018","chassisNo":"272822","cityCode":"370200","cityName":"青岛市","createDate":1535599304000,"discountContent":"优惠信息","discounts":[{"discountName":"优惠信息"}],"guidPrice":59,"imgs":[{"imgId":"30980617a3be4abe93a3ded780ed98d5","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304448_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304448.jpg"},{"imgId":"33f03f49d2604840bcac03f291b151ac","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304479_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304479.jpg"},{"imgId":"b2c7985d4e7d4b8388baa3720640eda7","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304385_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304385.jpg"},{"imgId":"c93200ad282841729a02d558b0544e58","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304417_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304417.jpg"}],"insuranceRebates":4,"loanRebates":4,"outsiteColor":"黑","provinceCode":"370000","provinceName":"山东省","remark":"没有备注","saleArea":"华北","saleCarPrice":60,"saleCommission":4000,"saleId":"de233f406b5d4cbdaa71fe567d8b7bde","saleStatusName":"已上架","shareNum":0,"shelvesNum":1,"typeName":"全国","versionId":1361152,"vname":"2018款 2.0T 300PS 四驱R-Sport运动版","withinColor":"黑"}
      * msg : 操作成功
      */
 
@@ -46,43 +46,45 @@ public class CarDetailResponse implements Serializable{
     public static class DataBean implements Serializable{
         /**
          * advicePrice : 10
-         * audiId : 10
-         * brand : AC Schnitzer
-         * brandId : 2
-         * browseNum : 50
-         * carFormality : 不填
-         * carId : 8c777efacec2453789b867c06d580821
-         * carPrice : 2
-         * carSeries : 奥迪RS 4
-         * carSetting : hj
+         * audiId : 1524
+         * brand : 奔驰
+         * brandId : 142
+         * browseNum : 0
+         * carFormality : 手续全随车发
+         * carId : 130598baa2f940f1b7a78407b7bea2a5
+         * carPrice : 50
+         * carSeries : 捷豹XE
+         * carSetting : 配置非好
          * carStatusName : 已上架
          * carType : 1
-         * carUserName : 山东青岛
+         * carUserName : 车源商负责人2
          * carUserPhone : 13869647062
          * carYear : 2018
-         * cityCode : 340100
-         * cityName : 合肥市
-         * createDate : 1534562562000
-         * discountContent : hhh
-         * discounts : [{"discountName":"店内贷款"},{"discountName":"店内保养"}]
-         * guidPrice : 3
-         * imgs : [{"imgId":"32874048afa64f478c87a43a8904d98a","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562562844.jpg"},{"imgId":"bcac71729f934bb291ac4f0ccbdce203","imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562561922_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180818/1534562561922.jpg"}]
-         * insuranceRebates : 8
-         * loanRebates : 8
-         * outsiteColor : 红
-         * provinceCode : 340000
-         * provinceName : 安徽省
-         * remark : hhj
-         * saleArea : 北京
-         * saleCarPrice : 2.2
-         * saleCommission : 1
-         * saleId : a4391258c8d14309b3069bd67275c86f
+         * chassisNo : 272822
+         * cityCode : 370200
+         * cityName : 青岛市
+         * createDate : 1535599304000
+         * discountContent : 优惠信息
+         * discounts : [{"discountName":"优惠信息"}]
+         * guidPrice : 59
+         * imgs : [{"imgId":"30980617a3be4abe93a3ded780ed98d5","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304448_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304448.jpg"},{"imgId":"33f03f49d2604840bcac03f291b151ac","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304479_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304479.jpg"},{"imgId":"b2c7985d4e7d4b8388baa3720640eda7","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304385_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304385.jpg"},{"imgId":"c93200ad282841729a02d558b0544e58","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304417_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304417.jpg"}]
+         * insuranceRebates : 4
+         * loanRebates : 4
+         * outsiteColor : 黑
+         * provinceCode : 370000
+         * provinceName : 山东省
+         * remark : 没有备注
+         * saleArea : 华北
+         * saleCarPrice : 60
+         * saleCommission : 4000
+         * saleId : de233f406b5d4cbdaa71fe567d8b7bde
+         * saleStatusName : 已上架
          * shareNum : 0
          * shelvesNum : 1
          * typeName : 全国
-         * versionId : 1
-         * vname : 2018款 30周年年型 Sportback 35 TFSI 进取型
-         * withinColor : 红
+         * versionId : 1361152
+         * vname : 2018款 2.0T 300PS 四驱R-Sport运动版
+         * withinColor : 黑
          */
 
         private int advicePrice;
@@ -100,6 +102,7 @@ public class CarDetailResponse implements Serializable{
         private String carUserName;
         private String carUserPhone;
         private String carYear;
+        private String chassisNo;
         private String cityCode;
         private String cityName;
         private long createDate;
@@ -112,9 +115,10 @@ public class CarDetailResponse implements Serializable{
         private String provinceName;
         private String remark;
         private String saleArea;
-        private double saleCarPrice;
+        private float saleCarPrice;
         private int saleCommission;
         private String saleId;
+        private String saleStatusName;
         private int shareNum;
         private int shelvesNum;
         private String typeName;
@@ -244,6 +248,14 @@ public class CarDetailResponse implements Serializable{
             this.carYear = carYear;
         }
 
+        public String getChassisNo() {
+            return chassisNo;
+        }
+
+        public void setChassisNo(String chassisNo) {
+            this.chassisNo = chassisNo;
+        }
+
         public String getCityCode() {
             return cityCode;
         }
@@ -340,11 +352,11 @@ public class CarDetailResponse implements Serializable{
             this.saleArea = saleArea;
         }
 
-        public double getSaleCarPrice() {
+        public float getSaleCarPrice() {
             return saleCarPrice;
         }
 
-        public void setSaleCarPrice(double saleCarPrice) {
+        public void setSaleCarPrice(int saleCarPrice) {
             this.saleCarPrice = saleCarPrice;
         }
 
@@ -362,6 +374,14 @@ public class CarDetailResponse implements Serializable{
 
         public void setSaleId(String saleId) {
             this.saleId = saleId;
+        }
+
+        public String getSaleStatusName() {
+            return saleStatusName;
+        }
+
+        public void setSaleStatusName(String saleStatusName) {
+            this.saleStatusName = saleStatusName;
         }
 
         public int getShareNum() {
@@ -430,7 +450,7 @@ public class CarDetailResponse implements Serializable{
 
         public static class DiscountsBean implements Serializable{
             /**
-             * discountName : 店内贷款
+             * discountName : 优惠信息
              */
 
             private String discountName;
@@ -446,9 +466,9 @@ public class CarDetailResponse implements Serializable{
 
         public static class ImgsBean implements Serializable{
             /**
-             * imgId : 32874048afa64f478c87a43a8904d98a
-             * imgThumUrl : http://39.104.136.205:8888/car/20180818/1534562562844_small.jpg
-             * imgUrl : http://39.104.136.205:8888/car/20180818/1534562562844.jpg
+             * imgId : 30980617a3be4abe93a3ded780ed98d5
+             * imgThumUrl : http://39.104.136.205:8888/car/20180830/1535599304448_small.jpg
+             * imgUrl : http://39.104.136.205:8888/car/20180830/1535599304448.jpg
              */
 
             private String imgId;

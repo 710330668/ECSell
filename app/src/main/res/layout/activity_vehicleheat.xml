@@ -42,16 +42,19 @@
         <RadioButton
             android:id="@+id/rb_today"
             style="@style/vehicleheat_radio_button"
+            android:background="@drawable/line_radio_button"
             android:text="今日" />
 
         <RadioButton
             android:id="@+id/rb_the_week"
             style="@style/vehicleheat_radio_button"
+            android:background="@drawable/line_radio_button"
             android:text="本周" />
 
         <RadioButton
             android:id="@+id/rb_last_week"
             style="@style/vehicleheat_radio_button"
+            android:background="@drawable/line_radio_button"
             android:text="上周" />
 
         <com.cheeshou.cheeshou.view.DrawableCenterRadioButton

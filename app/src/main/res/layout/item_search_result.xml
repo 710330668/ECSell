@@ -10,7 +10,6 @@
         android:id="@+id/img_car_poster"
         android:layout_width="96dp"
         android:layout_height="72dp"
-        android:src="@mipmap/ic_launcher"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:scaleType="fitXY"/>

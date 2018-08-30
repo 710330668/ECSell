@@ -24,16 +24,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="车辆详情"
+            android:text="上架车辆"
             android:textColor="#333333"
             android:textSize="16sp" />
 
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/top_more" />
 
     </RelativeLayout>
 

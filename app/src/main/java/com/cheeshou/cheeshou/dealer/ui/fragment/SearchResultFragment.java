@@ -152,12 +152,17 @@ public class SearchResultFragment extends BaseFragment {
                 }
             }
         });
-        getOwnOption();
     }
 
     @Override
     public void onLazyLoad() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getOwnOption();
     }
 
     @SuppressLint("CheckResult")
@@ -294,7 +299,7 @@ public class SearchResultFragment extends BaseFragment {
                                 case "已上架":
                                     carStatus = "SHELVES";
                                     break;
-                                case "已预定":
+                                case "已预订":
                                     carStatus = "RESERVE";
                                     break;
                             }

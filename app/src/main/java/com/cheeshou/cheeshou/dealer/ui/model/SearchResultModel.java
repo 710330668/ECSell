@@ -30,6 +30,8 @@ public class SearchResultModel implements Parcelable {
     //    上架入口
     private String id;
 
+    private String saleId;
+
     private boolean openPutEntrance;
 
     public SearchResultModel() {
@@ -43,6 +45,7 @@ public class SearchResultModel implements Parcelable {
         deduct = in.readString();
         state = in.readString();
         date = in.readString();
+        saleId = in.readString();
         isPut = in.readByte() != 0;
         id = in.readString();
         openPutEntrance = in.readByte() != 0;
@@ -140,6 +143,14 @@ public class SearchResultModel implements Parcelable {
         this.id = id;
     }
 
+    public String getSaleId() {
+        return saleId;
+    }
+
+    public void setSaleId(String saleId) {
+        this.saleId = saleId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -154,6 +165,7 @@ public class SearchResultModel implements Parcelable {
         dest.writeString(deduct);
         dest.writeString(state);
         dest.writeString(date);
+        dest.writeString(saleId);
         dest.writeByte((byte) (isPut ? 1 : 0));
         dest.writeString(id);
         dest.writeByte((byte) (openPutEntrance ? 1 : 0));

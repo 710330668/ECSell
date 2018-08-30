@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -37,6 +36,8 @@ import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.model.ColorModel;
 import com.cheeshou.cheeshou.options.model.FormalityModel;
+import com.cheeshou.cheeshou.options.model.HistoryAreaModel;
+import com.cheeshou.cheeshou.options.model.HistoryAreaModelDao;
 import com.cheeshou.cheeshou.options.model.OptionTypeModel;
 import com.cheeshou.cheeshou.options.model.SalesAreaModel;
 import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
@@ -46,6 +47,7 @@ import com.cheeshou.cheeshou.options.model.response.SalesAreaResponse;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.DaoUtils;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.CustomDatePicker;
 import com.cheeshou.cheeshou.view.KeyMapDailog;
@@ -58,8 +60,6 @@ import com.example.com.common.util.SP;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -163,8 +163,10 @@ public class ReleaseOptionActivity extends BaseActivity {
     private Bitmap bitmap;
     private File currentFile;
     private String deleteId = "";
-    private String carId;
+    private String carId,versionId;
     private Dialog myDialog;
+    private List<HistoryAreaModel> historyAreaModels = new ArrayList<>();
+
 
 
     @Override
@@ -232,6 +234,7 @@ public class ReleaseOptionActivity extends BaseActivity {
             carId = response.getData().getCarId();
             provinceCode = response.getData().getProvinceCode();
             cityCode = response.getData().getCityCode();
+            versionId = response.getData().getVersionId()+"";
 
         }
     }
@@ -271,58 +274,6 @@ public class ReleaseOptionActivity extends BaseActivity {
         }
     }
 
-
-    public void saveImageToGallery(Context context, Bitmap bmp) {
-        // 首先保存图片
-        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
-        String mainfileName = "img";
-        File appDir = new File(file, mainfileName);
-        if (!appDir.exists()) {
-            appDir.mkdirs();
-        }
-        String fileName = System.currentTimeMillis() + ".jpg";
-        currentFile = new File(appDir, fileName);
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(currentFile);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    private void addDiscounts(List<String> discounts) {
-        if (discounts == null) {
-            return;
-        }
-        for (int i = 0; i < discounts.size(); i++) {
-            final Button button = new Button(ReleaseOptionActivity.this);
-            button.setText(discounts.get(i));
-            button.setBackgroundResource(R.drawable.bg_edittext_red);
-            button.setPadding(10, 10, 10, 10);
-            button.setGravity(Gravity.CENTER);
-            button.setTextColor(getResources().getColor(R.color.color_FF5754));
-            llyYouhui.addView(button);
-            LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) button.getLayoutParams();
-            linearParams.setMargins(20, 20, 10, 10);
-            linearParams.height = 80;
-            linearParams.width = 240;
-            button.setLayoutParams(linearParams);
-        }
-    }
 
     @SuppressLint("CheckResult")
     @Override
@@ -624,7 +575,7 @@ public class ReleaseOptionActivity extends BaseActivity {
             prefers = "";
             Map<String, RequestBody> params = new HashMap<>();
             params.put("carType", toRequestBody(optionId));
-            params.put("carModel", toRequestBody(carId));
+            params.put("carModel", toRequestBody(versionId));
             params.put("saleArea", toRequestBody(tvSalesArea.getText().toString().trim()));
             params.put("carFormality", toRequestBody(tvFormalities.getText().toString()));
             params.put("carYear", toRequestBody(tvYear.getText().toString()));
@@ -647,6 +598,9 @@ public class ReleaseOptionActivity extends BaseActivity {
             params.put("saleCommission", toRequestBody(etCommission.getText().toString()));
             params.put("chassisNo", toRequestBody(etCarNumber.getText().toString()));
             params.put("delImgIds", toRequestBody(deleteId));
+            if(response!=null){
+                params.put("carId", toRequestBody(carId));
+            }
             if(imgPaths.size() != 0){
                 List<MultipartBody.Part> parts = new ArrayList<>();
                 for (int i = 0; i < imgPaths.size(); i++) {
@@ -828,6 +782,14 @@ public class ReleaseOptionActivity extends BaseActivity {
                 tvArea.setText(data.getStringExtra("area"));
                 provinceCode = data.getStringExtra("provinceCode");
                 cityCode = data.getStringExtra("cityCode");
+                long count = DaoUtils.getDaoSession(this).getHistoryAreaModelDao().queryBuilder().where(HistoryAreaModelDao.Properties.CityId.eq(cityCode)).count();
+                if(count == 0){
+                    HistoryAreaModel model = new HistoryAreaModel();
+                    model.setAreaName(data.getStringExtra("area"));
+                    model.setProvinceId(provinceCode);
+                    model.setCityId(cityCode);
+                    DaoUtils.getDaoSession(this).getHistoryAreaModelDao().insert(model);
+                }
             } else if (requestCode == REQUEST_LOCAL) {
                 Uri uri = data.getData();
                 String img_url = uri.getPath();

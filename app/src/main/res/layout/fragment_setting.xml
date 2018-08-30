@@ -9,13 +9,13 @@
         android:layout_height="120dp"
         android:background="@mipmap/home_bg">
 
-        <ImageView
+        <com.cheeshou.cheeshou.view.MyImageView
             android:id="@+id/iv_head"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
-            android:src="@mipmap/ic_launcher" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

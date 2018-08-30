@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.options.viewHolder;
 
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ public class ClientViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void onBindViewHolder(Object data,int position) {
+    public void onBindViewHolder(Object data, int position) {
         ItemData itemData = (ItemData) data;
         ClientModel model = (ClientModel) itemData.data;
         tvName.setText(model.getName());
@@ -49,5 +50,13 @@ public class ClientViewHolder extends BaseViewHolder {
         tvFollow.setText(model.getFollow());
         tvTime.setText(model.getTime());
         tvStatus.setText(model.getStatus());
+        switch (model.getStatus()) {
+            case "未到店":
+                tvStatus.setBackgroundColor(Color.parseColor("#3E404F"));
+                break;
+            default:
+                tvStatus.setBackgroundColor(Color.parseColor("#FF5755"));
+                break;
+        }
     }
 }

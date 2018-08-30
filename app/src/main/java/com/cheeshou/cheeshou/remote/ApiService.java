@@ -39,8 +39,6 @@ import com.cheeshou.cheeshou.order.response.OrderListResponse;
 import com.cheeshou.cheeshou.usercenter.model.DealerShipResponse;
 import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -336,10 +334,15 @@ public interface ApiService {
     @POST("order/getMySaleCount")
     Observable<MySaleCountResponse> getMySaleCount(@Field("token") String token, @Field("startDate") String startDate, @Field("endDate") String endDate);
 
-    //车源下架
+    //车源下架(经销商)
     @FormUrlEncoded
     @POST("sale/soldOutCarInfo")
     Observable<EasyResponse> soldOutCarInfo(@Field("token") String token, @Field("saleId") String saleId);
+
+    //车源下架(车源商)
+    @FormUrlEncoded
+    @POST("sale/soldOutCarInfoByCarId")
+    Observable<EasyResponse> soldOutCarInfoByCarId(@Field("token") String token, @Field("carId") String carId);
 
     //编辑销售车辆信息
     @FormUrlEncoded
@@ -370,12 +373,14 @@ public interface ApiService {
 
 
     //生成分享URL
-    @Multipart
-//    @FormUrlEncoded
+//    @Multipart
+    @FormUrlEncoded
     @POST("/share/saveShareInfo")
-//    Observable<ShareUrlResponse> saveShareInfo(@Header("token") String token, @Field("shareId") String shareId, @Field("shareType") String shareType,
-//                                               @Field("shareItems") String shareItems, @Field("shareDirect") String shareDirect, @Field("shareAttr") String shareAttr);
-    Observable<ShareUrlResponse> saveShareInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
+    Observable<ShareUrlResponse> saveShareInfo(@Header("token") String token, @Field("shareId") String shareId, @Field("shareType") String shareType,
+                                               @Field("shareItems") String shareItems, @Field("shareDirect") String shareDirect, @Field("shareAtt") String shareAttr);
+
+
+//    Observable<ShareUrlResponse> saveShareInfo(@Header("token") String token, @PartMap Map<String, RequestBody> params);
 
     @POST("/share/findMyShareList")
     Observable<MyShareResponse> findMyShareList(@Header("token") String token, @Body HashMap<String, String> params);

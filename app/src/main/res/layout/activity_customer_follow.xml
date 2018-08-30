@@ -216,7 +216,7 @@
                     android:background="@drawable/bg_radiobutton_selector"
                     android:button="@null"
                     android:gravity="center"
-                    android:text="已预定"
+                    android:text="已预订"
                     android:textColor="@drawable/text_color_radio_selector" />
 
                 <RadioButton

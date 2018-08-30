@@ -100,6 +100,7 @@ public class NationalSourceFragment extends BaseFragment {
     private String carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice, startDate, endDate, queryKey, carStatus, orderType;
     private boolean isOpen;
     private String scopeType = "own";
+    private ArrayList<SearchResultModel> mPutAwayData = new ArrayList<>();
 
     @Override
     protected int setLayoutResouceId() {
@@ -137,14 +138,18 @@ public class NationalSourceFragment extends BaseFragment {
             public void onClick(View v, Object data) {
                 if (data instanceof SearchResultModel) {
                     SearchResultModel model = (SearchResultModel) data;
+                    mPutAwayData.add(model);
                     if (!isOpen) {
                         Bundle bundle = new Bundle();
                         if(scopeType.equals("all")) {
+
                             bundle.putString("carId", model.getId());
                             bundle.putString("dealer_source", "nationSource");
+                            bundle.putParcelableArrayList("shelves_data",mPutAwayData);
                         }else{
                             bundle.putString("carId", model.getId());
                         }
+
                         startActivity(CarDetailActivity.class, bundle);
                     } else {
                         model.setPut(!model.isPut());
@@ -159,7 +164,6 @@ public class NationalSourceFragment extends BaseFragment {
             }
         });
         mSearchResult.setAdapter(mDataAdapter);
-        getAllOptions();
         switch (INVENTORY) {
             case C.INVENTORY_MARKET:
                 //销售 分享
@@ -179,7 +183,7 @@ public class NationalSourceFragment extends BaseFragment {
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
-                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+                stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预订", "RESERVE")));
                 stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
                 orderDate = new ArrayList<>();
@@ -301,6 +305,12 @@ public class NationalSourceFragment extends BaseFragment {
                 break;
             default:
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAllOptions();
     }
 
     @SuppressLint("CheckResult")

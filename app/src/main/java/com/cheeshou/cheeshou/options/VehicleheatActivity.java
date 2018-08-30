@@ -270,7 +270,8 @@ public class VehicleheatActivity extends BaseActivity {
                                 data.setShareTime(response.getData().getLists().get(i).getShareNum()+"");
                                 data.setPutAwayTime(response.getData().getLists().get(i).getShelvesNum()+"");
                                 data.setCarRankings(i + 1);
-                                data.setCarTitle(response.getData().getLists().get(i).getVname());
+                                data.setCarTitle(response.getData().getLists().get(i).getBrand() + " " + response.getData().getLists().get(i).getVname());
+                                data.setCarUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 mData.add(new ItemData(0, SettingDelegate.VEHICLE_HEAT_TYPE, data));
                             }
                             ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");

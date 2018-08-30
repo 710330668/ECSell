@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +23,7 @@ import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 import com.cheeshou.cheeshou.utils.DataCleanManager;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.cheeshou.cheeshou.view.CommonDialog;
+import com.cheeshou.cheeshou.view.MyImageView;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
 import com.example.com.imageloader.LoaderManager;
@@ -59,7 +59,7 @@ public class SettingFragment extends BaseFragment {
     @BindView(R.id.tv_cache)
     TextView tvCache;
     @BindView(R.id.iv_head)
-    ImageView ivHead;
+    MyImageView ivHead;
     private String token;
     private String cacheNum;
     private String userPic;

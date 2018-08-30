@@ -10,12 +10,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.cheeshou.cheeshou.options.CarDetailActivity;
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
-import com.cheeshou.cheeshou.dealer.ui.model.PutCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
@@ -31,6 +27,8 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -85,6 +83,11 @@ public class PutAwayDetailActivity extends BaseActivity {
         for (int i = 0; i < data.size(); i++) {
             ItemData e = new ItemData(0, SettingDelegate.PUT_AWAY_CAR_TYPE, data.get(i));
             PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getPrice());
+            String str = putAwayCarModel.getCarPrice();
+            Pattern p = Pattern.compile("\\d+");
+            Matcher m = p.matcher(str);
+            m.find();
+            putAwayCarModel.setCarPrice(m.group());
             modelList.add(putAwayCarModel);
             mCarData.add(e);
         }

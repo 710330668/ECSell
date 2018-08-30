@@ -22,6 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,10 +34,13 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.options.model.AddressModel;
 import com.cheeshou.cheeshou.options.model.AreasModel;
+import com.cheeshou.cheeshou.options.model.HistoryAreaModel;
+import com.cheeshou.cheeshou.options.model.HistoryAreaModelDao;
 import com.cheeshou.cheeshou.options.model.response.AreaProvinceResponse;
 import com.cheeshou.cheeshou.options.model.response.RegisonNameResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.utils.DaoUtils;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -80,6 +84,12 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     DrawerLayout mainDrawerLayout;
     @BindView(R.id.tv_loaction)
     TextView tvLoaction;
+    @BindView(R.id.btn_area1)
+    Button btnArea1;
+    @BindView(R.id.btn_area2)
+    Button btnArea2;
+    @BindView(R.id.btn_area3)
+    Button btnArea3;
 
     private List<AddressModel> areas = new ArrayList<>();
     private List<ItemData> areaLists = new ArrayList<>();
@@ -89,9 +99,10 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     private Location location;
     private Geocoder geocoder;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
-    private String provinceCode,cityCode,cityName;
+    private String provinceCode, cityCode, cityName;
     private AreasModel areasModel;
     private ItemData itemData;
+    private List<HistoryAreaModel> historyAreaModels = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -105,6 +116,8 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
         areas = new ArrayList<>();
 
+        historyAreaModels = DaoUtils.getDaoSession(this).getHistoryAreaModelDao().queryBuilder().orderDesc(HistoryAreaModelDao.Properties.Id).build().list();
+
     }
 
     @Override
@@ -114,6 +127,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
 
     @Override
     public void doBusiness(Context mContext) {
+        showHistoryArea();
         getRegionList();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlArea.setLayoutManager(layoutManager);
@@ -137,6 +151,26 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
             }
         });
         rlArea.setAdapter(baseAdapter);
+    }
+
+    private void showHistoryArea() {
+        if(historyAreaModels.size() == 1){
+            btnArea1.setText(historyAreaModels.get(0).getAreaName());
+            btnArea2.setVisibility(View.GONE);
+            btnArea3.setVisibility(View.GONE);
+        }else if(historyAreaModels.size() == 2){
+            btnArea1.setText(historyAreaModels.get(0).getAreaName());
+            btnArea2.setText(historyAreaModels.get(1).getAreaName());
+            btnArea3.setVisibility(View.GONE);
+        }else if(historyAreaModels.size() >= 3){
+            btnArea1.setText(historyAreaModels.get(0).getAreaName());
+            btnArea2.setText(historyAreaModels.get(1).getAreaName());
+            btnArea3.setText(historyAreaModels.get(2).getAreaName());
+        }else{
+            btnArea1.setVisibility(View.GONE);
+            btnArea2.setVisibility(View.GONE);
+            btnArea3.setVisibility(View.GONE);
+        }
     }
 
 
@@ -195,7 +229,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                     public void accept(AreaProvinceResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
-                            areasModel = new AreasModel("全省",  "");
+                            areasModel = new AreasModel("全省", "");
                             itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
                             areaLists.add(itemData);
                             for (int i = 0; i < response.getData().size(); i++) {
@@ -216,8 +250,9 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_location,R.id.tv_loaction})
+    @OnClick({R.id.iv_back, R.id.iv_location, R.id.tv_loaction,R.id.btn_area1,R.id.btn_area2,R.id.btn_area3})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
@@ -225,10 +260,30 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
             case R.id.iv_location:
                 break;
             case R.id.tv_loaction:
-                Intent intent = new Intent();
                 intent.putExtra("area", cityName);
                 intent.putExtra("provinceCode", provinceCode);
                 intent.putExtra("cityCode", cityCode);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case R.id.btn_area1:
+                intent.putExtra("area", historyAreaModels.get(0).getAreaName());
+                intent.putExtra("provinceCode", historyAreaModels.get(0).getProvinceId());
+                intent.putExtra("cityCode", historyAreaModels.get(0).getCityId());
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case R.id.btn_area2:
+                intent.putExtra("area", historyAreaModels.get(1).getAreaName());
+                intent.putExtra("provinceCode", historyAreaModels.get(1).getProvinceId());
+                intent.putExtra("cityCode", historyAreaModels.get(1).getCityId());
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case R.id.btn_area3:
+                intent.putExtra("area", historyAreaModels.get(2).getAreaName());
+                intent.putExtra("provinceCode", historyAreaModels.get(2).getProvinceId());
+                intent.putExtra("cityCode", historyAreaModels.get(2).getCityId());
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
@@ -303,16 +358,16 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     @SuppressLint("CheckResult")
     private void getCityInfor(String locality) {
         cityName = locality;
-        Injection.provideApiService().findRegionByName(token,locality)
+        Injection.provideApiService().findRegionByName(token, locality)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<RegisonNameResponse>() {
                     @Override
                     public void accept(RegisonNameResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        if(response.getCode() == 200){
-                            provinceCode = response.getData().getPid()+"";
-                            cityCode = response.getData().getId()+"";
+                        if (response.getCode() == 200) {
+                            provinceCode = response.getData().getPid() + "";
+                            cityCode = response.getData().getId() + "";
                         }
                     }
                 });

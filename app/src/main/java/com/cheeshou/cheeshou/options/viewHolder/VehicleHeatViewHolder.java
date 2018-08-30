@@ -10,6 +10,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.options.model.VehicleHeatModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.imageloader.LoaderManager;
 
 public class VehicleHeatViewHolder extends BaseViewHolder<ItemData> {
 
@@ -60,5 +61,6 @@ public class VehicleHeatViewHolder extends BaseViewHolder<ItemData> {
         }
         mCarTitle.setText(data1.getCarTitle());
         mCarState.setText(mCarState.getContext().getString(R.string.vehicleheat_item_car_state, data1.getPutAwayTime(), data1.getShareTime(), data1.getShareTime()));
+        LoaderManager.getLoader().loadNet(mCarPoster,data1.getCarUrl());
     }
 }

@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="52dp"
-        android:text="认证车源商"
+        android:text="认证销售"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="parent"

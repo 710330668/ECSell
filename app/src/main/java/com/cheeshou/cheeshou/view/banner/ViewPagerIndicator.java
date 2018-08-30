@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.shapes.RectShape;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -143,7 +144,7 @@ public class ViewPagerIndicator extends View {
     }
 
     Drawable genDrawable(int color) {
-        ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+        ShapeDrawable drawable = new ShapeDrawable(new RectShape());
         drawable.getPaint().setColor(color);
         drawable.getPaint().setAntiAlias(true);
         return drawable;

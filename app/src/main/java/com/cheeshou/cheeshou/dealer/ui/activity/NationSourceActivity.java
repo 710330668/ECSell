@@ -143,7 +143,6 @@ public class NationSourceActivity extends BaseActivity {
     private List<ItemData> stateData;
     private List<ItemData> orderDate;
 
-
     @Override
     public int bindLayout() {
         return R.layout.activity_nation_source;
@@ -205,10 +204,13 @@ public class NationSourceActivity extends BaseActivity {
             @Override
             public void onClick(View v, Object data) {
                 SearchResultModel model = (SearchResultModel) data;
+                mPutAwayData.clear();
+                mPutAwayData.add(model);
                 if (!isOpen) {
                     Bundle bundle = new Bundle();
                     bundle.putString("carId", model.getId());
                     bundle.putString("dealer_source", "nationSource");
+                    bundle.putParcelableArrayList("shelves_data",mPutAwayData);
                     startActivity(CarDetailActivity.class, bundle);
                 } else {
                     model.setPut(!model.isPut());
@@ -234,7 +236,7 @@ public class NationSourceActivity extends BaseActivity {
         stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("全部", "", true)));
         stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("在售", "IN_SALE")));
         stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已上架", "SHELVES")));
-        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预定", "RESERVE")));
+        stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已预订", "RESERVE")));
         stateData.add(new ItemData(0, SettingDelegate.POPUP_WINDOW_CAR_STATE_TYPE, new CarStateModel("已售", "OUT_SALE")));
 
         orderDate = new ArrayList<>();
@@ -268,11 +270,12 @@ public class NationSourceActivity extends BaseActivity {
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() + "|销售区域:"
+                                data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName()
                                         + response.getData().getLists().get(i).getSaleArea());
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
+                                data.setSaleId(response.getData().getLists().get(i).getSaleId());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

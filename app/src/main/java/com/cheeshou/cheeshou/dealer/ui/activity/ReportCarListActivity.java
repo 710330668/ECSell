@@ -144,11 +144,11 @@ public class ReportCarListActivity extends BaseActivity {
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
                                 data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getComDate()));
-                                data.setDeduct("销售提成"+response.getData().getLists().get(i).getSaleCommission() + "万");
-                                data.setPrice("车源价"+response.getData().getLists().get(i).getBrowseNum() + "万");
+                                data.setDeduct("售出时间"+TimeUtils.millis2String(response.getData().getLists().get(i).getComDate()));
+                                data.setPrice("成交价"+response.getData().getLists().get(i).getOrderPrice() + "万");
 //                                data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览140次");
-                                data.setTitle(response.getData().getLists().get(i).getVname());
+                                data.setSubTitle("客户" + response.getData().getLists().get(i).getCustomerName() + "销售"+response.getData().getLists().get(i).getUserName());
+                                data.setTitle(response.getData().getLists().get(i).getBrand()+" "+response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getOrderItemId());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);

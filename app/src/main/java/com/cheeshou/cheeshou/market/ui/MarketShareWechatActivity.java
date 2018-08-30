@@ -12,15 +12,12 @@ import android.widget.Toast;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
-import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
-import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +31,6 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.favorite.WechatFavorite;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class MarketShareWechatActivity extends BaseActivity {
 
@@ -64,6 +58,7 @@ public class MarketShareWechatActivity extends BaseActivity {
         data = params.getParcelableArrayList("data");
         article = params.getString("article");
         photos = params.getParcelableArrayList("photo");
+        shareUrl = params.getString("shareUrl");
         mToken = SP.getInstance(this).getString(C.USER_TOKEN);
     }
 
@@ -146,25 +141,25 @@ public class MarketShareWechatActivity extends BaseActivity {
         String[] image = {};
         momentsSp.setImageArray(imageArray.toArray(image));
         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
-//        wechatMoments.setPlatformActionListener(new PlatformActionListener() {
-//            @Override
-//            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-//                Log.e(TAG, "onComplete: ");
-//                Toast.makeText(appContext, "分享成功", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onError(Platform platform, int i, Throwable throwable) {
-//                Log.e(TAG, "onError: " + throwable.toString());
-//                Toast.makeText(appContext, throwable.toString(), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancel(Platform platform, int i) {
-//                Log.e(TAG, "onCancel: ");
-//                Toast.makeText(appContext, "取消已分享", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        wechatMoments.setPlatformActionListener(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                Log.e(TAG, "onComplete: ");
+                Toast.makeText(appContext, "分享成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                Log.e(TAG, "onError: " + throwable.toString());
+                Toast.makeText(appContext, throwable.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+                Log.e(TAG, "onCancel: ");
+                Toast.makeText(appContext, "取消已分享", Toast.LENGTH_SHORT).show();
+            }
+        });
         // 执行分享
         wechatMoments.share(momentsSp);
     }
