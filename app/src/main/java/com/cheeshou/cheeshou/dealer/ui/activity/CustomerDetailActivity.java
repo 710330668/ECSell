@@ -108,6 +108,8 @@ public class CustomerDetailActivity extends BaseActivity {
     private String customerId;
     private String token;
     private CustomerResponse.DataBean.ListsBean customer;
+    @BindView(R.id.tv_daikuan)
+    TextView mTvDaiKuan;
 
     @Override
     public int bindLayout() {
@@ -144,6 +146,8 @@ public class CustomerDetailActivity extends BaseActivity {
         super.onResume();
         List<SearchResultModel> customerWantList = ParamManager.getInstance(this).getCustomerWantList();
         Log.e(TAG, "onResume: " + new Gson().toJson(customerWantList));
+        ParamManager.getInstance(this).setCreateCustomerWantCarId("");
+        ParamManager.getInstance(this).setCustomerWantList(new ArrayList<SearchResultModel>());
         Injection.provideApiService().getCustomerDetailInfo(token, customerId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<CustomerDetailResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -160,6 +164,7 @@ public class CustomerDetailActivity extends BaseActivity {
                     mTvPrice.setText(s.getData().getMinBudget() + "-" + s.getData().getMaxBudget() + "万");
                     mTvNeedText.setText(s.getData().getNeedTxt());
                     mTvRemark.setText(TextUtils.isEmpty(s.getData().getRemark()) ? "无" : s.getData().getRemark());
+                    mTvDaiKuan.setText(s.getData().getReserveColumn1());
                     mData.clear();
                     List<CustomerDetailResponse.DataBean.ListsBean> lists = s.getData().getLists();
                     if (lists != null) {

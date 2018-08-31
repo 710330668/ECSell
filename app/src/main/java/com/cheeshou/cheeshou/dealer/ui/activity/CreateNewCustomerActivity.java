@@ -25,6 +25,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
 import com.cheeshou.cheeshou.utils.ParamManager;
+import com.cheeshou.cheeshou.view.CommonDialog;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -75,6 +76,9 @@ public class CreateNewCustomerActivity extends BaseActivity {
     private boolean optionId;
     @BindView(R.id.tv_want_car_number)
     TextView mTvCarNum;
+    @BindView(R.id.tv_daikuan)
+    TextView mTvDaikuan;
+    private String reserveColumn1;
 
     @Override
     public int bindLayout() {
@@ -129,7 +133,7 @@ public class CreateNewCustomerActivity extends BaseActivity {
         mTvCarNum.setText(num + "辆");
     }
 
-    @OnClick({R.id.ll_contacts, R.id.save_customer, R.id.img_back, R.id.tv_add_car, R.id.ll_want_car})
+    @OnClick({R.id.ll_contacts, R.id.save_customer, R.id.img_back, R.id.tv_add_car, R.id.ll_want_car, R.id.ll_daikuan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_contacts:
@@ -153,6 +157,29 @@ public class CreateNewCustomerActivity extends BaseActivity {
             case R.id.ll_want_car:
                 startActivity(CustomerWantCarActivity.class);
                 break;
+            case R.id.ll_daikuan:
+                final CommonDialog commonDialog = new CommonDialog(this, "选择保险贷款", "是否有保险贷款需求", "是", "否");
+                commonDialog.show();
+                commonDialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
+                    @Override
+                    public void doConfirm() {
+                        mTvDaikuan.setText("是");
+                        reserveColumn1 = "是";
+                        commonDialog.dismiss();
+                    }
+
+                    @Override
+                    public void doConfirm(String etContent) {
+                    }
+
+                    @Override
+                    public void doCancel() {
+                        mTvDaikuan.setText("否");
+                        reserveColumn1 = "否";
+                        commonDialog.dismiss();
+                    }
+                });
+                break;
             default:
         }
     }
@@ -173,8 +200,8 @@ public class CreateNewCustomerActivity extends BaseActivity {
             params.put("needTxt", toRequestBody(mEtNeed.getText().toString()));
             params.put("remark", toRequestBody(mEtRemark.getText().toString()));
             params.put("commType", toRequestBody(((RadioButton) findViewById(mRgType.getCheckedRadioButtonId())).getText().toString()));
-            Log.e(TAG, "createNewCustomer: " + ParamManager.getInstance(this).getCreateCustomerWantCarId() );
             params.put("saleIds", toRequestBody(ParamManager.getInstance(this).getCreateCustomerWantCarId()));
+            params.put("reserveColumn1", toRequestBody(reserveColumn1));
             CustomerWantCarModel.CodeBean[] strings = new CustomerWantCarModel.CodeBean[dataList.size()];
             for (int i = 0; i < dataList.size(); i++) {
                 CustomerWantCarModel.CodeBean code = ((CustomerWantCarModel) dataList.get(i).getData()).getCode();

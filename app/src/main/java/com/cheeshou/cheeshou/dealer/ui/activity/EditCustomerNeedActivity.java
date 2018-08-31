@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheeshou.cheeshou.R;
@@ -32,6 +33,7 @@ import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
 import com.cheeshou.cheeshou.utils.ParamManager;
+import com.cheeshou.cheeshou.view.CommonDialog;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -75,6 +77,9 @@ public class EditCustomerNeedActivity extends BaseActivity {
     private List<ItemData> dataList = new ArrayList<>();
     private SettingDelegate delegate;
     private BaseAdapter adapter;
+    @BindView(R.id.tv_daikuan)
+    TextView mTvDaiKuan;
+    private String reserveColumn1;
 
     @Override
     public int bindLayout() {
@@ -128,6 +133,7 @@ public class EditCustomerNeedActivity extends BaseActivity {
                 mEtMaxMoney.setText(easyResponse.getData().getMaxBudget() + "");
                 mEtNeedText.setText(easyResponse.getData().getNeedTxt());
                 mEtRemark.setText(easyResponse.getData().getRemark());
+                mTvDaiKuan.setText(easyResponse.getData().getReserveColumn1());
                 List<FindCustomerNeedResponse.DataBean.ListsBean> lists = easyResponse.getData().getLists();
                 for (FindCustomerNeedResponse.DataBean.ListsBean bean : lists) {
                     CustomerWantCarModel model = new CustomerWantCarModel();
@@ -155,7 +161,7 @@ public class EditCustomerNeedActivity extends BaseActivity {
         return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 
-    @OnClick({R.id.img_back, R.id.tv_add_brand, R.id.tv_save})
+    @OnClick({R.id.img_back, R.id.tv_add_brand, R.id.tv_save, R.id.ll_daikuan})
     public void onViewClicked(View view) {
 
         switch (view.getId()) {
@@ -170,6 +176,29 @@ public class EditCustomerNeedActivity extends BaseActivity {
             case R.id.tv_save:
                 updateInfo();
                 break;
+            case R.id.ll_daikuan:
+                final CommonDialog commonDialog = new CommonDialog(this, "选择保险贷款", "是否有保险贷款需求", "是", "否");
+                commonDialog.show();
+                commonDialog.setClicklistener(new CommonDialog.ClickListenerInterface() {
+                    @Override
+                    public void doConfirm() {
+                        mTvDaiKuan.setText("是");
+                        reserveColumn1 = "是";
+                        commonDialog.dismiss();
+                    }
+
+                    @Override
+                    public void doConfirm(String etContent) {
+                    }
+
+                    @Override
+                    public void doCancel() {
+                        mTvDaiKuan.setText("否");
+                        reserveColumn1 = "否";
+                        commonDialog.dismiss();
+                    }
+                });
+                break;
             default:
         }
     }
@@ -181,6 +210,7 @@ public class EditCustomerNeedActivity extends BaseActivity {
         params.put("minBudget", toRequestBody(mEtMinMoney.getText().toString()));
         params.put("maxBudget", toRequestBody(mEtMaxMoney.getText().toString()));
         params.put("remark", toRequestBody(mEtRemark.getText().toString()));
+        params.put("reserveColumn1", toRequestBody(reserveColumn1));
         CustomerWantCarModel.CodeBean[] strings = new CustomerWantCarModel.CodeBean[dataList.size()];
         for (int i = 0; i < dataList.size(); i++) {
             CustomerWantCarModel.CodeBean code = ((CustomerWantCarModel) dataList.get(i).getData()).getCode();

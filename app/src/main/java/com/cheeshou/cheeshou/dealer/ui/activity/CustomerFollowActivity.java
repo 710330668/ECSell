@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -21,12 +22,15 @@ import android.widget.Toast;
 
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
+import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.market.ui.response.ShareRankResponse;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
+import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
@@ -42,7 +46,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -83,6 +89,10 @@ public class CustomerFollowActivity extends BaseActivity {
     private String status = "";
     private String token = "";
     private ArrayList<ItemData> stateData = new ArrayList<>();
+    private BaseAdapter adapter;
+    @BindView(R.id.recycler_follow_car)
+    RecyclerView mRecyclerFollowCar;
+    private List<ItemData> mFollowCarData = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -105,6 +115,7 @@ public class CustomerFollowActivity extends BaseActivity {
     @Override
     public void setView(Bundle savedInstanceState) {
         mRecycler.setLayoutManager(new GridLayoutManager(this, 4));
+        mRecyclerFollowCar.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         mCommandType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -129,23 +140,53 @@ public class CustomerFollowActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        mRecycler.setAdapter(new BaseAdapter(stateData, new SettingDelegate(), new onItemClickListener() {
+
+//        Injection.provideApiService().findSoldOutCarList(token).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareRankResponse>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(ShareRankResponse shareRankResponse) {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//
+//            }
+//        });
+        onItemClickListener listener = new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
+                for (ItemData bean : stateData) {
+                    ((CarStateModel) bean.getData()).setSelected(false);
+                }
                 status = ((CarStateModel) data).getStateCode();
+                ((CarStateModel) data).setSelected(true);
                 if (status == "SUCCESS") {
                     mLLDealer.setVisibility(View.VISIBLE);
+                    mRecyclerFollowCar.setVisibility(View.VISIBLE);
                 } else {
                     mLLDealer.setVisibility(View.GONE);
+                    mRecyclerFollowCar.setVisibility(View.GONE);
                 }
-
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public boolean onLongClick(View v, Object data) {
                 return false;
             }
-        }));
+        };
+        adapter = new BaseAdapter(stateData, new SettingDelegate(), listener);
+        mRecycler.setAdapter(adapter);
     }
 
     @OnClick({R.id.img_back, R.id.lly_local_image, R.id.tv_save, R.id.tv_dealer})
@@ -165,7 +206,9 @@ public class CustomerFollowActivity extends BaseActivity {
                 break;
             case R.id.tv_dealer:
 //                添加意向车辆
-
+                Bundle bundle = new Bundle();
+                bundle.putString("customerId", customerId);
+                startActivity(CustomerCarFollowActivity.class, bundle);
                 break;
         }
     }
@@ -273,4 +316,15 @@ public class CustomerFollowActivity extends BaseActivity {
         return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<SearchResultModel> customerFollowList = ParamManager.getInstance(getApplicationContext()).getCustomerFollowList();
+        mFollowCarData.clear();
+        for (SearchResultModel bean : customerFollowList) {
+            ItemData itemData = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, bean);
+            mFollowCarData.add(itemData);
+        }
+        mRecyclerFollowCar.setAdapter(new BaseAdapter(mFollowCarData, new SettingDelegate()));
+    }
 }

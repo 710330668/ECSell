@@ -112,6 +112,7 @@
         <activity android:name=".market.ui.MarketShareWechatActivity" />
         <activity android:name=".dealer.ui.activity.StoreManagerItemClickActivity" />
         <activity android:name=".dealer.ui.activity.CustomerWantCarActivity" />
+        <activity android:name=".dealer.ui.activity.CustomerCarFollowActivity" />
         <activity android:name=".dealer.ui.activity.CarSourceTypeActivity"></activity>
     </application>
 

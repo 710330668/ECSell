@@ -396,5 +396,8 @@ public interface ApiService {
     @POST("share/findShareRankList")
     Observable<ShareRankResponse> findShareRankList(@Header("token") String token, @Body HashMap<String, String> params);
 
+    @POST("sale/findSoldOutCarList")
+    Observable<ShareRankResponse> findSoldOutCarList(@Header("token") String token);
+
 
 }

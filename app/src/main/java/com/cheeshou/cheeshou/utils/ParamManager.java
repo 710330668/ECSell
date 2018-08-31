@@ -5,6 +5,7 @@ import android.content.Context;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,18 @@ public class ParamManager {
     private CustomerWantCarModel model;
     private String createCustomerWantCarId;
     private List<SearchResultModel> customerWantList;
+    private List<SearchResultModel> customerFollowList;
+
+    public List<SearchResultModel> getCustomerFollowList() {
+        if (customerFollowList == null) {
+            return new ArrayList<>();
+        }
+        return customerFollowList;
+    }
+
+    public void setCustomerFollowList(List<SearchResultModel> customerFollowList) {
+        this.customerFollowList = customerFollowList;
+    }
 
     public static ParamManager getInstance() {
         return instance;

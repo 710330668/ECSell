@@ -11,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,7 @@ import io.reactivex.schedulers.Schedulers;
  * Email Address : 15764240573@163.com
  */
 
-public class CustomerWantFragment extends BaseFragment {
+public class CustomerFollowFragment extends BaseFragment {
 
     @BindView(R.id.rl_search_result)
     RecyclerView mSearchResult;
@@ -119,7 +118,6 @@ public class CustomerWantFragment extends BaseFragment {
     @Override
     public void initData(Bundle arguments) {
         token = SP.getInstance(C.USER_DB, getActivity()).getString(C.USER_TOKEN);
-
         if (arguments == null) {
             arguments = new Bundle();
         }
@@ -349,19 +347,21 @@ public class CustomerWantFragment extends BaseFragment {
                     s += (bean.getSaleId() + ",");
                 }
                 final String finalS = s;
-                Injection.provideApiService().updateCustomerNeedInfo(token, customerId, s).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
-                    @Override
-                    public void accept(EasyResponse easyResponse) throws Exception {
-                        if (easyResponse != null && easyResponse.getCode() == 200) {
-                            ParamManager.getInstance(getContext()).setCreateCustomerWantCarId(finalS);
-                            ParamManager.getInstance(getContext()).setCustomerWantList(dataList);
-                            Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        } else {
-                            Toast.makeText(getActivity(), easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                ParamManager.getInstance(getContext()).setCustomerFollowList(dataList);
+                getActivity().finish();
+//                Injection.provideApiService().updateCustomerNeedInfo(token, customerId, s).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
+//                    @Override
+//                    public void accept(EasyResponse easyResponse) throws Exception {
+//                        if (easyResponse != null && easyResponse.getCode() == 200) {
+//                            ParamManager.getInstance(getContext()).setCreateCustomerWantCarId(finalS);
+//                            ParamManager.getInstance(getContext()).setCustomerFollowList(dataList);
+//                            Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
+//                            getActivity().finish();
+//                        } else {
+//                            Toast.makeText(getActivity(), easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
                 break;
             default:
         }

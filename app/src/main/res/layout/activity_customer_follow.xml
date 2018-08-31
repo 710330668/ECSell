@@ -184,12 +184,18 @@
                 android:layout_height="7dp"
                 android:background="#F5F5F5" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rl_deal_car"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:id="@+id/ll_dealer"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="14dp"
+                android:visibility="gone"
                 android:paddingRight="14dp">
 
                 <TextView
@@ -210,9 +216,10 @@
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rl_deal_car"
+                android:id="@+id/recycler_follow_car"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:visibility="gone"
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
