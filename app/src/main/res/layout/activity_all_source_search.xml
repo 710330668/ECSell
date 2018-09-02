@@ -114,6 +114,7 @@
                     android:background="#F5F5F5" />
 
                 <RelativeLayout
+                    android:id="@+id/rl_area"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp">
@@ -153,6 +154,7 @@
                     android:background="#F5F5F5" />
 
                 <RelativeLayout
+                    android:id="@+id/rl_options_type"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp">
@@ -192,6 +194,7 @@
                     android:background="#F5F5F5" />
 
                 <RelativeLayout
+                    android:id="@+id/rl_car_brand"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp">
@@ -231,6 +234,7 @@
                     android:background="#F5F5F5" />
 
                 <RelativeLayout
+                    android:id="@+id/rl_car_model"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginRight="14dp">

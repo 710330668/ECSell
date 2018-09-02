@@ -4,16 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -24,14 +22,12 @@ import android.widget.Toast;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
-import com.cheeshou.cheeshou.dealer.ui.fragment.SearchResultFragment;
 import com.cheeshou.cheeshou.dealer.ui.fragment.StoreManagerItemClickFragment;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
 import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryDeleteModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchHistoryModelDao;
-import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
 import com.cheeshou.cheeshou.options.ChooseAreaActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.ChooseCarsActivity;
@@ -43,15 +39,12 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
-import com.google.gson.Gson;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -446,19 +439,19 @@ public class StoreManagerItemClickActivity extends BaseActivity {
         mTagFlowSourceType.setAdapter(sourceCarTypeAdapter);
     }
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_back, R.id.iv_options_type})
+    @OnClick({R.id.rl_sales_area, R.id.rl_car_brand, R.id.rl_car_model, R.id.tv_bar_right, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.tv_back, R.id.rl_options_type})
     public void onViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
-            case R.id.iv_sales_area:
+            case R.id.rl_sales_area:
                 startActivityForResult(new Intent(this, ChooseAreaActivity.class), REQUEST_AREA);
                 break;
-            case R.id.iv_car_brand:
+            case R.id.rl_car_brand:
                 bundle.putString("params", "filter");
                 bundle.putString("optionId", carType);
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
-            case R.id.iv_car_model:
+            case R.id.rl_car_model:
                 if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
                     bundle.putString("optionId", carType);
@@ -562,7 +555,7 @@ public class StoreManagerItemClickActivity extends BaseActivity {
             case R.id.tv_back:
                 finish();
                 break;
-            case R.id.iv_options_type:
+            case R.id.rl_options_type:
                 Intent intent = new Intent(this, CarSourceTypeActivity.class);
                 startActivityForResult(intent, REQUEST_CAR_TYPE);
                 break;

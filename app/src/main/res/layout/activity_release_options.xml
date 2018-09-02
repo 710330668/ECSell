@@ -48,6 +48,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/rl_options_type"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -87,6 +88,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_car_model"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -128,6 +130,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_appearance_color"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -167,6 +170,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_interior_color"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -206,6 +210,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_area"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -245,6 +250,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_sales_area"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -284,6 +290,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_formalities"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -323,6 +330,7 @@
                     android:layout_marginRight="14dp"/>
 
                 <RelativeLayout
+                    android:id="@+id/rl_year"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 

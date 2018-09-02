@@ -171,7 +171,7 @@ public class SettingFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache, R.id.btn_logout, R.id.rl_modify_password, R.id.rl_dealer_modify_password})
+    @OnClick({R.id.iv_car_infor, R.id.rl_dealer, R.id.rl_user_infor, R.id.rl_clean_cache, R.id.btn_logout, R.id.rl_modify_password, R.id.rl_dealer_modify_password,R.id.lly_dealer})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_car_infor:
@@ -193,6 +193,9 @@ public class SettingFragment extends BaseFragment {
                 break;
             case R.id.rl_dealer_modify_password:
                 startActivity(ModifyPasswordActivity.class);
+                break;
+            case R.id.lly_dealer:
+                startActivity(DealershipActivity.class);
                 break;
         }
     }

@@ -447,19 +447,19 @@ public class AllSourceSearchActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_sales_area, R.id.iv_car_brand, R.id.iv_car_model, R.id.tv_search, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.iv_options_type})
+    @OnClick({R.id.rl_area, R.id.rl_car_brand, R.id.rl_car_model, R.id.tv_search, R.id.bt_search_reset, R.id.bt_search_sure, R.id.tv_year_all, R.id.ll_choose_year, R.id.img_last, R.id.img_next, R.id.rl_options_type})
     public void onDrawerViewClicked(View view) {
         Bundle bundle = new Bundle();
         switch (view.getId()) {
-            case R.id.iv_sales_area:
+            case R.id.rl_area:
                 startActivityForResult(new Intent(this, ChooseAreaActivity.class), REQUEST_AREA);
                 break;
-            case R.id.iv_car_brand:
+            case R.id.rl_car_brand:
                 bundle.putString("params", "filter");
                 bundle.putString("optionId", carType);
                 startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
                 break;
-            case R.id.iv_car_model:
+            case R.id.rl_car_model:
                 if (TextUtils.isEmpty(brandId)) {
                     bundle.putString("params", "filter");
                     bundle.putString("optionId", carType);
@@ -545,7 +545,7 @@ public class AllSourceSearchActivity extends BaseActivity {
                 mTvYear.setText(Integer.parseInt(mTvYear.getText().toString()) + 1 + "");
                 carYear = mTvYear.getText().toString();
                 break;
-            case R.id.iv_options_type:
+            case R.id.rl_options_type:
                 Intent intent = new Intent(this, CarSourceTypeActivity.class);
                 startActivityForResult(intent, REQUEST_CAR_TYPE);
                 break;

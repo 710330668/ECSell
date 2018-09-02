@@ -482,51 +482,51 @@ public class ReleaseOptionActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_options_type, R.id.iv_car_model, R.id.iv_appearance_color,
-            R.id.iv_interior_color, R.id.iv_area, R.id.iv_sales_area, R.id.iv_formalities, R.id.iv_year,
+    @OnClick({R.id.iv_back, R.id.rl_options_type, R.id.rl_car_model, R.id.rl_appearance_color,
+            R.id.rl_interior_color, R.id.rl_area, R.id.rl_sales_area, R.id.rl_formalities, R.id.rl_year,
             R.id.lly_local_image, R.id.btn_release_options, R.id.btn_zidingyi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_options_type:
+            case R.id.rl_options_type:
                 openRightLayout();
                 showOptionsTypeList();
                 btnZidingyi.setVisibility(View.GONE);
                 break;
-            case R.id.iv_car_model:
+            case R.id.rl_car_model:
                 Intent intent = new Intent(ReleaseOptionActivity.this, ChooseBrandActivity.class);
                 intent.putExtra("optionId", optionId);
                 startActivityForResult(intent, REQUEST_BRAND);
                 break;
-            case R.id.iv_appearance_color:
+            case R.id.rl_appearance_color:
                 openRightLayout();
                 showApprenceColorList();
                 btnZidingyi.setVisibility(View.VISIBLE);
                 ziDingYiFlag = 1;
                 break;
-            case R.id.iv_interior_color:
+            case R.id.rl_interior_color:
                 openRightLayout();
                 showInteriorColorList();
                 btnZidingyi.setVisibility(View.VISIBLE);
                 ziDingYiFlag = 2;
                 break;
-            case R.id.iv_area:
+            case R.id.rl_area:
                 startActivityForResult(new Intent(ReleaseOptionActivity.this, ChooseAreaActivity.class), REQUEST_AREA);
                 break;
-            case R.id.iv_sales_area:
+            case R.id.rl_sales_area:
                 openRightLayout();
                 showSalesAreaList();
                 btnZidingyi.setVisibility(View.GONE);
                 break;
-            case R.id.iv_formalities:
+            case R.id.rl_formalities:
                 openRightLayout();
                 showFormalityList();
                 btnZidingyi.setVisibility(View.VISIBLE);
                 ziDingYiFlag = 3;
                 break;
-            case R.id.iv_year:
+            case R.id.rl_year:
                 customDatePicker.show(now.split(" ")[0]);
                 break;
             case R.id.lly_local_image:

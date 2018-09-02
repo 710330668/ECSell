@@ -8,7 +8,7 @@ public class UserInforModel {
 
     /**
      * code : 200
-     * data : {"account":"xs","address":"","companyName":"ddid","isCert":"0","userId":"1b6ce670df034cf5b6bd20cb8fac18bf","userName":"销售","userType":"USER_XS"}
+     * data : {"account":"xs","address":"","companyName":"ddid","isCert":"0","phone":"18363671108","userId":"1b6ce670df034cf5b6bd20cb8fac18bf","userName":"销售","userType":"USER_XS","weChat":""}
      * msg : 操作成功
      */
 
@@ -46,18 +46,22 @@ public class UserInforModel {
          * address :
          * companyName : ddid
          * isCert : 0
+         * phone : 18363671108
          * userId : 1b6ce670df034cf5b6bd20cb8fac18bf
          * userName : 销售
          * userType : USER_XS
+         * weChat :
          */
 
         private String account;
         private String address;
         private String companyName;
         private String isCert;
+        private String phone;
         private String userId;
         private String userName;
         private String userType;
+        private String weChat;
 
         public String getAccount() {
             return account;
@@ -91,6 +95,14 @@ public class UserInforModel {
             this.isCert = isCert;
         }
 
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
         public String getUserId() {
             return userId;
         }
@@ -113,6 +125,14 @@ public class UserInforModel {
 
         public void setUserType(String userType) {
             this.userType = userType;
+        }
+
+        public String getWeChat() {
+            return weChat;
+        }
+
+        public void setWeChat(String weChat) {
+            this.weChat = weChat;
         }
     }
 }

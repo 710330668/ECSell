@@ -114,6 +114,8 @@ public class UserInforActivity extends BaseActivity {
                             if (response.getCode() == 200) {
                                 tvAccountName.setText(response.getData().getAccount());
                                 tvUsername.setText(response.getData().getUserName());
+                                tvPhone.setText(response.getData().getPhone());
+                                tvWechat.setText(response.getData().getWeChat());
                                 userId = response.getData().getUserId();
                             }
                         } catch (Exception e) {
