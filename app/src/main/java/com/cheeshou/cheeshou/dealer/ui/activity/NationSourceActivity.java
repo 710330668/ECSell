@@ -607,6 +607,8 @@ public class NationSourceActivity extends BaseActivity {
             case R.id.bt_search_reset:
                 //搜索重置
                 CURRENT_PAGE = 1;
+                outsiteColor = "";
+                withinColor = "";
                 mTvSelectArea.setText("");
                 mTvSelectBrand.setText("");
                 brandId = "";
