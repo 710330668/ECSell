@@ -44,11 +44,11 @@ public class PutAwayHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data,int position) {
+    public void onBindViewHolder(ItemData data, int position) {
         SearchResultModel data1 = (SearchResultModel) data.getData();
         mCarTitle.setText(data1.getTitle());
         mCarPrice.setText(data1.getPrice());
-        LoaderManager.getLoader().loadNet(mCarPoster,data.getItemDesc());
+        LoaderManager.getLoader().loadNet(mCarPoster, data1.getImageUrl());
 //        mCarPriceSuggestion.setText(data1.getPriceSuggestion());
     }
 }

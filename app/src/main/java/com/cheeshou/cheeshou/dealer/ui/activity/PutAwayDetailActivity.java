@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -56,6 +58,16 @@ public class PutAwayDetailActivity extends BaseActivity {
     private ArrayList<SearchResultModel> data;
     private List<PutAwayCarModel> modelList = new ArrayList<>();
 
+
+    @BindView(R.id.check_percent_up)
+    CheckBox mCheckPercentUp;
+    @BindView(R.id.check_price_up)
+    CheckBox mCheckPriceUp;
+    @BindView(R.id.et_percent_up)
+    EditText mEtPercentUp;
+    @BindView(R.id.et_price_up)
+    EditText mEtPriceUp;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_put_away_detail;
@@ -72,6 +84,24 @@ public class PutAwayDetailActivity extends BaseActivity {
         LinearLayoutManager fullyLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerPutCar.setLayoutManager(fullyLinearLayoutManager);
         mRecyclerPutCar.addItemDecoration(new SpaceItemDecoration(5));
+        mCheckPercentUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mEtPriceUp.setEnabled(!isChecked);
+                if (isChecked) {
+                    mCheckPriceUp.setChecked(false);
+                }
+            }
+        });
+        mCheckPriceUp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mEtPercentUp.setEnabled(!isChecked);
+                if (isChecked) {
+                    mCheckPercentUp.setChecked(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -81,13 +111,15 @@ public class PutAwayDetailActivity extends BaseActivity {
 
     private void initData() {
         for (int i = 0; i < data.size(); i++) {
-            ItemData e = new ItemData(0, SettingDelegate.PUT_AWAY_CAR_TYPE, data.get(i));
+            ItemData e = new ItemData(0, SettingDelegate.PUT_AWAY_CAR_TYPE);
+            e.setData(data.get(i));
             PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getPrice());
             String str = putAwayCarModel.getCarPrice();
             Pattern p = Pattern.compile("\\d+");
             Matcher m = p.matcher(str);
             m.find();
             putAwayCarModel.setCarPrice(m.group());
+            putAwayCarModel.setImageUrl(data.get(i).getImageUrl());
             modelList.add(putAwayCarModel);
             mCarData.add(e);
         }
@@ -128,10 +160,19 @@ public class PutAwayDetailActivity extends BaseActivity {
     private class PutAwayCarModel {
         private String carId;
         private String carPrice;
+        private String imageUrl;
 
         public PutAwayCarModel(String carId, String carPrice) {
             this.carId = carId;
             this.carPrice = carPrice;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
         }
 
         public String getCarId() {

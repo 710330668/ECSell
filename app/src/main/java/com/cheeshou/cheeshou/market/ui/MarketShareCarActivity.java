@@ -199,7 +199,7 @@ public class MarketShareCarActivity extends BaseActivity {
 //        params.put("shareDirect", ("微信"));
 
 
-        affineArticle = "";
+//        affineArticle = "";
         Injection.provideApiService().saveShareInfo(token, UUID.randomUUID().toString(),shareType,shareItems,"微信",affineArticle).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareUrlResponse>() {
             @Override
             public void onSubscribe(Disposable d) {

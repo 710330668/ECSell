@@ -530,6 +530,8 @@ public class StoreManagerItemClickActivity extends BaseActivity {
                 brandId = "";
                 versionId = "";
                 carYear = "";
+                withinColor = "";
+                outsiteColor = "";
                 mEtManMoney.setText("");
                 mEtMinMoney.setText("");
                 mTagFlowPrice.getAdapter().setSelectedList(0);

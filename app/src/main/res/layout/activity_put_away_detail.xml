@@ -91,29 +91,58 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/et_percent_up"
+            <LinearLayout
                 android:layout_width="94dp"
                 android:layout_height="25dp"
-                android:hint="%"
-                android:gravity="right"
-                android:paddingRight="@dimen/dimens_5dp"
                 android:layout_marginRight="14dp"
                 android:background="@drawable/bg_edittext"
-                app:layout_constraintBaseline_toBaselineOf="@+id/check_percent_up"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dimens_5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/check_percent_up"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/check_percent_up">
 
-            <EditText
-                android:id="@+id/et_price_up"
+                <EditText
+                    android:id="@+id/et_percent_up"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_empty" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="%"
+                    android:textColor="#999999" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="94dp"
                 android:layout_height="25dp"
                 android:layout_marginRight="14dp"
-                android:hint="元"
-                android:gravity="right"
-                android:paddingRight="@dimen/dimens_5dp"
                 android:background="@drawable/bg_edittext"
-                app:layout_constraintBaseline_toBaselineOf="@+id/check_price_up"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dimens_5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/check_price_up"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/check_price_up">
+
+                <EditText
+                    android:id="@+id/et_price_up"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_empty" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="元"
+                    android:textColor="#999999" />
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -135,17 +164,31 @@
                 app:layout_constraintLeft_toLeftOf="@id/check_percent_up"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/et_insurance_rebates"
+            <LinearLayout
                 android:layout_width="94dp"
                 android:layout_height="25dp"
                 android:layout_marginRight="14dp"
-                android:hint="%"
-                android:gravity="right"
-                android:paddingRight="@dimen/dimens_5dp"
                 android:background="@drawable/bg_edittext"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_insurance_rebates"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dimens_5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_insurance_rebates"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_insurance_rebates">
+
+                <EditText
+                    android:id="@+id/et_insurance_rebates"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_empty" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="%"
+                    android:textColor="#999999" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_loan_rebates"
@@ -158,17 +201,32 @@
                 app:layout_constraintLeft_toLeftOf="@id/check_percent_up"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/et_loan_rebates"
+                <!--android:id="@+id/et_loan_rebates"-->
+            <LinearLayout
                 android:layout_width="94dp"
                 android:layout_height="25dp"
                 android:layout_marginRight="14dp"
-                android:hint="%"
-                android:gravity="right"
-                android:paddingRight="@dimen/dimens_5dp"
                 android:background="@drawable/bg_edittext"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_loan_rebates"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/dimens_5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_loan_rebates"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_loan_rebates">
+
+                <EditText
+                    android:id="@+id/et_loan_rebates"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/drawable_empty" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="%"
+                    android:textColor="#999999" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_spilt"

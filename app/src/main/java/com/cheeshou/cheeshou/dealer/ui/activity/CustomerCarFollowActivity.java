@@ -476,6 +476,8 @@ public class CustomerCarFollowActivity extends BaseActivity {
                 mTvSelectBrand.setText("");
                 mTvSelectedCar.setText("");
                 carType = "";
+                outsiteColor = "";
+                withinColor = "";
                 mCarTypeName.setText("");
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);

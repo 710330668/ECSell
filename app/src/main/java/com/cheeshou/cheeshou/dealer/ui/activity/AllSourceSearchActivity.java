@@ -246,7 +246,7 @@ public class AllSourceSearchActivity extends BaseActivity {
         nationAlFragment.setArguments(args);
         mTagFragments.add(nationAlFragment);
         searchResultFragment = new StoreManagerItemClickFragment();
-        searchResultFragment.setShare();
+//        searchResultFragment.setShare();
         mTagFragments.add(searchResultFragment);
         mContentAdapter = new ContentPagerAdapter(getSupportFragmentManager());
         mVpContent.setAdapter(mContentAdapter);
@@ -516,6 +516,8 @@ public class AllSourceSearchActivity extends BaseActivity {
                 brandId = "";
                 versionId = "";
                 carYear = "";
+                withinColor = "";
+                outsiteColor = "";
                 mTagFlowPrice.getAdapter().setSelectedList(0);
                 mTagFlowSourceType.getAdapter().setSelectedList(0);
                 mTagFlowColorInside.getAdapter().setSelectedList(0);
