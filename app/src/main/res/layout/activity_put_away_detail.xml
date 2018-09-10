@@ -64,13 +64,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
-                android:checked="true"
                 android:id="@+id/check_percent_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
                 android:layout_marginTop="50dp"
                 android:button="@drawable/bg_radio_put_away"
+                android:checked="true"
                 android:paddingLeft="10dp"
                 android:text="批量提升百分比"
                 android:textColor="#333333"
@@ -108,7 +108,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/drawable_empty" />
+                    android:background="@drawable/drawable_empty"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -130,12 +131,13 @@
                 app:layout_constraintTop_toTopOf="@+id/check_price_up">
 
                 <EditText
-                    android:enabled="false"
                     android:id="@+id/et_price_up"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/drawable_empty" />
+                    android:background="@drawable/drawable_empty"
+                    android:enabled="false"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -203,7 +205,7 @@
                 app:layout_constraintLeft_toLeftOf="@id/check_percent_up"
                 app:layout_constraintTop_toTopOf="parent" />
 
-                <!--android:id="@+id/et_loan_rebates"-->
+            <!--android:id="@+id/et_loan_rebates"-->
             <LinearLayout
                 android:layout_width="94dp"
                 android:layout_height="25dp"

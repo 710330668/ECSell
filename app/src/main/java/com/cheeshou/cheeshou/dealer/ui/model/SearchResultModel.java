@@ -31,6 +31,22 @@ public class SearchResultModel implements Parcelable {
     private String id;
 
     private String saleId;
+    //建议零售价
+    private String advicePrice;
+    //    底价
+    private String salePrice;
+
+    public String getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(String salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public static Creator<SearchResultModel> getCREATOR() {
+        return CREATOR;
+    }
 
     private boolean openPutEntrance;
 
@@ -49,6 +65,8 @@ public class SearchResultModel implements Parcelable {
         isPut = in.readByte() != 0;
         id = in.readString();
         openPutEntrance = in.readByte() != 0;
+        advicePrice = in.readString();
+        salePrice = in.readString();
     }
 
     public static final Creator<SearchResultModel> CREATOR = new Creator<SearchResultModel>() {
@@ -156,6 +174,15 @@ public class SearchResultModel implements Parcelable {
         return 0;
     }
 
+    public String getAdvicePrice() {
+        return advicePrice;
+    }
+
+    public void setAdvicePrice(String advicePrice) {
+        this.advicePrice = advicePrice;
+    }
+
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(imageUrl);
@@ -169,5 +196,7 @@ public class SearchResultModel implements Parcelable {
         dest.writeByte((byte) (isPut ? 1 : 0));
         dest.writeString(id);
         dest.writeByte((byte) (openPutEntrance ? 1 : 0));
+        dest.writeString(advicePrice);
+        dest.writeString(salePrice);
     }
 }

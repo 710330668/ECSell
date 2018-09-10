@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,12 +143,12 @@ public class NationalSourceFragment extends BaseFragment {
                     mPutAwayData.add(model);
                     if (!isOpen) {
                         Bundle bundle = new Bundle();
-                        if(scopeType.equals("all")) {
+                        if (scopeType.equals("all")) {
 
                             bundle.putString("carId", model.getId());
                             bundle.putString("dealer_source", "nationSource");
-                            bundle.putParcelableArrayList("shelves_data",mPutAwayData);
-                        }else{
+                            bundle.putParcelableArrayList("shelves_data", mPutAwayData);
+                        } else {
                             bundle.putString("carId", model.getId());
                         }
 
@@ -330,31 +332,33 @@ public class NationalSourceFragment extends BaseFragment {
                         if (response.getCode() == 200) {
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
-                                if(scopeType.equals("all")){
+                                if (scopeType.equals("all")) {
                                     //全国
                                     SearchResultModel data = new SearchResultModel();
                                     data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                     data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                     data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                     data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                    data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() +"|销售区域:"
-                                            +response.getData().getLists().get(i).getSaleArea());
+                                    data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() + "|销售区域:"
+                                            + response.getData().getLists().get(i).getSaleArea());
                                     data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                     data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                     data.setId(response.getData().getLists().get(i).getCarId());
+                                    data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
                                     ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                     mSearchResultData.add(e);
-                                }else{
+                                } else {
                                     SearchResultModel data = new SearchResultModel();
                                     data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getCreateDate()));
                                     data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                     data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                     data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                            data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
-                                                    response.getData().getLists().get(i).getBrowseNum() + "次");
+                                    data.setSubTitle("分享" + response.getData().getLists().get(i).getShareNum() + "次|浏览" +
+                                            response.getData().getLists().get(i).getBrowseNum() + "次");
                                     data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                     data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                     data.setId(response.getData().getLists().get(i).getCarId());
+                                    data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
                                     ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                     mSearchResultData.add(e);
                                 }

@@ -49,6 +49,6 @@ public class PutAwayHolder extends BaseViewHolder<ItemData> {
         mCarTitle.setText(data1.getTitle());
         mCarPrice.setText(data1.getPrice());
         LoaderManager.getLoader().loadNet(mCarPoster, data1.getImageUrl());
-//        mCarPriceSuggestion.setText(data1.getPriceSuggestion());
+        mCarPriceSuggestion.setText("底价 " + data1.getSalePrice() + "万丨建议售价" + data1.getAdvicePrice() + "万");
     }
 }

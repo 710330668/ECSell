@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -67,6 +69,7 @@ public class PutAwayDetailActivity extends BaseActivity {
     EditText mEtPercentUp;
     @BindView(R.id.et_price_up)
     EditText mEtPriceUp;
+    private BaseAdapter adapter;
 
     @Override
     public int bindLayout() {
@@ -107,23 +110,62 @@ public class PutAwayDetailActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initData();
+        mEtPercentUp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    String s1 = mEtPercentUp.getText().toString();
+                    Double v = Double.valueOf(s1);
+                    for (SearchResultModel bean : data) {
+                        bean.setSalePrice(Integer.parseInt(s1) * (1 + (v / 100)) + "");
+                    }
+                    adapter.notifyDataSetChanged();
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mEtPriceUp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String s1 = mEtPriceUp.getText().toString();
+                Double aDouble = Double.valueOf(s1);
+                for (SearchResultModel bean : data) {
+                    bean.setSalePrice((Integer.parseInt(bean.getAdvicePrice()) + (aDouble / 10000)) + "");
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void initData() {
         for (int i = 0; i < data.size(); i++) {
             ItemData e = new ItemData(0, SettingDelegate.PUT_AWAY_CAR_TYPE);
+            data.get(i).setSalePrice(data.get(i).getAdvicePrice());
             e.setData(data.get(i));
-            PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getPrice());
-            String str = putAwayCarModel.getCarPrice();
-            Pattern p = Pattern.compile("\\d+");
-            Matcher m = p.matcher(str);
-            m.find();
-            putAwayCarModel.setCarPrice(m.group());
-            putAwayCarModel.setImageUrl(data.get(i).getImageUrl());
-            modelList.add(putAwayCarModel);
             mCarData.add(e);
         }
-        BaseAdapter adapter = new BaseAdapter(mCarData, new SettingDelegate(), new onItemClickListener() {
+        adapter = new BaseAdapter(mCarData, new SettingDelegate(), new onItemClickListener() {
             @Override
             public void onClick(View v, Object data) {
                 startActivity(CarDetailActivity.class);
@@ -139,10 +181,19 @@ public class PutAwayDetailActivity extends BaseActivity {
 
     @OnClick(R.id.fm_put_away)
     public void onViewClicked(View view) {
+        for (int i = 0; i < data.size(); i++) {
+            PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getSalePrice());
+            String str = putAwayCarModel.getCarPrice();
+            Pattern p = Pattern.compile("\\d+");
+            Matcher m = p.matcher(str);
+            m.find();
+            putAwayCarModel.setCarPrice(m.group());
+            putAwayCarModel.setImageUrl(data.get(i).getImageUrl());
+            modelList.add(putAwayCarModel);
+        }
         Injection.provideApiService().batchShelvesCarInfo(token, mEtInsuranceRebates.getText().toString(), mEtLoanRebates.getText().toString(), new Gson().toJson(modelList)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
             @Override
             public void accept(EasyResponse easyResponse) throws Exception {
-                Log.e(TAG, "accept: " + new Gson().toJson(easyResponse));
                 if (easyResponse.getCode() == 200) {
                     Toast.makeText(appContext, "上架成功", Toast.LENGTH_SHORT).show();
                     finish();

@@ -191,6 +191,7 @@ public class SearchResultFragment extends BaseFragment {
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" +response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
+                                data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() +"");
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

@@ -265,6 +265,7 @@ public class CustomerWantFragment extends BaseFragment {
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
+                                data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
                                 data.setOpenPutEntrance(true);
                                 switch (INVENTORY) {
                                     case C.INVENTORY_DEALER:
