@@ -57,9 +57,12 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -334,7 +337,7 @@ public class ReleaseOptionActivity extends BaseActivity {
                                     llyYouhui.addView(button);
                                     LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) button.getLayoutParams();
                                     linearParams.setMargins(20, 20, 10, 10);
-                                    linearParams.height = 120;
+                                    linearParams.height = 150;
                                     linearParams.width = 240;
                                     button.setLayoutParams(linearParams);
                                     final int finalI = i;
@@ -538,7 +541,7 @@ public class ReleaseOptionActivity extends BaseActivity {
             case R.id.btn_release_options:
                 //发布车源
                 if(TextUtils.isEmpty(carId)){
-                    carId = ParamManager.getInstance(this).getCarId();
+                    versionId = ParamManager.getInstance(this).getCarId();
                 }
                 saveCarInfo();
                 break;
@@ -570,6 +573,14 @@ public class ReleaseOptionActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void saveCarInfo() {
+        if(TextUtils.isEmpty(optionId)||TextUtils.isEmpty(versionId)||TextUtils.isEmpty(tvApprenceColor.getText().toString())
+                ||TextUtils.isEmpty(tvInteriorColor.getText().toString())||TextUtils.isEmpty(tvSalesArea.getText().toString().trim())
+                ||TextUtils.isEmpty(tvFormalities.getText().toString())||TextUtils.isEmpty(tvYear.getText().toString())
+                ||TextUtils.isEmpty(etCarPrice.getText().toString())||TextUtils.isEmpty(etGuidedPrice.getText().toString())
+                ||TextUtils.isEmpty(etCommission.getText().toString())){
+            ToastUtils.showShort(ReleaseOptionActivity.this,"请保证信息完整");
+            return;
+        }
         myDialog.show();
         try {
             prefers = "";
@@ -830,6 +841,8 @@ public class ReleaseOptionActivity extends BaseActivity {
                         rlCarPhoto.setAdapter(imageDeleteAdapter);
                         imgUrl = getPath(data);
                         imgPaths.add(imgUrl);
+                        File imgFile = new File(imgUrl);
+                        compressBmpToFile(bitmap,imgFile);
 
                     }
                 } catch (FileNotFoundException e) {
@@ -846,6 +859,26 @@ public class ReleaseOptionActivity extends BaseActivity {
     }
 
 
+    public static void compressBmpToFile(Bitmap bmp,File file){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int options = 80;//个人喜欢从80开始,
+        bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        while (baos.toByteArray().length / 1024 > 800) {
+            baos.reset();
+            options -= 10;
+            bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(baos.toByteArray());
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private String getPath(Intent data) {
         String[] imgPath = {MediaStore.Images.Media.DATA};
 
@@ -859,4 +892,10 @@ public class ReleaseOptionActivity extends BaseActivity {
         return path;
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
+    }
 }

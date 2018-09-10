@@ -99,7 +99,8 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     private Location location;
     private Geocoder geocoder;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
-    private String provinceCode, cityCode, cityName;
+    private String cityName = "青岛市";
+    private String provinceCode, cityCode ;
     private AreasModel areasModel;
     private ItemData itemData;
     private List<HistoryAreaModel> historyAreaModels = new ArrayList<>();
@@ -129,6 +130,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     public void doBusiness(Context mContext) {
         showHistoryArea();
         getRegionList();
+        getCityInfor("青岛市");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rlArea.setLayoutManager(layoutManager);
         rlArea.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -250,7 +252,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_location, R.id.tv_loaction,R.id.btn_area1,R.id.btn_area2,R.id.btn_area3})
+    @OnClick({R.id.iv_back, R.id.iv_location, R.id.rl_location,R.id.btn_area1,R.id.btn_area2,R.id.btn_area3})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -259,7 +261,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                 break;
             case R.id.iv_location:
                 break;
-            case R.id.tv_loaction:
+            case R.id.rl_location:
                 intent.putExtra("area", cityName);
                 intent.putExtra("provinceCode", provinceCode);
                 intent.putExtra("cityCode", cityCode);
@@ -307,7 +309,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     }
 
     @SuppressLint("MissingPermission")
-    private Location getLocation(Context context) {
+    private void getLocation(Context context) {
         LocationManager manager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         //若GPS未开启
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -330,28 +332,30 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
         }
 
         geocoder = new Geocoder(ChooseAreaActivity.this);
-        try {
-            List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 5);
-            Log.v("location", location.getLatitude() + "," + location.getLongitude());
-            if (list != null) {
-                for (int i = 0; i < list.size(); i++) {
-                    Address address = list.get(i);
-                    String add = "";
-                    int maxLine = address.getMaxAddressLineIndex();
-                    Log.v("maxline", maxLine + "");
+        if(location!=null) {
+            try {
+                List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 5);
+                Log.v("location", location.getLatitude() + "," + location.getLongitude());
+                if (list != null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        Address address = list.get(i);
+                        String add = "";
+                        int maxLine = address.getMaxAddressLineIndex();
+                        Log.v
+                                ("maxline", maxLine + "");
 //                    if (maxLine >= 2) {
 //                        add = address.getAddressLine(1) + address.getAddressLine(2);
 //                    } else {
 //                        add = address.getAddressLine(1);
 //                    }
-                    tvLoaction.setText(address.getLocality());
-                    getCityInfor(address.getLocality());
+                        tvLoaction.setText(address.getLocality());
+                        getCityInfor(address.getLocality());
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return location;
 
     }
 

@@ -35,6 +35,8 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.btn_login)
     Button btnLogin;
 
+    private String account , password , userType;
+
     @Override
     public int bindLayout() {
         return R.layout.ac_login;
@@ -42,7 +44,9 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initParams(Bundle params) {
-
+        account = SP.getInstance(C.USER_DB, this).getString(C.USER_ACCOUNT);
+        password = SP.getInstance(C.USER_DB, this).getString(C.USER_PASSWORD);
+        userType = SP.getInstance(C.USER_DB, this).getString(C.USER_TYPE);
     }
 
     @Override
@@ -52,7 +56,21 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
+        if(!TextUtils.isEmpty(account)&&!TextUtils.isEmpty(password)){
+            switch (userType){
+                case C.USER_TYPE_CYS:
+                    ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_OPTION);
+                    break;
+                case C.USER_TYPE_JXS:
+                    ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_DEALER);
+                    break;
+                case C.USER_TYPE_XS:
+                    ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_MARKET);
+                    break;
+            }
+            startActivity(MainTabActivity.class);
+            finish();
+        }
     }
 
     @Override
@@ -101,6 +119,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void saveUserInfor(LoginResponse loginResponse) {
+        SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_ACCOUNT,loginResponse.getData().getToken());
+        SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_PASSWORD,loginResponse.getData().getToken());
         SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_TOKEN,loginResponse.getData().getToken());
         SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_TYPE,loginResponse.getData().getUserType());
         SP.getInstance(C.USER_DB,LoginActivity.this).put(C.USER_PHONE,loginResponse.getData().getPhone());

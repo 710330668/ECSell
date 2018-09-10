@@ -93,10 +93,11 @@ public class MarketShareCarActivity extends BaseActivity {
     private String mName;
     private String mCompany;
     private SettingDelegate delegate;
-    private String url = "http://39.104.136.205/share/visitShareInfo?";
+    private String url = "http://www.cheeshou.com/share/visitShareInfo?shareId=";
     private String shareUrl = "";
     private String token = "";
     private String shareType,shareItems;
+    private String UuId;
 
 
     @Override
@@ -121,9 +122,9 @@ public class MarketShareCarActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
+        UuId = UUID.randomUUID().toString();
         normalArticle += ("  [诚信车商] " + mCompany + " \n");
-        normalArticle += ("  [优质车源] " + url + UUID.randomUUID().toString() + "\n");
+        normalArticle += ("  [优质车源] " + url + UuId + "\n");
         normalArticle += ("  [联系方式]  " + mPhone + "  " + mName + "\n");
         normalArticle += ("  [看车地址]  " + mAddress + "\n");
 
@@ -200,7 +201,8 @@ public class MarketShareCarActivity extends BaseActivity {
 
 
 //        affineArticle = "";
-        Injection.provideApiService().saveShareInfo(token, UUID.randomUUID().toString(),shareType,shareItems,"微信",affineArticle).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareUrlResponse>() {
+
+        Injection.provideApiService().saveShareInfo(token, UuId,shareType,shareItems,"微信",affineArticle).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareUrlResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -245,7 +247,7 @@ public class MarketShareCarActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), MarketShareWechatActivity.class);
                             Bundle extras = new Bundle();
                             extras.putParcelableArrayList("data", data);
-                            extras.putString("shareUrl",shareUrl);
+                            extras.putString("shareUrl",url+UuId);
                             ArrayList<CarPhotoModel> list = new ArrayList<>();
                             for (ItemData carPhoto : carPhotos) {
                                 if (carPhoto.getData() != null) {

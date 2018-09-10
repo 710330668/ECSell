@@ -133,6 +133,10 @@ public class CarDetailActivity extends BaseActivity {
     FrameLayout flBanner;
     @BindView(R.id.tv_car_chassis)
     TextView tvCarChassis;
+    @BindView(R.id.tv_price_name)
+    TextView tvPriceName;
+    @BindView(R.id.lly_call)
+    LinearLayout llyCall;
     private PopupWindow pop;
     private View popView;
     private Button modifyBtn, shelvesBtn, reservateBtn;
@@ -274,7 +278,7 @@ public class CarDetailActivity extends BaseActivity {
                             saleId = response.getData().getCarId();
                             tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceCode() + response.getData().getCityName());
                             tvAdvise.setText("车源价" + response.getData().getCarPrice() + "万|"
-                                    + "建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
+                                    + "建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "元");
                             tvVname.setText(response.getData().getVname());
                             tvCarPrice.setText(response.getData().getOrderPrice() + "万");
                             tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
@@ -334,20 +338,21 @@ public class CarDetailActivity extends BaseActivity {
                             if (INVENTORY == C.INVENTORY_DEALER && TextUtils.isEmpty(dealerSource)) {
                                 tvAdvise.setText(response.getData().getSaleCarPrice() + "万|"
                                         + "建议售价" + response.getData().getGuidPrice() + "万|"
-                                        + "销售提成" + response.getData().getSaleCommission() + "万");
+                                        + "销售提成" + response.getData().getSaleCommission() + "元");
                                 tvCarPrice.setText(response.getData().getSaleCarPrice() + "万");
-                                tvReduce.setText("降价" + (response.getData().getGuidPrice() - response.getData().getSaleCarPrice() + "万"));
+                                tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getSaleCarPrice() + "万"));
                             } else if (INVENTORY == C.INVENTORY_MARKET) {
+                                tvPriceName.setText("销售底价");
                                 tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万");
                                 tvCarPrice.setText(response.getData().getSaleCarPrice() + "万");
-                                tvReduce.setText("降价" + (response.getData().getGuidPrice() - response.getData().getSaleCarPrice() + "万"));
+                                tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getSaleCarPrice() + "万"));
                             } else {
                                 tvCarPrice.setText(response.getData().getCarPrice() + "万");
-                                tvReduce.setText("降价" + (response.getData().getGuidPrice() - response.getData().getCarPrice() + "万"));
-                                tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "万");
+                                tvReduce.setText("降价" + (response.getData().getAdvicePrice() - response.getData().getCarPrice() + "万"));
+                                tvAdvise.setText("建议售价" + response.getData().getGuidPrice() + "万|" + "销售提成" + response.getData().getSaleCommission() + "元");
                             }
                             tvVname.setText(response.getData().getBrand() + "-" + response.getData().getVname());
-                            tvCarGuidePrice.setText(response.getData().getGuidPrice() + "万");
+                            tvCarGuidePrice.setText(response.getData().getAdvicePrice() + "万");
                             tvRebates.setText("保险返点" + response.getData().getInsuranceRebates() + "%" + "|贷款返点" + response.getData().getLoanRebates() + "%");
                             tvSellStatus.setText(response.getData().getCarStatusName());
                             tvShareShelvesNum.setText("上架" + response.getData().getShelvesNum() + "次|分享" + response.getData().getShareNum() + "次|浏览" + response.getData().getBrowseNum() + "次");
@@ -410,8 +415,8 @@ public class CarDetailActivity extends BaseActivity {
             button.setTextColor(getResources().getColor(R.color.color_FF5754));
             llyDiscounts.addView(button);
             LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) button.getLayoutParams();
-            linearParams.setMargins(20, 20, 10, 10);
-            linearParams.height = 80;
+            linearParams.setMargins(20, 20, 30, 10);
+            linearParams.height = 150;
             linearParams.width = 240;
             button.setLayoutParams(linearParams);
         }
@@ -564,7 +569,7 @@ public class CarDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more, R.id.btn_browse_car, R.id.btn_share_car, R.id.fl_banner, R.id.btn_car_share,R.id.lly_call})
+    @OnClick({R.id.iv_back, R.id.iv_amplification, R.id.iv_more, R.id.btn_browse_car, R.id.btn_share_car, R.id.fl_banner, R.id.btn_car_share, R.id.lly_call})
     public void onViewClicked(View view) {
         Bundle bundle = null;
         switch (view.getId()) {
@@ -600,8 +605,8 @@ public class CarDetailActivity extends BaseActivity {
                 startActivity(MarketShareCarActivity.class, bundle);
                 break;
             case R.id.lly_call:
-                if(TextUtils.isEmpty(userPhone)){
-                    ToastUtils.showShort(this,"赞无手机号信息");
+                if (TextUtils.isEmpty(userPhone)) {
+                    ToastUtils.showShort(this, "赞无手机号信息");
                     return;
                 }
                 callPhone(userPhone);
@@ -673,7 +678,7 @@ public class CarDetailActivity extends BaseActivity {
         @Override
         public View create(BannerItem item, int position, ViewGroup container) {
             ImageView iv = new ImageView(container.getContext());
-            iv.setScaleType(ImageView.ScaleType.FIT_XY);
+            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             LoaderManager.getLoader().loadNet(iv, item.image);
             return iv;
         }
@@ -682,6 +687,7 @@ public class CarDetailActivity extends BaseActivity {
 
     /**
      * 拨打电话（直接拨打电话）
+     *
      * @param phoneNum 电话号码
      */
     public void callPhone(String phoneNum) {
@@ -696,7 +702,7 @@ public class CarDetailActivity extends BaseActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            ToastUtils.showShort(this,"请先打开电话权限");
+            ToastUtils.showShort(this, "请先打开电话权限");
             return;
         }
         startActivity(intent);

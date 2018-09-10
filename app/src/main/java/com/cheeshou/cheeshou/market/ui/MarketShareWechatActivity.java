@@ -85,7 +85,7 @@ public class MarketShareWechatActivity extends BaseActivity {
     }
 
     @SuppressLint("LongLogTag")
-    @OnClick({R.id.ll_share_to_friend, R.id.ll_share_to_friend_circle, R.id.ll_share_to_collector})
+    @OnClick({R.id.ll_share_to_friend, R.id.ll_share_to_friend_circle, R.id.ll_share_to_collector,R.id.tv_close})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_share_to_friend:
@@ -96,6 +96,9 @@ public class MarketShareWechatActivity extends BaseActivity {
                 break;
             case R.id.ll_share_to_collector:
                 weChatFavorite();
+                break;
+            case R.id.tv_close:
+                finish();
                 break;
         }
     }
@@ -128,6 +131,7 @@ public class MarketShareWechatActivity extends BaseActivity {
         });
         // 执行分享
         wechat.share(sp);
+        finish();
     }
 
     @SuppressLint("LongLogTag")
@@ -162,6 +166,7 @@ public class MarketShareWechatActivity extends BaseActivity {
         });
         // 执行分享
         wechatMoments.share(momentsSp);
+        finish();
     }
 
     private void shareToFriend() {
@@ -192,5 +197,6 @@ public class MarketShareWechatActivity extends BaseActivity {
         });
         // 执行分享
         wechat.share(sp);
+        finish();
     }
 }

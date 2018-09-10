@@ -8,11 +8,11 @@ import android.support.annotation.IntDef;
 public interface C {
 
     //正式
-    String PRODUCT_BASE_URL = "http://api.yipurse.com/";
+    String PRODUCT_BASE_URL = "";
 
 
     //测试
-    String TEST_BASE_URL = "http://39.104.136.205/";
+    String TEST_BASE_URL = "http://www.cheeshou.com/";
 
     //http缓存大小
     int httpCacheSize = 10 * 1024 * 1024;
@@ -76,6 +76,10 @@ public interface C {
     }
 
     String USER_DB = "user_db";
+
+    String USER_ACCOUNT = "user_account";
+
+    String USER_PASSWORD = "user_password";
 
     String USER_TOKEN = "token";
 

@@ -62,6 +62,7 @@
         android:layout_margin="20dp"
         android:background="@mipmap/home_bg"
         android:textColor="#FFFFFF"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.cheeshou.cheeshou;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.cheeshou.cheeshou.config.C;

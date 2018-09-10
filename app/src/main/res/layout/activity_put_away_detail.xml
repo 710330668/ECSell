@@ -64,6 +64,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
+                android:checked="true"
                 android:id="@+id/check_percent_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,6 +130,7 @@
                 app:layout_constraintTop_toTopOf="@+id/check_price_up">
 
                 <EditText
+                    android:enabled="false"
                     android:id="@+id/et_price_up"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

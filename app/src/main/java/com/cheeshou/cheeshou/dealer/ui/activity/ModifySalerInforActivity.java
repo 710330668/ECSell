@@ -33,7 +33,9 @@ import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.imageloader.LoaderManager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,6 +88,7 @@ public class ModifySalerInforActivity extends BaseActivity {
     public CommonDialog resetPassDialog;
     private CommonDialog dialog;
     private Dialog myDialog;
+    private Bitmap bitmap;
 
     @Override
     public int bindLayout() {
@@ -181,6 +184,25 @@ public class ModifySalerInforActivity extends BaseActivity {
         });
     }
 
+    public static void compressBmpToFile(Bitmap bmp,File file){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int options = 80;//个人喜欢从80开始,
+        bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        while (baos.toByteArray().length / 1024 > 1024) {
+            baos.reset();
+            options -= 10;
+            bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(baos.toByteArray());
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressLint("CheckResult")
     private void updateXsUserInfo() {
         Injection.provideApiService().updateXsUserInfo(token, userId)
@@ -263,12 +285,14 @@ public class ModifySalerInforActivity extends BaseActivity {
                 Uri uri = data.getData();
                 ContentResolver cr = this.getContentResolver();
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                     ivHead.setImageBitmap(bitmap);
                 } catch (Exception e) {
                     LogUtils.e(e.getMessage());
                 }
                 imgUrl = getPath(data);
+                File file =new File(imgUrl);
+                compressBmpToFile(bitmap,file);
                 break;
             default:
                 break;

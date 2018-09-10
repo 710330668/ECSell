@@ -19,17 +19,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.BitmapUtils;
 import com.example.com.common.util.ContractUtil;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,7 @@ public class AddSalerActivity extends BaseActivity {
     private String bitmap64Head;
     private String imgUrl;
     private Dialog myDialog;
+    private Bitmap bitmap;
 
     @Override
     public int bindLayout() {
@@ -129,39 +132,44 @@ public class AddSalerActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     private void savaInfor() {
         myDialog.show();
-        if (!TextUtils.isEmpty(etAccount.getText().toString()) && !TextUtils.isEmpty(etPassword.getText().toString()) &&
-                !TextUtils.isEmpty(etSaleName.getText().toString()) && !TextUtils.isEmpty(etPhone.getText().toString())
-                && !TextUtils.isEmpty(etWechat.getText().toString()) && !TextUtils.isEmpty(bitmap64Head)) {
-            Map<String, RequestBody> params = new HashMap<>();
-            File file = new File(imgUrl);
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
-            params.put("account", toRequestBody(etAccount.getText().toString()));
-            params.put("password", toRequestBody(etPassword.getText().toString()));
-            params.put("phone", toRequestBody(etPhone.getText().toString().trim()));
-            params.put("userName", toRequestBody(etSaleName.getText().toString()));
-            params.put("weChat", toRequestBody(etWechat.getText().toString()));
-            params.put("sex", toRequestBody("0"));
-            Injection.provideApiService().saveXsUserInfo(token, body, params)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<EasyResponse>() {
-                        @Override
-                        public void accept(EasyResponse response) throws Exception {
-                            LogUtils.e(response.getMsg());
-                            myDialog.dismiss();
-                            if (response.getCode() == 200) {
-                                Toast.makeText(AddSalerActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                Toast.makeText(AddSalerActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+        try {
+            if (!TextUtils.isEmpty(etAccount.getText().toString()) && !TextUtils.isEmpty(etPassword.getText().toString()) &&
+                    !TextUtils.isEmpty(etSaleName.getText().toString()) && !TextUtils.isEmpty(etPhone.getText().toString())
+                    && !TextUtils.isEmpty(etWechat.getText().toString()) && !TextUtils.isEmpty(bitmap64Head)) {
+                Map<String, RequestBody> params = new HashMap<>();
+                File file = new File(imgUrl);
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+                params.put("account", toRequestBody(etAccount.getText().toString()));
+                params.put("password", toRequestBody(etPassword.getText().toString()));
+                params.put("phone", toRequestBody(etPhone.getText().toString().trim()));
+                params.put("userName", toRequestBody(etSaleName.getText().toString()));
+                params.put("weChat", toRequestBody(etWechat.getText().toString()));
+                params.put("sex", toRequestBody("0"));
+                Injection.provideApiService().saveXsUserInfo(token, body, params)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<EasyResponse>() {
+                            @Override
+                            public void accept(EasyResponse response) throws Exception {
+                                LogUtils.e(response.getMsg());
+                                myDialog.dismiss();
+                                if (response.getCode() == 200) {
+                                    Toast.makeText(AddSalerActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(AddSalerActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
 
-        } else {
-            Toast.makeText(AddSalerActivity.this, "请保证信息完整", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AddSalerActivity.this, "请保证信息完整", Toast.LENGTH_SHORT).show();
+            }
+        }catch (Exception e){
+            LogUtils.e(e.toString());
         }
+
 
 
     }
@@ -189,16 +197,37 @@ public class AddSalerActivity extends BaseActivity {
                 Uri uri = data.getData();
                 ContentResolver cr = this.getContentResolver();
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                     ivHead.setImageBitmap(bitmap);
                     bitmap64Head = BitmapUtils.bitmapToBase64(bitmap);
                 } catch (Exception e) {
                     LogUtils.e(e.getMessage());
                 }
                 imgUrl = getPath(data);
+                File file = new File(imgUrl);
+                compressBmpToFile(bitmap,file);
                 break;
             default:
                 break;
+        }
+    }
+
+    public static void compressBmpToFile(Bitmap bmp,File file){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int options = 80;//个人喜欢从80开始,
+        bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        while (baos.toByteArray().length / 1024 > 1024) {
+            baos.reset();
+            options -= 10;
+            bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(baos.toByteArray());
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

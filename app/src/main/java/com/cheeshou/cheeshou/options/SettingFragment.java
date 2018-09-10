@@ -245,6 +245,8 @@ public class SettingFragment extends BaseFragment {
             @Override
             public void doConfirm() {
                 // TODO Auto-generated method stub
+                SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
                 startActivity(LoginActivity.class);
                 getActivity().finish();
                 dialog.dismiss();
