@@ -8,7 +8,7 @@ public class ModifyCarInforResponse {
 
     /**
      * code : 200
-     * data : {"brand":"AC Schnitzer","carPrice":2,"carSeries":"奥迪RS 4","guidPrice":3,"imgThumUrl":"http://39.104.136.205:8888/car/20180818/1534562444828_small.jpg","insuranceRebates":10,"loanRebates":1,"saleCarPrice":222,"saleId":"0659c7b50f83429b942f0fc74fb4ea8e","vname":"2018款 30周年年型 Sportback 35 TFSI 进取型"}
+     * data : {"brand":"AC Schnitzer","carPrice":1,"carSeries":"奥迪RS 4","guidPrice":2,"imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326458997_small.jpg","insuranceRebates":0,"loanRebates":0,"saleCarPrice":1.01,"saleId":"54f0298d26274049af52534a4b8070b5","vname":"2018款 30周年年型 Sportback 35 TFSI 进取型"}
      * msg : 操作成功
      */
 
@@ -43,14 +43,14 @@ public class ModifyCarInforResponse {
     public static class DataBean {
         /**
          * brand : AC Schnitzer
-         * carPrice : 2
+         * carPrice : 1
          * carSeries : 奥迪RS 4
-         * guidPrice : 3
-         * imgThumUrl : http://39.104.136.205:8888/car/20180818/1534562444828_small.jpg
-         * insuranceRebates : 10
-         * loanRebates : 1
-         * saleCarPrice : 222
-         * saleId : 0659c7b50f83429b942f0fc74fb4ea8e
+         * guidPrice : 2
+         * imgThumUrl : http://39.104.136.205:8888/car/20180907/1536326458997_small.jpg
+         * insuranceRebates : 0
+         * loanRebates : 0
+         * saleCarPrice : 1.01
+         * saleId : 54f0298d26274049af52534a4b8070b5
          * vname : 2018款 30周年年型 Sportback 35 TFSI 进取型
          */
 
@@ -61,7 +61,7 @@ public class ModifyCarInforResponse {
         private String imgThumUrl;
         private int insuranceRebates;
         private int loanRebates;
-        private int saleCarPrice;
+        private double saleCarPrice;
         private String saleId;
         private String vname;
 
@@ -121,11 +121,11 @@ public class ModifyCarInforResponse {
             this.loanRebates = loanRebates;
         }
 
-        public int getSaleCarPrice() {
+        public double getSaleCarPrice() {
             return saleCarPrice;
         }
 
-        public void setSaleCarPrice(int saleCarPrice) {
+        public void setSaleCarPrice(double saleCarPrice) {
             this.saleCarPrice = saleCarPrice;
         }
 

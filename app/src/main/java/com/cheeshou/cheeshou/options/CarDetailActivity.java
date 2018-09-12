@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
-import com.cheeshou.cheeshou.dealer.ui.activity.StoreReportActivity;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.main.login.LoginActivity;
@@ -376,6 +375,7 @@ public class CarDetailActivity extends BaseActivity {
                             tvCreateDate.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             tvCarColor.setText("外观" + response.getData().getOutsiteColor() + " " + "内饰" + response.getData().getWithinColor());
                             tvCarType.setText(response.getData().getTypeName());
+                            tvCarChassis.setText(response.getData().getChassisNo());
                             tvProvince.setText(response.getData().getProvinceName() + " " + response.getData().getCityName());
                             tvSalerArea.setText(response.getData().getSaleArea());
                             for (int i = 0; i < response.getData().getDiscounts().size(); i++) {

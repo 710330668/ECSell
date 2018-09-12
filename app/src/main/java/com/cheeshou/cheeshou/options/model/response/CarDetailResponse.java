@@ -11,7 +11,7 @@ public class CarDetailResponse implements Serializable{
 
     /**
      * code : 200
-     * data : {"advicePrice":10,"audiId":1524,"brand":"奔驰","brandId":142,"browseNum":0,"carFormality":"手续全随车发","carId":"130598baa2f940f1b7a78407b7bea2a5","carPrice":50,"carSeries":"捷豹XE","carSetting":"配置非好","carStatusName":"已上架","carType":"1","carUserName":"车源商负责人2","carUserPhone":"13869647062","carYear":"2018","chassisNo":"272822","cityCode":"370200","cityName":"青岛市","createDate":1535599304000,"discountContent":"优惠信息","discounts":[{"discountName":"优惠信息"}],"guidPrice":59,"imgs":[{"imgId":"30980617a3be4abe93a3ded780ed98d5","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304448_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304448.jpg"},{"imgId":"33f03f49d2604840bcac03f291b151ac","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304479_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304479.jpg"},{"imgId":"b2c7985d4e7d4b8388baa3720640eda7","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304385_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304385.jpg"},{"imgId":"c93200ad282841729a02d558b0544e58","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304417_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304417.jpg"}],"insuranceRebates":4,"loanRebates":4,"outsiteColor":"黑","provinceCode":"370000","provinceName":"山东省","remark":"没有备注","saleArea":"华北","saleCarPrice":60,"saleCommission":4000,"saleId":"de233f406b5d4cbdaa71fe567d8b7bde","saleStatusName":"已上架","shareNum":0,"shelvesNum":1,"typeName":"全国","versionId":1361152,"vname":"2018款 2.0T 300PS 四驱R-Sport运动版","withinColor":"黑"}
+     * data : {"advicePrice":10,"audiId":1541,"brand":"奥迪","brandId":143,"browseNum":181,"carFormality":"商检","carId":"44db4f00fb044aaa9cc79939552c1435","carPrice":49,"carSeries":"江淮iEV6E","carSetting":"peizhi","carStatusName":"已上架","carType":"1","carUserName":"yang","carUserPhone":"18661835353","carYear":"2018","chassisNo":"27288373","cityCode":"370200","cityName":"青岛市","createDate":1535763538000,"discountContent":"斤斤计较","discounts":[{"discountName":"斤斤计较"}],"guidPrice":66,"imgs":[{"imgId":"1dc92f249c844ae1bc9ec347017727af","imgThumUrl":"http://39.104.136.205:8888/car/20180901/1535763538607_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180901/1535763538607.jpg"},{"imgId":"1f7c35b1a6a344f5a6e83fedb69ccb5b","imgThumUrl":"http://39.104.136.205:8888/car/20180901/1535763538560_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180901/1535763538560.jpg"},{"imgId":"392013101fe749a29911201893219581","imgThumUrl":"http://39.104.136.205:8888/car/20180901/1535763538639_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180901/1535763538639.jpg"}],"insuranceRebates":3,"loanRebates":3,"outsiteColor":"黑","provinceCode":"370000","provinceName":"山东省","remark":"备注","saleArea":"华北","saleCarPrice":53.9,"saleCommission":5000,"saleId":"9b70d93e49a04821807038f535fe5fbb","saleStatusName":"已上架","shareNum":21,"shelvesNum":2,"typeName":"全国","versionId":1361831,"vname":"2017款 iEV6E","withinColor":"红"}
      * msg : 操作成功
      */
 
@@ -46,45 +46,45 @@ public class CarDetailResponse implements Serializable{
     public static class DataBean implements Serializable{
         /**
          * advicePrice : 10
-         * audiId : 1524
-         * brand : 奔驰
-         * brandId : 142
-         * browseNum : 0
-         * carFormality : 手续全随车发
-         * carId : 130598baa2f940f1b7a78407b7bea2a5
-         * carPrice : 50
-         * carSeries : 捷豹XE
-         * carSetting : 配置非好
+         * audiId : 1541
+         * brand : 奥迪
+         * brandId : 143
+         * browseNum : 181
+         * carFormality : 商检
+         * carId : 44db4f00fb044aaa9cc79939552c1435
+         * carPrice : 49
+         * carSeries : 江淮iEV6E
+         * carSetting : peizhi
          * carStatusName : 已上架
          * carType : 1
-         * carUserName : 车源商负责人2
-         * carUserPhone : 13869647062
+         * carUserName : yang
+         * carUserPhone : 18661835353
          * carYear : 2018
-         * chassisNo : 272822
+         * chassisNo : 27288373
          * cityCode : 370200
          * cityName : 青岛市
-         * createDate : 1535599304000
-         * discountContent : 优惠信息
-         * discounts : [{"discountName":"优惠信息"}]
-         * guidPrice : 59
-         * imgs : [{"imgId":"30980617a3be4abe93a3ded780ed98d5","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304448_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304448.jpg"},{"imgId":"33f03f49d2604840bcac03f291b151ac","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304479_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304479.jpg"},{"imgId":"b2c7985d4e7d4b8388baa3720640eda7","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304385_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304385.jpg"},{"imgId":"c93200ad282841729a02d558b0544e58","imgThumUrl":"http://39.104.136.205:8888/car/20180830/1535599304417_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180830/1535599304417.jpg"}]
-         * insuranceRebates : 4
-         * loanRebates : 4
+         * createDate : 1535763538000
+         * discountContent : 斤斤计较
+         * discounts : [{"discountName":"斤斤计较"}]
+         * guidPrice : 66
+         * imgs : [{"imgId":"1dc92f249c844ae1bc9ec347017727af","imgThumUrl":"http://39.104.136.205:8888/car/20180901/1535763538607_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180901/1535763538607.jpg"},{"imgId":"1f7c35b1a6a344f5a6e83fedb69ccb5b","imgThumUrl":"http://39.104.136.205:8888/car/20180901/1535763538560_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180901/1535763538560.jpg"},{"imgId":"392013101fe749a29911201893219581","imgThumUrl":"http://39.104.136.205:8888/car/20180901/1535763538639_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180901/1535763538639.jpg"}]
+         * insuranceRebates : 3
+         * loanRebates : 3
          * outsiteColor : 黑
          * provinceCode : 370000
          * provinceName : 山东省
-         * remark : 没有备注
+         * remark : 备注
          * saleArea : 华北
-         * saleCarPrice : 60
-         * saleCommission : 4000
-         * saleId : de233f406b5d4cbdaa71fe567d8b7bde
+         * saleCarPrice : 53.9
+         * saleCommission : 5000
+         * saleId : 9b70d93e49a04821807038f535fe5fbb
          * saleStatusName : 已上架
-         * shareNum : 0
-         * shelvesNum : 1
+         * shareNum : 21
+         * shelvesNum : 2
          * typeName : 全国
-         * versionId : 1361152
-         * vname : 2018款 2.0T 300PS 四驱R-Sport运动版
-         * withinColor : 黑
+         * versionId : 1361831
+         * vname : 2017款 iEV6E
+         * withinColor : 红
          */
 
         private int advicePrice;
@@ -115,7 +115,7 @@ public class CarDetailResponse implements Serializable{
         private String provinceName;
         private String remark;
         private String saleArea;
-        private float saleCarPrice;
+        private double saleCarPrice;
         private int saleCommission;
         private String saleId;
         private String saleStatusName;
@@ -352,11 +352,11 @@ public class CarDetailResponse implements Serializable{
             this.saleArea = saleArea;
         }
 
-        public float getSaleCarPrice() {
+        public double getSaleCarPrice() {
             return saleCarPrice;
         }
 
-        public void setSaleCarPrice(int saleCarPrice) {
+        public void setSaleCarPrice(double saleCarPrice) {
             this.saleCarPrice = saleCarPrice;
         }
 
@@ -450,7 +450,7 @@ public class CarDetailResponse implements Serializable{
 
         public static class DiscountsBean implements Serializable{
             /**
-             * discountName : 优惠信息
+             * discountName : 斤斤计较
              */
 
             private String discountName;
@@ -466,9 +466,9 @@ public class CarDetailResponse implements Serializable{
 
         public static class ImgsBean implements Serializable{
             /**
-             * imgId : 30980617a3be4abe93a3ded780ed98d5
-             * imgThumUrl : http://39.104.136.205:8888/car/20180830/1535599304448_small.jpg
-             * imgUrl : http://39.104.136.205:8888/car/20180830/1535599304448.jpg
+             * imgId : 1dc92f249c844ae1bc9ec347017727af
+             * imgThumUrl : http://39.104.136.205:8888/car/20180901/1535763538607_small.jpg
+             * imgUrl : http://39.104.136.205:8888/car/20180901/1535763538607.jpg
              */
 
             private String imgId;

@@ -237,6 +237,7 @@ public class ReleaseOptionActivity extends BaseActivity {
             etSpecificDiscount.setText(response.getData().getDiscountContent());
             etConfiguration.setText(response.getData().getCarSetting());
             etNote.setText(response.getData().getRemark());
+            etCarNumber.setText(response.getData().getChassisNo());
             optionId = response.getData().getCarType();
             carId = response.getData().getCarId();
             provinceCode = response.getData().getProvinceCode();
