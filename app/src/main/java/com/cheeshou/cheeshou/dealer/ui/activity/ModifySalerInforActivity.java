@@ -25,6 +25,8 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserDetailResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
+import com.cheeshou.cheeshou.options.VehicleheatActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.view.CommonDialog;
 import com.example.com.common.BaseActivity;
@@ -216,7 +218,21 @@ public class ModifySalerInforActivity extends BaseActivity {
                         if (response.getCode() == 200) {
                             dialog.dismiss();
                             finish();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -233,9 +249,24 @@ public class ModifySalerInforActivity extends BaseActivity {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
                             Toast.makeText(ModifySalerInforActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                        } else {
+                        } else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
+                        }
+                        else {
                             Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -340,9 +371,24 @@ public class ModifySalerInforActivity extends BaseActivity {
                             if (response.getCode() == 200) {
                                 Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else {
+                            } else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
+                            }
+                            else {
                                 Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
                     });
         }else{
@@ -357,9 +403,24 @@ public class ModifySalerInforActivity extends BaseActivity {
                             if (response.getCode() == 200) {
                                 Toast.makeText(ModifySalerInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else {
+                            } else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
+                            }
+                            else {
                                 Toast.makeText(ModifySalerInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifySalerInforActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
                     });
         }

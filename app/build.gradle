@@ -6,6 +6,7 @@ android {
     signingConfigs {
         config {
             keyAlias 'cheeshou'
+
             keyPassword 'Cys123456'
             storeFile file('D:/PersonalWork/ECSell/keystore')
             storePassword 'Cys123456'
@@ -112,12 +113,12 @@ MobSDK {
 //
 //            Wechat {
 //                appId "wx4868b35061f87885"
-//                appSecret "64020361b8ec4c99936c0e3999a9f249"
+//                appSecret "6402||response.getCode() == 4010361b8ec4c99936c0e3999a9f249"
 //                bypassApproval false
 //            }
 //            WechatMoments {
 //                appId "wx4868b35061f87885"
-//                appSecret "64020361b8ec4c99936c0e3999a9f249"
+//                appSecret "6402||response.getCode() == 4010361b8ec4c99936c0e3999a9f249"
 //                bypassApproval false
 //            }
 //            Dingding {

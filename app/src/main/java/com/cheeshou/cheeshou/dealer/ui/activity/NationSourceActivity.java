@@ -32,6 +32,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.ColorFilterModel;
 import com.cheeshou.cheeshou.dealer.ui.model.PriceModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.options.ChooseAreaActivity;
@@ -306,21 +307,41 @@ public class NationSourceActivity extends BaseActivity {
                                 data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                 data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                 data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName()
-                                        + response.getData().getLists().get(i).getSaleArea());
+                                if(!TextUtils.isEmpty(response.getData().getLists().get(i).getCityName())){
+                                    data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName()
+                                            + response.getData().getLists().get(i).getSaleArea());
+                                }else{
+                                    data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName()
+                                            + response.getData().getLists().get(i).getSaleArea());
+                                }
                                 data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
                                 data.setSaleId(response.getData().getLists().get(i).getSaleId());
-                                data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
+                                data.setAdvicePrice(response.getData().getLists().get(i).getGuidPrice() + "");
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }
                             ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
                             mSearchResultData.add(e);
+                            mDataAdapter.notifyDataSetChanged();
+                            mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        }   else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,NationSourceActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,NationSourceActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
-                        mDataAdapter.notifyDataSetChanged();
-                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,NationSourceActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,NationSourceActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

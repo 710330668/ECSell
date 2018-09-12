@@ -2,6 +2,8 @@ package com.cheeshou.cheeshou.dealer.ui.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -106,6 +110,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
     public int INVENTORY = ParamManager.getInstance(getContext()).getChannelType();
     private String scopType = "own";
     private String customer;
+    private Dialog myDialog;
 
     @Override
     protected int setLayoutResouceId() {
@@ -114,6 +119,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
 
     @Override
     public void setView(View rootView) {
+        myDialog = getLoadingDialog(getActivity());
         mSearchResult.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mSearchResult.addItemDecoration(new SpaceItemDecoration(5));
     }
@@ -254,6 +260,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
         if (mSearchResultData.size() > 0) {
             mSearchResultData.remove(mSearchResultData.size() - 1);
         }
+        myDialog.show();
         Injection.provideApiService().getCarList(token, PAGE_SIZE + "", CURRENT_PAGE + "", scopType,
                 carType, brandId, versionId, carYear, outsiteColor, withinColor, minCarPrice, maxCarPrice,
                 startDate, endDate, queryKey, carStatus, orderType)
@@ -296,12 +303,29 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                             }
                             ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
                             mSearchResultData.add(e);
+                            mDataAdapter.notifyDataSetChanged();
+                            mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+
+                            if (!TextUtils.isEmpty(customer)) {
+                                setShareOpen();
+                            }
+                            myDialog.dismiss();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                            getActivity().finish();
+                            startActivity(LoginActivity.class);
                         }
-                        mDataAdapter.notifyDataSetChanged();
-                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
-                        if (!TextUtils.isEmpty(customer)) {
-                            setShareOpen();
-                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                        getActivity().finish();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -507,4 +531,21 @@ public class StoreManagerItemClickFragment extends BaseFragment {
         mRbShare.setVisibility(View.VISIBLE);
     }
 
+
+    /**
+     * 显示加载数据对话框
+     *
+     * @return
+     */
+    public Dialog getLoadingDialog(Context context) {
+        final Dialog mDialog = new Dialog(context, com.example.com.common.R.style.WoDeDialog);
+        View mDialogContentView = LayoutInflater.from(context).inflate(com.example.com.common.R.layout.layout_loading, null);
+        mDialog.setContentView(mDialogContentView);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(false);
+        mDialog.getWindow().setGravity(Gravity.CENTER);
+        return mDialog;
+
+
+    }
 }

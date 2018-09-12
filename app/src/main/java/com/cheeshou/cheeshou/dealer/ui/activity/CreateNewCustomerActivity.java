@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -14,14 +13,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerWantCarViewHolder;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
 import com.cheeshou.cheeshou.options.contract.ICarSell;
 import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
 import com.cheeshou.cheeshou.utils.ParamManager;
@@ -217,9 +217,24 @@ public class CreateNewCustomerActivity extends BaseActivity {
                             if (easyResponse.getCode() == 200) {
                                 Toast.makeText(appContext, "创建成功", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else {
+                            } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
+                            }
+                            else {
                                 Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
                     });
         }

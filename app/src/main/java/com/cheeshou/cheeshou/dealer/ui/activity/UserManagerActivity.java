@@ -17,6 +17,8 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.UserListModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
+import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
@@ -137,7 +139,21 @@ public class UserManagerActivity extends BaseActivity {
                             userLists.add(e);
                             baseAdapter.notifyDataSetChanged();
                             baseAdapter.setLoadState(baseAdapter.LOADING_COMPLETE);
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,UserManagerActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,UserManagerActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,UserManagerActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,UserManagerActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.activity.ModifySalerInforActivity;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.usercenter.model.DealerShipResponse;
 import com.example.com.common.BaseActivity;
@@ -73,7 +75,21 @@ public class DealershipActivity extends BaseActivity {
                             tvContact.setText(response.getData().getHeadName());
                             tvPhone.setText(response.getData().getHeadPhone());
                             tvHome.setText(response.getData().getProvinceName()+response.getData().getCityName());
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,DealershipActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,DealershipActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,DealershipActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,DealershipActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

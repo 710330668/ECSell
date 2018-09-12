@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.contract.ICarSell;
 import com.cheeshou.cheeshou.options.model.CarsModel;
 import com.cheeshou.cheeshou.options.model.response.CarsResponse;
@@ -145,11 +146,25 @@ public class ChooseCarsActivity extends BaseActivity {
                                     carLists.add(itemData);
                                     baseAdapter.notifyDataSetChanged();
                                 }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ChooseCarsActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ChooseCarsActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ChooseCarsActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ChooseCarsActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

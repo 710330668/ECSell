@@ -22,6 +22,7 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -197,9 +198,24 @@ public class SearchResultFragment extends BaseFragment {
                             }
                             ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
                             mSearchResultData.add(e);
+                            mDataAdapter.notifyDataSetChanged();
+                            mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        } else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                            getActivity().finish();
+                            startActivity(LoginActivity.class);
                         }
-                        mDataAdapter.notifyDataSetChanged();
-                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                        getActivity().finish();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,13 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.model.ShareRankModel;
 import com.cheeshou.cheeshou.market.ui.response.ShareRankResponse;
 import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.R;
-import com.cheeshou.cheeshou.market.ui.model.ShareRankModel;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
@@ -41,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -260,6 +257,12 @@ public class MarketShareRankingsActivity extends BaseActivity {
                     }
                     mData.add(new ItemData(0, SettingDelegate.FOOT_TYPE));
                     adapter.notifyDataSetChanged();
+                }else if(shareRankResponse.getCode() == 402||shareRankResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,MarketShareRankingsActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,MarketShareRankingsActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
             }
 

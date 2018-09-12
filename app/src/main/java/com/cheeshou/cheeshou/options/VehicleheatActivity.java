@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.model.VehicleHeatModel;
 import com.cheeshou.cheeshou.options.model.response.HotCarCountResponse;
 import com.cheeshou.cheeshou.options.model.response.HotCarListResponse;
@@ -278,7 +279,21 @@ public class VehicleheatActivity extends BaseActivity {
                             mData.add(e);
                             adapter.notifyDataSetChanged();
                             adapter.setLoadState(adapter.LOADING_COMPLETE);
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -300,7 +315,21 @@ public class VehicleheatActivity extends BaseActivity {
                             tvBrowse.setText(response.getData().getBrowseCount()+"次");
                             tvShare.setText(response.getData().getShareCount()+"次");
                             tvShelves.setText(response.getData().getShelvesCount()+"次");
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,VehicleheatActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

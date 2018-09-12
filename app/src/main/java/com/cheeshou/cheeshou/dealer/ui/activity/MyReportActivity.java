@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MyReportResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.LogUtils;
@@ -80,7 +81,21 @@ public class MyReportActivity extends BaseActivity {
                             tvMonthXinzeng.setText(response.getData().getMonthCustomerCount() + "");
                             tvMonthDaodian.setText(response.getData().getMonthEnterCount() + "");
                             tvMonthYishou.setText(response.getData().getMonthSaleCount() + "");
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,MyReportActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,MyReportActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,MyReportActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,MyReportActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

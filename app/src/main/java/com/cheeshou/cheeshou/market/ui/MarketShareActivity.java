@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareHeaderModel;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
 import com.cheeshou.cheeshou.market.ui.response.MyShareResponse;
@@ -20,7 +20,6 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +84,21 @@ public class MarketShareActivity extends BaseActivity {
                     ((MarketShareHeaderModel) mData.get(0).getData()).setShareCount(myShareResponse.getData().getMyShareCount());
                     ((MarketShareHeaderModel) mData.get(0).getData()).setShareRankings(myShareResponse.getData().getMyRank());
                     adapter.notifyDataSetChanged();
+                }else if(myShareResponse.getCode() == 402||myShareResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_ACCOUNT,"");
+                SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_PASSWORD,"");
+                finishAllActivity();
+                startActivity(LoginActivity.class);
             }
         });
 
@@ -114,6 +127,12 @@ public class MarketShareActivity extends BaseActivity {
                         mData.add(new ItemData(0, SettingDelegate.MARKET_SHARE_TYPE, data1));
                         adapter.notifyDataSetChanged();
                     }
+                }else if(myShareResponse.getCode() == 402||myShareResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
             }
 

@@ -27,6 +27,7 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.ShareUrlResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.TabEntity;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -212,6 +213,12 @@ public class MarketShareCarActivity extends BaseActivity {
             public void onNext(ShareUrlResponse easyResponse) {
                 if (easyResponse.getCode() == 200) {
                     shareUrl = easyResponse.getData().getShareUrl();
+                }else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,MarketShareCarActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,MarketShareCarActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
                 Log.e(TAG, "onNext: " + new Gson().toJson(easyResponse));
             }

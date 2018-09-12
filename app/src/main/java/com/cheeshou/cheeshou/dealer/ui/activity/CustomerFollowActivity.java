@@ -20,16 +20,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
-import com.cheeshou.cheeshou.market.ui.response.ShareRankResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
+import com.cheeshou.cheeshou.options.ModifyCarInfActivity;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -46,9 +47,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -237,10 +236,24 @@ public class CustomerFollowActivity extends BaseActivity {
                 if (easyResponse != null && easyResponse.getCode() == 200) {
                     Toast.makeText(appContext, "保存成功", Toast.LENGTH_SHORT).show();
                     finish();
-                } else {
+                } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
+                }else {
                     Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                 }
 //                Log.e(TAG, "accept: " + new Gson().toJson(easyResponse));
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_ACCOUNT,"");
+                SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_PASSWORD,"");
+                finishAllActivity();
+                startActivity(LoginActivity.class);
             }
         });
 

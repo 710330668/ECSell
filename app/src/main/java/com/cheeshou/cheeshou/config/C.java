@@ -18,7 +18,7 @@ public interface C {
     int httpCacheSize = 10 * 1024 * 1024;
 
     //http超时时间
-    long httpTimeOut = 5000L;
+    long httpTimeOut = 50000L;
 
 
     //首页

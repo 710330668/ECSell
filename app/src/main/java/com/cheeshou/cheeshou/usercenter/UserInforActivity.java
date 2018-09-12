@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
+import com.cheeshou.cheeshou.options.ChooseAreaActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.usercenter.model.UserInforModel;
 import com.example.com.common.BaseActivity;
@@ -117,10 +119,24 @@ public class UserInforActivity extends BaseActivity {
                                 tvPhone.setText(response.getData().getPhone());
                                 tvWechat.setText(response.getData().getWeChat());
                                 userId = response.getData().getUserId();
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -170,7 +186,14 @@ public class UserInforActivity extends BaseActivity {
                             if (response.getCode() == 200) {
                                 Toast.makeText(UserInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else {
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
+                            }
+                            else {
                                 Toast.makeText(UserInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -187,7 +210,14 @@ public class UserInforActivity extends BaseActivity {
                             if (response.getCode() == 200) {
                                 Toast.makeText(UserInforActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else {
+                            } else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,UserInforActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
+                            }
+                            else {
                                 Toast.makeText(UserInforActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -6,18 +6,16 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
-import com.cheeshou.cheeshou.options.model.CarsSeriesModel;
-import com.cheeshou.cheeshou.options.model.response.CarsModelResponse;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.model.CarsSeriesModel;
 import com.cheeshou.cheeshou.options.model.response.CarsModelResponse;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -130,11 +128,25 @@ public class ChooseModelActivity extends BaseActivity {
                                     carSeriesLists.add(itemData);
                                 }
                                 baseAdapter.notifyDataSetChanged();
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ChooseModelActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ChooseModelActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ChooseModelActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ChooseModelActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

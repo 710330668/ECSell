@@ -18,6 +18,7 @@ import android.widget.RadioGroup;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.SalerManagerActivity;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.order.response.OrderListResponse;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -154,7 +155,21 @@ public class OrderManagerActivity extends BaseActivity {
                             mSearchResultData.add(e);
                             mDataAdapter.notifyDataSetChanged();
                             mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,OrderManagerActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,OrderManagerActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,OrderManagerActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,OrderManagerActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

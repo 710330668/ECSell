@@ -5,16 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
-import com.cheeshou.cheeshou.options.contract.ICarSell;
-import com.cheeshou.cheeshou.options.model.AddressModel;
-import com.cheeshou.cheeshou.options.model.response.CarBrandResponse;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.contract.ICarSell;
 import com.cheeshou.cheeshou.options.model.AddressModel;
 import com.cheeshou.cheeshou.options.model.response.CarBrandResponse;
@@ -98,7 +95,21 @@ public class ChooseBrandActivity extends BaseActivity implements MyAdapter.Selec
                             }
                             adapter.notifyDataSetChanged();
 
+                        }else if(salesAreaResponse.getCode() == 402||salesAreaResponse.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ChooseBrandActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ChooseBrandActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ChooseBrandActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ChooseBrandActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
 

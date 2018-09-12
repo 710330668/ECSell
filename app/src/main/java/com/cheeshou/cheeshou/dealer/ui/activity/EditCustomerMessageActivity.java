@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerInfoResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.R;
 import com.example.com.common.BaseActivity;
@@ -89,7 +90,21 @@ public class EditCustomerMessageActivity extends BaseActivity {
                     mEtWeChat.setText(data.getWeBcat());
                     sex = data.getSex();
                     ((RadioButton) mRgSex.getChildAt(data.getSex())).setChecked(true);
+                }else if(s.getCode() == 402||s.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_ACCOUNT,"");
+                SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_PASSWORD,"");
+                finishAllActivity();
+                startActivity(LoginActivity.class);
             }
         });
     }
@@ -113,9 +128,24 @@ public class EditCustomerMessageActivity extends BaseActivity {
                         if (easyResponse.getCode() == 200) {
                             ToastUtils.showShort(EditCustomerMessageActivity.this, "修改成功");
                             EditCustomerMessageActivity.this.finish();
-                        } else {
+                        } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
+                        }
+                        else {
                             ToastUtils.showShort(EditCustomerMessageActivity.this, easyResponse.getMsg());
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,EditCustomerMessageActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
                 break;

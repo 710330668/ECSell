@@ -26,8 +26,10 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
+import com.cheeshou.cheeshou.dealer.ui.activity.StoreReportActivity;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
 import com.cheeshou.cheeshou.order.response.OrderDetailResponse;
@@ -315,7 +317,21 @@ public class CarDetailActivity extends BaseActivity {
                             bannerView.setViewFactory(new BannerViewFactory());
                             bannerView.setDataList(list);
                             bannerView.start();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -334,9 +350,10 @@ public class CarDetailActivity extends BaseActivity {
                         if (response.getCode() == 200) {
                             carDetailResponse = response;
                             saleId = response.getData().getSaleId();
-                            tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceCode() + response.getData().getCityName());
+                            tvName.setText(response.getData().getCarUserName() + "|" + response.getData().getProvinceName() + response.getData().getCityName());
                             if (INVENTORY == C.INVENTORY_DEALER && TextUtils.isEmpty(dealerSource)) {
-                                tvAdvise.setText(response.getData().getSaleCarPrice() + "万|"
+                                tvPriceName.setText("销售底价");
+                                tvAdvise.setText("车源价"+response.getData().getCarPrice() + "万|"
                                         + "建议售价" + response.getData().getGuidPrice() + "万|"
                                         + "销售提成" + response.getData().getSaleCommission() + "元");
                                 tvCarPrice.setText(response.getData().getSaleCarPrice() + "万");
@@ -397,7 +414,21 @@ public class CarDetailActivity extends BaseActivity {
                                     }
                                 });
                             }
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -520,7 +551,21 @@ public class CarDetailActivity extends BaseActivity {
                         ToastUtils.showShort(CarDetailActivity.this, response.getMsg());
                         if (response.getCode() == 200) {
                             finish();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -537,8 +582,22 @@ public class CarDetailActivity extends BaseActivity {
                         ToastUtils.showShort(CarDetailActivity.this, response.getMsg());
                         if (response.getCode() == 200) {
                             finish();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -556,8 +615,22 @@ public class CarDetailActivity extends BaseActivity {
                         ToastUtils.showShort(CarDetailActivity.this, response.getMsg());
                         if (response.getCode() == 200) {
                             finish();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -606,7 +679,7 @@ public class CarDetailActivity extends BaseActivity {
                 break;
             case R.id.lly_call:
                 if (TextUtils.isEmpty(userPhone)) {
-                    ToastUtils.showShort(this, "赞无手机号信息");
+                    ToastUtils.showShort(this, "暂无手机号信息");
                     return;
                 }
                 callPhone(userPhone);
@@ -658,7 +731,21 @@ public class CarDetailActivity extends BaseActivity {
                         ToastUtils.showShort(CarDetailActivity.this, response.getMsg());
                         if (response.getCode() == 200) {
                             finish();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

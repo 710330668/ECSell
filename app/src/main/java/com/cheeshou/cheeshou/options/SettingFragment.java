@@ -26,6 +26,7 @@ import com.cheeshou.cheeshou.view.CommonDialog;
 import com.cheeshou.cheeshou.view.MyImageView;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 import com.example.com.imageloader.LoaderManager;
 
 import butterknife.BindView;
@@ -143,11 +144,22 @@ public class SettingFragment extends BaseFragment {
                                         tvType.setText("销售");
                                         break;
                                 }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                                getActivity().finish();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ToastUtils.showShort(getActivity(),throwable.getMessage());
                     }
                 });
     }

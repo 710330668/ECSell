@@ -3,7 +3,6 @@ package com.cheeshou.cheeshou.dealer.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +11,8 @@ import android.view.View;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
+import com.cheeshou.cheeshou.options.ReleaseOptionActivity;
 import com.cheeshou.cheeshou.options.model.OptionTypeModel;
 import com.cheeshou.cheeshou.options.model.response.OptionTypeResponse;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -89,16 +90,32 @@ public class CarSourceTypeActivity extends BaseActivity {
                     public void accept(OptionTypeResponse response) throws Exception {
                         //获取车源类型
                         try {
-                            for (int i = 0; i < response.getData().size(); i++) {
-                                OptionTypeModel typeModel = new OptionTypeModel(response.getData().get(i).getCarTypeId(), response.getData().get(i).getTypeName());
-                                ItemData itemData = new ItemData(0, SettingDelegate.OPTION_TYPE, typeModel);
-                                optionTypes.add(itemData);
+                            if(response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    OptionTypeModel typeModel = new OptionTypeModel(response.getData().get(i).getCarTypeId(), response.getData().get(i).getTypeName());
+                                    ItemData itemData = new ItemData(0, SettingDelegate.OPTION_TYPE, typeModel);
+                                    optionTypes.add(itemData);
+                                }
+                                baseAdapter.notifyDataSetChanged();
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,CarSourceTypeActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,CarSourceTypeActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
-                            baseAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
                             Log.e(TAG, "accept: -----------------------------");
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,CarSourceTypeActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,CarSourceTypeActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

@@ -9,10 +9,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cheeshou.cheeshou.options.model.response.ModifyCarInforResponse;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.model.response.ModifyCarInforResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.example.com.common.BaseActivity;
@@ -86,7 +86,21 @@ public class ModifyCarInfActivity extends BaseActivity {
                             etSaleCarPrice.setText(response.getData().getSaleCarPrice()+"万");
                             etInsuranceRebates.setText(response.getData().getInsuranceRebates()+"%");
                             etLoanRebates.setText(response.getData().getLoanRebates()+"%");
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -124,7 +138,21 @@ public class ModifyCarInfActivity extends BaseActivity {
                         ToastUtils.showShort(ModifyCarInfActivity.this,response.getMsg());
                         if(response.getCode()==200){
                             finish();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

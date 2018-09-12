@@ -33,6 +33,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.model.ColorModel;
 import com.cheeshou.cheeshou.options.model.FormalityModel;
@@ -139,10 +140,13 @@ public class ReleaseOptionActivity extends BaseActivity {
     private List<ItemData> salesAreaTypes = new ArrayList<>();
     private List<ItemData> formalityTypes = new ArrayList<>();
     private List<ItemData> carPhotos = new ArrayList<>();
+    private List<ItemData> carPhotoNets = new ArrayList<>();
     private List<String> preferential = new ArrayList<>();
     private List<Boolean> flags = new ArrayList<>();
     private List<Bitmap> photos = new ArrayList<>();
     private List<String> photoIds = new ArrayList<>();
+    private List<Bitmap> photoNets = new ArrayList<>();
+    private List<String> photoIdNets = new ArrayList<>();
     private final int REQUEST_BRAND = 0;
     private final int REQUEST_AREA = 1;
     private final int REQUEST_LOCAL = 2;
@@ -221,9 +225,9 @@ public class ReleaseOptionActivity extends BaseActivity {
                 Glide.with(this).load(response.getData().getImgs().get(i).getImgUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        photos.add(resource);
-                        photoIds.add(response.getData().getImgs().get(finalI).getImgId());
-                        if(photos.size() >= response.getData().getImgs().size()){
+                        photoNets.add(resource);
+                        photoIdNets.add(response.getData().getImgs().get(finalI).getImgId());
+                        if(photoNets.size() >= response.getData().getImgs().size()){
                             showCarImg();
                         }
                     }
@@ -243,27 +247,32 @@ public class ReleaseOptionActivity extends BaseActivity {
     }
 
     private void showCarImg() {
-        for (int i = 0; i < photos.size(); i++) {
-            final CarPhotoModel carPhotoModel = new CarPhotoModel(photos.get(i));
+        for (int i = 0; i < photoNets.size(); i++) {
+            final CarPhotoModel carPhotoModel = new CarPhotoModel(photoNets.get(i));
             ItemData itemData = new ItemData(i, SettingDelegate.CAR_PHOTO_TYPE, carPhotoModel);
-            carPhotos.add(itemData);
+            carPhotoNets.add(itemData);
             rlCarPhoto.setLayoutManager(new GridLayoutManager(ReleaseOptionActivity.this, 3));
             final SettingDelegate delegate = new SettingDelegate();
             delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
                 @Override
                 public void removeImage(int position) {
+                    photos.clear();
                     if (TextUtils.isEmpty(deleteId)) {
-                        deleteId = deleteId +  photoIds.get(position) + "," ;
+                        deleteId = deleteId +  photoIdNets.get(position) + "," ;
                     }else{
-                        deleteId = deleteId +"," +photoIds.get(position) + "," ;
+                        deleteId = deleteId +"," +photoIdNets.get(position) + "," ;
                     }
                     deleteId = deleteId.substring(0, deleteId.length()-1);
-                    carPhotos.remove(position);
-                    photos.remove(position);
+                    photoIdNets.remove(position);
+                    carPhotoNets.remove(position);
+                    photoNets.remove(position);
+                    for(int i =0;i<photoNets.size();i++){
+                        photos.add(photoNets.get(i));
+                    }
                     imageDeleteAdapter.notifyDataSetChanged();
                 }
             });
-            imageDeleteAdapter = new BaseAdapter(carPhotos, delegate, new onItemClickListener() {
+            imageDeleteAdapter = new BaseAdapter(carPhotoNets, delegate, new onItemClickListener() {
                 @Override
                 public void onClick(View v, Object data) {
                 }
@@ -274,6 +283,9 @@ public class ReleaseOptionActivity extends BaseActivity {
                 }
             });
             rlCarPhoto.setAdapter(imageDeleteAdapter);
+        }
+        for(int i =0;i<photoNets.size();i++){
+            photos.add(photoNets.get(i));
         }
     }
 
@@ -355,11 +367,25 @@ public class ReleaseOptionActivity extends BaseActivity {
                                         }
                                     });
                                 }
+                            } else if (response.getCode() == 402 || response.getCode() == 401) {
+                                //token失效
+                                SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_ACCOUNT, "");
+                                SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_PASSWORD, "");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_ACCOUNT, "");
+                        SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_PASSWORD, "");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -374,15 +400,31 @@ public class ReleaseOptionActivity extends BaseActivity {
                     public void accept(SalesAreaResponse response) throws Exception {
                         //获取销售区域类型
                         try {
-                            for (int i = 0; i < response.getData().size(); i++) {
-                                SalesAreaModel salesAreaModel = new SalesAreaModel(response.getData().get(i).getAreaId(), response.getData().get(i).getAreaName());
-                                ItemData itemData = new ItemData(0, SettingDelegate.SALES_AREA_TYPE, salesAreaModel);
-                                salesAreaTypes.add(itemData);
+                            if(response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    SalesAreaModel salesAreaModel = new SalesAreaModel(response.getData().get(i).getAreaId(), response.getData().get(i).getAreaName());
+                                    ItemData itemData = new ItemData(0, SettingDelegate.SALES_AREA_TYPE, salesAreaModel);
+                                    salesAreaTypes.add(itemData);
+                                }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -398,15 +440,31 @@ public class ReleaseOptionActivity extends BaseActivity {
                     public void accept(CommonResponse response) throws Exception {
                         //获取车源类型
                         try {
-                            for (int i = 0; i < response.getData().size(); i++) {
-                                FormalityModel formalityModel = new FormalityModel(response.getData().get(i).getDataName());
-                                ItemData itemData = new ItemData(0, SettingDelegate.FORMALITY_TYPE, formalityModel);
-                                formalityTypes.add(itemData);
+                            if(response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    FormalityModel formalityModel = new FormalityModel(response.getData().get(i).getDataName());
+                                    ItemData itemData = new ItemData(0, SettingDelegate.FORMALITY_TYPE, formalityModel);
+                                    formalityTypes.add(itemData);
+                                }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -421,10 +479,18 @@ public class ReleaseOptionActivity extends BaseActivity {
                     public void accept(OptionTypeResponse response) throws Exception {
                         //获取车源类型
                         try {
-                            for (int i = 0; i < response.getData().size(); i++) {
-                                OptionTypeModel typeModel = new OptionTypeModel(response.getData().get(i).getCarTypeId(), response.getData().get(i).getTypeName());
-                                ItemData itemData = new ItemData(0, SettingDelegate.OPTION_TYPE, typeModel);
-                                optionTypes.add(itemData);
+                            if(response.getCode() == 200) {
+                                for (int i = 0; i < response.getData().size(); i++) {
+                                    OptionTypeModel typeModel = new OptionTypeModel(response.getData().get(i).getCarTypeId(), response.getData().get(i).getTypeName());
+                                    ItemData itemData = new ItemData(0, SettingDelegate.OPTION_TYPE, typeModel);
+                                    optionTypes.add(itemData);
+                                }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
@@ -450,11 +516,25 @@ public class ReleaseOptionActivity extends BaseActivity {
                                     ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
                                     apprenceColorTypes.add(itemData);
                                 }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_ACCOUNT, "");
+                        SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_PASSWORD, "");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -476,11 +556,25 @@ public class ReleaseOptionActivity extends BaseActivity {
                                     ItemData itemData = new ItemData(0, SettingDelegate.COLOR_TYPE, colorModel);
                                     interiorColorTypes.add(itemData);
                                 }
+                            }else if(response.getCode() == 402||response.getCode() == 401){
+                                //token失效
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                finishAllActivity();
+                                startActivity(LoginActivity.class);
                             }
                         } catch (Exception e) {
 
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_ACCOUNT, "");
+                        SP.getInstance(C.USER_DB, ReleaseOptionActivity.this).put(C.USER_PASSWORD, "");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -592,11 +686,13 @@ public class ReleaseOptionActivity extends BaseActivity {
             params.put("carYear", toRequestBody(tvYear.getText().toString()));
             params.put("carSetting", toRequestBody(etConfiguration.getText().toString()));
             for (int i = 0; i < flags.size(); i++) {
-                if (flags.get(i)) {
+                if (!flags.get(i)) {
                     prefers = prefers + "," + preferential.get(i);
                 }
             }
-            prefers = prefers.substring(1, prefers.length());
+            if(!TextUtils.isEmpty(prefers)){
+                prefers = prefers.substring(1, prefers.length());
+            }
             params.put("discountList", toRequestBody(prefers));
             params.put("discountContent", toRequestBody(etSpecificDiscount.getText().toString()));
             params.put("outsiteColor", toRequestBody(tvApprenceColor.getText().toString()));
@@ -633,9 +729,21 @@ public class ReleaseOptionActivity extends BaseActivity {
                                     ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
                                     ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
                                     finish();
-                                } else {
+                                }else if(response.getCode() == 402||response.getCode() == 401){
+                                    //token失效
+                                    SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                    SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                    finishAllActivity();
+                                    startActivity(LoginActivity.class);
+                                }
+                                else {
                                     Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                                 }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                ToastUtils.showShort(ReleaseOptionActivity.this,throwable.getMessage());
                             }
                         });
             }else{
@@ -652,15 +760,28 @@ public class ReleaseOptionActivity extends BaseActivity {
                                     ParamManager.getInstance(ReleaseOptionActivity.this).setCarFullName("");
                                     ParamManager.getInstance(ReleaseOptionActivity.this).setCarId("");
                                     finish();
-                                } else {
+                                } else if(response.getCode() == 402||response.getCode() == 401){
+                                    //token失效
+                                    SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_ACCOUNT,"");
+                                    SP.getInstance(C.USER_DB,ReleaseOptionActivity.this).put(C.USER_PASSWORD,"");
+                                    finishAllActivity();
+                                    startActivity(LoginActivity.class);
+                                }
+                                else {
                                     Toast.makeText(ReleaseOptionActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                                 }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                ToastUtils.showShort(ReleaseOptionActivity.this,throwable.getMessage());
                             }
                         });
             }
 
 
         } catch (Exception e) {
+            myDialog.dismiss();
             LogUtils.e(e.getMessage());
         }
 
@@ -822,10 +943,24 @@ public class ReleaseOptionActivity extends BaseActivity {
                         delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
                             @Override
                             public void removeImage(int position) {
-                                carPhotos.remove(position);
-                                photos.remove(position);
-                                imgPaths.remove(position);
-                                imageDeleteAdapter.notifyDataSetChanged();
+                                if(position<carPhotoNets.size()) {
+                                    if (TextUtils.isEmpty(deleteId)) {
+                                        deleteId = deleteId + photoIdNets.get(position) + ",";
+                                    } else {
+                                        deleteId = deleteId + "," + photoIdNets.get(position) + ",";
+                                    }
+                                    deleteId = deleteId.substring(0, deleteId.length() - 1);
+                                    carPhotoNets.remove(position);
+                                    photoNets.remove(position);
+                                    photos.remove(position);
+                                    carPhotos.remove(position);
+                                    imageDeleteAdapter.notifyDataSetChanged();
+                                }else {
+                                    carPhotos.remove(position);
+                                    photos.remove(position);
+                                    imgPaths.remove(position - carPhotoNets.size());
+                                    imageDeleteAdapter.notifyDataSetChanged();
+                                }
                             }
                         });
                         imageDeleteAdapter = new BaseAdapter(carPhotos, delegate, new onItemClickListener() {
@@ -839,11 +974,12 @@ public class ReleaseOptionActivity extends BaseActivity {
                             }
                         });
                         rlCarPhoto.setAdapter(imageDeleteAdapter);
-                        imgUrl = getPath(data);
-                        imgPaths.add(imgUrl);
-                        File imgFile = new File(imgUrl);
-                        compressBmpToFile(bitmap,imgFile);
-
+                        if(i>=photoNets.size()){
+                            imgUrl = getPath(data);
+                            imgPaths.add(imgUrl);
+                            File imgFile = new File(imgUrl);
+                            compressBmpToFile(bitmap,imgFile);
+                        }
                     }
                 } catch (FileNotFoundException e) {
                 }

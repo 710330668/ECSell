@@ -32,6 +32,8 @@ import android.widget.Toast;
 import com.cheeshou.cheeshou.MyApplication;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
+import com.cheeshou.cheeshou.dealer.ui.activity.CustomerFollowActivity;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.model.AddressModel;
 import com.cheeshou.cheeshou.options.model.AreasModel;
 import com.cheeshou.cheeshou.options.model.HistoryAreaModel;
@@ -47,6 +49,7 @@ import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -99,7 +102,7 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
     private Location location;
     private Geocoder geocoder;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
-    private String cityName = "青岛市";
+    private String cityName = "正在定位";
     private String provinceCode, cityCode ;
     private AreasModel areasModel;
     private ItemData itemData;
@@ -216,7 +219,21 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                             MyAdapter adapter = new MyAdapter(ChooseAreaActivity.this, areas);
                             adapter.setOnSelectBrandListener(ChooseAreaActivity.this);
                             listView.setAdapter(adapter);
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -239,8 +256,23 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                                 itemData = new ItemData(0, SettingDelegate.AREAS_TYPE, areasModel);
                                 areaLists.add(itemData);
                             }
+                            baseAdapter.notifyDataSetChanged();
                         }
-                        baseAdapter.notifyDataSetChanged();
+                        else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -262,6 +294,10 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
             case R.id.iv_location:
                 break;
             case R.id.rl_location:
+                if(cityName.equals("正在定位")){
+                    ToastUtils.showShort(ChooseAreaActivity.this,"定位失败");
+                    return;
+                }
                 intent.putExtra("area", cityName);
                 intent.putExtra("provinceCode", provinceCode);
                 intent.putExtra("cityCode", cityCode);
@@ -372,7 +408,21 @@ public class ChooseAreaActivity extends BaseActivity implements MyAdapter.Select
                         if (response.getCode() == 200) {
                             provinceCode = response.getData().getPid() + "";
                             cityCode = response.getData().getId() + "";
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ChooseAreaActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

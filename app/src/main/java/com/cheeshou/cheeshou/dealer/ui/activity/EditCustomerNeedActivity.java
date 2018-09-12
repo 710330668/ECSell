@@ -1,14 +1,9 @@
 
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,12 +18,9 @@ import com.cheeshou.cheeshou.dealer.ui.model.CustomerWantCarModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.FindCustomerNeedResponse;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerWantCarViewHolder;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.ChooseBrandActivity;
-import com.cheeshou.cheeshou.options.ReleaseOptionActivity;
 import com.cheeshou.cheeshou.options.contract.ICarSell;
-import com.cheeshou.cheeshou.options.model.CarPhotoModel;
-import com.cheeshou.cheeshou.options.model.response.CarDetailResponse;
-import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.NotifyCallBackManager;
@@ -37,11 +29,9 @@ import com.cheeshou.cheeshou.view.CommonDialog;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
-import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
 import com.google.gson.Gson;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -129,19 +119,27 @@ public class EditCustomerNeedActivity extends BaseActivity {
 
             @Override
             public void onNext(FindCustomerNeedResponse easyResponse) {
-                mEtMinMoney.setText(easyResponse.getData().getMinBudget() + "");
-                mEtMaxMoney.setText(easyResponse.getData().getMaxBudget() + "");
-                mEtNeedText.setText(easyResponse.getData().getNeedTxt());
-                mEtRemark.setText(easyResponse.getData().getRemark());
-                mTvDaiKuan.setText(easyResponse.getData().getReserveColumn1());
-                List<FindCustomerNeedResponse.DataBean.ListsBean> lists = easyResponse.getData().getLists();
-                for (FindCustomerNeedResponse.DataBean.ListsBean bean : lists) {
-                    CustomerWantCarModel model = new CustomerWantCarModel();
-                    model.setName(bean.getBrandName() + "|" + bean.getAudiName() + "|" + bean.getVersionName());
-                    model.setCode(new CustomerWantCarModel.CodeBean(bean.getBrandId(), bean.getAudiId(), bean.getVersionId()));
-                    dataList.add(new ItemData(0, SettingDelegate.CUSTOMER_WANT_CAR, model));
+                if(easyResponse.getCode() == 200) {
+                    mEtMinMoney.setText(easyResponse.getData().getMinBudget() + "");
+                    mEtMaxMoney.setText(easyResponse.getData().getMaxBudget() + "");
+                    mEtNeedText.setText(easyResponse.getData().getNeedTxt());
+                    mEtRemark.setText(easyResponse.getData().getRemark());
+                    mTvDaiKuan.setText(easyResponse.getData().getReserveColumn1());
+                    List<FindCustomerNeedResponse.DataBean.ListsBean> lists = easyResponse.getData().getLists();
+                    for (FindCustomerNeedResponse.DataBean.ListsBean bean : lists) {
+                        CustomerWantCarModel model = new CustomerWantCarModel();
+                        model.setName(bean.getBrandName() + "|" + bean.getAudiName() + "|" + bean.getVersionName());
+                        model.setCode(new CustomerWantCarModel.CodeBean(bean.getBrandId(), bean.getAudiId(), bean.getVersionId()));
+                        dataList.add(new ItemData(0, SettingDelegate.CUSTOMER_WANT_CAR, model));
+                    }
+                    adapter.notifyDataSetChanged();
+                }else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,EditCustomerNeedActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,EditCustomerNeedActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -228,6 +226,12 @@ public class EditCustomerNeedActivity extends BaseActivity {
                 if (easyResponse != null && easyResponse.getCode() == 200) {
                     finish();
                     Toast.makeText(EditCustomerNeedActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                }else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,EditCustomerNeedActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,EditCustomerNeedActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 } else {
                     Toast.makeText(EditCustomerNeedActivity.this, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                 }

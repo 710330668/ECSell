@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.BitmapUtils;
@@ -157,7 +158,14 @@ public class AddSalerActivity extends BaseActivity {
                                 if (response.getCode() == 200) {
                                     Toast.makeText(AddSalerActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                                     finish();
-                                } else {
+                                } else if(response.getCode() == 402||response.getCode() == 401){
+                                    //token失效
+                                    SP.getInstance(C.USER_DB,AddSalerActivity.this).put(C.USER_ACCOUNT,"");
+                                    SP.getInstance(C.USER_DB,AddSalerActivity.this).put(C.USER_PASSWORD,"");
+                                    finishAllActivity();
+                                    startActivity(LoginActivity.class);
+                                }
+                                else {
                                     Toast.makeText(AddSalerActivity.this, response.getMsg(), Toast.LENGTH_SHORT).show();
                                 }
                             }

@@ -11,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
@@ -288,9 +288,25 @@ public class CustomerWantFragment extends BaseFragment {
                             }
                             ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
                             mSearchResultData.add(e);
+                            mDataAdapter.notifyDataSetChanged();
+                            mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
                         }
-                        mDataAdapter.notifyDataSetChanged();
-                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                            getActivity().finish();
+                            startActivity(LoginActivity.class);
+                        }
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                        getActivity().finish();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -358,9 +374,23 @@ public class CustomerWantFragment extends BaseFragment {
                             ParamManager.getInstance(getContext()).setCustomerWantList(dataList);
                             Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
                             getActivity().finish();
-                        } else {
+                        } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                            getActivity().finish();
+                            startActivity(LoginActivity.class);
+                        }else {
                             Toast.makeText(getActivity(), easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                        getActivity().finish();
+                        startActivity(LoginActivity.class);
                     }
                 });
                 break;

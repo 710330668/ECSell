@@ -21,6 +21,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.SellRankModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MySaleCountResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.NearDaySaleResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserStatResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.view.ChartView;
@@ -295,8 +296,22 @@ public class StoreReportActivity extends BaseActivity {
                         if (response.getCode() == 200) {
                             tvSaleNum.setText(response.getData().getSaleCount() + "");
                             tvMoneyNum.setText(response.getData().getSaleMoney() + "");
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -313,15 +328,31 @@ public class StoreReportActivity extends BaseActivity {
                     @Override
                     public void accept(NearDaySaleResponse response) throws Exception {
                         LogUtils.e(response.getMsg());
-                        xLabel = new String[response.getData().size()];
-                        data = new String[response.getData().size()];
-                        for(int i =0 ;i<response.getData().size();i++){
-                            xLabel[i] = response.getData().get(i).getCreateDate();
-                            data[i] = response.getData().get(i).getSaleMoney()+"";
+                        if (response.getCode() == 200) {
+                            xLabel = new String[response.getData().size()];
+                            data = new String[response.getData().size()];
+                            for (int i = 0; i < response.getData().size(); i++) {
+                                xLabel[i] = response.getData().get(i).getCreateDate();
+                                data[i] = response.getData().get(i).getSaleMoney() + "";
+                            }
+                            chartview.setData(data);
+                            chartview.setxLabel(xLabel);
+                            chartview.fresh();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
-                        chartview.setData(data);
-                        chartview.setxLabel(xLabel);
-                        chartview.fresh();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }
@@ -346,7 +377,21 @@ public class StoreReportActivity extends BaseActivity {
                                 sellRankLists.add(itemData);
                             }
                             baseAdapter.notifyDataSetChanged();
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

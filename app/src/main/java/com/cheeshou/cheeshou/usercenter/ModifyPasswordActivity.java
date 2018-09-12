@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.LogUtils;
@@ -103,9 +104,24 @@ public class ModifyPasswordActivity extends BaseActivity {
                         if(response.getCode() == 200){
                             ToastUtils.showShort(ModifyPasswordActivity.this,response.getMsg());
                             finish();
-                        }else{
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,ModifyPasswordActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,ModifyPasswordActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
+                        }
+                        else{
                             ToastUtils.showShort(ModifyPasswordActivity.this,response.getMsg());
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,ModifyPasswordActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,ModifyPasswordActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

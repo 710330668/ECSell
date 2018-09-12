@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.StoreManagerResponse;
-import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.ParamManager;
@@ -98,7 +98,21 @@ public class StoreManagerActivity extends BaseActivity {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
                             initData(response.getData());
+                        } else if (response.getCode() == 402 || response.getCode() == 401) {
+                            //token失效
+                            SP.getInstance(C.USER_DB, StoreManagerActivity.this).put(C.USER_ACCOUNT, "");
+                            SP.getInstance(C.USER_DB, StoreManagerActivity.this).put(C.USER_PASSWORD, "");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB, StoreManagerActivity.this).put(C.USER_ACCOUNT, "");
+                        SP.getInstance(C.USER_DB, StoreManagerActivity.this).put(C.USER_PASSWORD, "");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

@@ -10,7 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +26,7 @@ import com.cheeshou.cheeshou.dealer.ui.activity.AllOptionResponse;
 import com.cheeshou.cheeshou.dealer.ui.activity.PutAwayDetailActivity;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareCarActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
@@ -40,7 +41,6 @@ import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -339,12 +339,17 @@ public class NationalSourceFragment extends BaseFragment {
                                     data.setDeduct("销售提成" + response.getData().getLists().get(i).getSaleCommission() + "元");
                                     data.setPrice("车源价" + response.getData().getLists().get(i).getCarPrice() + "万");
                                     data.setState(response.getData().getLists().get(i).getCarStatusName());
-                                    data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName() + "|销售区域:"
-                                            + response.getData().getLists().get(i).getSaleArea());
+                                    if(!TextUtils.isEmpty(response.getData().getLists().get(i).getCityName())){
+                                        data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName() + response.getData().getLists().get(i).getCityName()
+                                                + response.getData().getLists().get(i).getSaleArea());
+                                    }else{
+                                        data.setSubTitle(response.getData().getLists().get(i).getCarUserName() + "|" + response.getData().getLists().get(i).getProvinceName()
+                                                + response.getData().getLists().get(i).getSaleArea());
+                                    }
                                     data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                     data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                     data.setId(response.getData().getLists().get(i).getCarId());
-                                    data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
+                                    data.setAdvicePrice(response.getData().getLists().get(i).getGuidPrice() + "");
                                     ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                     mSearchResultData.add(e);
                                 } else {
@@ -358,7 +363,7 @@ public class NationalSourceFragment extends BaseFragment {
                                     data.setTitle(response.getData().getLists().get(i).getBrand() + "-" + response.getData().getLists().get(i).getVname());
                                     data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                     data.setId(response.getData().getLists().get(i).getCarId());
-                                    data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
+                                    data.setAdvicePrice(response.getData().getLists().get(i).getGuidPrice() + "");
                                     ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                     mSearchResultData.add(e);
                                 }
@@ -376,9 +381,24 @@ public class NationalSourceFragment extends BaseFragment {
                             }
                             ItemData e = new ItemData(0, SettingDelegate.FOOT_TYPE, "");
                             mSearchResultData.add(e);
+                            mDataAdapter.notifyDataSetChanged();
+                            mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+                        } else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                            getActivity().finish();
+                            startActivity(LoginActivity.class);
                         }
-                        mDataAdapter.notifyDataSetChanged();
-                        mDataAdapter.setLoadState(mDataAdapter.LOADING_COMPLETE);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,getActivity()).put(C.USER_PASSWORD,"");
+                        getActivity().finish();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

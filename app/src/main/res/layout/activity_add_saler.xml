@@ -248,7 +248,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="14dp"
-            android:hint="请输入初始密码"
+            android:hint="请输入电话号码"
             android:background="@null"
             android:textColor="#333333"
             android:textSize="13dp" />

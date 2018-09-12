@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,9 +18,11 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
+import com.cheeshou.cheeshou.usercenter.DealershipActivity;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -31,8 +33,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -120,7 +120,12 @@ public class PutAwayDetailActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     String s1 = mEtPercentUp.getText().toString();
-                    Double v = Double.valueOf(s1);
+                    Double v ;
+                    if(TextUtils.isEmpty(s1)){
+                        v = 0.0;
+                    }else{
+                        v = Double.valueOf(s1);
+                    }
                     for (SearchResultModel bean : data) {
                         String price = bean.getPrice();
                         bean.setSalePrice(Integer.parseInt(price.substring(3, price.length() - 1)) * (1 + (v / 100)) + "");
@@ -145,7 +150,12 @@ public class PutAwayDetailActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String s1 = mEtPriceUp.getText().toString();
-                Double aDouble = Double.valueOf(s1);
+                Double aDouble;
+                if(TextUtils.isEmpty(s1)){
+                    aDouble = 0.0;
+                }else{
+                    aDouble = Double.valueOf(s1);
+                }
                 for (SearchResultModel bean : data) {
 
                     String price = bean.getPrice();
@@ -188,10 +198,10 @@ public class PutAwayDetailActivity extends BaseActivity {
         for (int i = 0; i < data.size(); i++) {
             PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getSalePrice());
             String str = putAwayCarModel.getCarPrice();
-            Pattern p = Pattern.compile("\\d+");
-            Matcher m = p.matcher(str);
-            m.find();
-            putAwayCarModel.setCarPrice(m.group());
+//            Pattern p = Pattern.compile("\\d+");
+//            Matcher m = p.matcher(str);
+//            m.find();
+            putAwayCarModel.setCarPrice(str);
             putAwayCarModel.setImageUrl(data.get(i).getImageUrl());
             modelList.add(putAwayCarModel);
         }
@@ -201,9 +211,23 @@ public class PutAwayDetailActivity extends BaseActivity {
                 if (easyResponse.getCode() == 200) {
                     Toast.makeText(appContext, "上架成功", Toast.LENGTH_SHORT).show();
                     finish();
-                } else {
+                } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
+                }else {
                     Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_ACCOUNT,"");
+                SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_PASSWORD,"");
+                finishAllActivity();
+                startActivity(LoginActivity.class);
             }
         });
     }

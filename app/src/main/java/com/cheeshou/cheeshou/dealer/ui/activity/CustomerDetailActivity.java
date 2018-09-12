@@ -24,6 +24,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.CustomerFollowModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerDetailResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.ParamManager;
@@ -205,6 +206,12 @@ public class CustomerDetailActivity extends BaseActivity {
                     }
                     mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
 
+                }else if(s.getCode() == 402||s.getCode() == 401){
+                    //token失效
+                    SP.getInstance(C.USER_DB,CustomerDetailActivity.this).put(C.USER_ACCOUNT,"");
+                    SP.getInstance(C.USER_DB,CustomerDetailActivity.this).put(C.USER_PASSWORD,"");
+                    finishAllActivity();
+                    startActivity(LoginActivity.class);
                 }
             }
 

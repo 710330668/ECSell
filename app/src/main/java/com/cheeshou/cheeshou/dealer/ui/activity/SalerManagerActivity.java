@@ -9,12 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.cheeshou.cheeshou.remote.Injection;
-import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.UserListModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.SalersListResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
@@ -98,7 +97,21 @@ public class SalerManagerActivity extends BaseActivity {
                                 }
                             });
                             rlUserManager.setAdapter(baseAdapter);
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,SalerManagerActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,SalerManagerActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,SalerManagerActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,SalerManagerActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

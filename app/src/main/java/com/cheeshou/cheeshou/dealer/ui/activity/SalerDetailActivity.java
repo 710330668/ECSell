@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserDetailResponse;
+import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.LogUtils;
@@ -87,7 +88,21 @@ public class SalerDetailActivity extends BaseActivity {
                             tvWechat.setText(response.getData().getWeChat());
                             tvTime.setText(TimeUtils.millis2String(response.getData().getCreateDate()));
                             LoaderManager.getLoader().loadNet(ivHead,response.getData().getUserPic());
+                        }else if(response.getCode() == 402||response.getCode() == 401){
+                            //token失效
+                            SP.getInstance(C.USER_DB,SalerDetailActivity.this).put(C.USER_ACCOUNT,"");
+                            SP.getInstance(C.USER_DB,SalerDetailActivity.this).put(C.USER_PASSWORD,"");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB,SalerDetailActivity.this).put(C.USER_ACCOUNT,"");
+                        SP.getInstance(C.USER_DB,SalerDetailActivity.this).put(C.USER_PASSWORD,"");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
                     }
                 });
     }

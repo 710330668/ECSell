@@ -15,6 +15,7 @@ import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,10 +96,10 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new Consumer<LoginResponse>() {
                     @Override
                     public void accept(LoginResponse loginResponse) throws Exception {
-                        if(loginResponse.getCode() == 200){
+                        if (loginResponse.getCode() == 200) {
                             saveUserInfor(loginResponse);
                             String userType = loginResponse.getData().getUserType();
-                            switch (userType){
+                            switch (userType) {
                                 case C.USER_TYPE_CYS:
                                     ParamManager.getInstance(LoginActivity.this).setChannelType(C.INVENTORY_OPTION);
                                     break;
@@ -111,9 +112,14 @@ public class LoginActivity extends BaseActivity {
                             }
                             startActivity(MainTabActivity.class);
                             finish();
-                        }else{
-                            Toast.makeText(LoginActivity.this,loginResponse.getMsg(),Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, loginResponse.getMsg(), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        ToastUtils.showShort(LoginActivity.this,throwable.getMessage());
                     }
                 });
     }

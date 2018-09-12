@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.example.com.common.util.AppManager;
 import com.example.com.common.util.AppUtils;
 import com.example.com.common.util.LogUtils;
+import com.example.com.common.util.ToastUtils;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -213,24 +215,16 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     public void addActivity(Activity activity) {
-        if (stack == null) {
-            stack = new Stack<>();
-        }
-        stack.add(activity);
+        AppManager.getAppManager().addActivity(activity);
     }
 
     public void finishActivity(Activity activity) {
-        if (activity != null) {
-            stack.remove(activity);
-            finish();
-        }
+        AppManager.getAppManager().finishActivity(activity);
     }
 
     public void finishAllActivity() {
-        for (Activity activity : stack) {
-            activity.finish();
-        }
-        stack.clear();
+        ToastUtils.showShort(this,"token失效,请重新登录");
+        AppManager.getAppManager().finishAllActivity();
     }
 
     /**
