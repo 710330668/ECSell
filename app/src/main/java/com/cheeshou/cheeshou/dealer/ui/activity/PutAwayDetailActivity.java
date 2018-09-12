@@ -122,7 +122,8 @@ public class PutAwayDetailActivity extends BaseActivity {
                     String s1 = mEtPercentUp.getText().toString();
                     Double v = Double.valueOf(s1);
                     for (SearchResultModel bean : data) {
-                        bean.setSalePrice(Integer.parseInt(s1) * (1 + (v / 100)) + "");
+                        String price = bean.getPrice();
+                        bean.setSalePrice(Integer.parseInt(price.substring(3, price.length() - 1)) * (1 + (v / 100)) + "");
                     }
                     adapter.notifyDataSetChanged();
                 } catch (Exception e) {
@@ -146,7 +147,9 @@ public class PutAwayDetailActivity extends BaseActivity {
                 String s1 = mEtPriceUp.getText().toString();
                 Double aDouble = Double.valueOf(s1);
                 for (SearchResultModel bean : data) {
-                    bean.setSalePrice((Integer.parseInt(bean.getAdvicePrice()) + (aDouble / 10000)) + "");
+
+                    String price = bean.getPrice();
+                    bean.setSalePrice((Integer.parseInt(price.substring(3, price.length() - 1)) + (aDouble / 10000)) + "");
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -161,7 +164,8 @@ public class PutAwayDetailActivity extends BaseActivity {
     private void initData() {
         for (int i = 0; i < data.size(); i++) {
             ItemData e = new ItemData(0, SettingDelegate.PUT_AWAY_CAR_TYPE);
-            data.get(i).setSalePrice(data.get(i).getAdvicePrice());
+            String price = data.get(i).getPrice();
+            data.get(i).setSalePrice(price.substring(3, price.length() - 1));
             e.setData(data.get(i));
             mCarData.add(e);
         }
