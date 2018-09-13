@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarOrderViewHolder;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CarStateViewHolder;
 import com.cheeshou.cheeshou.dealer.ui.viewHolder.CustomerWantCarViewHolder;
+import com.cheeshou.cheeshou.dealer.ui.viewHolder.FindSuccessCarHolder;
 import com.cheeshou.cheeshou.options.viewHolder.AreasViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.options.viewHolder.CarsViewHolder;
@@ -98,6 +99,7 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
     public static final int CUSTOMER_WANT_CAR = 29;
     public static final int SHARE_CAR_PHOTO_TYPE = 30;
     public static final int SHARE_CAR_PHOTO_ADD_TYPE = 31;
+    public static final int FIND_SUCCESS_CAR_LIST_TYPE = 32;
 
     public static final int FOOT_TYPE = 99;
 
@@ -176,9 +178,9 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return new ShareCarPhotoViewHolder(parent, getItemView(parent, viewType));
             case SHARE_CAR_PHOTO_ADD_TYPE:
                 ShareCarPhotoAddViewHolder shareCarPhotoAddViewHolder = new ShareCarPhotoAddViewHolder(parent, getItemView(parent, viewType));
-//                Log.e("setShareCarPhotoAddListener", "setShareCarPhotoAddListener: --------------------" + (this.addCarPhotoListener == null));
-//                shareCarPhotoAddViewHolder.setOnImageAddListener(addCarPhotoListener);
                 return shareCarPhotoAddViewHolder;
+            case FIND_SUCCESS_CAR_LIST_TYPE:
+                return new FindSuccessCarHolder(parent, getItemView(parent, viewType));
             default:
         }
         return null;
@@ -258,6 +260,8 @@ public class SettingDelegate extends BaseDelegate<ItemData> {
                 return R.layout.item_car_photo;
             case SHARE_CAR_PHOTO_ADD_TYPE:
                 return R.layout.item_car_photo;
+            case FIND_SUCCESS_CAR_LIST_TYPE:
+                return R.layout.item_find_success_car;
             default:
         }
         return 0;

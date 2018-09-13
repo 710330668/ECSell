@@ -7,6 +7,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerStatusResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.FindCustomerNeedResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.FindSuccessCarResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MyReportResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.MySaleCountResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.NearDaySaleResponse;
@@ -397,7 +398,7 @@ public interface ApiService {
     Observable<ShareRankResponse> findShareRankList(@Header("token") String token, @Body HashMap<String, String> params);
 
     @POST("sale/findSoldOutCarList")
-    Observable<ShareRankResponse> findSoldOutCarList(@Header("token") String token);
+    Observable<FindSuccessCarResponse> findSoldOutCarList(@Header("token") String token);
 
 
 }

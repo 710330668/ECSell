@@ -113,7 +113,8 @@
         <activity android:name=".dealer.ui.activity.StoreManagerItemClickActivity" />
         <activity android:name=".dealer.ui.activity.CustomerWantCarActivity" />
         <activity android:name=".dealer.ui.activity.CustomerCarFollowActivity" />
-        <activity android:name=".dealer.ui.activity.CarSourceTypeActivity"></activity>
+        <activity android:name=".dealer.ui.activity.CarSourceTypeActivity" />
+        <activity android:name=".dealer.ui.activity.FindSuccessCarActivity"></activity>
     </application>
 
 </manifest>

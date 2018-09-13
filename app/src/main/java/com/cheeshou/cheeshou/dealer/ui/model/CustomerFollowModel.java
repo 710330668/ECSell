@@ -5,6 +5,15 @@ public class CustomerFollowModel {
     private String time;
     private String message;
     private String from;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getDate() {
         return date;

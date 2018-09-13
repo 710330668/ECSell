@@ -223,7 +223,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     public void finishAllActivity() {
-        ToastUtils.showShort(this,"token失效,请重新登录");
+        ToastUtils.showShort(this, "token失效,请重新登录");
         AppManager.getAppManager().finishAllActivity();
     }
 
@@ -303,7 +303,6 @@ public abstract class BaseActivity extends FragmentActivity {
     @IntDef({GRANTED, SHOULD_SHOWREQUEST, REFUSE})
     public @interface PermissionState {
     }
-
 
 
     /**

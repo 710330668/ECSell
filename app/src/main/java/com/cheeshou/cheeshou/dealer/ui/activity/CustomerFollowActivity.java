@@ -205,9 +205,10 @@ public class CustomerFollowActivity extends BaseActivity {
                 break;
             case R.id.tv_dealer:
 //                添加意向车辆
-                Bundle bundle = new Bundle();
-                bundle.putString("customerId", customerId);
-                startActivity(CustomerCarFollowActivity.class, bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("customerId", customerId);
+//                startActivity(CustomerCarFollowActivity.class, bundle);
+                startActivity(FindSuccessCarActivity.class);
                 break;
         }
     }
@@ -236,13 +237,13 @@ public class CustomerFollowActivity extends BaseActivity {
                 if (easyResponse != null && easyResponse.getCode() == 200) {
                     Toast.makeText(appContext, "保存成功", Toast.LENGTH_SHORT).show();
                     finish();
-                } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                } else if (easyResponse.getCode() == 402 || easyResponse.getCode() == 401) {
                     //token失效
-                    SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_ACCOUNT,"");
-                    SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_PASSWORD,"");
+                    SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_ACCOUNT, "");
+                    SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_PASSWORD, "");
                     finishAllActivity();
                     startActivity(LoginActivity.class);
-                }else {
+                } else {
                     Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                 }
 //                Log.e(TAG, "accept: " + new Gson().toJson(easyResponse));
@@ -250,8 +251,8 @@ public class CustomerFollowActivity extends BaseActivity {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_ACCOUNT,"");
-                SP.getInstance(C.USER_DB,CustomerFollowActivity.this).put(C.USER_PASSWORD,"");
+                SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_ACCOUNT, "");
+                SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_PASSWORD, "");
                 finishAllActivity();
                 startActivity(LoginActivity.class);
             }
@@ -332,12 +333,12 @@ public class CustomerFollowActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        List<SearchResultModel> customerFollowList = ParamManager.getInstance(getApplicationContext()).getCustomerFollowList();
-        mFollowCarData.clear();
-        for (SearchResultModel bean : customerFollowList) {
-            ItemData itemData = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, bean);
-            mFollowCarData.add(itemData);
-        }
-        mRecyclerFollowCar.setAdapter(new BaseAdapter(mFollowCarData, new SettingDelegate()));
+//        List<SearchResultModel> customerFollowList = ParamManager.getInstance(getApplicationContext()).getCustomerFollowList();
+//        mFollowCarData.clear();
+//        for (SearchResultModel bean : customerFollowList) {
+//            ItemData itemData = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, bean);
+//            mFollowCarData.add(itemData);
+//        }
+//        mRecyclerFollowCar.setAdapter(new BaseAdapter(mFollowCarData, new SettingDelegate()));
     }
 }

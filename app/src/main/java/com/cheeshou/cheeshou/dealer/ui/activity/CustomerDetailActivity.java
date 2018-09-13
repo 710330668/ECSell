@@ -133,7 +133,7 @@ public class CustomerDetailActivity extends BaseActivity {
         mRecyclerFollow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerFollow.setNestedScrollingEnabled(false);
 
-        mTvBrand.setText(customer.getBrandName());
+//        mTvBrand.setText(customer.getBrandName());
 
         initStatus(customer.getStatusName());
     }
@@ -167,6 +167,7 @@ public class CustomerDetailActivity extends BaseActivity {
                     mTvRemark.setText(TextUtils.isEmpty(s.getData().getRemark()) ? "无" : s.getData().getRemark());
                     mTvDaiKuan.setText(s.getData().getReserveColumn1());
                     mData.clear();
+                    StringBuffer stringBuffer = new StringBuffer();
                     List<CustomerDetailResponse.DataBean.ListsBean> lists = s.getData().getLists();
                     if (lists != null) {
                         for (CustomerDetailResponse.DataBean.ListsBean s1 : lists) {
@@ -176,9 +177,11 @@ public class CustomerDetailActivity extends BaseActivity {
                             data.setState("已上架");
                             data.setTime("今天");
                             data.setTitle("雪弗兰2013款 科鲁兹 1.6LSL天地版MT");
+                            stringBuffer.append(s1.getBrandName()).append("-").append(s1.getVersionName()).append("；");
                             mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
                         }
                     }
+                    mTvBrand.setText(stringBuffer.toString());
 //                    List<CustomerDetailResponse.DataBean.SaleCarInfosBean> saleCarInfos = s.getData().getSaleCarInfos();
 //                    for (CustomerDetailResponse.DataBean.SaleCarInfosBean bean : saleCarInfos) {
 //                        CustomerDetailWantModel data = new CustomerDetailWantModel();
@@ -202,14 +205,15 @@ public class CustomerDetailActivity extends BaseActivity {
                         data.setTime(formatDate("hh:mm", bean.getCreateDate()));
                         data.setMessage(bean.getContent());
                         data.setFrom(bean.getSource());
+                        data.setType(bean.getType());
                         mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
                     }
                     mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
 
-                }else if(s.getCode() == 402||s.getCode() == 401){
+                } else if (s.getCode() == 402 || s.getCode() == 401) {
                     //token失效
-                    SP.getInstance(C.USER_DB,CustomerDetailActivity.this).put(C.USER_ACCOUNT,"");
-                    SP.getInstance(C.USER_DB,CustomerDetailActivity.this).put(C.USER_PASSWORD,"");
+                    SP.getInstance(C.USER_DB, CustomerDetailActivity.this).put(C.USER_ACCOUNT, "");
+                    SP.getInstance(C.USER_DB, CustomerDetailActivity.this).put(C.USER_PASSWORD, "");
                     finishAllActivity();
                     startActivity(LoginActivity.class);
                 }

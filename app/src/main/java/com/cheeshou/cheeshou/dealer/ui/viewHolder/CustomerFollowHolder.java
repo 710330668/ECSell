@@ -39,12 +39,12 @@ public class CustomerFollowHolder extends BaseViewHolder<ItemData> {
     }
 
     @Override
-    public void onBindViewHolder(ItemData data,int position) {
+    public void onBindViewHolder(ItemData data, int position) {
         CustomerFollowModel data1 = (CustomerFollowModel) data.getData();
         mTvDate.setText(data1.getDate());
         mTvTime.setText(data1.getTime());
         mTvMessage.setText(data1.getMessage());
-        mTvFrom.setText(data1.getFrom());
+        mTvFrom.setText(data1.getFrom() + " | " + data1.getType());
 
         if (getAdapterPosition() == 0) {
             mImgCircle.setImageResource(R.drawable.circle_red);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
@@ -20,6 +21,7 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,10 +86,10 @@ public class MarketShareActivity extends BaseActivity {
                     ((MarketShareHeaderModel) mData.get(0).getData()).setShareCount(myShareResponse.getData().getMyShareCount());
                     ((MarketShareHeaderModel) mData.get(0).getData()).setShareRankings(myShareResponse.getData().getMyRank());
                     adapter.notifyDataSetChanged();
-                }else if(myShareResponse.getCode() == 402||myShareResponse.getCode() == 401){
+                } else if (myShareResponse.getCode() == 402 || myShareResponse.getCode() == 401) {
                     //token失效
-                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_ACCOUNT,"");
-                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_PASSWORD,"");
+                    SP.getInstance(C.USER_DB, MarketShareActivity.this).put(C.USER_ACCOUNT, "");
+                    SP.getInstance(C.USER_DB, MarketShareActivity.this).put(C.USER_PASSWORD, "");
                     finishAllActivity();
                     startActivity(LoginActivity.class);
                 }
@@ -95,8 +97,8 @@ public class MarketShareActivity extends BaseActivity {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_ACCOUNT,"");
-                SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_PASSWORD,"");
+                SP.getInstance(C.USER_DB, MarketShareActivity.this).put(C.USER_ACCOUNT, "");
+                SP.getInstance(C.USER_DB, MarketShareActivity.this).put(C.USER_PASSWORD, "");
                 finishAllActivity();
                 startActivity(LoginActivity.class);
             }
@@ -124,13 +126,15 @@ public class MarketShareActivity extends BaseActivity {
                             data1.setShareTitle(bean.getSaleCarInfos().get(j).getVname());
                             imgUrl.add(bean.getSaleCarInfos().get(j).getImgThumUrl());
                         }
+                        data1.setImgUrl(imgUrl);
                         mData.add(new ItemData(0, SettingDelegate.MARKET_SHARE_TYPE, data1));
-                        adapter.notifyDataSetChanged();
                     }
-                }else if(myShareResponse.getCode() == 402||myShareResponse.getCode() == 401){
+                    Log.e(TAG, "onNext: " + new Gson().toJson(mData));
+                    adapter.notifyDataSetChanged();
+                } else if (myShareResponse.getCode() == 402 || myShareResponse.getCode() == 401) {
                     //token失效
-                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_ACCOUNT,"");
-                    SP.getInstance(C.USER_DB,MarketShareActivity.this).put(C.USER_PASSWORD,"");
+                    SP.getInstance(C.USER_DB, MarketShareActivity.this).put(C.USER_ACCOUNT, "");
+                    SP.getInstance(C.USER_DB, MarketShareActivity.this).put(C.USER_PASSWORD, "");
                     finishAllActivity();
                     startActivity(LoginActivity.class);
                 }
@@ -146,19 +150,6 @@ public class MarketShareActivity extends BaseActivity {
 
             }
         });
-
-//        for (int i = 0; i < 10; i++) {
-//            MarketShareModel data1 = new MarketShareModel();
-//            data1.setShareTitle("雪弗兰2013款 科鲁兹 1.6LSL天地版MT");
-//            data1.setShareCount(5);
-//            data1.setShareTime("2018-06-04");
-//            ArrayList<String> imgUrl = new ArrayList<>();
-//            for (int j = 0; j < 1; j++) {
-//                imgUrl.add("");
-//            }
-//            data1.setImgUrl(imgUrl);
-//            mData.add(new ItemData(0, SettingDelegate.MARKET_SHARE_TYPE, data1));
-//        }
         SettingDelegate delegate = new SettingDelegate();
         delegate.setShareHeaderClickListener(new MarketShareHeaderHolder.ShareRankClickListener() {
             @Override

@@ -2,6 +2,7 @@ package com.cheeshou.cheeshou.market.ui.viewholder;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.imageloader.GlideLoader;
+import com.example.com.imageloader.LoaderManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +27,7 @@ public class MarketShareHolder extends BaseViewHolder<ItemData> {
     private TextView mShareCount;
     private TextView mShareTime;
     private Context mContext;
+    private static final String TAG = "MarketShareHolder";
 
     /**
      * TODO
@@ -49,7 +53,7 @@ public class MarketShareHolder extends BaseViewHolder<ItemData> {
         MarketShareModel data1 = (MarketShareModel) data.getData();
         mShareCount.setText(data1.getShareCount() + "人看过");
         Date date = new Date(Long.parseLong(data1.getShareTime()));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM//dd hh:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         mShareTime.setText(simpleDateFormat.format(date));
         List<String> imgUrl = data1.getImgUrl();
         switch (imgUrl.size()) {
@@ -76,7 +80,7 @@ public class MarketShareHolder extends BaseViewHolder<ItemData> {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_48dp), mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_36dp));
         layoutParams.leftMargin = mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_5dp);
         layoutParams.rightMargin = mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_5dp);
-        imageView.setImageResource(R.mipmap.ic_launcher);
+//        LoaderManager.getLoader().loadNet(imageView, imgUrl);
         mShareContent.addView(imageView, layoutParams);
     }
 
