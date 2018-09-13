@@ -69,7 +69,7 @@ public class EditCustomerNeedActivity extends BaseActivity {
     private BaseAdapter adapter;
     @BindView(R.id.tv_daikuan)
     TextView mTvDaiKuan;
-    private String reserveColumn1;
+    private String reserveColumn1 = "是";
 
     @Override
     public int bindLayout() {

@@ -51,6 +51,7 @@ public class ModifyCarInfActivity extends BaseActivity {
     TextView tvSuggestPrice;
     private String token;
     private String saleId;
+    private String saleCarPrice = "",insuranceRebates = "",loanRebates = "";
 
     @Override
     public int bindLayout() {
@@ -84,8 +85,11 @@ public class ModifyCarInfActivity extends BaseActivity {
                             tvCarPrice.setText("车源价"+" "+response.getData().getCarPrice()+"万");
                             tvSuggestPrice.setText("建议售价 "+response.getData().getGuidPrice()+"万");
                             etSaleCarPrice.setText(response.getData().getSaleCarPrice()+"万");
+                            saleCarPrice = response.getData().getSaleCarPrice()+"";
                             etInsuranceRebates.setText(response.getData().getInsuranceRebates()+"%");
+                            insuranceRebates = response.getData().getInsuranceRebates()+"";
                             etLoanRebates.setText(response.getData().getLoanRebates()+"%");
+                            loanRebates = response.getData().getLoanRebates()+"";
                         }else if(response.getCode() == 402||response.getCode() == 401){
                             //token失效
                             SP.getInstance(C.USER_DB,ModifyCarInfActivity.this).put(C.USER_ACCOUNT,"");
@@ -127,8 +131,8 @@ public class ModifyCarInfActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void updateSaleCarInfo() {
-        Injection.provideApiService().updateSaleCarInfo(token, saleId, etSaleCarPrice.getText().toString(),
-                etInsuranceRebates.getText().toString(), etLoanRebates.getText().toString())
+        Injection.provideApiService().updateSaleCarInfo(token, saleId, saleCarPrice,
+                insuranceRebates, loanRebates)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<EasyResponse>() {

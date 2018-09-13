@@ -112,6 +112,8 @@ public class CustomerDetailActivity extends BaseActivity {
     @BindView(R.id.tv_daikuan)
     TextView mTvDaiKuan;
 
+    private String phone;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_customer_detail;
@@ -159,6 +161,7 @@ public class CustomerDetailActivity extends BaseActivity {
                 if (s != null && s.getCode() == 200) {
                     mTvWechat.setText(s.getData().getWeBcat());
                     mTvPhone.setText(s.getData().getPhone());
+                    phone = s.getData().getPhone();
                     mTvName.setText(s.getData().getName());
                     mTvSex.setText(s.getData().getSex() == 0 ? "先生" : "女士");
                     mTvOfferName.setText(s.getData().getUserName());
@@ -246,6 +249,9 @@ public class CustomerDetailActivity extends BaseActivity {
                 break;
             case R.id.ll_customer_message:
                 // TODO: 2018/8/20 短信
+                Uri uri = Uri.parse("smsto:" + phone + "");
+                Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+                startActivity(i);
                 break;
             case R.id.ll_customer_phone:
                 intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"));

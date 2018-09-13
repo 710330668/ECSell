@@ -12,6 +12,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheeshou.cheeshou.R;
@@ -22,7 +25,6 @@ import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.usercenter.DealershipActivity;
 import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
@@ -31,10 +33,12 @@ import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -54,6 +58,18 @@ public class PutAwayDetailActivity extends BaseActivity {
     EditText mEtInsuranceRebates;
     @BindView(R.id.et_loan_rebates)
     EditText mEtLoanRebates;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.layout_bar)
+    RelativeLayout layoutBar;
+    @BindView(R.id.tv_insurance_rebates)
+    TextView tvInsuranceRebates;
+    @BindView(R.id.tv_loan_rebates)
+    TextView tvLoanRebates;
+    @BindView(R.id.line_spilt)
+    View lineSpilt;
+    @BindView(R.id.put_away_car_title)
+    TextView putAwayCarTitle;
     private List<ItemData> mCarData = new ArrayList<>();
     private String token;
     private static final String TAG = "PutAwayDetailActivity";
@@ -120,15 +136,15 @@ public class PutAwayDetailActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     String s1 = mEtPercentUp.getText().toString();
-                    Double v ;
-                    if(TextUtils.isEmpty(s1)){
+                    Double v;
+                    if (TextUtils.isEmpty(s1)) {
                         v = 0.0;
-                    }else{
+                    } else {
                         v = Double.valueOf(s1);
                     }
                     for (SearchResultModel bean : data) {
                         String price = bean.getPrice();
-                        bean.setSalePrice(Integer.parseInt(price.substring(3, price.length() - 1)) * (1 + (v / 100)) + "");
+                        bean.setSalePrice(doubleToString(Double.valueOf(Integer.parseInt(price.substring(3, price.length() - 1)) * (1 + (v / 100)) + "")));
                     }
                     adapter.notifyDataSetChanged();
                 } catch (Exception e) {
@@ -151,15 +167,15 @@ public class PutAwayDetailActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String s1 = mEtPriceUp.getText().toString();
                 Double aDouble;
-                if(TextUtils.isEmpty(s1)){
+                if (TextUtils.isEmpty(s1)) {
                     aDouble = 0.0;
-                }else{
+                } else {
                     aDouble = Double.valueOf(s1);
                 }
                 for (SearchResultModel bean : data) {
 
                     String price = bean.getPrice();
-                    bean.setSalePrice((Integer.parseInt(price.substring(3, price.length() - 1)) + (aDouble / 10000)) + "");
+                    bean.setSalePrice(doubleToString(Double.valueOf((Integer.parseInt(price.substring(3, price.length() - 1)) + (aDouble / 10000)))));
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -193,47 +209,67 @@ public class PutAwayDetailActivity extends BaseActivity {
         mRecyclerPutCar.setAdapter(adapter);
     }
 
-    @OnClick(R.id.fm_put_away)
-    public void onViewClicked(View view) {
-        for (int i = 0; i < data.size(); i++) {
-            PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getSalePrice());
-            String str = putAwayCarModel.getCarPrice();
-//            Pattern p = Pattern.compile("\\d+");
-//            Matcher m = p.matcher(str);
-//            m.find();
-            putAwayCarModel.setCarPrice(str);
-            putAwayCarModel.setImageUrl(data.get(i).getImageUrl());
-            modelList.add(putAwayCarModel);
-        }
-        Injection.provideApiService().batchShelvesCarInfo(token, mEtInsuranceRebates.getText().toString(), mEtLoanRebates.getText().toString(), new Gson().toJson(modelList)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
-            @Override
-            public void accept(EasyResponse easyResponse) throws Exception {
-                if (easyResponse.getCode() == 200) {
-                    Toast.makeText(appContext, "上架成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
-                    //token失效
-                    SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_ACCOUNT,"");
-                    SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_PASSWORD,"");
-                    finishAllActivity();
-                    startActivity(LoginActivity.class);
-                }else {
-                    Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_ACCOUNT,"");
-                SP.getInstance(C.USER_DB,PutAwayDetailActivity.this).put(C.USER_PASSWORD,"");
-                finishAllActivity();
-                startActivity(LoginActivity.class);
-            }
-        });
+
+    public String doubleToString(double num) {
+        //使用0.00不足位补0，#.##仅保留有效位
+        return new DecimalFormat("0.00").format(num);
     }
+
 
     public RequestBody toRequestBody(String value) {
         return RequestBody.create(MediaType.parse("text/plain"), value);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick({R.id.iv_back, R.id.layout_bar,R.id.fm_put_away})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.layout_bar:
+                break;
+            case R.id.fm_put_away:
+                for (int i = 0; i < data.size(); i++) {
+                    PutAwayCarModel putAwayCarModel = new PutAwayCarModel(((SearchResultModel) data.get(i)).getId(), ((SearchResultModel) data.get(i)).getSalePrice());
+                    String str = putAwayCarModel.getCarPrice();
+                    putAwayCarModel.setCarPrice(str);
+                    putAwayCarModel.setImageUrl(data.get(i).getImageUrl());
+                    modelList.add(putAwayCarModel);
+                }
+                Injection.provideApiService().batchShelvesCarInfo(token, mEtInsuranceRebates.getText().toString(), mEtLoanRebates.getText().toString(), new Gson().toJson(modelList)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
+                    @Override
+                    public void accept(EasyResponse easyResponse) throws Exception {
+                        if (easyResponse.getCode() == 200) {
+                            Toast.makeText(appContext, "上架成功", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else if (easyResponse.getCode() == 402 || easyResponse.getCode() == 401) {
+                            //token失效
+                            SP.getInstance(C.USER_DB, PutAwayDetailActivity.this).put(C.USER_ACCOUNT, "");
+                            SP.getInstance(C.USER_DB, PutAwayDetailActivity.this).put(C.USER_PASSWORD, "");
+                            finishAllActivity();
+                            startActivity(LoginActivity.class);
+                        } else {
+                            Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        SP.getInstance(C.USER_DB, PutAwayDetailActivity.this).put(C.USER_ACCOUNT, "");
+                        SP.getInstance(C.USER_DB, PutAwayDetailActivity.this).put(C.USER_PASSWORD, "");
+                        finishAllActivity();
+                        startActivity(LoginActivity.class);
+                    }
+                });
+                break;
+        }
     }
 
     private class PutAwayCarModel {
