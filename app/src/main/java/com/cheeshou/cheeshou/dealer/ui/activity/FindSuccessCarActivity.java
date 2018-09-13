@@ -1,7 +1,7 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,6 @@ import android.view.View;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.response.FindSuccessCarResponse;
-import com.cheeshou.cheeshou.market.ui.response.ShareRankResponse;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.example.com.common.BaseActivity;
@@ -19,7 +18,6 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,6 @@ import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class FindSuccessCarActivity extends BaseActivity {
@@ -65,12 +62,17 @@ public class FindSuccessCarActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_sure:
-                this.setResult(RESULT_OK);
+                ArrayList<FindSuccessCarResponse.DataBean> dataBeans = new ArrayList<>();
                 for (ItemData bean : dataList) {
-                    if (((FindSuccessCarResponse.DataBean) bean.getData()).isChecked()) {
-
+                    FindSuccessCarResponse.DataBean data = (FindSuccessCarResponse.DataBean) bean.getData();
+                    if (data.isChecked()) {
+                        data.setHideCheck(true);
+                        dataBeans.add(data);
                     }
                 }
+                Intent newIntent = new Intent();
+                newIntent.putParcelableArrayListExtra("data", dataBeans);
+                this.setResult(RESULT_OK, newIntent);
                 finish();
                 break;
         }

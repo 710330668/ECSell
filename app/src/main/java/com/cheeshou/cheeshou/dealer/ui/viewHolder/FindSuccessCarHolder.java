@@ -43,5 +43,6 @@ public class FindSuccessCarHolder extends BaseViewHolder<ItemData> {
         mCarProvince.setText(data1.getProvinceName());
         mCarPrice.setText("成交价" + data1.getOrderPrice() + "万");
         mCarChecked.setImageResource(data1.isChecked() ? R.mipmap.checked_true : R.drawable.bg_cb_put_away_normal);
+        mCarChecked.setVisibility(data1.isHideCheck() ? View.GONE : View.VISIBLE);
     }
 }

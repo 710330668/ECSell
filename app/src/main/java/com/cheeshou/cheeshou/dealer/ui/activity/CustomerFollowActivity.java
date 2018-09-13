@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
 import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
+import com.cheeshou.cheeshou.dealer.ui.model.response.FindSuccessCarResponse;
 import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.options.ModifyCarInfActivity;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
@@ -81,6 +83,7 @@ public class CustomerFollowActivity extends BaseActivity {
     private List<Bitmap> photos = new ArrayList<>();
 
     private final int REQUEST_LOCAL = 2;
+    private final int REQUEST_SUCCESS_CAR = 3;
     private BaseAdapter imageDeleteAdapter;
     private String imgUrl = "";
     private String customerId = "";
@@ -208,7 +211,8 @@ public class CustomerFollowActivity extends BaseActivity {
 //                Bundle bundle = new Bundle();
 //                bundle.putString("customerId", customerId);
 //                startActivity(CustomerCarFollowActivity.class, bundle);
-                startActivity(FindSuccessCarActivity.class);
+                Intent intent = new Intent(this, FindSuccessCarActivity.class);
+                startActivityForResult(intent, REQUEST_SUCCESS_CAR);
                 break;
         }
     }
@@ -309,6 +313,21 @@ public class CustomerFollowActivity extends BaseActivity {
                     }
                 } catch (FileNotFoundException e) {
                 }
+            }
+            if (requestCode == REQUEST_SUCCESS_CAR) {
+                ArrayList<FindSuccessCarResponse.DataBean> data1 = data.getParcelableArrayListExtra("data");
+                List<ItemData> dataList = new ArrayList<>();
+                if (data1.size() > 0) {
+                    mTvDealer.setText("重选");
+                } else {
+                    mTvDealer.setText("添加");
+                }
+                for (FindSuccessCarResponse.DataBean bean : data1) {
+                    ItemData itemData = new ItemData(0, SettingDelegate.FIND_SUCCESS_CAR_LIST_TYPE, bean);
+                    dataList.add(itemData);
+                }
+
+                mRecyclerFollowCar.setAdapter(new BaseAdapter(dataList, new SettingDelegate()));
             }
         }
     }
