@@ -462,6 +462,7 @@ public class CarDetailActivity extends BaseActivity {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("carDetailResponse", (Serializable) carDetailResponse);
                         startActivity(ReleaseOptionActivity.class, bundle);
+                        finish();
                         pop.dismiss();
                     }
                 });
@@ -481,6 +482,7 @@ public class CarDetailActivity extends BaseActivity {
                         Bundle bundle = new Bundle();
                         bundle.putString("saleId", carDetailResponse.getData().getSaleId());
                         startActivity(ModifyCarInfActivity.class, bundle);
+                        finish();
                         pop.dismiss();
                     }
                 });
