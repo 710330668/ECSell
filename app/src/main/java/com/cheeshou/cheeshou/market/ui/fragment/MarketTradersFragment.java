@@ -12,9 +12,8 @@ import com.cheeshou.cheeshou.dealer.ui.activity.CustomerManagerActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.MyReportActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerActivity;
 import com.cheeshou.cheeshou.dealer.ui.activity.StoreManagerItemClickActivity;
-import com.cheeshou.cheeshou.market.ui.MarketSearchActivity;
 import com.cheeshou.cheeshou.market.ui.MarketShareActivity;
-import com.cheeshou.cheeshou.utils.ParamManager;
+import com.cheeshou.cheeshou.order.OrderManagerActivity;
 import com.example.com.common.BaseFragment;
 import com.example.com.common.util.SP;
 
@@ -76,7 +75,7 @@ public class MarketTradersFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_store_manager, R.id.rl_client_manager, R.id.rl_my_share, R.id.rl_report, R.id.et_search})
+    @OnClick({R.id.rl_store_manager, R.id.rl_client_manager, R.id.rl_my_share, R.id.rl_report, R.id.et_search,R.id.rl_order_manager})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_store_manager:
@@ -94,6 +93,9 @@ public class MarketTradersFragment extends BaseFragment {
                 break;
             case R.id.rl_my_share:
                 startActivity(MarketShareActivity.class);
+                break;
+            case R.id.rl_order_manager:
+                startActivity(OrderManagerActivity.class);
                 break;
             default:
         }

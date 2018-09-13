@@ -24,7 +24,7 @@ import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserStatResponse;
 import com.cheeshou.cheeshou.main.login.LoginActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.view.ChartView;
+import com.cheeshou.cheeshou.utils.LineChartView;
 import com.cheeshou.cheeshou.view.CustomDatePicker;
 import com.cheeshou.cheeshou.view.DrawableCenterRadioButton;
 import com.example.com.common.BaseActivity;
@@ -94,7 +94,7 @@ public class StoreReportActivity extends BaseActivity {
     @BindView(R.id.tv_money_num)
     TextView tvMoneyNum;
     @BindView(R.id.chartview)
-    ChartView chartview;
+    LineChartView chartview;
 
 
     private List<ItemData> sellRankLists = new ArrayList<>();
@@ -113,7 +113,8 @@ public class StoreReportActivity extends BaseActivity {
     private String endDate;
     private int count;
     private BaseAdapter baseAdapter;
-    private String[] xLabel,data;
+    private String[] xLabel,ydate;
+    private float[] data;
     private boolean clientFlag = true;
     private boolean chengjiaoFlag = true;
     private boolean daodianFlag = true;
@@ -330,14 +331,13 @@ public class StoreReportActivity extends BaseActivity {
                         LogUtils.e(response.getMsg());
                         if (response.getCode() == 200) {
                             xLabel = new String[response.getData().size()];
-                            data = new String[response.getData().size()];
+                            data = new float[response.getData().size()];
                             for (int i = 0; i < response.getData().size(); i++) {
                                 xLabel[i] = response.getData().get(i).getCreateDate();
-                                data[i] = response.getData().get(i).getSaleMoney() + "";
+                                data[i] = Float.valueOf(response.getData().get(i).getSaleMoney() + "");
+                                ydate = chartview.getFundWeekYdata("200.00", "0.00");
                             }
-                            chartview.setData(data);
-                            chartview.setxLabel(xLabel);
-                            chartview.fresh();
+                            chartview.setData(xLabel, ydate, data);
                         }else if(response.getCode() == 402||response.getCode() == 401){
                             //token失效
                             SP.getInstance(C.USER_DB,StoreReportActivity.this).put(C.USER_ACCOUNT,"");

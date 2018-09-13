@@ -219,10 +219,10 @@
                     android:textColor="#333333"
                     android:textSize="14sp" />
 
-                <com.cheeshou.cheeshou.view.ChartView
+                <com.cheeshou.cheeshou.utils.LineChartView
                     android:id="@+id/chartview"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="210dp"
                     android:layout_margin="20dp" />
             </LinearLayout>
 

@@ -123,7 +123,7 @@ public class MarketShareActivity extends BaseActivity {
                         data1.setShareTime(bean.getCreateDate());
                         ArrayList<String> imgUrl = new ArrayList<>();
                         for (int j = 0; j < bean.getSaleCarInfos().size(); j++) {
-                            data1.setShareTitle(bean.getSaleCarInfos().get(j).getVname());
+                            data1.setShareTitle(bean.getSaleCarInfos().get(j).getBrand()+ " "+ bean.getSaleCarInfos().get(j).getVname());
                             imgUrl.add(bean.getSaleCarInfos().get(j).getImgThumUrl());
                         }
                         data1.setImgUrl(imgUrl);

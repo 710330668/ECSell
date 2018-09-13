@@ -2,7 +2,6 @@ package com.cheeshou.cheeshou.market.ui.viewholder;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.market.ui.model.MarketShareModel;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
-import com.example.com.imageloader.GlideLoader;
 import com.example.com.imageloader.LoaderManager;
 
 import java.text.SimpleDateFormat;
@@ -80,7 +78,7 @@ public class MarketShareHolder extends BaseViewHolder<ItemData> {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_48dp), mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_36dp));
         layoutParams.leftMargin = mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_5dp);
         layoutParams.rightMargin = mContext.getResources().getDimensionPixelOffset(R.dimen.dimens_5dp);
-//        LoaderManager.getLoader().loadNet(imageView, imgUrl);
+        LoaderManager.getLoader().loadNet(imageView, imgUrl);
         mShareContent.addView(imageView, layoutParams);
     }
 

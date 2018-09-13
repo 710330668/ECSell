@@ -18,7 +18,6 @@ import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.UserListModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.XsUserResponse;
 import com.cheeshou.cheeshou.main.login.LoginActivity;
-import com.cheeshou.cheeshou.options.CarDetailActivity;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
 import com.cheeshou.cheeshou.utils.EndlessRecyclerOnScrollListener;
@@ -106,6 +105,11 @@ public class UserManagerActivity extends BaseActivity {
             }
         });
         rlUserManager.setAdapter(baseAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getUserList();
     }
 

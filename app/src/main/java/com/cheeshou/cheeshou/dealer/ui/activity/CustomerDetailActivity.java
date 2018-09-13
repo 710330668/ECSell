@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -33,6 +35,7 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -254,9 +257,14 @@ public class CustomerDetailActivity extends BaseActivity {
                 startActivity(i);
                 break;
             case R.id.ll_customer_phone:
-                intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+//                intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"));
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+                if (TextUtils.isEmpty(phone)) {
+                    ToastUtils.showShort(this, "暂无手机号信息");
+                    return;
+                }
+                callPhone(phone);
                 break;
             case R.id.ll_customer_wechat:
                 if (isWeixinAvilible(this)) {
@@ -282,6 +290,25 @@ public class CustomerDetailActivity extends BaseActivity {
     public void getCustomerInfo() {
 
     }
+
+    public void callPhone(String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ToastUtils.showShort(this, "请先打开电话权限");
+            return;
+        }
+        startActivity(intent);
+    }
+
 
     private void initStatus(String statusName) {
         switch (statusName) {
