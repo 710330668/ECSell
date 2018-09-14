@@ -30,6 +30,7 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class CreateNewCustomerActivity extends BaseActivity {
     TextView mTvCarNum;
     @BindView(R.id.tv_daikuan)
     TextView mTvDaikuan;
-    private String reserveColumn1;
+    private String reserveColumn1 = "否";
 
     @Override
     public int bindLayout() {
@@ -199,8 +200,16 @@ public class CreateNewCustomerActivity extends BaseActivity {
             params.put("maxBudget", toRequestBody(mEtMaxMoney.getText().toString()));
             params.put("needTxt", toRequestBody(mEtNeed.getText().toString()));
             params.put("remark", toRequestBody(mEtRemark.getText().toString()));
-            params.put("commType", toRequestBody(((RadioButton) findViewById(mRgType.getCheckedRadioButtonId())).getText().toString()));
-            params.put("saleIds", toRequestBody(ParamManager.getInstance(this).getCreateCustomerWantCarId()));
+            RadioButton viewById = (RadioButton) findViewById(mRgType.getCheckedRadioButtonId());
+            if (viewById != null) {
+                params.put("commType", toRequestBody(viewById.getText().toString()));
+            } else {
+
+                ToastUtils.showShort(this, "请选择沟通方式");
+//                params.put("commType", toRequestBody(""));
+            }
+            String createCustomerWantCarId = ParamManager.getInstance(this).getCreateCustomerWantCarId();
+            params.put("saleIds", toRequestBody(TextUtils.isEmpty(createCustomerWantCarId) ? "" : createCustomerWantCarId));
             params.put("reserveColumn1", toRequestBody(reserveColumn1));
             CustomerWantCarModel.CodeBean[] strings = new CustomerWantCarModel.CodeBean[dataList.size()];
             for (int i = 0; i < dataList.size(); i++) {
@@ -216,23 +225,23 @@ public class CreateNewCustomerActivity extends BaseActivity {
 //                                Log.e(TAG, "accept: " + easyResponse.getMsg());
                             if (easyResponse.getCode() == 200) {
                                 Toast.makeText(appContext, "创建成功", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
                                 finish();
-                            } else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                            } else if (easyResponse.getCode() == 402 || easyResponse.getCode() == 401) {
                                 //token失效
-                                SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_ACCOUNT,"");
-                                SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_PASSWORD,"");
+                                SP.getInstance(C.USER_DB, CreateNewCustomerActivity.this).put(C.USER_ACCOUNT, "");
+                                SP.getInstance(C.USER_DB, CreateNewCustomerActivity.this).put(C.USER_PASSWORD, "");
                                 finishAllActivity();
                                 startActivity(LoginActivity.class);
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_ACCOUNT,"");
-                            SP.getInstance(C.USER_DB,CreateNewCustomerActivity.this).put(C.USER_PASSWORD,"");
+                            SP.getInstance(C.USER_DB, CreateNewCustomerActivity.this).put(C.USER_ACCOUNT, "");
+                            SP.getInstance(C.USER_DB, CreateNewCustomerActivity.this).put(C.USER_PASSWORD, "");
                             finishAllActivity();
                             startActivity(LoginActivity.class);
                         }

@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -68,6 +70,7 @@ public class CustomerManagerActivity extends BaseActivity {
     private static final int REQUEST_CLIENT = 1;
     private final int REQUEST_CAR = 2;
     private final int REQUEST_CAR_TYPE = 3;
+    private static final int REQUEST_CREATE = 4;
     private String carBrand;
 
     @BindView(R.id.rb_customer_state)
@@ -267,10 +270,10 @@ public class CustomerManagerActivity extends BaseActivity {
                                 mAdapter.notifyDataSetChanged();
                             }
                             dataList.add(new ItemData(0, SettingDelegate.FOOT_TYPE));
-                        }else if(s.getCode() == 402||s.getCode() == 401){
+                        } else if (s.getCode() == 402 || s.getCode() == 401) {
                             //token失效
-                            SP.getInstance(C.USER_DB,CustomerManagerActivity.this).put(C.USER_ACCOUNT,"");
-                            SP.getInstance(C.USER_DB,CustomerManagerActivity.this).put(C.USER_PASSWORD,"");
+                            SP.getInstance(C.USER_DB, CustomerManagerActivity.this).put(C.USER_ACCOUNT, "");
+                            SP.getInstance(C.USER_DB, CustomerManagerActivity.this).put(C.USER_PASSWORD, "");
                             finishAllActivity();
                             startActivity(LoginActivity.class);
                         }
@@ -278,8 +281,8 @@ public class CustomerManagerActivity extends BaseActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        SP.getInstance(C.USER_DB,CustomerManagerActivity.this).put(C.USER_ACCOUNT,"");
-                        SP.getInstance(C.USER_DB,CustomerManagerActivity.this).put(C.USER_PASSWORD,"");
+                        SP.getInstance(C.USER_DB, CustomerManagerActivity.this).put(C.USER_ACCOUNT, "");
+                        SP.getInstance(C.USER_DB, CustomerManagerActivity.this).put(C.USER_PASSWORD, "");
                         finishAllActivity();
                         startActivity(LoginActivity.class);
                     }
@@ -311,7 +314,7 @@ public class CustomerManagerActivity extends BaseActivity {
                 this.finish();
                 break;
             case R.id.img_add_client:
-                startActivity(CreateNewCustomerActivity.class);
+                startActivityForResult(new Intent(this, CreateNewCustomerActivity.class), REQUEST_CREATE);
                 break;
             case R.id.rb_customer_state:
                 showPopupWindow(R.id.rb_customer_state);
@@ -360,9 +363,14 @@ public class CustomerManagerActivity extends BaseActivity {
                 initRecycler(TAG_FILTER);
                 break;
             case R.id.ll_want_brand:
-                bundle.putString("params", "filter");
-                bundle.putString("optionId", carType);
-                startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
+                if (!TextUtils.isEmpty(carType)) {
+                    bundle.putString("params", "filter");
+                    bundle.putString("optionId", carType);
+                    startActivityForResult(ChooseBrandActivity.class, bundle, REQUEST_BRAND);
+                } else {
+                    ToastUtils.showShort(this, "请选择车源类型");
+                }
+
                 break;
             case R.id.ll_want_type:
                 if ("".equals(brandId)) {
@@ -537,6 +545,9 @@ public class CustomerManagerActivity extends BaseActivity {
                     mTvCarType.setText(carTypeName);
                     mTvCarType.setTextColor(Color.parseColor("#FF5745"));
                     carType = carTypeId;
+                    break;
+                case REQUEST_CREATE:
+                    initRecycler(TAG_FILTER);
                     break;
             }
         }

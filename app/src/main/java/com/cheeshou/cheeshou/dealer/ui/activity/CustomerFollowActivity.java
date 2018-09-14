@@ -39,6 +39,7 @@ import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.ToastUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -220,6 +221,10 @@ public class CustomerFollowActivity extends BaseActivity {
     private void saveProgressInfo() {
         Map<String, RequestBody> params = new HashMap<>();
         List<MultipartBody.Part> parts = new ArrayList<>();
+        if (imgPaths.size() <= 0) {
+            ToastUtils.showShort(this, "请上传图片");
+            return;
+        }
         for (int i = 0; i < imgPaths.size(); i++) {
             File file = new File(imgPaths.get(i));
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);

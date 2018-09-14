@@ -140,7 +140,7 @@ public class CustomerDetailActivity extends BaseActivity {
 
 //        mTvBrand.setText(customer.getBrandName());
 
-        initStatus(customer.getStatusName());
+//        initStatus(customer.getStatusName());
     }
 
     @Override
@@ -150,8 +150,6 @@ public class CustomerDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        List<SearchResultModel> customerWantList = ParamManager.getInstance(this).getCustomerWantList();
-        Log.e(TAG, "onResume: " + new Gson().toJson(customerWantList));
         ParamManager.getInstance(this).setCreateCustomerWantCarId("");
         ParamManager.getInstance(this).setCustomerWantList(new ArrayList<SearchResultModel>());
         Injection.provideApiService().getCustomerDetailInfo(token, customerId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<CustomerDetailResponse>() {
@@ -162,6 +160,7 @@ public class CustomerDetailActivity extends BaseActivity {
             @Override
             public void onNext(CustomerDetailResponse s) {
                 if (s != null && s.getCode() == 200) {
+//                    s.getData().getStatusName()
                     mTvWechat.setText(s.getData().getWeBcat());
                     mTvPhone.setText(s.getData().getPhone());
                     phone = s.getData().getPhone();
@@ -172,6 +171,7 @@ public class CustomerDetailActivity extends BaseActivity {
                     mTvNeedText.setText(s.getData().getNeedTxt());
                     mTvRemark.setText(TextUtils.isEmpty(s.getData().getRemark()) ? "无" : s.getData().getRemark());
                     mTvDaiKuan.setText(s.getData().getReserveColumn1());
+                    initStatus(s.getData().getStatusName());
                     mData.clear();
                     StringBuffer stringBuffer = new StringBuffer();
                     List<CustomerDetailResponse.DataBean.ListsBean> lists = s.getData().getLists();
