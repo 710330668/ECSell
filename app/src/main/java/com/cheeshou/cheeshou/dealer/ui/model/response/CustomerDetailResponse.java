@@ -1,8 +1,9 @@
 package com.cheeshou.cheeshou.dealer.ui.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CustomerDetailResponse {
+public class CustomerDetailResponse implements Serializable {
 
     /**
      * code : 200
@@ -38,7 +39,7 @@ public class CustomerDetailResponse {
         this.msg = msg;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * createDate : 1533469561000
          * customerId : e943de9297e14b8c8fb7c626dc084b01
@@ -212,7 +213,7 @@ public class CustomerDetailResponse {
             this.saleCarInfos = saleCarInfos;
         }
 
-        public static class ListsBean {
+        public static class ListsBean implements Serializable {
             /**
              * audiId : 10
              * audiName : 奥迪RS 4
@@ -278,7 +279,7 @@ public class CustomerDetailResponse {
             }
         }
 
-        public static class ProgressesBean {
+        public static class ProgressesBean implements Serializable {
             /**
              * content : 性别：男改成女
              * createDate : 1535214449000
@@ -344,7 +345,7 @@ public class CustomerDetailResponse {
         }
 
 
-        public static class ImageBean {
+        public static class ImageBean implements Serializable {
             private String imgId;
             private String imgUrl;
 
@@ -365,7 +366,7 @@ public class CustomerDetailResponse {
             }
         }
 
-        public static class SaleCarInfosBean {
+        public static class SaleCarInfosBean implements Serializable {
             /**
              * advicePrice : 10
              * brand : AC Schnitzer

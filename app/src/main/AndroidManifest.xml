@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -115,7 +115,8 @@
         <activity android:name=".dealer.ui.activity.CustomerWantCarActivity" />
         <activity android:name=".dealer.ui.activity.CustomerCarFollowActivity" />
         <activity android:name=".dealer.ui.activity.CarSourceTypeActivity" />
-        <activity android:name=".dealer.ui.activity.FindSuccessCarActivity"></activity>
+        <activity android:name=".dealer.ui.activity.FindSuccessCarActivity" />
+        <activity android:name=".dealer.ui.activity.FollowDetailActivity"></activity>
     </application>
 
 </manifest>

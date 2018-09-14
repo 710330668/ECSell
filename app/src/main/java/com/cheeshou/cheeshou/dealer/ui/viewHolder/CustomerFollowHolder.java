@@ -7,8 +7,12 @@ import android.widget.TextView;
 
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.dealer.ui.model.CustomerFollowModel;
+import com.cheeshou.cheeshou.dealer.ui.model.response.CustomerDetailResponse;
 import com.example.com.common.adapter.BaseViewHolder;
 import com.example.com.common.adapter.ItemData;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CustomerFollowHolder extends BaseViewHolder<ItemData> {
 
@@ -40,11 +44,12 @@ public class CustomerFollowHolder extends BaseViewHolder<ItemData> {
 
     @Override
     public void onBindViewHolder(ItemData data, int position) {
-        CustomerFollowModel data1 = (CustomerFollowModel) data.getData();
-        mTvDate.setText(data1.getDate());
-        mTvTime.setText(data1.getTime());
-        mTvMessage.setText(data1.getMessage());
-        mTvFrom.setText(data1.getFrom() + " | " + data1.getType());
+
+        CustomerDetailResponse.DataBean.ProgressesBean data1 = (CustomerDetailResponse.DataBean.ProgressesBean) data.getData();
+        mTvDate.setText(formatDate("yyyy-MM-dd", data1.getCreateDate()));
+        mTvTime.setText(formatDate("hh:mm", data1.getCreateDate()));
+        mTvMessage.setText(data1.getContent());
+        mTvFrom.setText(data1.getSource() + " | " + data1.getType());
 
         if (getAdapterPosition() == 0) {
             mImgCircle.setImageResource(R.drawable.circle_red);
@@ -52,5 +57,11 @@ public class CustomerFollowHolder extends BaseViewHolder<ItemData> {
             mImgCircle.setImageResource(R.drawable.circle_gary);
         }
 
+    }
+
+    private String formatDate(String format, long date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        Date date1 = new Date(date);
+        return simpleDateFormat.format(date1);
     }
 }

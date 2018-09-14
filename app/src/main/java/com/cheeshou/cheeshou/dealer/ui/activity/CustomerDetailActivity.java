@@ -34,6 +34,7 @@ import com.cheeshou.cheeshou.view.SpaceItemDecoration;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.common.adapter.onItemClickListener;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.TimeUtils;
 import com.example.com.common.util.ToastUtils;
@@ -180,13 +181,11 @@ public class CustomerDetailActivity extends BaseActivity {
                         for (CustomerDetailResponse.DataBean.SaleCarInfosBean s1 : lists) {
                             SearchResultModel data = new SearchResultModel();
                             data.setSaleId(s1.getSaleId());
-                            data.setOpenPutEntrance(false);
                             data.setDate(TimeUtils.millis2String(s1.getCreateDate()));
                             data.setDeduct("销售提成" + s1.getSaleCommission() + "元");
                             data.setPrice("车源价" + s1.getCarPrice() + "万");
                             data.setState(s1.getCarStatusName());
                             data.setAdvicePrice(s1.getAdvicePrice() + "");
-                            data.setOpenPutEntrance(true);
                             data.setSubTitle("分享" + s1.getShareNum() + "次|浏览" +
                                     s1.getBrowseNum() + "次");
                             data.setTitle(s1.getBrand() + "-" + s1.getVname());
@@ -203,15 +202,25 @@ public class CustomerDetailActivity extends BaseActivity {
                     mFollowData.clear();
                     List<CustomerDetailResponse.DataBean.ProgressesBean> progresses = s.getData().getProgresses();
                     for (CustomerDetailResponse.DataBean.ProgressesBean bean : progresses) {
-                        CustomerFollowModel data = new CustomerFollowModel();
-                        data.setDate(formatDate("yyyy-MM-dd", bean.getCreateDate()));
-                        data.setTime(formatDate("hh:mm", bean.getCreateDate()));
-                        data.setMessage(bean.getContent());
-                        data.setFrom(bean.getSource());
-                        data.setType(bean.getType());
-                        mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, data));
+                        mFollowData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_FOLLOW_TYPE, bean));
                     }
-                    mRecyclerFollow.setAdapter(new BaseAdapter(mFollowData, new SettingDelegate()));
+                    BaseAdapter adapter1 = new BaseAdapter(mFollowData, new SettingDelegate(), new onItemClickListener() {
+                        @Override
+                        public void onClick(View v, Object data) {
+                            CustomerDetailResponse.DataBean.ProgressesBean data1 = (CustomerDetailResponse.DataBean.ProgressesBean) data;
+                            Intent intent = new Intent(CustomerDetailActivity.this, FollowDetailActivity.class);
+                            Bundle extras = new Bundle();
+                            extras.putSerializable("data", data1);
+                            intent.putExtras(extras);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public boolean onLongClick(View v, Object data) {
+                            return false;
+                        }
+                    });
+                    mRecyclerFollow.setAdapter(adapter1);
 
                 } else if (s.getCode() == 402 || s.getCode() == 401) {
                     //token失效
