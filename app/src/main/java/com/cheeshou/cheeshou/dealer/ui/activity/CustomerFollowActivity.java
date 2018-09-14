@@ -199,9 +199,8 @@ public class CustomerFollowActivity extends BaseActivity {
                 this.finish();
                 break;
             case R.id.lly_local_image:
-                Intent intent1 = new Intent();
+                Intent intent1 = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent1.setType("image/*");
-                intent1.setAction(Intent.ACTION_PICK);
                 startActivityForResult(intent1, REQUEST_LOCAL);
                 break;
             case R.id.tv_save:
