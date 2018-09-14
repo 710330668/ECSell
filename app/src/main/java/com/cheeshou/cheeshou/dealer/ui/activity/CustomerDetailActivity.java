@@ -35,6 +35,7 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.util.SP;
+import com.example.com.common.util.TimeUtils;
 import com.example.com.common.util.ToastUtils;
 import com.google.gson.Gson;
 
@@ -174,31 +175,27 @@ public class CustomerDetailActivity extends BaseActivity {
                     initStatus(s.getData().getStatusName());
                     mData.clear();
                     StringBuffer stringBuffer = new StringBuffer();
-                    List<CustomerDetailResponse.DataBean.ListsBean> lists = s.getData().getLists();
+                    List<CustomerDetailResponse.DataBean.SaleCarInfosBean> lists = s.getData().getSaleCarInfos();
                     if (lists != null) {
-                        for (CustomerDetailResponse.DataBean.ListsBean s1 : lists) {
-                            CustomerDetailWantModel data = new CustomerDetailWantModel();
-                            data.setMessage("分享次 浏览次");
-                            data.setPrice("万");
-                            data.setState("已上架");
-                            data.setTime("今天");
-                            data.setTitle("雪弗兰2013款 科鲁兹 1.6LSL天地版MT");
-                            stringBuffer.append(s1.getBrandName()).append("-").append(s1.getVersionName()).append("；");
-                            mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
+                        for (CustomerDetailResponse.DataBean.SaleCarInfosBean s1 : lists) {
+                            SearchResultModel data = new SearchResultModel();
+                            data.setSaleId(s1.getSaleId());
+                            data.setOpenPutEntrance(false);
+                            data.setDate(TimeUtils.millis2String(s1.getCreateDate()));
+                            data.setDeduct("销售提成" + s1.getSaleCommission() + "元");
+                            data.setPrice("车源价" + s1.getCarPrice() + "万");
+                            data.setState(s1.getCarStatusName());
+                            data.setAdvicePrice(s1.getAdvicePrice() + "");
+                            data.setOpenPutEntrance(true);
+                            data.setSubTitle("分享" + s1.getShareNum() + "次|浏览" +
+                                    s1.getBrowseNum() + "次");
+                            data.setTitle(s1.getBrand() + "-" + s1.getVname());
+                            data.setImageUrl(s1.getImgThumUrl());
+                            data.setId(s1.getCarId());
+                            mData.add(new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data));
                         }
                     }
                     mTvBrand.setText(stringBuffer.toString());
-//                    List<CustomerDetailResponse.DataBean.SaleCarInfosBean> saleCarInfos = s.getData().getSaleCarInfos();
-//                    for (CustomerDetailResponse.DataBean.SaleCarInfosBean bean : saleCarInfos) {
-//                        CustomerDetailWantModel data = new CustomerDetailWantModel();
-//                        data.setDeduct("销售提成" + bean.getSaleCommission() + "元   ");
-//                        data.setMessage(bean.getCarUserName() + " | " + bean.getProvinceName() + " | " + bean.getCityName());
-//                        data.setPrice(bean.getCarPrice() + "万");
-//                        data.setState(bean.getCarStatusName());
-//                        data.setTime("今天");
-//                        data.setTitle(bean.getBrand() + "  " + bean.getCarSeries() + "  " + bean.getVname());
-//                        mData.add(new ItemData(0, SettingDelegate.CUSTOMER_DETAIL_WANT_TYPE, data));
-//                    }
                     BaseAdapter adapter = new BaseAdapter(mData, new SettingDelegate());
                     mRecyclerWantCar.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -227,10 +224,12 @@ public class CustomerDetailActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
+                Log.e(TAG, "onError: ====");
             }
 
             @Override
             public void onComplete() {
+                Log.e(TAG, "onComplete: ----");
             }
         });
     }

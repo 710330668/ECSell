@@ -292,6 +292,15 @@ public class CustomerDetailResponse {
             private String source;
             private String type;
             private String userName;
+            private List<ImageBean> imgs;
+
+            public List<ImageBean> getImgs() {
+                return imgs;
+            }
+
+            public void setImgs(List<ImageBean> imgs) {
+                this.imgs = imgs;
+            }
 
             public String getContent() {
                 return content;
@@ -334,6 +343,28 @@ public class CustomerDetailResponse {
             }
         }
 
+
+        public static class ImageBean {
+            private String imgId;
+            private String imgUrl;
+
+            public String getImgId() {
+                return imgId;
+            }
+
+            public void setImgId(String imgId) {
+                this.imgId = imgId;
+            }
+
+            public String getImgUrl() {
+                return imgUrl;
+            }
+
+            public void setImgUrl(String imgUrl) {
+                this.imgUrl = imgUrl;
+            }
+        }
+
         public static class SaleCarInfosBean {
             /**
              * advicePrice : 10
@@ -369,7 +400,7 @@ public class CustomerDetailResponse {
             private int guidPrice;
             private String imgThumUrl;
             private String provinceName;
-            private int saleCarPrice;
+            private double saleCarPrice;
             private int saleCommission;
             private String saleId;
             private int shareNum;
@@ -479,11 +510,11 @@ public class CustomerDetailResponse {
                 this.provinceName = provinceName;
             }
 
-            public int getSaleCarPrice() {
+            public double getSaleCarPrice() {
                 return saleCarPrice;
             }
 
-            public void setSaleCarPrice(int saleCarPrice) {
+            public void setSaleCarPrice(double saleCarPrice) {
                 this.saleCarPrice = saleCarPrice;
             }
 
