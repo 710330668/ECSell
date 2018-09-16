@@ -165,10 +165,10 @@ public class MarketShareCarActivity extends BaseActivity {
 
         if (data.size() == 1) {
             UuId = UUID.randomUUID().toString();
-            normalArticle += ("  【品牌车型】 " + "  " + data.get(0).getTitle() + "\n");
-            normalArticle += ("  【价格】 " + "  " + data.get(0).getPrice() + "\n");
-            normalArticle += ("  【颜色】  " + "  " + "外观" + data.get(0).getOutsiteColor() + "  内饰" + data.get(0).getWithinColor() + "\n");
-            normalArticle += ("  【销售】  " + "  " + mName + "\n");
+            normalArticle += ("  【品牌车型】 " + data.get(0).getTitle() + "\n");
+            normalArticle += ("  【价格】 " + data.get(0).getPrice() + "\n");
+            normalArticle += ("  【颜色】  " + "外观" + data.get(0).getOutsiteColor() + "  内饰" + data.get(0).getWithinColor() + "\n");
+            normalArticle += ("  【销售】  " + mName + "\n");
             normalArticle += ("  【联系方式】  " + mPhone + "\n");
             normalArticle += ("  【链接】  " + (url + UuId) + "\n");
 
