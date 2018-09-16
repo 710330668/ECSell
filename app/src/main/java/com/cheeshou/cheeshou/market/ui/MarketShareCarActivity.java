@@ -165,12 +165,12 @@ public class MarketShareCarActivity extends BaseActivity {
 
         if (data.size() == 1) {
             UuId = UUID.randomUUID().toString();
-            normalArticle += ("  [品牌车型] " + "  " + data.get(0).getTitle() + "\n");
-            normalArticle += ("  [价格] " + "  " + data.get(0).getPrice() + "\n");
-            normalArticle += ("  [颜色]  " + "  " + "外观" + data.get(0).getOutsiteColor() + "内饰" + data.get(0).getWithinColor()+ "\n");
-            normalArticle += ("  [销售]  " + "  " + mName + "\n");
-            normalArticle += ("  [联系方式]  " + mPhone + "\n");
-            normalArticle += ("  [链接]  " + "  " + url + UuId + "\n");
+            normalArticle += ("  【品牌车型】 " + "  " + data.get(0).getTitle() + "\n");
+            normalArticle += ("  【价格】 " + "  " + data.get(0).getPrice() + "\n");
+            normalArticle += ("  【颜色】  " + "  " + "外观" + data.get(0).getOutsiteColor() + "  内饰" + data.get(0).getWithinColor() + "\n");
+            normalArticle += ("  【销售】  " + "  " + mName + "\n");
+            normalArticle += ("  【联系方式】  " + mPhone + "\n");
+            normalArticle += ("  【链接】  " + (url + UuId) + "\n");
 
             affineArticle = getResources().getString(R.string.single_affine_article, data.size(), data.get(0).getTitle(), data.get(0).getPrice() + "元", data.get(0).getOutsiteColor(), data.get(0).getWithinColor(), url + UuId, mPhone, mName);
 
@@ -184,10 +184,10 @@ public class MarketShareCarActivity extends BaseActivity {
         } else {
 
             UuId = UUID.randomUUID().toString();
-            normalArticle += ("  [诚信车商] " + mCompany + " \n");
-            normalArticle += ("  [优质车源] " + url + UuId + "\n");
-            normalArticle += ("  [联系方式]  " + mPhone + "  " + mName + "\n");
-            normalArticle += ("  [看车地址]  " + mAddress + "\n");
+            normalArticle += ("  【诚信车商】 " + mCompany + " \n");
+            normalArticle += ("  【优质车源】 " + (url + UuId) + "\n");
+            normalArticle += ("  【联系方式】 " + mPhone + "  " + mName + "\n");
+            normalArticle += ("  【看车地址】 " + mAddress + "\n");
             double maxPrice = 0, minPrice = Integer.MAX_VALUE;
             for (SearchResultModel bean : data) {
                 String substring = bean.getPrice().substring(0, bean.getPrice().length() - 1);
@@ -237,12 +237,10 @@ public class MarketShareCarActivity extends BaseActivity {
                     finishAllActivity();
                     startActivity(LoginActivity.class);
                 }
-                Log.e(TAG, "onNext: " + new Gson().toJson(easyResponse));
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, "onError: -----" + e.toString());
             }
 
             @Override
