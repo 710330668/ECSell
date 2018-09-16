@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.google.gson.Gson;
 
@@ -86,6 +88,7 @@ public class PutAwayDetailActivity extends BaseActivity {
     @BindView(R.id.et_price_up)
     EditText mEtPriceUp;
     private BaseAdapter adapter;
+
 
     @Override
     public int bindLayout() {
@@ -144,11 +147,11 @@ public class PutAwayDetailActivity extends BaseActivity {
                     }
                     for (SearchResultModel bean : data) {
                         String price = bean.getPrice();
-                        bean.setSalePrice(doubleToString(Double.valueOf(Integer.parseInt(price.substring(3, price.length() - 1)) * (1 + (v / 100)) + "")));
+                        bean.setSalePrice(doubleToString(Double.valueOf(Double.valueOf(price.substring(3, price.length() - 1)) * (1 + (v / 100)) )));
                     }
                     adapter.notifyDataSetChanged();
                 } catch (Exception e) {
-
+                    LogUtils.e(e.toString());
                 }
             }
 
@@ -175,7 +178,7 @@ public class PutAwayDetailActivity extends BaseActivity {
                 for (SearchResultModel bean : data) {
 
                     String price = bean.getPrice();
-                    bean.setSalePrice(doubleToString(Double.valueOf((Integer.parseInt(price.substring(3, price.length() - 1)) + (aDouble / 10000)))));
+                    bean.setSalePrice(doubleToString(Double.valueOf((Double.valueOf(price.substring(3, price.length() - 1)) + (aDouble / 10000)))));
                 }
                 adapter.notifyDataSetChanged();
             }

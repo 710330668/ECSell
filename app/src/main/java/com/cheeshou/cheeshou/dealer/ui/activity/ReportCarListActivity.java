@@ -144,8 +144,8 @@ public class ReportCarListActivity extends BaseActivity {
                             count = response.getData().getCount();
                             for (int i = 0; i < response.getData().getLists().size(); i++) {
                                 SearchResultModel data = new SearchResultModel();
-                                data.setDate(TimeUtils.millis2String(response.getData().getLists().get(i).getComDate()));
-                                data.setDeduct("售出时间"+TimeUtils.millis2String(response.getData().getLists().get(i).getComDate()));
+                                data.setDate("售出时间"+TimeUtils.millis2String(response.getData().getLists().get(i).getComDate()));
+                                data.setDeduct("");
                                 data.setPrice("成交价"+response.getData().getLists().get(i).getOrderPrice() + "万");
 //                                data.setState(response.getData().getLists().get(i).getCarStatusName());
                                 data.setSubTitle("客户" + response.getData().getLists().get(i).getCustomerName() + "销售"+response.getData().getLists().get(i).getUserName());

@@ -132,11 +132,11 @@ public class AddSalerActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void savaInfor() {
-        myDialog.show();
         try {
             if (!TextUtils.isEmpty(etAccount.getText().toString()) && !TextUtils.isEmpty(etPassword.getText().toString()) &&
                     !TextUtils.isEmpty(etSaleName.getText().toString()) && !TextUtils.isEmpty(etPhone.getText().toString())
                     && !TextUtils.isEmpty(etWechat.getText().toString()) && !TextUtils.isEmpty(bitmap64Head)) {
+                myDialog.show();
                 Map<String, RequestBody> params = new HashMap<>();
                 File file = new File(imgUrl);
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
@@ -173,6 +173,7 @@ public class AddSalerActivity extends BaseActivity {
 
             } else {
                 Toast.makeText(AddSalerActivity.this, "请保证信息完整", Toast.LENGTH_SHORT).show();
+                return;
             }
         }catch (Exception e){
             LogUtils.e(e.toString());
@@ -198,8 +199,8 @@ public class AddSalerActivity extends BaseActivity {
                 Cursor cursor = this.getContentResolver().query(contactData, null, null, null, null);
                 String name = ContractUtil.getName(this, cursor).trim();
                 String tel = ContractUtil.getTel(this, cursor).trim();
-                etSaleName.setText(name);
-                etPhone.setText(tel);
+                etSaleName.setText(name.replace(" ",""));
+                etPhone.setText(tel.replace(" ",""));
                 break;
             case REQUEST_LOCAL:
                 Uri uri = data.getData();

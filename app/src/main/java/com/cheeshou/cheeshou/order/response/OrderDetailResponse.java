@@ -11,7 +11,7 @@ public class OrderDetailResponse implements Serializable{
 
     /**
      * code : 200
-     * data : {"advicePrice":10,"brand":"Agile Automotive","browseNum":71,"carFormality":"手续齐全7天内发车","carId":"0d76e55458a644d49dc79f3a46f069d5","carPrice":123,"carSeries":"奥迪A5","carSetting":"高端大气上档次","carStatusName":"已上架","carType":"2","carUserName":"销售","carYear":"2018","cityCode":"340300","cityName":"蚌埠市","createDate":1532859956000,"customerName":"5552","discountContent":"具体优惠","discounts":[{"discountName":"店内上保险，店内置换"}],"guidPrice":240,"imgs":[{"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg","imgUrl":"http://39.104.136.205:8888/20180729/car/1532859956333.jpg"}],"insuranceRebates":10,"loanRebates":10,"orderPrice":50,"outsiteColor":"白色","provinceCode":"340000","provinceName":"安徽省","remark":"备注","saleArea":"华北","saleCarPrice":90,"saleCommission":3,"shareNum":5,"shelvesNum":3,"typeName":"国产-现车","userName":"销售","vname":"2017款 Sportback 45 TFSI quattro 运动型","withinColor":"灰"}
+     * data : {"advicePrice":100,"brand":"AC Schnitzer","browseNum":12,"carFormality":"不填","carId":"26d24330688e4b93bdeaa43563d6e259","carPrice":1,"carSeries":"奥迪RS 4","carSetting":"13","carStatusName":"已售","carType":"1","carUserName":"车源商负责人2","carYear":"2018","chassisNo":"123","cityCode":"370200","cityName":"青岛市","createDate":1536759891000,"customerName":"555233","discountContent":"1234","discounts":[{"discountName":"店内贷款"},{"discountName":"店内保养"}],"guidPrice":2,"imgs":[{"imgId":"4279cd5646e148b7b808b75d9ecd5c0c","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326457482_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326457482.jpg"},{"imgId":"553208bd8dad431e8f79f1a29f1f9cd8","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326458325_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326458325.jpg"},{"imgId":"b2002aca168b4c30951cf7deb03497f4","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326458997_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326458997.jpg"},{"imgId":"fbcd86b21da14d96bddaa4f9c3ff2a04","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326456841_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326456841.jpg"}],"insuranceRebates":0,"loanRebates":0,"orderPrice":100,"outsiteColor":"黑","provinceCode":"370000","provinceName":"山东省","remark":"11","saleArea":"北京","saleCarPrice":1.01,"saleCommission":1,"shareNum":1,"shelvesNum":2,"typeName":"全国","userName":"经销商","vname":"2018款 30周年年型 Sportback 35 TFSI 进取型","withinColor":"黑"}
      * msg : 操作成功
      */
 
@@ -43,73 +43,75 @@ public class OrderDetailResponse implements Serializable{
         this.msg = msg;
     }
 
-    public static class DataBean implements Serializable{
+    public static class DataBean {
         /**
-         * advicePrice : 10
-         * brand : Agile Automotive
-         * browseNum : 71
-         * carFormality : 手续齐全7天内发车
-         * carId : 0d76e55458a644d49dc79f3a46f069d5
-         * carPrice : 123
-         * carSeries : 奥迪A5
-         * carSetting : 高端大气上档次
-         * carStatusName : 已上架
-         * carType : 2
-         * carUserName : 销售
+         * advicePrice : 100
+         * brand : AC Schnitzer
+         * browseNum : 12
+         * carFormality : 不填
+         * carId : 26d24330688e4b93bdeaa43563d6e259
+         * carPrice : 1
+         * carSeries : 奥迪RS 4
+         * carSetting : 13
+         * carStatusName : 已售
+         * carType : 1
+         * carUserName : 车源商负责人2
          * carYear : 2018
-         * cityCode : 340300
-         * cityName : 蚌埠市
-         * createDate : 1532859956000
-         * customerName : 5552
-         * discountContent : 具体优惠
-         * discounts : [{"discountName":"店内上保险，店内置换"}]
-         * guidPrice : 240
-         * imgs : [{"imgThumUrl":"http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg","imgUrl":"http://39.104.136.205:8888/20180729/car/1532859956333.jpg"}]
-         * insuranceRebates : 10
-         * loanRebates : 10
-         * orderPrice : 50
-         * outsiteColor : 白色
-         * provinceCode : 340000
-         * provinceName : 安徽省
-         * remark : 备注
-         * saleArea : 华北
-         * saleCarPrice : 90
-         * saleCommission : 3
-         * shareNum : 5
-         * shelvesNum : 3
-         * typeName : 国产-现车
-         * userName : 销售
-         * vname : 2017款 Sportback 45 TFSI quattro 运动型
-         * withinColor : 灰
+         * chassisNo : 123
+         * cityCode : 370200
+         * cityName : 青岛市
+         * createDate : 1536759891000
+         * customerName : 555233
+         * discountContent : 1234
+         * discounts : [{"discountName":"店内贷款"},{"discountName":"店内保养"}]
+         * guidPrice : 2
+         * imgs : [{"imgId":"4279cd5646e148b7b808b75d9ecd5c0c","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326457482_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326457482.jpg"},{"imgId":"553208bd8dad431e8f79f1a29f1f9cd8","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326458325_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326458325.jpg"},{"imgId":"b2002aca168b4c30951cf7deb03497f4","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326458997_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326458997.jpg"},{"imgId":"fbcd86b21da14d96bddaa4f9c3ff2a04","imgThumUrl":"http://39.104.136.205:8888/car/20180907/1536326456841_small.jpg","imgUrl":"http://39.104.136.205:8888/car/20180907/1536326456841.jpg"}]
+         * insuranceRebates : 0
+         * loanRebates : 0
+         * orderPrice : 100
+         * outsiteColor : 黑
+         * provinceCode : 370000
+         * provinceName : 山东省
+         * remark : 11
+         * saleArea : 北京
+         * saleCarPrice : 1.01
+         * saleCommission : 1
+         * shareNum : 1
+         * shelvesNum : 2
+         * typeName : 全国
+         * userName : 经销商
+         * vname : 2018款 30周年年型 Sportback 35 TFSI 进取型
+         * withinColor : 黑
          */
 
-        private int advicePrice;
+        private float advicePrice;
         private String brand;
         private int browseNum;
         private String carFormality;
         private String carId;
-        private int carPrice;
+        private float carPrice;
         private String carSeries;
         private String carSetting;
         private String carStatusName;
         private String carType;
         private String carUserName;
         private String carYear;
+        private String chassisNo;
         private String cityCode;
         private String cityName;
         private long createDate;
         private String customerName;
         private String discountContent;
-        private int guidPrice;
+        private float guidPrice;
         private int insuranceRebates;
         private int loanRebates;
-        private int orderPrice;
+        private float orderPrice;
         private String outsiteColor;
         private String provinceCode;
         private String provinceName;
         private String remark;
         private String saleArea;
-        private int saleCarPrice;
+        private double saleCarPrice;
         private int saleCommission;
         private int shareNum;
         private int shelvesNum;
@@ -120,11 +122,11 @@ public class OrderDetailResponse implements Serializable{
         private List<DiscountsBean> discounts;
         private List<ImgsBean> imgs;
 
-        public int getAdvicePrice() {
+        public float getAdvicePrice() {
             return advicePrice;
         }
 
-        public void setAdvicePrice(int advicePrice) {
+        public void setAdvicePrice(float advicePrice) {
             this.advicePrice = advicePrice;
         }
 
@@ -160,11 +162,11 @@ public class OrderDetailResponse implements Serializable{
             this.carId = carId;
         }
 
-        public int getCarPrice() {
+        public float getCarPrice() {
             return carPrice;
         }
 
-        public void setCarPrice(int carPrice) {
+        public void setCarPrice(float carPrice) {
             this.carPrice = carPrice;
         }
 
@@ -216,6 +218,14 @@ public class OrderDetailResponse implements Serializable{
             this.carYear = carYear;
         }
 
+        public String getChassisNo() {
+            return chassisNo;
+        }
+
+        public void setChassisNo(String chassisNo) {
+            this.chassisNo = chassisNo;
+        }
+
         public String getCityCode() {
             return cityCode;
         }
@@ -256,11 +266,11 @@ public class OrderDetailResponse implements Serializable{
             this.discountContent = discountContent;
         }
 
-        public int getGuidPrice() {
+        public float getGuidPrice() {
             return guidPrice;
         }
 
-        public void setGuidPrice(int guidPrice) {
+        public void setGuidPrice(float guidPrice) {
             this.guidPrice = guidPrice;
         }
 
@@ -280,11 +290,11 @@ public class OrderDetailResponse implements Serializable{
             this.loanRebates = loanRebates;
         }
 
-        public int getOrderPrice() {
+        public float getOrderPrice() {
             return orderPrice;
         }
 
-        public void setOrderPrice(int orderPrice) {
+        public void setOrderPrice(float orderPrice) {
             this.orderPrice = orderPrice;
         }
 
@@ -328,11 +338,11 @@ public class OrderDetailResponse implements Serializable{
             this.saleArea = saleArea;
         }
 
-        public int getSaleCarPrice() {
+        public double getSaleCarPrice() {
             return saleCarPrice;
         }
 
-        public void setSaleCarPrice(int saleCarPrice) {
+        public void setSaleCarPrice(double saleCarPrice) {
             this.saleCarPrice = saleCarPrice;
         }
 
@@ -408,9 +418,9 @@ public class OrderDetailResponse implements Serializable{
             this.imgs = imgs;
         }
 
-        public static class DiscountsBean implements Serializable {
+        public static class DiscountsBean {
             /**
-             * discountName : 店内上保险，店内置换
+             * discountName : 店内贷款
              */
 
             private String discountName;
@@ -424,14 +434,24 @@ public class OrderDetailResponse implements Serializable{
             }
         }
 
-        public static class ImgsBean implements Serializable{
+        public static class ImgsBean {
             /**
-             * imgThumUrl : http://39.104.136.205:8888/20180729/car/1532859956333_small.jpg
-             * imgUrl : http://39.104.136.205:8888/20180729/car/1532859956333.jpg
+             * imgId : 4279cd5646e148b7b808b75d9ecd5c0c
+             * imgThumUrl : http://39.104.136.205:8888/car/20180907/1536326457482_small.jpg
+             * imgUrl : http://39.104.136.205:8888/car/20180907/1536326457482.jpg
              */
 
+            private String imgId;
             private String imgThumUrl;
             private String imgUrl;
+
+            public String getImgId() {
+                return imgId;
+            }
+
+            public void setImgId(String imgId) {
+                this.imgId = imgId;
+            }
 
             public String getImgThumUrl() {
                 return imgThumUrl;

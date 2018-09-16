@@ -94,11 +94,11 @@ public class AllOptionResponse {
              * vname : 2018款 2.0T 300PS 四驱R-Sport运动版
              */
 
-            private int advicePrice;
+            private float advicePrice;
             private String brand;
             private int browseNum;
             private String carId;
-            private int carPrice;
+            private float carPrice;
             private String carSeries;
             private String carStatusName;
             private String carUserName;
@@ -106,7 +106,7 @@ public class AllOptionResponse {
             private String cityCode;
             private String cityName;
             private long createDate;
-            private int guidPrice;
+            private float guidPrice;
             private String imgThumUrl;
             private String provinceCode;
             private String provinceName;
@@ -117,12 +117,30 @@ public class AllOptionResponse {
             private int shareNum;
             private int shelvesNum;
             private String vname;
+            private String outsiteColor;
+            private String withinColor;
 
-            public int getAdvicePrice() {
+            public String getOutsiteColor() {
+                return outsiteColor;
+            }
+
+            public void setOutsiteColor(String outsiteColor) {
+                this.outsiteColor = outsiteColor;
+            }
+
+            public String getWithinColor() {
+                return withinColor;
+            }
+
+            public void setWithinColor(String withinColor) {
+                this.withinColor = withinColor;
+            }
+
+            public float getAdvicePrice() {
                 return advicePrice;
             }
 
-            public void setAdvicePrice(int advicePrice) {
+            public void setAdvicePrice(float advicePrice) {
                 this.advicePrice = advicePrice;
             }
 
@@ -150,11 +168,11 @@ public class AllOptionResponse {
                 this.carId = carId;
             }
 
-            public int getCarPrice() {
+            public float getCarPrice() {
                 return carPrice;
             }
 
-            public void setCarPrice(int carPrice) {
+            public void setCarPrice(float carPrice) {
                 this.carPrice = carPrice;
             }
 
@@ -214,11 +232,11 @@ public class AllOptionResponse {
                 this.createDate = createDate;
             }
 
-            public int getGuidPrice() {
+            public float getGuidPrice() {
                 return guidPrice;
             }
 
-            public void setGuidPrice(int guidPrice) {
+            public void setGuidPrice(float guidPrice) {
                 this.guidPrice = guidPrice;
             }
 
@@ -258,7 +276,7 @@ public class AllOptionResponse {
                 return saleCarPrice;
             }
 
-            public void setSaleCarPrice(int saleCarPrice) {
+            public void setSaleCarPrice(float saleCarPrice) {
                 this.saleCarPrice = saleCarPrice;
             }
 

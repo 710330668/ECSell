@@ -193,6 +193,8 @@ public class SearchResultFragment extends BaseFragment {
                                 data.setImageUrl(response.getData().getLists().get(i).getImgThumUrl());
                                 data.setId(response.getData().getLists().get(i).getCarId());
                                 data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() +"");
+                                data.setOutsiteColor(response.getData().getLists().get(i).getOutsiteColor());
+                                data.setWithinColor(response.getData().getLists().get(i).getWithinColor());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

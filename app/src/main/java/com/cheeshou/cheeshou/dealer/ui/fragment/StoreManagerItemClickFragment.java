@@ -251,6 +251,7 @@ public class StoreManagerItemClickFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        CURRENT_PAGE = 1;
         mSearchResultData.clear();
         getOwnOption();
     }
@@ -298,6 +299,8 @@ public class StoreManagerItemClickFragment extends BaseFragment {
                                 data.setId(response.getData().getLists().get(i).getCarId());
                                 data.setSaleId(response.getData().getLists().get(i).getSaleId());
                                 data.setAdvicePrice(response.getData().getLists().get(i).getAdvicePrice() + "");
+                                data.setOutsiteColor(response.getData().getLists().get(i).getOutsiteColor());
+                                data.setWithinColor(response.getData().getLists().get(i).getWithinColor());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

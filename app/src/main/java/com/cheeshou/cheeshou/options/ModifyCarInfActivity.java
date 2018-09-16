@@ -84,11 +84,11 @@ public class ModifyCarInfActivity extends BaseActivity {
                             tvCarName.setText(response.getData().getVname());
                             tvCarPrice.setText("车源价"+" "+response.getData().getCarPrice()+"万");
                             tvSuggestPrice.setText("建议售价 "+response.getData().getGuidPrice()+"万");
-                            etSaleCarPrice.setText(response.getData().getSaleCarPrice()+"万");
+                            etSaleCarPrice.setText(response.getData().getSaleCarPrice()+"");
                             saleCarPrice = response.getData().getSaleCarPrice()+"";
-                            etInsuranceRebates.setText(response.getData().getInsuranceRebates()+"%");
+                            etInsuranceRebates.setText(response.getData().getInsuranceRebates()+"");
                             insuranceRebates = response.getData().getInsuranceRebates()+"";
-                            etLoanRebates.setText(response.getData().getLoanRebates()+"%");
+                            etLoanRebates.setText(response.getData().getLoanRebates()+"");
                             loanRebates = response.getData().getLoanRebates()+"";
                         }else if(response.getCode() == 402||response.getCode() == 401){
                             //token失效
@@ -131,8 +131,8 @@ public class ModifyCarInfActivity extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void updateSaleCarInfo() {
-        Injection.provideApiService().updateSaleCarInfo(token, saleId, saleCarPrice,
-                insuranceRebates, loanRebates)
+        Injection.provideApiService().updateSaleCarInfo(token, saleId,etSaleCarPrice.getText().toString(),
+                etInsuranceRebates.getText().toString(), etLoanRebates.getText().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<EasyResponse>() {

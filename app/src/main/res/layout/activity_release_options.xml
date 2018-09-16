@@ -545,7 +545,7 @@
                 <EditText
                     android:id="@+id/et_specific_discount"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="180dp"
                     android:layout_margin="14dp"
                     android:hint="输入优惠信息"
                     android:padding="14dp"
@@ -646,6 +646,7 @@
                     android:padding="14dp"
                     android:gravity="left"
                     android:textSize="14sp"
+                    android:scrollbars="vertical"
                     android:background="@drawable/bg_edittext"/>
 
                 <TextView
@@ -659,7 +660,7 @@
                 <EditText
                     android:id="@+id/et_note"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="160dp"
                     android:layout_margin="14dp"
                     android:hint="输入备注"
                     android:padding="14dp"

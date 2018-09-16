@@ -319,6 +319,8 @@ public class NationSourceActivity extends BaseActivity {
                                 data.setId(response.getData().getLists().get(i).getCarId());
                                 data.setSaleId(response.getData().getLists().get(i).getSaleId());
                                 data.setAdvicePrice(response.getData().getLists().get(i).getGuidPrice() + "");
+                                data.setOutsiteColor(response.getData().getLists().get(i).getOutsiteColor());
+                                data.setWithinColor(response.getData().getLists().get(i).getWithinColor());
                                 ItemData e = new ItemData(0, SettingDelegate.SEARCH_RESULT_TYPE, data);
                                 mSearchResultData.add(e);
                             }

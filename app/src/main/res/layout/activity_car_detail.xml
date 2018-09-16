@@ -539,7 +539,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -556,7 +556,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="14dp"
+                    android:layout_margin="14dp"
                     android:text="具体优惠"
                     android:textColor="#333333"
                     android:textSize="13dp" />
@@ -678,7 +678,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -695,10 +695,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="14dp"
+                    android:layout_margin="14dp"
                     android:text="P01全景"
-                    android:maxLines="3"
-                    android:ellipsize="end"
                     android:textColor="#333333"
                     android:textSize="13dp" />
 
@@ -714,7 +712,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -731,7 +729,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="14dp"
+                    android:layout_margin="14dp"
                     android:text="环保已公开"
                     android:textColor="#333333"
                     android:textSize="13dp" />

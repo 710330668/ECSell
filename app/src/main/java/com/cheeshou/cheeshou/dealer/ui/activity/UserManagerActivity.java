@@ -110,6 +110,8 @@ public class UserManagerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        CURRENT_PAGE = 1;
+        userLists.clear();
         getUserList();
     }
 

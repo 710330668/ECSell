@@ -36,6 +36,26 @@ public class SearchResultModel implements Parcelable {
     //    底价
     private String salePrice;
 
+    private String withinColor;
+
+    private String outsiteColor;
+
+    public String getWithinColor() {
+        return withinColor;
+    }
+
+    public void setWithinColor(String withinColor) {
+        this.withinColor = withinColor;
+    }
+
+    public String getOutsiteColor() {
+        return outsiteColor;
+    }
+
+    public void setOutsiteColor(String outsiteColor) {
+        this.outsiteColor = outsiteColor;
+    }
+
     public String getSalePrice() {
         return salePrice;
     }
@@ -67,6 +87,8 @@ public class SearchResultModel implements Parcelable {
         openPutEntrance = in.readByte() != 0;
         advicePrice = in.readString();
         salePrice = in.readString();
+        withinColor = in.readString();
+        outsiteColor = in.readString();
     }
 
     public static final Creator<SearchResultModel> CREATOR = new Creator<SearchResultModel>() {
@@ -198,5 +220,7 @@ public class SearchResultModel implements Parcelable {
         dest.writeByte((byte) (openPutEntrance ? 1 : 0));
         dest.writeString(advicePrice);
         dest.writeString(salePrice);
+        dest.writeString(outsiteColor);
+        dest.writeString(withinColor);
     }
 }

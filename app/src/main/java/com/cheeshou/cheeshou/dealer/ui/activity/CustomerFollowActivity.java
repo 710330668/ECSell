@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.dealer.ui.activity;
 
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,25 +24,25 @@ import android.widget.Toast;
 import com.cheeshou.cheeshou.R;
 import com.cheeshou.cheeshou.config.C;
 import com.cheeshou.cheeshou.dealer.ui.model.CarStateModel;
-import com.cheeshou.cheeshou.dealer.ui.model.SearchResultModel;
 import com.cheeshou.cheeshou.dealer.ui.model.response.EasyResponse;
 import com.cheeshou.cheeshou.dealer.ui.model.response.FindSuccessCarResponse;
 import com.cheeshou.cheeshou.main.login.LoginActivity;
-import com.cheeshou.cheeshou.options.ModifyCarInfActivity;
 import com.cheeshou.cheeshou.options.model.CarPhotoModel;
 import com.cheeshou.cheeshou.options.viewHolder.CarPhotoViewHolder;
 import com.cheeshou.cheeshou.remote.Injection;
 import com.cheeshou.cheeshou.remote.SettingDelegate;
-import com.cheeshou.cheeshou.utils.ParamManager;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
 import com.example.com.common.adapter.onItemClickListener;
+import com.example.com.common.util.LogUtils;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.ToastUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +96,8 @@ public class CustomerFollowActivity extends BaseActivity {
     @BindView(R.id.recycler_follow_car)
     RecyclerView mRecyclerFollowCar;
     private List<ItemData> mFollowCarData = new ArrayList<>();
+    private Dialog myDialog;
+    private String saleId = "";
 
     @Override
     public int bindLayout() {
@@ -117,6 +119,7 @@ public class CustomerFollowActivity extends BaseActivity {
 
     @Override
     public void setView(Bundle savedInstanceState) {
+        myDialog = getLoadingDialog(this);
         mRecycler.setLayoutManager(new GridLayoutManager(this, 4));
         mRecyclerFollowCar.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
@@ -239,19 +242,24 @@ public class CustomerFollowActivity extends BaseActivity {
         params.put("content", toRequestBody(mEtFollowRecord.getText().toString()));
         params.put("type", toRequestBody(commandType));
         params.put("customerStatus", toRequestBody(status));
+        params.put("saleId", toRequestBody(saleId));
+        myDialog.show();
         Injection.provideApiService().saveCustomerProgressInfo(token, parts, params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<EasyResponse>() {
             @Override
             public void accept(EasyResponse easyResponse) throws Exception {
                 if (easyResponse != null && easyResponse.getCode() == 200) {
+                    myDialog.dismiss();
                     Toast.makeText(appContext, "保存成功", Toast.LENGTH_SHORT).show();
                     finish();
                 } else if (easyResponse.getCode() == 402 || easyResponse.getCode() == 401) {
                     //token失效
+                    myDialog.dismiss();
                     SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_ACCOUNT, "");
                     SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_PASSWORD, "");
                     finishAllActivity();
                     startActivity(LoginActivity.class);
                 } else {
+                    myDialog.dismiss();
                     Toast.makeText(appContext, easyResponse.getMsg(), Toast.LENGTH_SHORT).show();
                 }
 //                Log.e(TAG, "accept: " + new Gson().toJson(easyResponse));
@@ -262,6 +270,7 @@ public class CustomerFollowActivity extends BaseActivity {
                 SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_ACCOUNT, "");
                 SP.getInstance(C.USER_DB, CustomerFollowActivity.this).put(C.USER_PASSWORD, "");
                 finishAllActivity();
+                myDialog.dismiss();
                 startActivity(LoginActivity.class);
             }
         });
@@ -272,7 +281,6 @@ public class CustomerFollowActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         carPhotos.clear();
-        imgPaths.clear();
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_LOCAL) {
                 Uri uri = data.getData();
@@ -295,10 +303,15 @@ public class CustomerFollowActivity extends BaseActivity {
                         delegate.setOnImageDeleteListener(new CarPhotoViewHolder.OnImageDeleteListener() {
                             @Override
                             public void removeImage(int position) {
-                                carPhotos.remove(position);
-                                photos.remove(position);
-                                imgPaths.remove(position);
-                                imageDeleteAdapter.notifyDataSetChanged();
+                                try {
+                                    carPhotos.remove(position);
+                                    photos.remove(position);
+                                    imgPaths.remove(position);
+                                    imageDeleteAdapter.notifyDataSetChanged();
+                                }catch (Exception e){
+                                    LogUtils.e(e.toString());
+                                }
+
                             }
                         });
                         imageDeleteAdapter = new BaseAdapter(carPhotos, delegate, new onItemClickListener() {
@@ -312,9 +325,11 @@ public class CustomerFollowActivity extends BaseActivity {
                             }
                         });
                         rlCarPhoto.setAdapter(imageDeleteAdapter);
-                        imgUrl = getPath(data);
-                        imgPaths.add(imgUrl);
                     }
+                    imgUrl = getPath(data);
+                    imgPaths.add(imgUrl);
+                    File imgFile = new File(imgUrl);
+                    compressBmpToFile(bitmap,imgFile);
                 } catch (FileNotFoundException e) {
                 }
             }
@@ -328,6 +343,7 @@ public class CustomerFollowActivity extends BaseActivity {
                 }
                 for (FindSuccessCarResponse.DataBean bean : data1) {
                     ItemData itemData = new ItemData(0, SettingDelegate.FIND_SUCCESS_CAR_LIST_TYPE, bean);
+                    saleId = bean.getSaleId();
                     dataList.add(itemData);
                 }
 
@@ -335,7 +351,24 @@ public class CustomerFollowActivity extends BaseActivity {
             }
         }
     }
-
+    public static void compressBmpToFile(Bitmap bmp,File file){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int options = 80;//个人喜欢从80开始,
+        bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        while (baos.toByteArray().length / 1024 > 800) {
+            baos.reset();
+            options -= 10;
+            bmp.compress(Bitmap.CompressFormat.JPEG, options, baos);
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(baos.toByteArray());
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private String getPath(Intent data) {
         String[] imgPath = {MediaStore.Images.Media.DATA};
 

@@ -87,14 +87,14 @@ public class CarDetailResponse implements Serializable{
          * withinColor : 红
          */
 
-        private int advicePrice;
+        private float advicePrice;
         private int audiId;
         private String brand;
         private int brandId;
         private int browseNum;
         private String carFormality;
         private String carId;
-        private int carPrice;
+        private float carPrice;
         private String carSeries;
         private String carSetting;
         private String carStatusName;
@@ -107,7 +107,7 @@ public class CarDetailResponse implements Serializable{
         private String cityName;
         private long createDate;
         private String discountContent;
-        private int guidPrice;
+        private float guidPrice;
         private int insuranceRebates;
         private int loanRebates;
         private String outsiteColor;
@@ -128,11 +128,11 @@ public class CarDetailResponse implements Serializable{
         private List<DiscountsBean> discounts;
         private List<ImgsBean> imgs;
 
-        public int getAdvicePrice() {
+        public float getAdvicePrice() {
             return advicePrice;
         }
 
-        public void setAdvicePrice(int advicePrice) {
+        public void setAdvicePrice(float advicePrice) {
             this.advicePrice = advicePrice;
         }
 
@@ -184,11 +184,11 @@ public class CarDetailResponse implements Serializable{
             this.carId = carId;
         }
 
-        public int getCarPrice() {
+        public float getCarPrice() {
             return carPrice;
         }
 
-        public void setCarPrice(int carPrice) {
+        public void setCarPrice(float carPrice) {
             this.carPrice = carPrice;
         }
 
@@ -288,11 +288,11 @@ public class CarDetailResponse implements Serializable{
             this.discountContent = discountContent;
         }
 
-        public int getGuidPrice() {
+        public float getGuidPrice() {
             return guidPrice;
         }
 
-        public void setGuidPrice(int guidPrice) {
+        public void setGuidPrice(float guidPrice) {
             this.guidPrice = guidPrice;
         }
 

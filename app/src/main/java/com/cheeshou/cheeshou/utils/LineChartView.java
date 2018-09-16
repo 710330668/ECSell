@@ -232,7 +232,7 @@ public class LineChartView extends View implements View.OnTouchListener {
         this.YLabels = YLabels;
         this.data = data;
         this.title = title;
-        this.ylabelBig1 = new BigDecimal(this.YLabels[0]);
+        this.ylabelBig1 = new BigDecimal(40.00);
         invalidate();
     }
 
@@ -247,7 +247,7 @@ public class LineChartView extends View implements View.OnTouchListener {
         this.XLabels = XLabels;
         this.YLabels = YLabels;
         this.data = data;
-        this.ylabelBig1 = new BigDecimal(this.YLabels[1]);
+        this.ylabelBig1 = new BigDecimal(this.YLabels[0]);
         invalidate();
     }
 

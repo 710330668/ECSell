@@ -2,7 +2,11 @@ package com.cheeshou.cheeshou.dealer.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -29,6 +33,7 @@ import com.cheeshou.cheeshou.view.CommonDialog;
 import com.example.com.common.BaseActivity;
 import com.example.com.common.adapter.BaseAdapter;
 import com.example.com.common.adapter.ItemData;
+import com.example.com.common.util.ContractUtil;
 import com.example.com.common.util.SP;
 import com.example.com.common.util.ToastUtils;
 import com.google.gson.Gson;
@@ -80,6 +85,8 @@ public class CreateNewCustomerActivity extends BaseActivity {
     @BindView(R.id.tv_daikuan)
     TextView mTvDaikuan;
     private String reserveColumn1 = "否";
+    private Intent intent;
+    public static final int REQUES_CODE_1 = 1;
 
     @Override
     public int bindLayout() {
@@ -97,6 +104,7 @@ public class CreateNewCustomerActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+        intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         mRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         delegate = new SettingDelegate();
         delegate.setCustomerWantCarDeleteListener(new CustomerWantCarViewHolder.OnDeleteListener() {
@@ -138,11 +146,14 @@ public class CreateNewCustomerActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_contacts:
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.PICK");
-                intent.addCategory("android.intent.category.DEFAULT");
-                intent.setType("vnd.android.cursor.dir/phone_v2");
-                startActivity(intent);
+                PackageManager pm = getPackageManager();
+                boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                        pm.checkPermission("android.permission.READ_CONTACTS", getPackageName()));
+                if (permission) {
+                    startActivityForResult(intent, REQUES_CODE_1);
+                } else {
+                    Toast.makeText(CreateNewCustomerActivity.this, "请先打开通讯录权限", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.save_customer:
                 createNewCustomer();
@@ -182,6 +193,26 @@ public class CreateNewCustomerActivity extends BaseActivity {
                 });
                 break;
             default:
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case REQUES_CODE_1:
+                Uri contactData = data.getData();
+                Cursor cursor = this.getContentResolver().query(contactData, null, null, null, null);
+                String name = ContractUtil.getName(this, cursor).trim();
+                String tel = ContractUtil.getTel(this, cursor).trim();
+                mEtName.setText(name.replace(" ",""));
+                mEtPhone.setText(tel.replace(" ",""));
+                break;
+            default:
+                break;
         }
     }
 

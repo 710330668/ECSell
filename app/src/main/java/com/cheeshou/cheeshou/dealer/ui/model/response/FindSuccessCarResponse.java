@@ -3,8 +3,6 @@ package com.cheeshou.cheeshou.dealer.ui.model.response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.nostra13.universalimageloader.utils.L;
-
 import java.util.List;
 
 public class FindSuccessCarResponse implements Parcelable {
@@ -70,6 +68,7 @@ public class FindSuccessCarResponse implements Parcelable {
         private String cityName;
         private String imgThumUrl;
         private String orderPrice;
+        private String saleId;
         private String provinceName;
         private String vname;
         private boolean checked;
@@ -82,6 +81,7 @@ public class FindSuccessCarResponse implements Parcelable {
             imgThumUrl = in.readString();
             orderPrice = in.readString();
             provinceName = in.readString();
+            saleId = in.readString();
             vname = in.readString();
             checked = in.readByte() != 0;
             hideCheck = in.readByte() != 0;
@@ -125,6 +125,14 @@ public class FindSuccessCarResponse implements Parcelable {
 
         public String getCityName() {
             return cityName;
+        }
+
+        public void setSaleId(String saleId) {
+            this.saleId = saleId;
+        }
+
+        public String getSaleId() {
+            return saleId;
         }
 
         public void setCityName(String cityName) {
@@ -184,6 +192,7 @@ public class FindSuccessCarResponse implements Parcelable {
             dest.writeString(imgThumUrl);
             dest.writeString(orderPrice);
             dest.writeString(provinceName);
+            dest.writeString(saleId);
             dest.writeString(vname);
             dest.writeByte((byte) (checked ? 1 : 0));
             dest.writeByte((byte) (hideCheck ? 1 : 0));

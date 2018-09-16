@@ -86,7 +86,7 @@ public class OrderListResponse {
             private String customerName;
             private String imgThumUrl;
             private String orderItemId;
-            private int orderPrice;
+            private float orderPrice;
             private String userName;
             private String vname;
 
@@ -138,11 +138,11 @@ public class OrderListResponse {
                 this.orderItemId = orderItemId;
             }
 
-            public int getOrderPrice() {
+            public float getOrderPrice() {
                 return orderPrice;
             }
 
-            public void setOrderPrice(int orderPrice) {
+            public void setOrderPrice(float orderPrice) {
                 this.orderPrice = orderPrice;
             }
 

@@ -55,9 +55,9 @@ public class ModifyCarInforResponse {
          */
 
         private String brand;
-        private int carPrice;
+        private float carPrice;
         private String carSeries;
-        private int guidPrice;
+        private float guidPrice;
         private String imgThumUrl;
         private int insuranceRebates;
         private int loanRebates;
@@ -73,11 +73,11 @@ public class ModifyCarInforResponse {
             this.brand = brand;
         }
 
-        public int getCarPrice() {
+        public float getCarPrice() {
             return carPrice;
         }
 
-        public void setCarPrice(int carPrice) {
+        public void setCarPrice(float carPrice) {
             this.carPrice = carPrice;
         }
 
@@ -89,11 +89,11 @@ public class ModifyCarInforResponse {
             this.carSeries = carSeries;
         }
 
-        public int getGuidPrice() {
+        public float getGuidPrice() {
             return guidPrice;
         }
 
-        public void setGuidPrice(int guidPrice) {
+        public void setGuidPrice(float guidPrice) {
             this.guidPrice = guidPrice;
         }
 

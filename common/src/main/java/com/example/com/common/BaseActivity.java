@@ -316,7 +316,7 @@ public abstract class BaseActivity extends FragmentActivity {
         final Dialog mDialog = new Dialog(context, R.style.WoDeDialog);
         View mDialogContentView = LayoutInflater.from(context).inflate(R.layout.layout_loading, null);
         mDialog.setContentView(mDialogContentView);
-        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCanceledOnTouchOutside(true);
         mDialog.setCancelable(false);
         mDialog.getWindow().setGravity(Gravity.CENTER);
         return mDialog;
