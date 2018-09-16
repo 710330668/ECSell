@@ -1,5 +1,6 @@
 package com.cheeshou.cheeshou.market.ui;
 
+import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,8 +9,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -87,6 +90,8 @@ public class MarketShareCarActivity extends BaseActivity {
     private PopupWindow mPopupWindow;
     private String normalArticle = "";
     private String affineArticle = "";
+    private String singleNormalArticle = "";
+    private String singleAffineArticle = "";
     private List<String> imageArray = new ArrayList<>();
     private static final String TAG = "MarketShareCarActivity";
     private String mPhone;
@@ -97,7 +102,7 @@ public class MarketShareCarActivity extends BaseActivity {
     private String url = "http://www.cheeshou.com/share/visitShareInfo?shareId=";
     private String shareUrl = "";
     private String token = "";
-    private String shareType,shareItems;
+    private String shareType, shareItems;
     private String UuId;
 
 
@@ -121,28 +126,12 @@ public class MarketShareCarActivity extends BaseActivity {
         mTvTitle.setText("已选择" + data.size() + "辆车");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("StringFormatMatches")
     @Override
     public void doBusiness(Context mContext) {
-        UuId = UUID.randomUUID().toString();
-        normalArticle += ("  [诚信车商] " + mCompany + " \n");
-        normalArticle += ("  [优质车源] " + url + UuId + "\n");
-        normalArticle += ("  [联系方式]  " + mPhone + "  " + mName + "\n");
-        normalArticle += ("  [看车地址]  " + mAddress + "\n");
-
-        affineArticle = getResources().getString(R.string.affine_article, data.size() + "", mPhone, mName);
-
         mRecycler.setLayoutManager(new GridLayoutManager(this, 3));
         delegate = new SettingDelegate();
-//        delegate.setShareCarPhotoAddListener(new ShareCarPhotoAddViewHolder.OnImageAddListener() {
-//            @Override
-//            public void addImage(int position) {
-//                Log.e(TAG, "addImage: ----------------");
-//                Intent intent1 = new Intent();
-//                intent1.setType("image/*");
-//                intent1.setAction(Intent.ACTION_PICK);
-//                startActivityForResult(intent1, REQUEST_LOCAL);
-//            }
-//        });
         String id = "";
         for (int i = 0; i < data.size(); i++) {
             id += (data.get(i).getSaleId() + ",");
@@ -175,11 +164,39 @@ public class MarketShareCarActivity extends BaseActivity {
         params.put("shareId", toRequestBody(UUID.randomUUID().toString()));
 
         if (data.size() == 1) {
+            UuId = UUID.randomUUID().toString();
+            normalArticle += ("  [品牌车型] " + "  " + data.get(0).getTitle() + "\n");
+            normalArticle += ("  [价格] " + "  " + data.get(0).getPrice() + "\n");
+            normalArticle += ("  [颜色]  " + "  " + "外观" + "  " + "内饰" + "\n");
+            normalArticle += ("  [销售]  " + "  " + mName + "\n");
+            normalArticle += ("  [联系方式]  " + mPhone + "\n");
+            normalArticle += ("  [链接]  " + "  " + url + UuId + "\n");
+
+            affineArticle = getResources().getString(R.string.single_affine_article, data.size(), data.get(0).getTitle(), data.get(0).getPrice() + "元", "外观", "内饰", url + UuId, mPhone, mName);
+
+
             shareType = "单车";
             shareItems = data.get(0).getSaleId();
 //            params.put("shareType", toRequestBody("单车"));
 //            params.put("shareItems", toRequestBody(data.get(0).getId()));
+
+
         } else {
+
+            UuId = UUID.randomUUID().toString();
+            normalArticle += ("  [诚信车商] " + mCompany + " \n");
+            normalArticle += ("  [优质车源] " + url + UuId + "\n");
+            normalArticle += ("  [联系方式]  " + mPhone + "  " + mName + "\n");
+            normalArticle += ("  [看车地址]  " + mAddress + "\n");
+            double maxPrice = 0, minPrice = Integer.MAX_VALUE;
+            for (SearchResultModel bean : data) {
+                String substring = bean.getPrice().substring(0, bean.getPrice().length() - 1);
+                double integer = Double.parseDouble(substring);
+                maxPrice = Double.max(maxPrice, integer);
+                minPrice = Double.min(minPrice, integer);
+            }
+            affineArticle = getResources().getString(R.string.affine_article, data.size(), minPrice + "万", maxPrice + "万", url + UuId, mPhone, mName);
+
             shareType = "多车";
             shareItems = id;
             params.put("shareType", toRequestBody("多车"));
@@ -203,7 +220,7 @@ public class MarketShareCarActivity extends BaseActivity {
 
 //        affineArticle = "";
 
-        Injection.provideApiService().saveShareInfo(token, UuId,shareType,shareItems,"微信",affineArticle).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareUrlResponse>() {
+        Injection.provideApiService().saveShareInfo(token, UuId, shareType, shareItems, "微信", affineArticle).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ShareUrlResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -213,10 +230,10 @@ public class MarketShareCarActivity extends BaseActivity {
             public void onNext(ShareUrlResponse easyResponse) {
                 if (easyResponse.getCode() == 200) {
                     shareUrl = easyResponse.getData().getShareUrl();
-                }else if(easyResponse.getCode() == 402||easyResponse.getCode() == 401){
+                } else if (easyResponse.getCode() == 402 || easyResponse.getCode() == 401) {
                     //token失效
-                    SP.getInstance(C.USER_DB,MarketShareCarActivity.this).put(C.USER_ACCOUNT,"");
-                    SP.getInstance(C.USER_DB,MarketShareCarActivity.this).put(C.USER_PASSWORD,"");
+                    SP.getInstance(C.USER_DB, MarketShareCarActivity.this).put(C.USER_ACCOUNT, "");
+                    SP.getInstance(C.USER_DB, MarketShareCarActivity.this).put(C.USER_PASSWORD, "");
                     finishAllActivity();
                     startActivity(LoginActivity.class);
                 }
@@ -254,7 +271,7 @@ public class MarketShareCarActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), MarketShareWechatActivity.class);
                             Bundle extras = new Bundle();
                             extras.putParcelableArrayList("data", data);
-                            extras.putString("shareUrl",url+UuId);
+                            extras.putString("shareUrl", url + UuId);
                             ArrayList<CarPhotoModel> list = new ArrayList<>();
                             for (ItemData carPhoto : carPhotos) {
                                 if (carPhoto.getData() != null) {
@@ -266,7 +283,7 @@ public class MarketShareCarActivity extends BaseActivity {
                             extras.putString("article", mEtShare.getText().toString());
                             intent.putExtras(extras);
                             startActivity(intent);
-                            }
+                        }
 //                            Wechat.ShareParams sp = new Wechat.ShareParams();
 //                            sp.setShareType(Platform.SHARE_WEBPAGE);//非常重要：一定要设置分享属性
 //                            sp.setTitle("车易售"); //分享标题
